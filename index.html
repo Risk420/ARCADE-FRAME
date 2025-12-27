@@ -13,11 +13,19 @@
     -webkit-overflow-scrolling: touch; transition: 0.3s;
   }
   
-  /* MODE TOGGLE BUTTONS */
-  .top-btns { position: absolute; top: 15px; left: 15px; display: flex; gap: 8px; z-index: 1000; }
-  .btn-ui {
+  /* POSITIONED TOGGLE BUTTONS */
+  .menu-toggle {
+    position: absolute; top: 15px; left: 15px; 
     background: #1a1a1c; color: #ffffff; border: 1px solid rgba(255,255,255,0.1);
-    padding: 8px 12px; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 11px;
+    padding: 8px 12px; border-radius: 4px; font-weight: bold; cursor: pointer; z-index: 1000;
+    font-size: 11px;
+  }
+
+  .mode-toggle {
+    position: absolute; top: 15px; right: 15px; /* Moved to top right */
+    background: #1a1a1c; color: #ffffff; border: 1px solid rgba(255,255,255,0.1);
+    padding: 8px 12px; border-radius: 4px; font-weight: bold; cursor: pointer; z-index: 1000;
+    font-size: 11px;
   }
 
   /* SIDE MENU - Solid Black */
@@ -37,7 +45,6 @@
   .music-btn { border-color: #ff0000; background: rgba(255,0,0,0.1); justify-content: space-between; }
   .lnk svg { width: 18px; height: 18px; fill: white; }
 
-  /* HEADER */
   h1 {
     color: #ffffff; margin: 30px 0 0 0; font-family: "Arial Black", sans-serif; font-style: italic;
     font-size: 36px; text-transform: uppercase; letter-spacing: -1px;
@@ -45,7 +52,7 @@
   }
   p { color: #ffffff; font-weight: bold; margin: 2px 0 15px 0; text-transform: uppercase; font-size: 11px; letter-spacing: 2px; }
 
-  /* FLEX CONTAINER FOR PC MODE */
+  /* FLEX WRAPPER FOR LAYOUT SWITCHING */
   .main-wrapper { display: flex; flex-direction: column; align-items: center; width: 100%; }
   
   /* PC MODE STYLES */
@@ -94,10 +101,8 @@
 </head>
 <body onclick="startAudio()">
 
-<div class="top-btns">
-  <button class="btn-ui" onclick="toggleMenu(event)">MENU ☰</button>
-  <button id="mode-toggle" class="btn-ui" onclick="toggleMode()">PC VERSION</button>
-</div>
+<button class="menu-toggle" onclick="toggleMenu(event)">MENU ☰</button>
+<button id="mode-toggle" class="mode-toggle" onclick="toggleMode()">PC VERSION</button>
 
 <div id="menu-panel">
   <div class="music-btn" onclick="toggleMusic()">MUSIC CONTROL <span id="m-status" style="color:#ff0000;">ON</span></div>
