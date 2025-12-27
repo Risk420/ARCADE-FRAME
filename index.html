@@ -11,10 +11,12 @@
     display: flex; flex-direction: column; align-items: center;
     min-height: 100vh; margin: 0; padding-bottom: 120px;
     -webkit-overflow-scrolling: touch; transition: 0.3s;
+    overflow-x: hidden;
   }
   
-  .top-btns { position: absolute; top: 15px; left: 15px; width: calc(100% - 30px); display: flex; justify-content: space-between; z-index: 1000; }
-  .btn-ui { background: #1a1a1c; color: #ffffff; border: 1px solid rgba(255,255,255,0.1); padding: 8px 12px; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 11px; }
+  /* CENTERED NAV */
+  .top-btns { position: absolute; top: 15px; left: 0; width: 100%; display: flex; justify-content: center; z-index: 1000; }
+  .btn-ui { background: #1a1a1c; color: #ffffff; border: 1px solid rgba(255,255,255,0.1); padding: 8px 16px; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 11px; margin: 0 10px; }
 
   #menu-panel { position: fixed; top: 0; left: -250px; width: 230px; height: 100%; background: #000; padding-top: 60px; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); z-index: 999; display: flex; flex-direction: column; gap: 10px; padding-left: 15px; padding-right: 15px; }
   #menu-panel.open { left: 0; }
@@ -22,39 +24,34 @@
   .music-btn { border-color: #ff0000; background: rgba(255,0,0,0.1); justify-content: space-between; }
   .lnk svg { width: 18px; height: 18px; fill: white; }
 
+  /* ABOUT PAGE OVERLAY */
   #about-page { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000000; z-index: 2000; overflow-y: auto; padding: 80px 20px 40px 20px; box-sizing: border-box; text-align: left; }
-  .about-wrap { max-width: 700px; margin: auto; line-height: 1.6; }
+  .about-wrap { max-width: 600px; margin: auto; line-height: 1.6; }
   .back-btn { background: #ff0000; color: white; border: none; padding: 10px 20px; border-radius: 4px; font-weight: bold; cursor: pointer; margin-bottom: 30px; }
   .sec-h { color: #00ffff; font-size: 14px; letter-spacing: 2px; border-bottom: 1px solid #222; margin-top: 30px; padding-bottom: 8px; font-weight: bold; text-transform: uppercase; }
   .red-step { color: #ff0000; font-weight: bold; }
 
-  h1 { color: #ffffff; margin: 30px 0 0 0; font-family: "Arial Black", sans-serif; font-style: italic; font-size: 36px; text-transform: uppercase; letter-spacing: -1px; text-shadow: 2px 2px 0px #ff0000, -1px -1px 10px rgba(255, 0, 0, 0.8); }
-  p.sub { color: #ffffff; font-weight: bold; margin: 2px 0 15px 0; text-transform: uppercase; font-size: 11px; letter-spacing: 2px; }
+  h1 { color: #ffffff; margin: 60px 0 0 0; font-family: "Arial Black", sans-serif; font-style: italic; font-size: 36px; text-transform: uppercase; letter-spacing: -1px; text-shadow: 2px 2px 0px #ff0000, -1px -1px 10px rgba(255, 0, 0, 0.8); text-align: center; }
+  p.sub { color: #ffffff; font-weight: bold; margin: 2px 0 15px 0; text-transform: uppercase; font-size: 11px; letter-spacing: 2px; text-align: center; }
 
-  #box { position: relative; width: 280px; height: 280px; border-radius: 50%; overflow: hidden; background-image: linear-gradient(45deg,#111 25%,transparent 25%),linear-gradient(-45deg,#111 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#111 75%),linear-gradient(-45deg,transparent 75%,#111 75%); background-size: 20px 20px; box-shadow: 0 0 20px rgba(0,0,0,0.5); border: 2px solid transparent; transition: 0.3s; -webkit-mask-image: -webkit-radial-gradient(white,black); }
+  /* COMPACT CENTERED CIRCLE */
+  #box { position: relative; width: 280px; height: 280px; border-radius: 50%; overflow: hidden; background-image: linear-gradient(45deg,#111 25%,transparent 25%),linear-gradient(-45deg,#111 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#111 75%),linear-gradient(-45deg,transparent 75%,#111 75%); background-size: 20px 20px; box-shadow: 0 0 20px rgba(0,0,0,0.5); border: 2px solid transparent; transition: 0.3s; -webkit-mask-image: -webkit-radial-gradient(white,black); margin: 0 auto; }
   canvas { position: absolute; top: 0; left: 0; width: 280px; height: 280px; touch-action: none; }
   
-  .ui { margin-top: 15px; width: 260px; display: flex; flex-direction: column; align-items: stretch; gap: 6px; }
+  /* PERFECTLY CENTERED UI BOX */
+  .ui { margin-top: 20px; width: 260px; display: flex; flex-direction: column; align-items: stretch; gap: 6px; margin-left: auto; margin-right: auto; }
   .btn { background: #111; border: 2px solid #ffffff; color: white; padding: 10px; text-align: center; border-radius: 8px; font-weight: bold; display: block; font-size: 11px; cursor: pointer; }
   .btn-r { border-color: #ff0000; }
   .btn-reset { border-color: #555; color: #888; margin-bottom: 5px; }
-  .lbl { font-size: 9px; color: #888; text-transform: uppercase; margin-top: 2px; display: flex; justify-content: space-between; }
-  .val-tag { color: #ff0000; font-weight: bold; font-family: monospace; }
+  .lbl { font-size: 9px; color: #888; text-transform: uppercase; margin-top: 2px; display: flex; justify-content: space-between; align-items: center; }
+  .val-tag { color: #ff0000; font-weight: bold; font-family: monospace; font-size: 10px; }
 
-  input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; margin: 10px 0; }
-  input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 8px; cursor: pointer; background: linear-gradient(to right, #ff0000 var(--v, 0%), #00ffff var(--v, 0%)); border-radius: 4px; }
-  input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 20px; width: 20px; border-radius: 50%; background: #ff0000; cursor: pointer; margin-top: -6px; box-shadow: 0 0 10px #ff0000; border: 2px solid #ffffff; }
+  input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; margin: 10px 0; cursor: pointer; }
+  input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 8px; background: linear-gradient(to right, #ff0000 var(--v, 0%), #00ffff var(--v, 0%)); border-radius: 4px; }
+  input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 20px; width: 20px; border-radius: 50%; background: #ff0000; margin-top: -6px; box-shadow: 0 0 10px #ff0000; border: 2px solid #ffffff; }
   
   #save { background: #ff0000; border: none; font-size: 13px; color: white; padding: 12px; border-radius: 8px; font-weight: bold; margin-top: 10px; cursor: not-allowed; opacity: 0.4; transition: 0.2s; }
   #save.active { cursor: pointer; opacity: 1; }
-
-  body.pc-mode { padding: 0; overflow: hidden; display: block; }
-  body.pc-mode h1, body.pc-mode p.sub { display: none; }
-  body.pc-mode .main-wrapper { flex-direction: row-reverse; height: 100vh; align-items: stretch; display: flex; width: 100%; }
-  body.pc-mode .ui { background: #000; width: 350px; height: 100vh; margin: 0; padding: 80px 25px 30px 25px; box-sizing: border-box; overflow-y: auto; border-right: 1px solid rgba(255,255,255,0.1); }
-  body.pc-mode .ui::before { content: "ARCADE STUDIO"; display: block; font-family: "Arial Black", sans-serif; font-size: 24px; color: #ff0000; margin-bottom: 30px; letter-spacing: -1px; font-style: italic; }
-  body.pc-mode #box { margin: auto; width: 450px; height: 450px; }
-  body.pc-mode canvas { width: 450px; height: 450px; }
 
   input[type=file] { display: none; }
   #yt-player { display: none; }
@@ -64,7 +61,6 @@
 
 <div class="top-btns">
   <button class="btn-ui" onclick="toggleMenu(event)">MENU ☰</button>
-  <button id="mode-toggle" class="btn-ui" onclick="toggleMode()">PC VERSION</button>
 </div>
 
 <div id="menu-panel">
@@ -78,55 +74,54 @@
   <div class="about-wrap">
     <button class="back-btn" onclick="toggleAboutPage()">← BACK TO STUDIO</button>
     <div class="sec-h" style="margin-top:0;">ABOUT ARCADE STUDIO</div>
-    <p style="color:#aaa; font-size:14px;">Arcade Studio is the ultimate high-performance platform for Plato app players and digital creators. Designed to deliver pixel-perfect results with an aggressive retro-inspired interface, our engine adapts to your device to provide a professional editing workbench on PC and a high-speed app experience on Mobile.</p>
+    <p style="color:#aaa; font-size:14px;">Arcade Studio is the ultimate high-performance platform for Plato app players and digital creators. Engineered with a mathematical symmetry logic, our engine ensures professional-grade results on both mobile devices and PC browsers.</p>
     <div class="sec-h">CORE CAPABILITIES</div>
     <p style="color:#aaa; font-size:14px;">
-      <b>Circle Size:</b> The "Frame Lock" tool. Adjust the clipping window to expand or shrink the viewing hole of your subject. Essential for eliminating "checkerboard gaps" and ensuring your subject fits custom frame borders perfectly.<br><br>
-      <b>Subject Scaling (Zoom):</b> Professional high-resolution subject scaling with unique percentage tracking.<br><br>
-      <b>Pro Touch Controls:</b> High-precision one-finger dragging and advanced multi-touch rotation for 360-degree subject alignment.
+      <b>Circle Size:</b> The "Frame Lock" tool. Adjust the clipping window to expand or shrink the viewing hole of your subject. Essential for eliminating background gaps.<br><br>
+      <b>Subject Scaling (Zoom):</b> Professional high-resolution subject scaling with red-tag percentage tracking.<br><br>
+      <b>Pro Touch Controls:</b> High-precision one-finger dragging and advanced multi-touch rotation for 360-degree alignment.
     </p>
     <div class="sec-h">OPERATIONAL GUIDELINES</div>
     <p style="color:#888; font-size:14px;">
-      <span class="red-step">1. Choose Photo:</span> Upload your base subject photo using Step 1. <br><br>
-      <span class="red-step">2. Apply Frame:</span> Overlay your Arcade Frame using Step 2. <br><br>
-      <span class="red-step">3. Adjust Circle Size:</span> Shrink or grow the hole until the background gaps disappear. This ensures a clean "Official" look.<br><br>
-      <span class="red-step">4. Refine Zoom:</span> Scale the subject to match your frame composition. <br><br>
-      <span class="red-step">5. Align:</span> Use one finger to drag the subject into position, or two fingers to spin it into a custom angle. <br><br>
-      <span class="red-step">6. Export:</span> Click Download to save your high-resolution PNG instantly.
+      <span class="red-step">1. Choose Photo:</span> Upload base photo. <br><br>
+      <span class="red-step">2. Apply Frame:</span> Overlay official frame. <br><br>
+      <span class="red-step">3. Reset Project:</span> Clear workspace if needed. <br><br>
+      <span class="red-step">4. Frame Alignment:</span> Adjust Tint, Zoom, and Circle size at the bottom. <br><br>
+      <span class="red-step">5. Align:</span> Drag to center or twist to spin. <br><br>
+      <span class="red-step">6. Export:</span> Click Download to save PNG.
     </p>
   </div>
 </div>
 
 <div id="yt-player"></div>
 
+<h1>ARCADE</h1>
+<p class="sub">FRAME STUDIO</p>
+
 <div id="studio-view" style="display: flex; flex-direction: column; align-items: center; width: 100%;">
-  <h1>ARCADE</h1>
-  <p class="sub">FRAME STUDIO</p>
-  <div class="main-wrapper">
-    <div id="box"><canvas id="c" width="800" height="800"></canvas></div>
-    <div class="ui">
-      <label class="btn" onclick="playClick()">STEP 1: CHOOSE PHOTO<input type="file" id="u1" accept="image/*"></label>
-      <label class="btn btn-r" onclick="playClick()">STEP 2: UPLOAD FRAME<input type="file" id="u2" accept="image/*"></label>
-      <button class="btn btn-reset" onclick="resetProject()">RESET PROJECT</button>
-      
-      <div class="lbl">FRAME TINT & SHINE <span id="ft-val" class="val-tag">0°</span></div>
-      <input type="range" id="ft" min="0" max="360" step="1" value="0">
-      
-      <div class="lbl">ZOOM PHOTO <span id="z-val" class="val-tag">100%</span></div>
-      <input type="range" id="z" min="0.1" max="4" step="0.01" value="1">
-      
-      <div class="lbl">CIRCLE SIZE <span id="m-val" class="val-tag">375px</span></div>
-      <input type="range" id="m" min="300" max="400" step="1" value="375">
-      
-      <button id="save">DOWNLOAD PICTURE</button>
-    </div>
+  <div id="box"><canvas id="c" width="800" height="800"></canvas></div>
+  <div class="ui">
+    <label class="btn" onclick="playClick()">STEP 1: CHOOSE PHOTO<input type="file" id="u1" accept="image/*"></label>
+    <label class="btn btn-r" onclick="playClick()">STEP 2: UPLOAD FRAME<input type="file" id="u2" accept="image/*"></label>
+    <button class="btn btn-reset" onclick="resetProject()">RESET PROJECT</button>
+    
+    <div class="lbl">FRAME TINT & SHINE <span id="ft-val" class="val-tag">0°</span></div>
+    <input type="range" id="ft" min="0" max="360" step="1" value="0">
+    
+    <div class="lbl">ZOOM PHOTO <span id="z-val" class="val-tag">100%</span></div>
+    <input type="range" id="z" min="0.1" max="4" step="0.01" value="1">
+    
+    <div class="lbl">CIRCLE SIZE <span id="m-val" class="val-tag">375px</span></div>
+    <input type="range" id="m" min="300" max="400" step="1" value="375">
+    
+    <button id="save">DOWNLOAD PICTURE</button>
   </div>
 </div>
 
 <script src="https://www.youtube.com/iframe_api"></script>
 <script>
-const c=document.getElementById('c'),x=c.getContext('2d'),z=document.getElementById('z'),m=document.getElementById('m'),ft=document.getElementById('ft'),sBtn=document.getElementById('save'),panel=document.getElementById('menu-panel'),aboutPage=document.getElementById('about-page'),studioView=document.getElementById('studio-view'),modeBtn=document.getElementById('mode-toggle'),mStat=document.getElementById('m-status');
-const zVal=document.getElementById('z-val'),mVal=document.getElementById('m-val'),ftVal=document.getElementById('ft-val');
+const c=document.getElementById('c'),x=c.getContext('2d'),z=document.getElementById('z'),m=document.getElementById('m'),ft=document.getElementById('ft'),sBtn=document.getElementById('save'),panel=document.getElementById('menu-panel'),aboutPage=document.getElementById('about-page'),studioView=document.getElementById('studio-view');
+const zVal=document.getElementById('z-val'),mVal=document.getElementById('m-val'),ftVal=document.getElementById('ft-val'),mStat=document.getElementById('m-status');
 let i=new Image(),f=new Image(),cfg={s:1,m:375,x:400,y:400,r:0,ft:0,d:false,lx:0,ly:0,ia:0,ir:0},originalFileName="Arcade_PFP",player,musicOn=true,audioStarted=false;
 
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -138,20 +133,8 @@ function onYouTubeIframeAPIReady() {
 }
 
 function startAudio() { if (!audioStarted) { audioCtx.resume(); if(player && musicOn) player.playVideo(); audioStarted = true; } }
-function toggleMode() { startAudio(); playClick(); const isPC = document.body.classList.toggle('pc-mode'); modeBtn.innerText = isPC ? "MOBILE VERSION" : "PC VERSION"; d(); }
-
-function toggleAboutPage() {
-  playShutter(); const isOpen = aboutPage.style.display === 'block';
-  aboutPage.style.display = isOpen ? 'none' : 'block'; studioView.style.display = isOpen ? 'flex' : 'none';
-  if(!isOpen) { panel.classList.remove('open'); window.scrollTo(0,0); }
-}
-
-function resetProject() {
-  playDown(); i = new Image(); f = new Image(); cfg={s:1,m:375,x:400,y:400,r:0,ft:0,d:false,lx:0,ly:0}; z.value = 1; m.value = 375; ft.value = 0;
-  zVal.innerText="100%"; mVal.innerText="375px"; ftVal.innerText="0°";
-  document.querySelectorAll('input[type=range]').forEach(updateSliderColor); sBtn.classList.remove('active'); d();
-}
-
+function toggleAboutPage() { playShutter(); const isOpen = aboutPage.style.display === 'block'; aboutPage.style.display = isOpen ? 'none' : 'block'; studioView.style.display = isOpen ? 'flex' : 'none'; if(!isOpen) { panel.classList.remove('open'); window.scrollTo(0,0); } }
+function resetProject() { playDown(); i = new Image(); f = new Image(); cfg={s:1,m:375,x:400,y:400,r:0,ft:0,d:false,lx:0,ly:0}; z.value = 1; m.value = 375; ft.value = 0; zVal.innerText="100%"; mVal.innerText="375px"; ftVal.innerText="0°"; document.querySelectorAll('input[type=range]').forEach(updateSliderColor); sBtn.classList.remove('active'); d(); }
 function toggleMusic() { startAudio(); playClick(); musicOn = !musicOn; if(musicOn) { player.playVideo(); mStat.innerText = "ON"; mStat.style.color = "#ff0000"; } else { player.pauseVideo(); mStat.innerText = "OFF"; mStat.style.color = "#888"; } }
 function toggleMenu(e) { e.stopPropagation(); startAudio(); playClick(); panel.classList.toggle('open'); }
 window.onclick = e => { if (panel.classList.contains('open') && !panel.contains(e.target)) { panel.classList.remove('open'); playClick(); } };
@@ -179,9 +162,6 @@ function d(){
   }
   if (i.src || f.src) sBtn.classList.add('active');
 }
-
-document.getElementById('box').ondragover = e => e.preventDefault();
-document.getElementById('box').ondrop = e => { e.preventDefault(); const file = e.dataTransfer.files[0]; if (file && file.type.startsWith('image/')) handleFile(file); };
 
 function handleFile(file) {
   originalFileName = file.name.split('.').slice(0, -1).join('.') || "Arcade_PFP";
