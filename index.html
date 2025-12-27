@@ -20,7 +20,7 @@
     -webkit-overflow-scrolling: touch;
   }
 
-  /* MENU TOGGLE BUTTON */
+  /* MENU TOGGLE */
   .menu-toggle {
     position: absolute;
     top: 15px;
@@ -34,12 +34,8 @@
     cursor: pointer;
     z-index: 1000;
     font-size: 12px;
-    display: flex;
-    align-items: center;
-    gap: 5px;
   }
 
-  /* HIDDEN MENU PANEL */
   #menu-panel {
     position: fixed;
     top: 0;
@@ -57,10 +53,8 @@
     gap: 10px;
     padding-left: 15px;
   }
-
   #menu-panel.open { left: 0; }
 
-  /* MENU LINKS */
   .lnk {
     display: flex;
     align-items: center;
@@ -77,7 +71,7 @@
   .web { border-color: #00ffff; background: rgba(0,255,255,0.1); }
   .lnk svg { width: 18px; height: 18px; fill: white; }
 
-  /* HEADER: Aggressive Style */
+  /* HEADER */
   h1 {
     color: #ffffff;
     margin: 30px 0 0 0;
@@ -98,10 +92,31 @@
     letter-spacing: 2px;
   }
   
-  #box{position:relative;width:310px;height:310px;border-radius:50%;overflow:hidden;background-image:linear-gradient(45deg,#111 25%,transparent 25%),linear-gradient(-45deg,#111 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#111 75%),linear-gradient(-45deg,transparent 75%,#111 75%);background-size:20px 20px;box-shadow:0 0 20px rgba(0,0,0,0.5);-webkit-mask-image:-webkit-radial-gradient(white,black);}
-  canvas{position:absolute;top:0;left:0;width:310px;height:310px;touch-action:none;}
+  /* STUDIO BOX / DROP ZONE */
+  #box {
+    position: relative;
+    width: 310px;
+    height: 310px;
+    border-radius: 50%;
+    overflow: hidden;
+    background-image: linear-gradient(45deg,#111 25%,transparent 25%),linear-gradient(-45deg,#111 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#111 75%),linear-gradient(-45deg,transparent 75%,#111 75%);
+    background-size: 20px 20px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    border: 2px solid transparent;
+    transition: 0.3s;
+    -webkit-mask-image: -webkit-radial-gradient(white,black);
+  }
   
-  .ui{margin-top:10px;width:300px;display:flex;flex-direction:column;gap:6px;}
+  /* Glowing effect when dragging file over */
+  #box.drag-over {
+    border-color: #00ffff;
+    box-shadow: 0 0 30px #00ffff;
+    transform: scale(1.02);
+  }
+
+  canvas { position: absolute; top: 0; left: 0; width: 310px; height: 310px; touch-action: none; }
+  
+  .ui { margin-top: 10px; width: 300px; display: flex; flex-direction: column; gap: 6px; }
   
   .btn {
     background: #111;
@@ -114,14 +129,11 @@
     display: block;
     font-size: 12px;
     cursor: pointer;
-    transition: 0.1s;
   }
-  .btn:active { transform: scale(0.96); }
   .btn-r { border-color: #ff0000; }
   
-  .lbl{font-size:9px;color:#888;text-transform:uppercase;margin-top:2px;display:flex;justify-content:space-between;}
+  .lbl { font-size: 9px; color: #888; text-transform: uppercase; margin-top: 2px; display: flex; justify-content: space-between; }
   
-  /* SLIDERS: Red Progress on Cyan Track */
   input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; margin: 10px 0; }
   input[type=range]::-webkit-slider-runnable-track {
     width: 100%; height: 8px; cursor: pointer;
@@ -145,10 +157,9 @@
     margin-top: 4px;
     cursor: not-allowed;
     opacity: 0.4;
-    transition: 0.3s;
   }
   #save.active { cursor: pointer; opacity: 1; }
-  input[type=file]{display:none;}
+  input[type=file] { display: none; }
 </style>
 </head>
 <body>
@@ -174,26 +185,20 @@
 <div class="ui">
   <label class="btn" onclick="playClick()">STEP 1: CHOOSE PHOTO<input type="file" id="u1" accept="image/*"></label>
   <label class="btn btn-r" onclick="playClick()">STEP 2: UPLOAD FRAME<input type="file" id="u2" accept="image/*"></label>
-  
   <div class="lbl">ZOOM PHOTO</div>
   <input type="range" id="z" min="0.1" max="4" step="0.01" value="1">
-  
   <div class="lbl">CIRCLE SIZE</div>
   <input type="range" id="m" min="300" max="400" step="1" value="375">
-
   <button id="save">DOWNLOAD PICTURE</button>
 </div>
 
 <script>
-const c=document.getElementById('c'),x=c.getContext('2d'),z=document.getElementById('z'),m=document.getElementById('m'),sBtn=document.getElementById('save'),panel=document.getElementById('menu-panel');
+const c=document.getElementById('c'),x=c.getContext('2d'),z=document.getElementById('z'),m=document.getElementById('m'),sBtn=document.getElementById('save'),panel=document.getElementById('menu-panel'),box=document.getElementById('box');
 let i=new Image(),f=new Image(),cfg={s:1,m:375,x:400,y:400,d:false,lx:0,ly:0},originalFileName="Arcade_PFP";
 
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
-function toggleMenu() { 
-  playClick();
-  panel.classList.toggle('open'); 
-}
+function toggleMenu() { playClick(); panel.classList.toggle('open'); }
 
 function playClick() {
   const osc = audioCtx.createOscillator();
@@ -221,9 +226,7 @@ function playShutter() {
 function playSlider(val) {
   const osc = audioCtx.createOscillator();
   const gain = audioCtx.createGain();
-  // Adjusted pitch scaling for the Circle Size range (300-400)
-  const freq = val > 5 ? val : 200 + (val * 100);
-  osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+  osc.frequency.setValueAtTime(200 + (val > 5 ? (val-300)*5 : val * 100), audioCtx.currentTime);
   gain.gain.setValueAtTime(0.02, audioCtx.currentTime);
   gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
   osc.connect(gain); gain.connect(audioCtx.destination);
@@ -235,9 +238,7 @@ function updateSliderColor(el) {
   el.style.setProperty('--v', percent + '%');
 }
 
-function checkFiles() {
-  if (i.src || f.src) { sBtn.classList.add('active'); } 
-}
+function checkFiles() { if (i.src || f.src) sBtn.classList.add('active'); }
 
 function d(){
   x.clearRect(0,0,800,800);
@@ -248,23 +249,36 @@ function d(){
   checkFiles();
 }
 
+// DRAG AND DROP LOGIC
+box.ondragover = e => { e.preventDefault(); box.classList.add('drag-over'); };
+box.ondragleave = () => box.classList.remove('drag-over');
+box.ondrop = e => {
+  e.preventDefault();
+  box.classList.remove('drag-over');
+  const file = e.dataTransfer.files[0];
+  if (file && file.type.startsWith('image/')) handleFile(file);
+};
+
+function handleFile(file) {
+  originalFileName = file.name.split('.').slice(0, -1).join('.') || "Arcade_PFP";
+  let r=new FileReader();
+  r.onload=v=>{
+    i.src=v.target.result;
+    i.onload=()=>{
+      cfg.s=Math.max(800/i.width,800/i.height);
+      z.value=cfg.s; updateSliderColor(z); d();
+      playClick();
+    }
+  };
+  r.readAsDataURL(file);
+}
+
 document.querySelectorAll('input[type=range]').forEach(el => {
-  el.addEventListener('input', () => {
-    updateSliderColor(el);
-    playSlider(el.value);
-  });
+  el.addEventListener('input', () => { updateSliderColor(el); playSlider(el.value); });
   updateSliderColor(el);
 });
 
-document.getElementById('u1').onchange=e=>{
-  const file = e.target.files[0]; if(!file) return;
-  originalFileName = file.name.split('.').slice(0, -1).join('.') || "Arcade_PFP";
-  let r=new FileReader(); r.onload=v=>{
-    i.src=v.target.result;
-    i.onload=()=>{ cfg.s=Math.max(800/i.width,800/i.height); z.value=cfg.s; updateSliderColor(z); d(); }
-  }; r.readAsDataURL(file);
-};
-
+document.getElementById('u1').onchange=e=>handleFile(e.target.files[0]);
 document.getElementById('u2').onchange=e=>{
   const file = e.target.files[0]; if(!file) return;
   let r=new FileReader(); r.onload=v=>{f.src=v.target.result;f.onload=d;};
