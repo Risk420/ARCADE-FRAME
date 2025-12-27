@@ -7,7 +7,7 @@
 <style>
   html { scroll-behavior: smooth; }
   body {
-    background: #0a0a0c; color: white; font-family: sans-serif; /* REVERTED TO ORIGINAL FONT */
+    background: #0a0a0c; color: white; font-family: sans-serif;
     display: flex; flex-direction: column; align-items: center;
     min-height: 100vh; margin: 0; padding-bottom: 120px;
     -webkit-overflow-scrolling: touch; transition: 0.3s;
@@ -27,6 +27,9 @@
   .about-wrap { max-width: 700px; margin: auto; line-height: 1.6; }
   .back-btn { background: #ff0000; color: white; border: none; padding: 10px 20px; border-radius: 4px; font-weight: bold; cursor: pointer; margin-bottom: 30px; }
   .sec-h { color: #00ffff; font-size: 14px; letter-spacing: 2px; border-bottom: 1px solid #222; margin-top: 30px; padding-bottom: 8px; font-weight: bold; text-transform: uppercase; }
+  
+  /* RED TITLES FOR GUIDELINES */
+  .red-step { color: #ff0000; font-weight: bold; }
 
   h1 { color: #ffffff; margin: 30px 0 0 0; font-family: "Arial Black", sans-serif; font-style: italic; font-size: 36px; text-transform: uppercase; letter-spacing: -1px; text-shadow: 2px 2px 0px #ff0000, -1px -1px 10px rgba(255, 0, 0, 0.8); }
   p.sub { color: #ffffff; font-weight: bold; margin: 2px 0 15px 0; text-transform: uppercase; font-size: 11px; letter-spacing: 2px; }
@@ -39,7 +42,7 @@
   .btn-r { border-color: #ff0000; }
   .btn-reset { border-color: #555; color: #888; }
   .lbl { font-size: 9px; color: #888; text-transform: uppercase; margin-top: 2px; display: flex; justify-content: space-between; }
-  .val-tag { color: #00ffff; font-weight: bold; font-family: monospace; }
+  .val-tag { color: #ff0000; font-weight: bold; font-family: monospace; } /* Values are now Red */
 
   input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; margin: 10px 0; }
   input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 8px; cursor: pointer; background: linear-gradient(to right, #ff0000 var(--v, 0%), #00ffff var(--v, 0%)); border-radius: 4px; }
@@ -91,12 +94,12 @@
 
     <div class="sec-h">OPERATIONAL GUIDELINES</div>
     <p style="color:#888; font-size:14px;">
-      1. <b>Choose Photo:</b> Upload your base subject photo using Step 1. <br><br>
-      2. <b>Apply Frame:</b> Overlay your Arcade Frame using Step 2. <br><br>
-      3. <b>Adjust Circle Size:</b> Shrink or grow the hole until the background gaps disappear. This ensures a clean "Official" look.<br><br>
-      4. <b>Refine Zoom:</b> Scale the subject to match your frame composition. <br><br>
-      5. <b>Align:</b> Use one finger to drag the subject into position, or two fingers to spin it into a custom angle. <br><br>
-      6. <b>Export:</b> Click Download to save your high-resolution PNG instantly.
+      <span class="red-step">1. Choose Photo:</span> Upload your base subject photo using Step 1. <br><br>
+      <span class="red-step">2. Apply Frame:</span> Overlay your Arcade Frame using Step 2. <br><br>
+      <span class="red-step">3. Adjust Circle Size:</span> Shrink or grow the hole until the background gaps disappear. This ensures a clean "Official" look.<br><br>
+      <span class="red-step">4. Refine Zoom:</span> Scale the subject to match your frame composition. <br><br>
+      <span class="red-step">5. Align:</span> Use one finger to drag the subject into position, or two fingers to spin it into a custom angle. <br><br>
+      <span class="red-step">6. Export:</span> Click Download to save your high-resolution PNG instantly.
     </p>
   </div>
 </div>
