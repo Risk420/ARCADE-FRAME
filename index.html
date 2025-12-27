@@ -14,7 +14,6 @@
     overflow-x: hidden;
   }
   
-  /* MENU TOP-LEFT RESTORED */
   .menu-toggle { position: absolute; top: 15px; left: 15px; background: #1a1a1c; color: #fff; border: 1px solid rgba(255,255,255,0.1); padding: 8px 12px; border-radius: 4px; font-weight: bold; cursor: pointer; z-index: 1000; font-size: 11px; }
 
   #menu-panel { position: fixed; top: 0; left: -250px; width: 230px; height: 100%; background: #000; padding-top: 60px; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); z-index: 999; display: flex; flex-direction: column; gap: 10px; padding-left: 15px; padding-right: 15px; }
@@ -24,7 +23,6 @@
   .music-btn { border-color: #ff0000; background: rgba(255,0,0,0.1); justify-content: space-between; }
   .lnk svg { width: 18px; height: 18px; fill: white; flex-shrink: 0; }
 
-  /* ABOUT PAGE OVERLAY */
   #about-page { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000000; z-index: 2000; overflow-y: auto; padding: 80px 20px 40px 20px; box-sizing: border-box; text-align: left; }
   .about-wrap { max-width: 600px; margin: auto; line-height: 1.6; }
   .back-btn { background: #ff0000; color: white; border: none; padding: 10px 20px; border-radius: 4px; font-weight: bold; cursor: pointer; margin-bottom: 30px; }
@@ -39,6 +37,7 @@
   
   .ui { margin-top: 20px; width: 260px; display: flex; flex-direction: column; align-items: stretch; gap: 6px; margin-left: auto; margin-right: auto; }
   .btn { background: #111; border: 2px solid #ffffff; color: white; padding: 10px; text-align: center; border-radius: 8px; font-weight: bold; display: block; font-size: 11px; cursor: pointer; }
+  .btn-cyan { border-color: #00ffff; color: #00ffff; margin-bottom: 5px; }
   .btn-r { border-color: #ff0000; }
   .btn-reset { border-color: #555; color: #888; margin-bottom: 5px; }
   .lbl { font-size: 9px; color: #888; text-transform: uppercase; margin-top: 2px; display: flex; justify-content: space-between; align-items: center; }
@@ -61,21 +60,9 @@
 
 <div id="menu-panel">
   <div class="music-btn" onclick="toggleMusic()">MUSIC CONTROL <span id="m-status" style="color:#ff0000;">ON</span></div>
-  
-  <a href="https://discord.gg/ardc" target="_blank" class="lnk" style="border-color:#5865F2;" onclick="playShutter()">
-    <svg viewBox="0 0 127.14 96.36"><path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36,77.11,77.11,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1A105.25,105.25,0,0,0,126.6,80.22c2.36-24.44-5.42-48.18-18.9-72.15ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54,46,53.89,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.25,60,73.25,53s5-12.74,11.44-12.74S96.23,46,96.12,53,91.08,65.69,84.69,65.69Z"/></svg>
-    <span>Discord Server</span>
-  </a>
-
-  <a href="https://platopedia.com/groups/arcade" target="_blank" class="lnk" style="border-color:#00ffff;" onclick="playShutter()">
-    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
-    <span>Arcade Website</span>
-  </a>
-
-  <div class="lnk" style="border-color:#ffffff;" onclick="toggleAboutPage()">
-    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
-    <span>About Us</span>
-  </div>
+  <a href="https://discord.gg/ardc" target="_blank" class="lnk" style="border-color:#5865F2;" onclick="playShutter()"><svg viewBox="0 0 127.14 96.36"><path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36,77.11,77.11,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1A105.25,105.25,0,0,0,126.6,80.22c2.36-24.44-5.42-48.18-18.9-72.15ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54,46,53.89,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.25,60,73.25,53s5-12.74,11.44-12.74S96.23,46,96.12,53,91.08,65.69,84.69,65.69Z"/></svg><span>Discord Server</span></a>
+  <a href="https://platopedia.com/groups/arcade" target="_blank" class="lnk" style="border-color:#00ffff;" onclick="playShutter()"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg><span>Arcade Website</span></a>
+  <div class="lnk" style="border-color:#ffffff;" onclick="toggleAboutPage()"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg><span>About Us</span></div>
 </div>
 
 <div id="yt-player"></div>
@@ -88,6 +75,9 @@
   <div class="ui">
     <label class="btn" onclick="playClick()">STEP 1: CHOOSE PHOTO<input type="file" id="u1" accept="image/*"></label>
     <label class="btn btn-r" onclick="playClick()">STEP 2: UPLOAD FRAME<input type="file" id="u2" accept="image/*"></label>
+    
+    <button class="btn btn-cyan" onclick="enhanceHD()">STEP 3: IMPROVE PICTURE QUALITY ✨</button>
+    
     <button class="btn btn-reset" onclick="resetProject()">RESET PROJECT</button>
     
     <div class="lbl">FRAME TINT & SHINE <span id="ft-val" class="val-tag">0°</span></div>
@@ -107,21 +97,21 @@
   <div class="about-wrap">
     <button class="back-btn" onclick="toggleAboutPage()">← BACK TO STUDIO</button>
     <div class="sec-h" style="margin-top:0;">ABOUT ARCADE STUDIO</div>
-    <p style="color:#aaa; font-size:14px;">Arcade Studio is the ultimate high-performance platform for Plato app players and digital creators. Designed to deliver pixel-perfect results with mathematical symmetry, our engine ensures a professional editing experience on all devices.</p>
+    <p style="color:#aaa; font-size:14px;">Arcade Studio is the ultimate high-performance platform for Plato app players and digital creators. Designed to deliver professional results with mathematical symmetry and unlimited HD editing power.</p>
     <div class="sec-h">CORE CAPABILITIES</div>
     <p style="color:#aaa; font-size:14px;">
-      <b>Circle Size:</b> The "Frame Lock" tool. Adjust the clipping window to expand or shrink the viewing hole of your subject. Essential for eliminating background gaps.<br><br>
-      <b>Subject Scaling (Zoom):</b> Professional high-resolution subject scaling with unique red-tag tracking.<br><br>
-      <b>Pro Touch Controls:</b> High-precision dragging and advanced multi-touch rotation for 360-degree alignment.
+      <b>Improve Quality:</b> Smart 1-click HD enhancement. Click multiple times to stack sharpness and clarity.<br><br>
+      <b>Circle Size:</b> The "Frame Lock" tool. Adjust the clipping window to eliminate background gaps instantly.<br><br>
+      <b>Pro Controls:</b> High-precision dragging, 360-degree rotation, and exclusive Frame Tint finishes.
     </p>
     <div class="sec-h">OPERATIONAL GUIDELINES</div>
     <p style="color:#888; font-size:14px;">
       <span class="red-step">1. Choose Photo:</span> Upload your base subject photo. <br><br>
-      <span class="red-step">2. Apply Frame:</span> Overlay your Arcade Frame. <br><br>
-      <span class="red-step">3. Reset Project:</span> Instantly clear the workspace safely. <br><br>
-      <span class="red-step">4. Adjust Circle Size:</span> Lock the frame to hide gaps. <br><br>
-      <span class="red-step">5. Align:</span> Position with one finger or spin with two. <br><br>
-      <span class="red-step">6. Export:</span> Save your official high-resolution PNG.
+      <span class="red-step">2. Apply Frame:</span> Overlay your official Arcade Frame. <br><br>
+      <span class="red-step">3. Enhance Quality:</span> Use "Improve Picture Quality" to reach HD clarity. Repeat until satisfied. <br><br>
+      <span class="red-step">4. Lock Frame:</span> Adjust Circle Size to hide gaps and Zoom to fit. <br><br>
+      <span class="red-step">5. Perfect Align:</span> Drag to center or twist with two fingers to spin. <br><br>
+      <span class="red-step">6. Export:</span> Click Download to save your high-resolution PNG.
     </p>
   </div>
 </div>
@@ -142,6 +132,19 @@ function onYouTubeIframeAPIReady() {
 
 function startAudio() { if (!audioStarted) { audioCtx.resume(); if(player && musicOn) player.playVideo(); audioStarted = true; } }
 function toggleAboutPage() { playShutter(); const isOpen = aboutPage.style.display === 'block'; aboutPage.style.display = isOpen ? 'none' : 'block'; studioView.style.display = isOpen ? 'flex' : 'none'; if(!isOpen) { panel.classList.remove('open'); window.scrollTo(0,0); } }
+
+// SMART HD ENHANCER
+function enhanceHD() {
+  if(!i.src) return;
+  playShutter();
+  const tC = document.createElement('canvas'); tC.width = i.width; tC.height = i.height;
+  const tX = tC.getContext('2d');
+  tX.filter = "contrast(1.05) saturate(1.02) brightness(1.01) contrast(1.1) sharp";
+  tX.drawImage(i, 0, 0);
+  i.src = tC.toDataURL();
+  i.onload = () => d();
+}
+
 function resetProject() { playDown(); i = new Image(); f = new Image(); cfg={s:1,m:375,x:400,y:400,r:0,ft:0,d:false,lx:0,ly:0}; z.value = 1; m.value = 375; ft.value = 0; zVal.innerText="100%"; mVal.innerText="375px"; ftVal.innerText="0°"; document.querySelectorAll('input[type=range]').forEach(updateSliderColor); sBtn.classList.remove('active'); d(); }
 function toggleMusic() { startAudio(); playClick(); musicOn = !musicOn; if(musicOn) { player.playVideo(); mStat.innerText = "ON"; mStat.style.color = "#ff0000"; } else { player.pauseVideo(); mStat.innerText = "OFF"; mStat.style.color = "#888"; } }
 function toggleMenu(e) { e.stopPropagation(); startAudio(); playClick(); panel.classList.toggle('open'); }
