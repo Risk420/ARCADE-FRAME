@@ -28,8 +28,6 @@
     text-decoration: none; color: white; font-size: 13px; font-weight: bold;
     border-radius: 4px; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.05); cursor: pointer;
   }
-  .dsc { border-color: #5865F2; background: rgba(88,101,242,0.1); }
-  .web { border-color: #00ffff; background: rgba(0,255,255,0.1); }
   .music-btn { border-color: #ff0000; background: rgba(255,0,0,0.1); }
   h1 {
     color: #ffffff; margin: 30px 0 0 0; font-family: "Arial Black", sans-serif; font-style: italic;
@@ -50,11 +48,7 @@
     border-radius: 8px; font-weight: bold; display: block; font-size: 12px; cursor: pointer;
   }
   .btn-r { border-color: #ff0000; }
-  /* SMART AI BUTTON */
-  .btn-magic { 
-    border-color: #00ffff; color: #00ffff; background: rgba(0,255,255,0.05); 
-    position: relative; overflow: hidden;
-  }
+  .btn-magic { border-color: #00ffff; color: #00ffff; background: rgba(0,255,255,0.05); }
   .btn-magic.loading { opacity: 0.5; cursor: wait; }
   
   .lbl { font-size: 9px; color: #888; text-transform: uppercase; margin-top: 2px; display: flex; justify-content: space-between; }
@@ -66,6 +60,10 @@
     -webkit-appearance: none; height: 20px; width: 20px; border-radius: 50%;
     background: #ff0000; cursor: pointer; margin-top: -6px; box-shadow: 0 0 10px #ff0000; border: 2px solid #ffffff;
   }
+  /* REFINE AI SLIDER: Cyan Glow */
+  .refine-slider::-webkit-slider-runnable-track { background: linear-gradient(to right, #00ffff var(--v, 0%), #111 var(--v, 0%)) !important; border: 1px solid #00ffff; }
+  .refine-slider::-webkit-slider-thumb { background: #00ffff !important; box-shadow: 0 0 10px #00ffff !important; }
+
   #save {
     background: #ff0000; border: none; font-size: 14px; color: white; padding: 12px;
     border-radius: 8px; font-weight: bold; margin-top: 4px; cursor: not-allowed; opacity: 0.4;
@@ -75,13 +73,13 @@
   #yt-player { display: none; }
 </style>
 </head>
-<body>
+<body onclick="startAudio()">
 
 <button class="menu-toggle" onclick="toggleMenu()">MENU ☰</button>
 <div id="menu-panel">
   <div class="music-btn" onclick="toggleMusic()">MUSIC: <span id="m-status">ON</span> 🔊</div>
-  <a href="https://discord.gg/ardc" target="_blank" class="lnk" style="border-color:#5865F2;" onclick="playShutter()">Discord Server</a>
-  <a href="https://platopedia.com/groups/arcade" target="_blank" class="lnk" style="border-color:#00ffff;" onclick="playShutter()">Arcade Website</a>
+  <a href="https://discord.gg/ardc" target="_blank" class="lnk" style="border-color:#5865F2;">Discord Server</a>
+  <a href="https://platopedia.com/groups/arcade" target="_blank" class="lnk" style="border-color:#00ffff;">Arcade Website</a>
 </div>
 
 <div id="yt-player"></div>
@@ -92,10 +90,12 @@
 <div id="box"><canvas id="c" width="800" height="800"></canvas></div>
 
 <div class="ui">
-  <label class="btn" onclick="startAudio(); playClick()">STEP 1: CHOOSE PHOTO<input type="file" id="u1" accept="image/*"></label>
-  <label class="btn btn-r" onclick="startAudio(); playClick()">STEP 2: UPLOAD FRAME<input type="file" id="u2" accept="image/*"></label>
-  <button id="ai-btn" class="btn btn-magic" onclick="startAudio(); eraseBackground()">STEP 3: SMART ERASE ✨</button>
-  
+  <label class="btn" onclick="playClick()">STEP 1: CHOOSE PHOTO<input type="file" id="u1" accept="image/*"></label>
+  <label class="btn btn-r" onclick="playClick()">STEP 2: UPLOAD FRAME<input type="file" id="u2" accept="image/*"></label>
+  <button id="ai-btn" class="btn btn-magic" onclick="eraseBackground()">STEP 3: SMART ERASE ✨</button>
+  <div class="lbl"><span style="color:#00ffff;">REFINE AI CUTOUT</span></div>
+  <input type="range" id="t" class="refine-slider" min="0" max="1" step="0.01" value="0.5">
+
   <div class="lbl">ZOOM PHOTO</div>
   <input type="range" id="z" min="0.1" max="4" step="0.01" value="1">
   <div class="lbl">CIRCLE SIZE</div>
@@ -105,12 +105,10 @@
 
 <script src="https://www.youtube.com/iframe_api"></script>
 <script>
-const c=document.getElementById('c'),x=c.getContext('2d'),z=document.getElementById('z'),m=document.getElementById('m'),sBtn=document.getElementById('save'),panel=document.getElementById('menu-panel'),box=document.getElementById('box'),mStat=document.getElementById('m-status'),aiBtn=document.getElementById('ai-btn');
-let i=new Image(),f=new Image(),cfg={s:1,m:375,x:400,y:400,d:false,lx:0,ly:0},originalFileName="Arcade_PFP",player,musicOn=true, audioStarted=false;
+const c=document.getElementById('c'),x=c.getContext('2d'),z=document.getElementById('z'),m=document.getElementById('m'),t=document.getElementById('t'),sBtn=document.getElementById('save'),panel=document.getElementById('menu-panel'),box=document.getElementById('box'),mStat=document.getElementById('m-status'),aiBtn=document.getElementById('ai-btn');
+let i=new Image(),f=new Image(),cfg={s:1,m:375,x:400,y:400,d:false,lx:0,ly:0},originalFileName="Arcade_PFP",player,musicOn=true,audioStarted=false,mask=null;
 
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-
-/* AI SEGMENTATION ENGINE */
 const selfieSegmentation = new SelfieSegmentation({locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/${file}`});
 selfieSegmentation.setOptions({modelSelection: 1});
 selfieSegmentation.onResults(onAIResults);
@@ -137,66 +135,33 @@ function toggleMusic() {
 }
 
 function toggleMenu() { startAudio(); playClick(); panel.classList.toggle('open'); }
+function playClick() { const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain(); osc.frequency.setValueAtTime(800, audioCtx.currentTime); osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.1); gain.gain.setValueAtTime(0.1, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1); osc.connect(gain); gain.connect(audioCtx.destination); osc.start(); osc.stop(audioCtx.currentTime + 0.1); }
+function playMagic() { const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain(); osc.type = 'triangle'; osc.frequency.setValueAtTime(400, audioCtx.currentTime); osc.frequency.exponentialRampToValueAtTime(1200, audioCtx.currentTime + 0.3); gain.gain.setValueAtTime(0.1, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3); osc.connect(gain); gain.connect(audioCtx.destination); osc.start(); osc.stop(audioCtx.currentTime + 0.3); }
 
-function playClick() {
-  const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
-  osc.frequency.setValueAtTime(800, audioCtx.currentTime); osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.1);
-  gain.gain.setValueAtTime(0.1, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
-  osc.connect(gain); gain.connect(audioCtx.destination); osc.start(); osc.stop(audioCtx.currentTime + 0.1);
-}
-
-function playShutter() {
-  const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
-  osc.type = 'square'; osc.frequency.setValueAtTime(200, audioCtx.currentTime); osc.frequency.setValueAtTime(400, audioCtx.currentTime + 0.05);
-  gain.gain.setValueAtTime(0.1, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
-  osc.connect(gain); gain.connect(audioCtx.destination); osc.start(); osc.stop(audioCtx.currentTime + 0.15);
-}
-
-function playMagic() {
-  const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
-  osc.type = 'triangle'; osc.frequency.setValueAtTime(400, audioCtx.currentTime); osc.frequency.exponentialRampToValueAtTime(1200, audioCtx.currentTime + 0.3);
-  gain.gain.setValueAtTime(0.1, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
-  osc.connect(gain); gain.connect(audioCtx.destination); osc.start(); osc.stop(audioCtx.currentTime + 0.3);
-}
-
-function playSlider(val) {
-  const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
-  osc.frequency.setValueAtTime(200 + (val > 5 ? (val-300)*5 : val * 100), audioCtx.currentTime);
-  gain.gain.setValueAtTime(0.02, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
-  osc.connect(gain); gain.connect(audioCtx.destination); osc.start(); osc.stop(audioCtx.currentTime + 0.05);
-}
-
-/* SMART AI ERASER LOGIC */
-async function eraseBackground() {
-  if (!i.src) return;
-  aiBtn.classList.add('loading');
-  aiBtn.innerText = "AI THINKING...";
-  playMagic();
-  await selfieSegmentation.send({image: i});
-}
+async function eraseBackground() { if (!i.src) return; aiBtn.classList.add('loading'); aiBtn.innerText = "AI THINKING..."; playMagic(); await selfieSegmentation.send({image: i}); }
 
 function onAIResults(results) {
-  const tempCanvas = document.createElement('canvas');
-  const tempCtx = tempCanvas.getContext('2d');
-  tempCanvas.width = i.width; tempCanvas.height = i.height;
-  
-  // Draw the mask
-  tempCtx.drawImage(results.segmentationMask, 0, 0, tempCanvas.width, tempCanvas.height);
-  tempCtx.globalCompositeOperation = 'source-in';
-  tempCtx.drawImage(i, 0, 0);
-  
-  i.src = tempCanvas.toDataURL();
-  i.onload = () => {
-    d();
-    aiBtn.classList.remove('loading');
-    aiBtn.innerText = "STEP 3: SMART ERASE ✨";
-  };
+  mask = results.segmentationMask;
+  applyMask();
+  aiBtn.classList.remove('loading'); aiBtn.innerText = "STEP 3: SMART ERASE ✨";
 }
 
-function updateSliderColor(el) {
-  const percent = ((el.value - el.min) / (el.max - el.min)) * 100;
-  el.style.setProperty('--v', percent + '%');
+function applyMask() {
+  if(!mask) return;
+  const tempCanvas = document.createElement('canvas'); const tempCtx = tempCanvas.getContext('2d');
+  tempCanvas.width = i.width; tempCanvas.height = i.height;
+  tempCtx.drawImage(mask, 0, 0, tempCanvas.width, tempCanvas.height);
+  const imgData = tempCtx.getImageData(0, 0, tempCanvas.width, tempCanvas.height);
+  const data = imgData.data;
+  const threshold = parseFloat(t.value);
+  for(let j=0; j<data.length; j+=4) { data[j+3] = data[j] > threshold * 255 ? 255 : 0; }
+  tempCtx.putImageData(imgData, 0, 0);
+  tempCtx.globalCompositeOperation = 'source-in'; tempCtx.drawImage(i, 0, 0);
+  const finalImage = new Image(); finalImage.src = tempCanvas.toDataURL();
+  finalImage.onload = () => { i = finalImage; d(); };
 }
+
+function updateSliderColor(el) { const percent = ((el.value - el.min) / (el.max - el.min)) * 100; el.style.setProperty('--v', percent + '%'); }
 
 function d(){
   x.clearRect(0,0,800,800); x.save(); x.beginPath(); x.arc(400,400,cfg.m,0,6.28); x.clip();
@@ -205,48 +170,25 @@ function d(){
   if (i.src || f.src) sBtn.classList.add('active');
 }
 
-box.ondragover = e => { e.preventDefault(); box.classList.add('drag-over'); };
-box.ondragleave = () => box.classList.remove('drag-over');
-box.ondrop = e => {
-  e.preventDefault(); box.classList.remove('drag-over');
-  const file = e.dataTransfer.files[0]; if (file && file.type.startsWith('image/')) handleFile(file);
-};
-
-function handleFile(file) {
-  originalFileName = file.name.split('.').slice(0, -1).join('.') || "Arcade_PFP";
-  let r=new FileReader(); r.onload=v=>{
-    i.src=v.target.result;
-    i.onload=()=>{ cfg.s=Math.max(800/i.width,800/i.height); z.value=cfg.s; updateSliderColor(z); d(); playClick(); }
-  }; r.readAsDataURL(file);
-}
-
 document.querySelectorAll('input[type=range]').forEach(el => {
-  el.addEventListener('input', () => { updateSliderColor(el); playSlider(el.value); });
+  el.addEventListener('input', () => { updateSliderColor(el); if(el.id === 't') applyMask(); });
   updateSliderColor(el);
 });
 
-document.getElementById('u1').onchange=e=>handleFile(e.target.files[0]);
-document.getElementById('u2').onchange=e=>{
+document.getElementById('u1').onchange=e=>{
   const file = e.target.files[0]; if(!file) return;
-  let r=new FileReader(); r.onload=v=>{ f.src=v.target.result; f.onload=d; }; r.readAsDataURL(file);
+  originalFileName = file.name.split('.').slice(0, -1).join('.') || "Arcade_PFP";
+  let r=new FileReader(); r.onload=v=>{ i.src=v.target.result; i.onload=()=>{ cfg.s=Math.max(800/i.width,800/i.height); z.value=cfg.s; updateSliderColor(z); d(); } }; r.readAsDataURL(file);
 };
-
+document.getElementById('u2').onchange=e=>{ const file = e.target.files[0]; if(!file) return; let r=new FileReader(); r.onload=v=>{ f.src=v.target.result; f.onload=d; }; r.readAsDataURL(file); };
 z.oninput=e=>{ cfg.s=parseFloat(e.target.value); d(); };
 m.oninput=e=>{ cfg.m=parseInt(e.target.value); d(); };
-
 function gp(e){ let r=c.getBoundingClientRect(), t=e.touches?e.touches[0]:e; return {x:(t.clientX-r.left)*(800/r.width),y:(t.clientY-r.top)*(800/r.height)}; }
 function st(e){ if(e.target==c){ e.preventDefault(); cfg.d=true; let p=gp(e); cfg.lx=p.x-cfg.x; cfg.ly=p.y-cfg.y; } }
 function mv(e){ if(cfg.d){ e.preventDefault(); let p=gp(e); cfg.x=p.x-cfg.lx; cfg.y=p.y-cfg.ly; d(); } }
 function en(){ cfg.d=false; }
-
-c.ontouchstart=st; window.ontouchmove=mv; window.ontouchend=en;
-c.onmousedown=st; window.onmousemove=mv; window.onmouseup=en;
-
-sBtn.onclick=()=>{
-  if(!i.src && !f.src) return;
-  playClick(); let a=document.createElement('a');
-  a.download = originalFileName + '.png'; a.href=c.toDataURL(); a.click();
-};
+c.ontouchstart=st; window.ontouchmove=mv; window.ontouchend=en; c.onmousedown=st; window.onmousemove=mv; window.onmouseup=en;
+sBtn.onclick=()=>{ if(!i.src && !f.src) return; let a=document.createElement('a'); a.download = originalFileName + '.png'; a.href=c.toDataURL(); a.click(); };
 </script>
 </body>
 </html>
