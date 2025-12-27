@@ -62,7 +62,7 @@
 
   .ui { margin-top: 20px; width: 260px; display: flex; flex-direction: column; gap: 6px; margin-left: auto; margin-right: auto; z-index: 100; position: relative; }
   .btn { background: #111; border: 1px solid #ffffff; color: white; padding: 10px; text-align: center; border-radius: 8px; font-weight: bold; font-size: 11px; cursor: pointer; display: block; }
-  .btn-center { border-color: #00ffff; color: #00ffff; margin-bottom: 5px; }
+  .btn-center { border-color: #00ffff; color: #00ffff; }
   .val-tag { color: #ff0000; font-weight: bold; font-family: monospace; font-size: 10px; }
   #save { background: #ff0000; border: none; font-size: 13px; color: white; padding: 12px; border-radius: 8px; font-weight: bold; margin-top: 10px; cursor: pointer; }
 
@@ -81,8 +81,16 @@
 <div id="menu-panel">
   <div class="lnk" onclick="toggleMusic()">MUSIC: <span id="m-status">ON</span></div>
   <div class="lnk" style="border-color:#00ffff;" onclick="openThemeSelector()">Switch Theme</div>
-  <a href="https://discord.gg/ardc" target="_blank" class="lnk" style="border-color:#5865F2;">Discord Server</a>
-  <a href="https://platopedia.com/groups/arcade" target="_blank" class="lnk" style="border-color:#00ffff;"><svg viewBox="0 0 24 24" style="width:18px; height:18px; fill:white;"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg><span>Arcade Website</span></a>
+  
+  <a href="https://discord.gg/ardc" target="_blank" class="lnk" style="border-color:#5865F2;">
+    <svg viewBox="0 0 127.14 96.36" style="width:18px; height:18px; fill:white;"><path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36,77.11,77.11,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1A105.25,105.25,0,0,0,126.6,80.22c2.36-24.44-5.42-48.18-18.9-72.15ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54,46,53.89,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.25,60,73.25,53s5-12.74,11.44-12.74S96.23,46,96.12,53,91.08,65.69,84.69,65.69Z"/></svg>
+    <span>Discord Server</span>
+  </a>
+
+  <a href="https://platopedia.com/groups/arcade" target="_blank" class="lnk" style="border-color:#00ffff;">
+    <svg viewBox="0 0 24 24" style="width:18px; height:18px; fill:white;"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+    <span>Arcade Website</span>
+  </a>
 </div>
 
 <div id="theme-selector">
@@ -126,7 +134,7 @@ const c=document.getElementById('c'),x=c.getContext('2d'),zSl=document.getElemen
 let i=new Image(),f=new Image(),cfg={s:1,m:375,x:400,y:400,r:0,d:false,lx:0,ly:0,ia:0,ir:0},player,musicOn=true,audioStarted=false,curT=1;
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
-function onYouTubeIframeAPIReady() { player = new YT.Player('yt-player', { height: '0', width: '0', videoId: 'nv_2rz5BFDA', playerVars: { 'autoplay': 1, 'loop': 1 }, events: { 'onReady': e => { if(musicOn) e.target.playVideo(); } } }); }
+function onYouTubeIframeAPIReady() { player = new YT.Player('yt-player', { height: '0', width: '0', videoId: 'nv_2rz5BFDA', playerVars: { 'autoplay': 1, 'loop': 1, 'playlist': 'nv_2rz5BFDA' }, events: { 'onReady': e => { if(musicOn) e.target.playVideo(); } } }); }
 function startAudio() { if (!audioStarted) { audioCtx.resume(); if(player && musicOn) player.playVideo(); audioStarted = true; } }
 function openThemeSelector() { panel.classList.remove('open'); tMenu.classList.add('open'); }
 function closeThemeSelector() { tMenu.classList.remove('open'); panel.classList.add('open'); }
@@ -146,12 +154,6 @@ function st(e){ if(e.target==c){ cfg.d=true; if(e.touches && e.touches.length ==
 function mv(e){ if(cfg.d){ if(e.touches && e.touches.length === 2) { let a = Math.atan2(e.touches[1].pageY - e.touches[0].pageY, e.touches[1].pageX - e.touches[0].pageX); cfg.r = cfg.ir + (a - cfg.ia); } else { let p=gp(e); cfg.x=p.x-cfg.lx; cfg.y=p.y-cfg.ly; } d(); } }
 c.ontouchstart=st; window.ontouchmove=mv; window.ontouchend=()=>cfg.d=false; c.onmousedown=st; window.onmousemove=mv; window.onmouseup=()=>cfg.d=false;
 
-function playClick() { const o = audioCtx.createOscillator(); const g = audioCtx.createGain(); o.frequency.setValueAtTime(800, audioCtx.currentTime); g.gain.setValueAtTime(0.1, audioCtx.currentTime); o.connect(g); g.connect(audioCtx.destination); o.start(); o.stop(audioCtx.currentTime + 0.1); }
 function playShutter() { const o = audioCtx.createOscillator(); const g = audioCtx.createGain(); o.type = 'square'; o.frequency.setValueAtTime(200, audioCtx.currentTime); g.gain.setValueAtTime(0.1, audioCtx.currentTime); o.connect(g); g.connect(audioCtx.destination); o.start(); o.stop(audioCtx.currentTime + 0.15); }
 function downloadPic() { 
-  const notes = [523.25, 659.25, 783.99, 1046.50]; notes.forEach((freq, idx) => { const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain(); osc.frequency.setValueAtTime(freq, audioCtx.currentTime + (idx * 0.1)); gain.gain.setValueAtTime(0.1, audioCtx.currentTime + (idx * 0.1)); gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + (idx * 0.1) + 0.1); osc.connect(gain); gain.connect(audioCtx.destination); osc.start(audioCtx.currentTime + (idx * 0.1)); osc.stop(audioCtx.currentTime + (idx * 0.1) + 0.1); });
-  let a=document.createElement('a'); a.download='Arcade_Edit.png'; a.href=c.toDataURL(); a.click(); 
-}
-</script>
-</body>
-</html>
+  const notes = [523.25, 659.25, 783.99, 1046.50]; notes.forEach((freq, idx) => { const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain(); osc.frequency.setValueAtTime(freq, audioCtx.currentTime + (
