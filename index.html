@@ -53,31 +53,36 @@
   
   .lbl{font-size:9px;color:#888;text-transform:uppercase;margin-top:2px;display:flex;justify-content:space-between;}
   
-  /* SLIDERS: Red handle on Cyan track */
+  /* SLIDERS: Red Progress on Cyan Track */
   input[type=range] {
     -webkit-appearance: none;
     width: 100%;
     background: transparent;
     margin: 10px 0;
   }
-  /* The Track (Cyan) */
+
+  /* The Track Design */
   input[type=range]::-webkit-slider-runnable-track {
     width: 100%;
-    height: 6px;
-    background: #00ffff;
-    border-radius: 3px;
-    box-shadow: 0 0 5px rgba(0, 255, 255, 0.5);
+    height: 8px;
+    cursor: pointer;
+    /* This gradient handles the Red Fill on Cyan Empty look */
+    background: linear-gradient(to right, #ff0000 var(--v, 0%), #00ffff var(--v, 0%));
+    border-radius: 4px;
+    box-shadow: 0 0 5px rgba(0, 255, 255, 0.3);
   }
-  /* The Handle (Red) */
+
+  /* The Red Knob */
   input[type=range]::-webkit-slider-thumb {
     -webkit-appearance: none;
-    height: 18px;
-    width: 18px;
+    height: 20px;
+    width: 20px;
     border-radius: 50%;
     background: #ff0000;
     cursor: pointer;
-    margin-top: -6px; /* Centers handle on track */
-    box-shadow: 0 0 8px #ff0000;
+    margin-top: -6px; /* Align with track */
+    box-shadow: 0 0 10px #ff0000;
+    border: 2px solid #ffffff;
   }
   
   /* Download Button */
@@ -129,6 +134,12 @@
 const c=document.getElementById('c'),x=c.getContext('2d'),z=document.getElementById('z'),m=document.getElementById('m');
 let i=new Image(),f=new Image(),cfg={s:1,m:375,x:400,y:400,d:false,lx:0,ly:0};
 
+// Helper function to update slider fill colors
+function updateSliderColor(el) {
+  const percent = ((el.value - el.min) / (el.max - el.min)) * 100;
+  el.style.setProperty('--v', percent + '%');
+}
+
 function d(){
   x.clearRect(0,0,800,800);
   x.save();x.beginPath();x.arc(400,400,cfg.m,0,6.28);x.clip();
@@ -137,9 +148,16 @@ function d(){
   if(f.src)x.drawImage(f,0,0,800,800);
 }
 
+document.querySelectorAll('input[type=range]').forEach(el => {
+  el.addEventListener('input', () => updateSliderColor(el));
+  updateSliderColor(el); // Initial call
+});
+
 document.getElementById('u1').onchange=e=>{
   let r=new FileReader();r.onload=v=>{i.src=v.target.result;i.onload=()=>{
-    cfg.s=Math.max(800/i.width,800/i.height);z.value=cfg.s;cfg.x=400;cfg.y=400;d();
+    cfg.s=Math.max(800/i.width,800/i.height);z.value=cfg.s;cfg.x=400;cfg.y=400;
+    updateSliderColor(z);
+    d();
   }};r.readAsDataURL(e.target.files[0]);
 };
 
@@ -147,8 +165,8 @@ document.getElementById('u2').onchange=e=>{
   let r=new FileReader();r.onload=v=>{f.src=v.target.result;f.onload=d;};r.readAsDataURL(e.target.files[0]);
 };
 
-z.oninput=e=>{cfg.s=parseFloat(e.target.value);d();};
-m.oninput=e=>{cfg.m=parseInt(e.target.value);d();};
+z.oninput=e=>{cfg.s=parseFloat(e.target.value);updateSliderColor(z);d();};
+m.oninput=e=>{cfg.m=parseInt(e.target.value);updateSliderColor(m);d();};
 
 function gp(e){let r=c.getBoundingClientRect(),t=e.touches?e.touches[0]:e;return{x:(t.clientX-r.left)*(800/r.width),y:(t.clientY-r.top)*(800/r.height)};}
 function st(e){if(e.target==c){e.preventDefault();cfg.d=true;let p=gp(e);cfg.lx=p.x-cfg.x;cfg.ly=p.y-cfg.y;}}
