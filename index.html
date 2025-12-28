@@ -11,74 +11,56 @@
     display: flex; flex-direction: column; align-items: center;
     min-height: 100vh; margin: 0; padding-bottom: 120px; 
     -webkit-overflow-scrolling: touch; 
-    /* RETRO SCANLINES - Seen on website, not in export */
+    /* OFFICIAL SCANLINE RETRO BACKGROUND */
     background-image: linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px);
     background-size: 100% 4px;
     overflow-x: hidden;
   }
   
-  /* --- 1. MENU TOGGLE (FIXED TOP LEFT) --- */
+  /* --- FIXED MENU TOGGLE --- */
   .menu-toggle {
-    position: fixed; 
-    top: 15px; left: 15px; 
-    background: #1a1a1c; color: #fff; 
+    position: fixed; top: 15px; left: 15px; 
+    background: #1a1a1c; color: #ffffff; 
     border: 1px solid rgba(255,255,255,0.1); 
-    padding: 8px 12px; border-radius: 4px; 
-    font-weight: bold; cursor: pointer; 
-    z-index: 100000; 
+    padding: 8px 12px; border-radius: 4px; font-weight: bold; cursor: pointer; z-index: 100000;
     font-size: 12px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.5);
   }
 
   #menu-panel {
     position: fixed; top: 0; left: -260px; width: 240px; height: 100%;
-    background: #1a1a1c; padding-top: 60px; 
-    transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
-    z-index: 99999; 
+    background: #1a1a1c; padding-top: 60px; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); z-index: 99999;
     display: flex; flex-direction: column; gap: 10px; padding-left: 15px; padding-right: 15px;
     box-shadow: 2px 0 15px rgba(0,0,0,0.8);
   }
   #menu-panel.open { left: 0; }
 
-  /* --- 2. SWITCH BUTTON (ABSOLUTE TOP RIGHT) --- */
-  #studio-toggle {
-    position: absolute; top: 15px; right: 15px; 
-    background: #ff0000; color: white;
-    border: 2px solid #ffffff; padding: 8px 14px; border-radius: 4px; 
-    font-weight: bold; cursor: pointer; 
-    z-index: 1000; font-size: 11px;
-    text-transform: uppercase; letter-spacing: 1px; 
-    box-shadow: 0 0 10px rgba(255,0,0,0.5);
-    transition: 0.3s;
-  }
-  #studio-toggle.gif-active { background: #00ffff; color: #000; box-shadow: 0 0 10px rgba(0,255,255,0.5); }
-
   .lnk, .music-btn {
     display: flex; align-items: center; gap: 10px; padding: 12px;
     text-decoration: none; color: white; font-size: 13px; font-weight: bold;
-    border-radius: 4px; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.05);
+    border-radius: 4px; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.05); cursor: pointer;
   }
   .music-btn { border-color: #ff0000; background: rgba(255,0,0,0.1); justify-content: space-between; }
 
   h1 {
-    color: #fff; margin: 60px 0 0 0; font-family: "Arial Black", sans-serif; font-style: italic;
+    color: #ffffff; margin: 60px 0 0 0; font-family: "Arial Black", sans-serif; font-style: italic;
     font-size: 36px; text-transform: uppercase; letter-spacing: -1px;
     text-shadow: 2px 2px 0px #ff0000, -1px -1px 10px rgba(255, 0, 0, 0.8);
     animation: arcadeBounce 1.8s infinite ease-in-out;
   }
-  @keyframes arcadeBounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-  .sub { color: #fff; font-weight: bold; margin: 2px 0 15px 0; text-transform: uppercase; font-size: 11px; letter-spacing: 2px; }
+  @keyframes arcadeBounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+  .sub { color: #ffffff; font-weight: bold; margin: 2px 0 15px 0; text-transform: uppercase; font-size: 11px; letter-spacing: 2px; text-align: center; }
   
-  /* CANVAS CONTAINER */
   #box {
     position: relative; width: 310px; height: 310px; border-radius: 50%; overflow: hidden;
-    /* SUBTLE GRID TO SHOW TRANSPARENCY ON WEBSITE */
     background-image: 
       linear-gradient(45deg, #1a1a1c 25%, transparent 25%), 
       linear-gradient(-45deg, #1a1a1c 25%, transparent 25%), 
       linear-gradient(45deg, transparent 75%, #1a1a1c 75%), 
       linear-gradient(-45deg, transparent 75%, #1a1a1c 75%);
-    background-color: transparent; /* FIXED: Changed from black to transparent */
+    background-color: transparent;
     background-size: 20px 20px; 
     box-shadow: 0 0 20px rgba(0,0,0,0.5); border: 2px solid transparent; 
     -webkit-mask-image: -webkit-radial-gradient(white,black); z-index: 10;
@@ -87,7 +69,7 @@
   
   .ui { margin-top: 20px; width: 300px; display: flex; flex-direction: column; gap: 6px; z-index: 100; position: relative; }
   .btn {
-    background: #111; border: 2px solid #fff; color: white; padding: 10px; text-align: center;
+    background: #111; border: 2px solid #ffffff; color: white; padding: 10px; text-align: center;
     border-radius: 8px; font-weight: bold; display: block; font-size: 12px; cursor: pointer; text-transform: uppercase;
   }
   .btn-r { border-color: #ff0000; }
@@ -98,7 +80,8 @@
 
   input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; margin: 10px 0; cursor: pointer; }
   input[type=range]::-webkit-slider-runnable-track {
-    width: 100%; height: 8px; background: linear-gradient(to right, #ff0000 var(--v, 0%), #00ffff var(--v, 0%)); border-radius: 4px;
+    width: 100%; height: 8px; 
+    background: linear-gradient(to right, #ff0000 var(--v, 0%), #00ffff var(--v, 0%)); border-radius: 4px;
   }
   input[type=range]::-webkit-slider-thumb {
     -webkit-appearance: none; height: 20px; width: 20px; border-radius: 50%;
@@ -108,58 +91,38 @@
   #save {
     background: #ff0000; border: none; font-size: 14px; color: white; padding: 12px;
     border-radius: 8px; font-weight: bold; margin-top: 10px; cursor: pointer; text-transform: uppercase;
-    opacity: 0.4; pointer-events: none;
+    opacity: 0.4; pointer-events: none; transition: 0.2s;
   }
-  #save.active { opacity: 1; pointer-events: auto; }
-  
-  /* RECORD BUTTON (CYAN) */
-  #record-btn {
-    background: #00ffff; color: #000; border: none; font-size: 14px; padding: 12px;
-    border-radius: 8px; font-weight: bold; margin-top: 10px; cursor: pointer; text-transform: uppercase;
-    display: none; box-shadow: 0 0 15px rgba(0,255,255,0.4);
-  }
-  #record-btn.recording { background: #ff0000; color: #fff; animation: pulse 1s infinite; }
-  @keyframes pulse { 0% { box-shadow: 0 0 10px #ff0000; } 50% { box-shadow: 0 0 20px #ff0000; } 100% { box-shadow: 0 0 10px #ff0000; } }
-
+  #save.active { cursor: pointer; opacity: 1; pointer-events: auto; }
   input[type=file] { display: none; }
-  #yt-player, #hidden-video { display: none; }
+  #yt-player { display: none; }
 </style>
 </head>
 <body onclick="startAudio()">
 
 <button class="menu-toggle" onclick="toggleMenu(event)">MENU ☰</button>
-<button id="studio-toggle" onclick="toggleStudioMode()">VIDEO STUDIO 🎬</button>
 
 <div id="menu-panel">
   <div class="music-btn" onclick="toggleMusic()">MUSIC CONTROL <span id="m-status" style="color:#ff0000;">ON</span></div>
-  <a href="https://discord.gg/ardc" target="_blank" class="lnk" style="border-color:#5865F2;"><span>Discord Server</span></a>
-  <a href="https://platopedia.com/groups/arcade" target="_blank" class="lnk" style="border-color:#00ffff;"><span>Arcade Website</span></a>
+  <a href="https://discord.gg/ardc" target="_blank" class="lnk" style="border-color:#5865F2;">
+    <span>Discord Server</span>
+  </a>
+  <a href="https://platopedia.com/groups/arcade" target="_blank" class="lnk" style="border-color:#00ffff;">
+    <span>Arcade Website</span>
+  </a>
 </div>
 
 <div id="yt-player"></div>
-<video id="hidden-video" muted loop playsinline crossorigin="anonymous"></video>
 
-<h1 id="main-title">ARCADE</h1>
-<p class="sub" id="main-sub">PICTURE STUDIO</p>
+<h1>ARCADE</h1>
+<p class="sub">PICTURE STUDIO</p>
 
 <div id="box"><canvas id="c" width="800" height="800"></canvas></div>
 
 <div class="ui">
-  <div id="img-controls">
-    <label class="btn" onclick="playClick()">CHOOSE IMAGE<input type="file" id="u1" accept="image/*" onchange="handleFile(event)"></label>
-    <label class="btn btn-r" onclick="playClick()">APPLY FRAME<input type="file" id="u2" accept="image/*" onchange="handleFrame(event)"></label>
-    <button class="btn btn-center" onclick="centerSubject()">CENTER SUBJECT 🎯</button>
-  </div>
-
-  <div id="video-controls" style="display:none;">
-    <label class="btn" style="border-color:#00ffff;" onclick="playClick()">SELECT VIDEO 🎥<input type="file" id="v1" accept="video/*" onchange="handleVideo(event)"></label>
-    <label class="btn btn-r" onclick="playClick()">APPLY FRAME<input type="file" id="u2_vid" accept="image/*" onchange="handleFrame(event)"></label>
-    
-    <div class="lbl">PLAYBACK SPEED <span id="speed-val" class="val-tag">1.0x</span></div>
-    <input type="range" id="speed" min="0.5" max="3.0" step="0.1" value="1.0" oninput="updateSpeed(this.value)">
-    
-    <button id="record-btn" onclick="recordVideo()">RECORD CLIP (5s) 🔴</button>
-  </div>
+  <label class="btn" onclick="playClick()">CHOOSE IMAGE<input type="file" id="u1" accept="image/*" onchange="handleFile(event)"></label>
+  <label class="btn btn-r" onclick="playClick()">APPLY FRAME<input type="file" id="u2" accept="image/*" onchange="handleFrame(event)"></label>
+  <button class="btn btn-center" onclick="centerSubject()">CENTER SUBJECT 🎯</button>
   
   <div class="lbl">SCALE ADJUSTMENT <span id="z-val" class="val-tag">100%</span></div>
   <input type="range" id="z" min="0.1" max="4" step="0.01" value="1" oninput="updateZ(this.value)">
@@ -172,10 +135,9 @@
 
 <script src="https://www.youtube.com/iframe_api"></script>
 <script>
-const c=document.getElementById('c'),x=c.getContext('2d'),zSl=document.getElementById('z'),mSl=document.getElementById('m'),sBtn=document.getElementById('save'),panel=document.getElementById('menu-panel'),mStat=document.getElementById('m-status'),toggleBtn=document.getElementById('studio-toggle'),vEl=document.getElementById('hidden-video'),rBtn=document.getElementById('record-btn');
-const zVal=document.getElementById('z-val'),mVal=document.getElementById('m-val'),sVal=document.getElementById('speed-val');
-let i=new Image(),f=new Image(),cfg={s:1,m:375,x:400,y:400,r:0,d:false,lx:0,ly:0},player,musicOn=true,audioStarted=false,isVideoMode=false,vActive=false,playbackSpeed=1.0;
-let mediaRecorder, recordedChunks = [];
+const c=document.getElementById('c'),x=c.getContext('2d'),zSl=document.getElementById('z'),mSl=document.getElementById('m'),sBtn=document.getElementById('save'),panel=document.getElementById('menu-panel'),mStat=document.getElementById('m-status');
+const zVal=document.getElementById('z-val'),mVal=document.getElementById('m-val');
+let i=new Image(),f=new Image(),cfg={s:1,m:375,x:400,y:400,r:0,d:false,lx:0,ly:0},player,musicOn=true,audioStarted=false;
 
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
@@ -186,153 +148,75 @@ window.addEventListener('click', (e) => {
   }
 });
 
-function toggleStudioMode() {
-    isVideoMode = !isVideoMode;
-    playClick();
-    document.getElementById('img-controls').style.display = isVideoMode ? 'none' : 'block';
-    document.getElementById('video-controls').style.display = isVideoMode ? 'block' : 'none';
-    
-    sBtn.style.display = isVideoMode ? 'none' : 'block';
-    rBtn.style.display = (isVideoMode && vActive) ? 'block' : 'none';
-    
-    document.getElementById('main-title').innerText = isVideoMode ? 'VIDEO' : 'ARCADE';
-    document.getElementById('main-sub').innerText = isVideoMode ? 'MOTION STUDIO' : 'PICTURE STUDIO';
-    
-    if (isVideoMode) {
-        toggleBtn.innerText = "SWITCH TO PICTURE STUDIO 🖼️";
-        toggleBtn.classList.add('gif-active');
-        if(vActive) vEl.play();
-    } else {
-        toggleBtn.innerText = "VIDEO STUDIO 🎬";
-        toggleBtn.classList.remove('gif-active');
-        vEl.pause();
-    }
-    d();
+function onYouTubeIframeAPIReady() {
+  player = new YT.Player('yt-player', {
+    height: '0', width: '0', videoId: 'nv_2rz5BFDA',
+    playerVars: { 'autoplay': 1, 'loop': 1, 'playlist': 'nv_2rz5BFDA' },
+    events: { 'onReady': e => { e.target.setVolume(25); if(musicOn) e.target.playVideo(); } }
+  });
 }
 
-function handleVideo(e) {
-    const file = e.target.files[0];
-    if (file) {
-        vEl.src = URL.createObjectURL(file);
-        vEl.onloadedmetadata = () => {
-            vActive = true;
-            cfg.s = Math.max(800/vEl.videoWidth, 800/vEl.videoHeight);
-            zSl.value = cfg.s;
-            zVal.innerText = Math.round(cfg.s*100)+"%";
-            vEl.playbackRate = playbackSpeed;
-            vEl.play();
-            
-            rBtn.style.display = 'block';
-            rBtn.innerText = "RECORD CLIP (5s) 🔴";
-            rBtn.disabled = false;
-            rBtn.classList.remove('recording');
-            
-            playShutter();
-            requestAnimationFrame(drawLoop);
-        };
-    }
+function startAudio() {
+  if (audioStarted) return;
+  audioCtx.resume();
+  if(player && musicOn) player.playVideo();
+  audioStarted = true;
 }
 
-function updateSpeed(v) {
-    playbackSpeed = parseFloat(v);
-    sVal.innerText = playbackSpeed.toFixed(1) + "x";
-    vEl.playbackRate = playbackSpeed;
-    updateSliderColor(document.getElementById('speed'));
+function centerSubject() { if(!i.src) return; playShutter(); cfg.x = 400; cfg.y = 400; d(); }
+
+function toggleMusic() {
+  startAudio(); playClick(); musicOn = !musicOn;
+  if(musicOn) { player.playVideo(); mStat.innerText = "ON"; mStat.style.color = "#ff0000"; }
+  else { player.pauseVideo(); mStat.innerText = "OFF"; mStat.style.color = "#888"; }
 }
 
-function drawLoop() {
-    if(isVideoMode && vActive) { d(); requestAnimationFrame(drawLoop); }
+function toggleMenu(e) { 
+  e.stopPropagation(); startAudio(); playClick(); panel.classList.toggle('open'); 
 }
 
-function recordVideo() {
-    if (!vActive) return;
-    
-    rBtn.innerText = "RECORDING...";
-    rBtn.classList.add('recording');
-    rBtn.disabled = true;
+function playClick() { const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain(); osc.frequency.setValueAtTime(800, audioCtx.currentTime); osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.1); gain.gain.setValueAtTime(0.1, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1); osc.connect(gain); gain.connect(audioCtx.destination); osc.start(); osc.stop(audioCtx.currentTime + 0.1); }
+function playShutter() { const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain(); osc.type = 'square'; osc.frequency.setValueAtTime(200, audioCtx.currentTime); osc.frequency.setValueAtTime(400, audioCtx.currentTime + 0.05); gain.gain.setValueAtTime(0.1, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.15); osc.connect(gain); gain.connect(audioCtx.destination); osc.start(); osc.stop(audioCtx.currentTime + 0.15); }
 
-    const stream = c.captureStream(30); 
-    // VP9 codec is required for transparency in WebM
-    const options = { mimeType: 'video/webm;codecs=vp9' }; 
-    
-    try {
-        mediaRecorder = new MediaRecorder(stream, options);
-    } catch (e) {
-        // Fallback if VP9 isn't supported (might lose transparency on some browsers)
-        mediaRecorder = new MediaRecorder(stream); 
-    }
-
-    recordedChunks = [];
-    mediaRecorder.ondataavailable = (e) => { if(e.data.size > 0) recordedChunks.push(e.data); };
-    
-    mediaRecorder.onstop = () => {
-        const blob = new Blob(recordedChunks, { type: 'video/webm' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'Arcade_Motion.webm';
-        a.click();
-        
-        rBtn.innerText = "RECORD CLIP (5s) 🔴";
-        rBtn.classList.remove('recording');
-        rBtn.disabled = false;
-    };
-
-    mediaRecorder.start();
-    setTimeout(() => { mediaRecorder.stop(); }, 5000);
+function updateSliderColor(el) { 
+  const percent = ((el.value - el.min) / (el.max - el.min)) * 100;
+  el.style.setProperty('--v', percent + '%');
 }
 
 function d(){
-  // CRITICAL: Clear canvas to transparent before drawing new frame
-  x.clearRect(0,0,800,800); 
-  
-  x.save(); x.beginPath(); x.arc(400,400,cfg.m,0,6.28); x.clip();
-  
-  if(isVideoMode && vActive){
-      let w=vEl.videoWidth*cfg.s, h=vEl.videoHeight*cfg.s;
-      x.save(); 
-      x.translate(cfg.x, cfg.y); 
-      x.drawImage(vEl, -w/2, -h/2, w, h); 
-      x.restore();
-  } else if(i.src){ 
-      let w=i.width*cfg.s, h=i.height*cfg.s; 
-      x.save(); 
-      x.translate(cfg.x, cfg.y); 
-      x.drawImage(i, -w/2, -h/2, w, h); 
-      x.restore(); 
+  x.clearRect(0,0,800,800); x.save(); x.beginPath(); x.arc(400,400,cfg.m,0,6.28); x.clip();
+  if(i.src){ 
+    let w=i.width*cfg.s, h=i.height*cfg.s; 
+    x.save(); x.translate(cfg.x, cfg.y); x.drawImage(i, -w/2, -h/2, w, h); x.restore(); 
   }
-  
-  x.restore(); 
-  if(f.src) x.drawImage(f, 0, 0, 800, 800);
-  
-  if ((i.src && !isVideoMode) || (f.src && !isVideoMode)) sBtn.classList.add('active');
+  x.restore(); if(f.src) x.drawImage(f, 0, 0, 800, 800);
+  if (i.src || f.src) sBtn.classList.add('active');
 }
 
-// UTILITIES
 function handleFile(e) {
   let r=new FileReader(); r.onload=v=>{ const nextI = new Image(); nextI.onload=()=>{ i=nextI; cfg.s=Math.max(800/i.width,800/i.height); zSl.value=cfg.s; zVal.innerText=Math.round(cfg.s*100)+"%"; updateSliderColor(zSl); d(); playClick(); }; nextI.src=v.target.result; }; r.readAsDataURL(e.target.files[0]);
 }
+
 function handleFrame(e) { 
   let r=new FileReader(); r.onload=v=>{ const nF=new Image(); nF.onload=()=>{ f=nF; d(); playClick(); }; nF.src=v.target.result; }; r.readAsDataURL(e.target.files[0]); 
 }
-function onYouTubeIframeAPIReady() { player = new YT.Player('yt-player', { height: '0', width: '0', videoId: 'nv_2rz5BFDA', playerVars: { 'autoplay': 1, 'loop': 1, 'playlist': 'nv_2rz5BFDA' }, events: { 'onReady': e => { e.target.setVolume(25); if(musicOn) e.target.playVideo(); } } }); }
-function startAudio() { if (audioStarted) return; audioCtx.resume(); if(player && musicOn) player.playVideo(); audioStarted = true; }
-function toggleMusic() { startAudio(); playClick(); musicOn = !musicOn; if(musicOn) { player.playVideo(); mStat.innerText = "ON"; mStat.style.color = "#ff0000"; } else { player.pauseVideo(); mStat.innerText = "OFF"; mStat.style.color = "#888"; } }
-function toggleMenu(e) { e.stopPropagation(); startAudio(); playClick(); panel.classList.toggle('open'); }
-function playClick() { const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain(); osc.frequency.setValueAtTime(800, audioCtx.currentTime); osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.1); gain.gain.setValueAtTime(0.1, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1); osc.connect(gain); gain.connect(audioCtx.destination); osc.start(); osc.stop(audioCtx.currentTime + 0.1); }
-function playShutter() { const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain(); osc.type = 'square'; osc.frequency.setValueAtTime(200, audioCtx.currentTime); osc.frequency.setValueAtTime(400, audioCtx.currentTime + 0.05); gain.gain.setValueAtTime(0.1, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.15); osc.connect(gain); gain.connect(audioCtx.destination); osc.start(); osc.stop(audioCtx.currentTime + 0.15); }
-function updateSliderColor(el) { const percent = ((el.value - el.min) / (el.max - el.min)) * 100; el.style.setProperty('--v', percent + '%'); }
+
+document.querySelectorAll('input[type=range]').forEach(el => {
+  el.addEventListener('input', () => { updateSliderColor(el); });
+  updateSliderColor(el);
+});
+
 function updateZ(v) { cfg.s=parseFloat(v); zVal.innerText=Math.round(v*100)+"%"; d(); }
 function updateM(v) { cfg.m=parseInt(v); mVal.innerText=v+"px"; d(); }
-function centerSubject() { if(!i.src && !vActive) return; playShutter(); cfg.x = 400; cfg.y = 400; d(); }
+
 function gp(e, idx=0){ let r=c.getBoundingClientRect(), t=e.touches?e.touches[idx]:e; return {x:(t.clientX-r.left)*(800/r.width),y:(t.clientY-r.top)*(800/r.height)}; }
 function st(e){ if(e.target==c){ e.preventDefault(); cfg.d=true; let p=gp(e); cfg.lx=p.x-cfg.x; cfg.ly=p.y-cfg.y; } }
 function mv(e){ if(cfg.d){ e.preventDefault(); let p=gp(e); cfg.x=p.x-cfg.lx; cfg.y=p.y-cfg.ly; d(); } }
 function en(){ cfg.d=false; }
 c.ontouchstart=st; window.ontouchmove=mv; window.ontouchend=en;
 c.onmousedown=st; window.onmousemove=mv; window.onmouseup=en;
-function downloadPic() { if(!i.src && !f.src) return; let a=document.createElement('a'); a.download = 'Arcade_Studio_Picture.png'; a.href=c.toDataURL(); a.click(); }
-document.querySelectorAll('input[type=range]').forEach(el => { el.addEventListener('input', () => { updateSliderColor(el); }); updateSliderColor(el); });
+
+function downloadPic() { if(!i.src && !f.src) return; let a=document.createElement('a'); a.download = 'Arcade_Studio_Export.png'; a.href=c.toDataURL(); a.click(); }
 </script>
 </body>
 </html>
