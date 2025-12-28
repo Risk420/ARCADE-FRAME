@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Arcade Studio</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gifshot/0.4.5/gifshot.min.js"></script>
 <style>
   html { scroll-behavior: smooth; }
   body {
@@ -18,7 +17,7 @@
     overflow-x: hidden;
   }
   
-  /* --- FIXED MENU TOGGLE (HIGHEST LAYER) --- */
+  /* --- 1. MENU TOGGLE (FIXED TOP LEFT) --- */
   .menu-toggle {
     position: fixed; 
     top: 15px; left: 15px; 
@@ -26,7 +25,7 @@
     border: 1px solid rgba(255,255,255,0.1); 
     padding: 8px 12px; border-radius: 4px; 
     font-weight: bold; cursor: pointer; 
-    z-index: 99999; /* Always on top */
+    z-index: 100000; /* Highest possible layer */
     font-size: 12px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.5);
   }
@@ -35,13 +34,13 @@
     position: fixed; top: 0; left: -260px; width: 240px; height: 100%;
     background: #1a1a1c; padding-top: 60px; 
     transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
-    z-index: 99998; /* Under button, over content */
+    z-index: 99999; 
     display: flex; flex-direction: column; gap: 10px; padding-left: 15px; padding-right: 15px;
     box-shadow: 2px 0 15px rgba(0,0,0,0.8);
   }
   #menu-panel.open { left: 0; }
 
-  /* STUDIO SWITCHER */
+  /* --- 2. SWITCH BUTTON (ABSOLUTE TOP RIGHT) --- */
   #studio-toggle {
     position: absolute; top: 15px; right: 15px; 
     background: #ff0000; color: white;
@@ -54,6 +53,7 @@
   }
   #studio-toggle.gif-active { background: #00ffff; color: #000; box-shadow: 0 0 10px rgba(0,255,255,0.5); }
 
+  /* LINKS & HEADERS */
   .lnk, .music-btn {
     display: flex; align-items: center; gap: 10px; padding: 12px;
     text-decoration: none; color: white; font-size: 13px; font-weight: bold;
@@ -70,6 +70,7 @@
   @keyframes arcadeBounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
   .sub { color: #fff; font-weight: bold; margin: 2px 0 15px 0; text-transform: uppercase; font-size: 11px; letter-spacing: 2px; }
   
+  /* CANVAS */
   #box {
     position: relative; width: 310px; height: 310px; border-radius: 50%; overflow: hidden;
     background-image: linear-gradient(45deg,#111 25%,transparent 25%),linear-gradient(-45deg,#111 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#111 75%),linear-gradient(-45deg,transparent 75%,#111 75%);
@@ -78,6 +79,7 @@
   }
   canvas { position: absolute; top: 0; left: 0; width: 310px; height: 310px; touch-action: none; z-index: 15; }
   
+  /* UI BUTTONS */
   .ui { margin-top: 20px; width: 300px; display: flex; flex-direction: column; gap: 6px; z-index: 100; position: relative; }
   .btn {
     background: #111; border: 2px solid #fff; color: white; padding: 10px; text-align: center;
@@ -89,6 +91,7 @@
   .lbl { font-size: 9px; color: #888; text-transform: uppercase; margin-top: 2px; display: flex; justify-content: space-between; align-items: center; }
   .val-tag { color: #ff0000; font-weight: bold; font-family: monospace; font-size: 10px; }
 
+  /* SLIDERS */
   input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; margin: 10px 0; cursor: pointer; }
   input[type=range]::-webkit-slider-runnable-track {
     width: 100%; height: 8px; background: linear-gradient(to right, #ff0000 var(--v, 0%), #00ffff var(--v, 0%)); border-radius: 4px;
@@ -105,12 +108,14 @@
   }
   #save.active { opacity: 1; pointer-events: auto; }
   
-  /* DOWNLOAD GIF BUTTON (CYAN) */
-  #dl-gif-btn {
+  /* RECORD BUTTON (CYAN) */
+  #record-btn {
     background: #00ffff; color: #000; border: none; font-size: 14px; padding: 12px;
     border-radius: 8px; font-weight: bold; margin-top: 10px; cursor: pointer; text-transform: uppercase;
     display: none; box-shadow: 0 0 15px rgba(0,255,255,0.4);
   }
+  #record-btn.recording { background: #ff0000; color: #fff; animation: pulse 1s infinite; }
+  @keyframes pulse { 0% { box-shadow: 0 0 10px #ff0000; } 50% { box-shadow: 0 0 20px #ff0000; } 100% { box-shadow: 0 0 10px #ff0000; } }
 
   input[type=file] { display: none; }
   #yt-player, #hidden-video { display: none; }
@@ -119,7 +124,7 @@
 <body onclick="startAudio()">
 
 <button class="menu-toggle" onclick="toggleMenu(event)">MENU ☰</button>
-<button id="studio-toggle" onclick="toggleStudioMode()">GIF STUDIO 🎬</button>
+<button id="studio-toggle" onclick="toggleStudioMode()">VIDEO STUDIO 🎬</button>
 
 <div id="menu-panel">
   <div class="music-btn" onclick="toggleMusic()">MUSIC CONTROL <span id="m-status" style="color:#ff0000;">ON</span></div>
@@ -142,14 +147,14 @@
     <button class="btn btn-center" onclick="centerSubject()">CENTER SUBJECT 🎯</button>
   </div>
 
-  <div id="gif-controls" style="display:none;">
+  <div id="video-controls" style="display:none;">
     <label class="btn" style="border-color:#00ffff;" onclick="playClick()">SELECT VIDEO 🎥<input type="file" id="v1" accept="video/*" onchange="handleVideo(event)"></label>
-    <label class="btn btn-r" onclick="playClick()">APPLY FRAME<input type="file" id="u2_gif" accept="image/*" onchange="handleFrame(event)"></label>
+    <label class="btn btn-r" onclick="playClick()">APPLY FRAME<input type="file" id="u2_vid" accept="image/*" onchange="handleFrame(event)"></label>
     
-    <div class="lbl">GIF SPEED <span id="speed-val" class="val-tag">1.0x</span></div>
+    <div class="lbl">PLAYBACK SPEED <span id="speed-val" class="val-tag">1.0x</span></div>
     <input type="range" id="speed" min="0.5" max="3.0" step="0.1" value="1.0" oninput="updateSpeed(this.value)">
     
-    <button id="dl-gif-btn" onclick="downloadGif()">DOWNLOAD GIF ⬇️</button>
+    <button id="record-btn" onclick="recordVideo()">RECORD CLIP (5s) 🔴</button>
   </div>
   
   <div class="lbl">SCALE ADJUSTMENT <span id="z-val" class="val-tag">100%</span></div>
@@ -163,13 +168,14 @@
 
 <script src="https://www.youtube.com/iframe_api"></script>
 <script>
-const c=document.getElementById('c'),x=c.getContext('2d'),zSl=document.getElementById('z'),mSl=document.getElementById('m'),sBtn=document.getElementById('save'),panel=document.getElementById('menu-panel'),mStat=document.getElementById('m-status'),toggleBtn=document.getElementById('studio-toggle'),vEl=document.getElementById('hidden-video'),gBtn=document.getElementById('dl-gif-btn');
+const c=document.getElementById('c'),x=c.getContext('2d'),zSl=document.getElementById('z'),mSl=document.getElementById('m'),sBtn=document.getElementById('save'),panel=document.getElementById('menu-panel'),mStat=document.getElementById('m-status'),toggleBtn=document.getElementById('studio-toggle'),vEl=document.getElementById('hidden-video'),rBtn=document.getElementById('record-btn');
 const zVal=document.getElementById('z-val'),mVal=document.getElementById('m-val'),sVal=document.getElementById('speed-val');
-let i=new Image(),f=new Image(),cfg={s:1,m:375,x:400,y:400,r:0,d:false,lx:0,ly:0},player,musicOn=true,audioStarted=false,isGifMode=false,vActive=false,playbackSpeed=1.0;
+let i=new Image(),f=new Image(),cfg={s:1,m:375,x:400,y:400,r:0,d:false,lx:0,ly:0},player,musicOn=true,audioStarted=false,isVideoMode=false,vActive=false,playbackSpeed=1.0;
+let mediaRecorder, recordedChunks = [];
 
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
-// 1. MENU CLOSE LOGIC (FIXED)
+// 1. MENU CLOSE LOGIC
 window.addEventListener('click', (e) => {
   if (panel.classList.contains('open') && !panel.contains(e.target) && !e.target.classList.contains('menu-toggle')) {
     panel.classList.remove('open');
@@ -178,48 +184,48 @@ window.addEventListener('click', (e) => {
 });
 
 function toggleStudioMode() {
-    isGifMode = !isGifMode;
+    isVideoMode = !isVideoMode;
     playClick();
-    document.getElementById('img-controls').style.display = isGifMode ? 'none' : 'block';
-    document.getElementById('gif-controls').style.display = isGifMode ? 'block' : 'none';
+    document.getElementById('img-controls').style.display = isVideoMode ? 'none' : 'block';
+    document.getElementById('video-controls').style.display = isVideoMode ? 'block' : 'none';
     
-    sBtn.style.display = isGifMode ? 'none' : 'block';
-    // Show download button ONLY if video is already selected
-    gBtn.style.display = (isGifMode && vActive) ? 'block' : 'none';
+    sBtn.style.display = isVideoMode ? 'none' : 'block';
+    // Show record button ONLY if video is already selected
+    rBtn.style.display = (isVideoMode && vActive) ? 'block' : 'none';
     
-    document.getElementById('main-title').innerText = isGifMode ? 'GIF' : 'ARCADE';
-    document.getElementById('main-sub').innerText = isGifMode ? 'MOTION STUDIO' : 'PICTURE STUDIO';
+    document.getElementById('main-title').innerText = isVideoMode ? 'VIDEO' : 'ARCADE';
+    document.getElementById('main-sub').innerText = isVideoMode ? 'MOTION STUDIO' : 'PICTURE STUDIO';
     
-    if (isGifMode) {
+    if (isVideoMode) {
         toggleBtn.innerText = "SWITCH TO PICTURE STUDIO 🖼️";
         toggleBtn.classList.add('gif-active');
         if(vActive) vEl.play();
     } else {
-        toggleBtn.innerText = "GIF STUDIO 🎬";
+        toggleBtn.innerText = "VIDEO STUDIO 🎬";
         toggleBtn.classList.remove('gif-active');
         vEl.pause();
     }
     d();
 }
 
-// 2. VIDEO HANDLER - INSTANT PREVIEW, NO GENERATING TEXT
+// 2. VIDEO HANDLER - INSTANT PREVIEW
 function handleVideo(e) {
     const file = e.target.files[0];
     if (file) {
         vEl.src = URL.createObjectURL(file);
         vEl.onloadedmetadata = () => {
             vActive = true;
-            // Auto fit
             cfg.s = Math.max(800/vEl.videoWidth, 800/vEl.videoHeight);
             zSl.value = cfg.s;
             zVal.innerText = Math.round(cfg.s*100)+"%";
             vEl.playbackRate = playbackSpeed;
             vEl.play();
             
-            // SHOW BUTTON IMMEDIATELY. NO "GENERATING" TEXT.
-            gBtn.style.display = 'block';
-            gBtn.innerText = "DOWNLOAD GIF ⬇️"; // Reset text
-            gBtn.disabled = false;
+            // SHOW RECORD BUTTON IMMEDIATELY
+            rBtn.style.display = 'block';
+            rBtn.innerText = "RECORD CLIP (5s) 🔴";
+            rBtn.disabled = false;
+            rBtn.classList.remove('recording');
             
             playShutter();
             requestAnimationFrame(drawLoop);
@@ -234,58 +240,81 @@ function updateSpeed(v) {
     updateSliderColor(document.getElementById('speed'));
 }
 
-// 3. DRAW LOOP (The "Virtual GIF" - Plays instantly)
+// 3. DRAW LOOP
 function drawLoop() {
-    if(isGifMode && vActive) { d(); requestAnimationFrame(drawLoop); }
+    if(isVideoMode && vActive) { d(); requestAnimationFrame(drawLoop); }
 }
 
-// 4. DOWNLOAD LOGIC (HEAVY PROCESSING HAPPENS ONLY HERE)
-function downloadGif() {
+// 4. RECORDING LOGIC (MEDIARECORDER)
+function recordVideo() {
     if (!vActive) return;
-    gBtn.innerText = "RENDERING GIF... (PLEASE WAIT)";
-    gBtn.disabled = true;
+    
+    rBtn.innerText = "RECORDING...";
+    rBtn.classList.add('recording');
+    rBtn.disabled = true;
 
-    // gifshot runs only when you ask it to
-    gifshot.createGIF({
-        video: [vEl.src],
-        gifWidth: 400,
-        gifHeight: 400,
-        interval: 0.1 / playbackSpeed,
-        numFrames: 15,
-        sampleInterval: 12, 
-    }, function(obj) {
-        if(!obj.error) {
-            let a = document.createElement('a');
-            a.download = 'Arcade_Motion.gif';
-            a.href = obj.image;
-            a.click();
+    const stream = c.captureStream(30); // Capture canvas at 30 FPS
+    const options = { mimeType: 'video/webm;codecs=vp9' };
+    
+    // Fallback for Safari/other browsers
+    if (!MediaRecorder.isTypeSupported('video/webm;codecs=vp9')) {
+        if (MediaRecorder.isTypeSupported('video/webm')) {
+             options.mimeType = 'video/webm';
+        } else if (MediaRecorder.isTypeSupported('video/mp4')) {
+             options.mimeType = 'video/mp4';
+        } else {
+             options.mimeType = ''; // Let browser decide
         }
-        gBtn.innerText = "DOWNLOAD GIF ⬇️";
-        gBtn.disabled = false;
-    });
+    }
+
+    try {
+        mediaRecorder = new MediaRecorder(stream, options);
+    } catch (e) {
+        mediaRecorder = new MediaRecorder(stream);
+    }
+
+    recordedChunks = [];
+    mediaRecorder.ondataavailable = (e) => { if(e.data.size > 0) recordedChunks.push(e.data); };
+    
+    mediaRecorder.onstop = () => {
+        const blob = new Blob(recordedChunks, { type: 'video/webm' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'Arcade_Motion.webm';
+        a.click();
+        
+        // Reset Button
+        rBtn.innerText = "RECORD CLIP (5s) 🔴";
+        rBtn.classList.remove('recording');
+        rBtn.disabled = false;
+    };
+
+    mediaRecorder.start();
+
+    // Stop after 5 seconds
+    setTimeout(() => {
+        mediaRecorder.stop();
+    }, 5000);
 }
 
 function d(){
   x.clearRect(0,0,800,800); x.save(); x.beginPath(); x.arc(400,400,cfg.m,0,6.28); x.clip();
   
-  if(isGifMode && vActive){
-      // DRAW VIDEO FRAME
+  if(isVideoMode && vActive){
       let w=vEl.videoWidth*cfg.s, h=vEl.videoHeight*cfg.s;
       x.save(); x.translate(cfg.x, cfg.y); x.drawImage(vEl, -w/2, -h/2, w, h); x.restore();
   } else if(i.src){ 
-      // DRAW IMAGE
       let w=i.width*cfg.s, h=i.height*cfg.s; 
       x.save(); x.translate(cfg.x, cfg.y); x.drawImage(i, -w/2, -h/2, w, h); x.restore(); 
   }
   
-  // DRAW FRAME ON TOP
   x.restore(); if(f.src) x.drawImage(f, 0, 0, 800, 800);
   
-  // Handle Save Button active state
-  if ((i.src && !isGifMode) || (f.src && !isGifMode)) sBtn.classList.add('active');
+  if ((i.src && !isVideoMode) || (f.src && !isVideoMode)) sBtn.classList.add('active');
 }
 
-// SHARED UTILITIES
+// UTILITIES
 function handleFile(e) {
   let r=new FileReader(); r.onload=v=>{ const nextI = new Image(); nextI.onload=()=>{ i=nextI; cfg.s=Math.max(800/i.width,800/i.height); zSl.value=cfg.s; zVal.innerText=Math.round(cfg.s*100)+"%"; updateSliderColor(zSl); d(); playClick(); }; nextI.src=v.target.result; }; r.readAsDataURL(e.target.files[0]);
 }
@@ -306,8 +335,6 @@ function gp(e, idx=0){ let r=c.getBoundingClientRect(), t=e.touches?e.touches[id
 function st(e){ if(e.target==c){ e.preventDefault(); cfg.d=true; let p=gp(e); cfg.lx=p.x-cfg.x; cfg.ly=p.y-cfg.y; } }
 function mv(e){ if(cfg.d){ e.preventDefault(); let p=gp(e); cfg.x=p.x-cfg.lx; cfg.y=p.y-cfg.ly; d(); } }
 function en(){ cfg.d=false; }
-c.ontouchstart=st; window.ontouchmove=mv; window.ontouchend=en;
-c.onmousedown=st; window.onmousemove=mv; window.onmouseup=en;
 function downloadPic() { if(!i.src && !f.src) return; let a=document.createElement('a'); a.download = 'Arcade_Studio_Picture.png'; a.href=c.toDataURL(); a.click(); }
 document.querySelectorAll('input[type=range]').forEach(el => { el.addEventListener('input', () => { updateSliderColor(el); }); updateSliderColor(el); });
 </script>
