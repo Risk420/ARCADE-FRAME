@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Arcade Studio</title>
 <style>
-  /* FIX: Allow scrolling globally, only block touch on specific elements */
   html { scroll-behavior: smooth; overflow-y: auto; }
   body {
     background: #0a0a0c; color: white; font-family: sans-serif;
@@ -14,7 +13,7 @@
     -webkit-overflow-scrolling: touch; 
     background-image: linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px);
     background-size: 100% 4px;
-    touch-action: auto; /* ALLOW SCROLLING */
+    touch-action: auto; 
   }
   
   /* --- NAVIGATION --- */
@@ -94,23 +93,18 @@
     background-color: transparent; background-size: 20px 20px; box-shadow: 0 0 20px rgba(0,0,0,0.5); 
     -webkit-mask-image: -webkit-radial-gradient(white,black); z-index: 10;
   }
-  /* FIX: Block touch only here to allow page scroll elsewhere */
+  /* CANVAS ONLY BLOCKS TOUCH */
   canvas { position: absolute; top: 0; left: 0; width: 310px; height: 310px; z-index: 15; touch-action: none; }
   
-  /* ✍️ FONT GENERATOR (PERFECT LAYOUT + SCROLLABLE) */
+  /* ✍️ FONT GENERATOR (PERFECT LAYOUT) */
   .font-input {
     width: 100%; background: #111; border: 2px solid #00ffff; color: #fff;
     padding: 15px; border-radius: 8px; font-weight: bold; text-align: center; margin-bottom: 15px;
     font-size: 16px; outline: none; box-sizing: border-box;
   }
   .font-scroll {
-    width: 100%; max-height: 500px; 
-    overflow-y: auto; /* Enable Scroll */
-    -webkit-overflow-scrolling: touch; /* Smooth iOS Scroll */
-    display: flex; flex-direction: column;
-    gap: 0; border-radius: 8px; overflow-x: hidden; 
-    border: 1px solid rgba(255,255,255,0.1); box-sizing: border-box;
-    touch-action: auto; /* Force allow scroll here */
+    width: 100%; max-height: 500px; overflow-y: auto; display: flex; flex-direction: column;
+    gap: 0; border-radius: 8px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); box-sizing: border-box;
   }
   .font-item {
     background: #1a1a1c; border: none; border-bottom: 1px solid rgba(255,255,255,0.1);
@@ -174,10 +168,10 @@
     <label class="btn" onclick="playClick()">CHOOSE IMAGE<input type="file" id="u1" accept="image/*" onchange="handleFile(event)"></label>
     <label class="btn btn-r" onclick="playClick()">APPLY FRAME<input type="file" id="u2" accept="image/*" onchange="handleFrame(event)"></label>
     <button class="btn" style="border-color:#00ffff; color:#00ffff;" onclick="centerSubject()">CENTER SUBJECT 🎯</button>
-    <div class="lbl">SCALE <span id="z-val" class="val-tag">100%</span></div>
+    <div class="lbl">ZOOM <span id="z-val" class="val-tag">100%</span></div>
     <input type="range" id="z" min="0.1" max="4" step="0.01" value="1" oninput="updateZ(this.value)">
-    <div class="lbl">ROTATE <span id="r-val" class="val-tag">0°</span></div>
-    <input type="range" id="r" min="0" max="360" step="1" value="0" oninput="updateR(this.value)">
+    <div class="lbl">CIRCLE SIZE <span id="m-val" class="val-tag">375px</span></div>
+    <input type="range" id="m" min="300" max="400" step="1" value="375" oninput="updateM(this.value)">
     <button id="save" onclick="downloadPic()">DOWNLOAD PICTURE</button>
   </div>
 </div>
@@ -190,8 +184,8 @@
 
 <script src="https://www.youtube.com/iframe_api"></script>
 <script>
-const c=document.getElementById('c'),x=c.getContext('2d'),zSl=document.getElementById('z'),mSl=document.getElementById('r'),sBtn=document.getElementById('save'),panel=document.getElementById('menu-panel'),mStat=document.getElementById('m-status'), sName=document.getElementById('studio-name'), sSub=document.getElementById('studio-sub'), swMenu=document.getElementById('switch-menu');
-const zVal=document.getElementById('z-val'),rVal=document.getElementById('r-val');
+const c=document.getElementById('c'),x=c.getContext('2d'),zSl=document.getElementById('z'),mSl=document.getElementById('m'),sBtn=document.getElementById('save'),panel=document.getElementById('menu-panel'),mStat=document.getElementById('m-status'), sName=document.getElementById('studio-name'), sSub=document.getElementById('studio-sub'), swMenu=document.getElementById('switch-menu');
+const zVal=document.getElementById('z-val'),mVal=document.getElementById('m-val');
 let i=new Image(),f=new Image(),cfg={s:1,m:375,x:400,y:400,r:0,d:false,lx:0,ly:0},player,musicOn=true,audioStarted=false;
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
@@ -280,8 +274,20 @@ function mapText(t, m) { let r="", mArr=Array.from(m); for(let c of t) { let idx
 function addF(t, b) { let d=document.createElement('div'); d.className="font-item"; d.innerText=t; d.onclick=()=>{navigator.clipboard.writeText(t); playShutter();}; b.appendChild(d); }
 
 // --- AUDIO TRIGGER ---
-function initAudio() { if(!audioStarted) { audioCtx.resume(); if(player && musicOn) player.playVideo(); audioStarted=true; } }
-window.addEventListener('mousedown', initAudio); window.addEventListener('touchstart', initAudio); window.addEventListener('scroll', initAudio);
+function initAudio() {
+    if(!audioStarted) { 
+        audioCtx.resume().then(() => {
+            audioStarted = true;
+            if(player && musicOn) { player.unMute(); player.playVideo(); }
+            window.removeEventListener('click', initAudio);
+            window.removeEventListener('touchstart', initAudio);
+            window.removeEventListener('scroll', initAudio);
+        });
+    }
+}
+window.addEventListener('click', initAudio, {capture: true});
+window.addEventListener('touchstart', initAudio, {capture: true});
+window.addEventListener('scroll', initAudio, {capture: true});
 
 window.onclick = e => { if (panel.classList.contains('open') && !panel.contains(e.target) && !e.target.classList.contains('menu-toggle')) { panel.classList.remove('open'); playClick(); } swMenu.style.display = 'none'; }
 function onYouTubeIframeAPIReady() { player = new YT.Player('yt-player', { height: '0', width: '0', videoId: 'jfKfPfyJRdk', playerVars: { 'autoplay': 1, 'loop': 1, 'playlist': 'jfKfPfyJRdk', 'mute':0 }, events: { 'onReady': e => { e.target.setVolume(25); } } }); }
@@ -292,12 +298,13 @@ function playClick() { const o=audioCtx.createOscillator(), g=audioCtx.createGai
 function playShutter() { const o=audioCtx.createOscillator(), g=audioCtx.createGain(); o.type='square'; o.frequency.setValueAtTime(200, audioCtx.currentTime); g.gain.setValueAtTime(0.05, audioCtx.currentTime); o.connect(g); g.connect(audioCtx.destination); o.start(); o.stop(audioCtx.currentTime + 0.1); }
 function updateSliderColor(el) { el.style.setProperty('--v', ((el.value-el.min)/(el.max-el.min)*100)+'%'); }
 
-// --- CANVAS ---
+// --- CANVAS & CIRCLE SIZE FIX ---
 function d(){ x.clearRect(0,0,800,800); x.save(); x.beginPath(); x.arc(400,400,cfg.m,0,6.28); x.clip(); if(i.src){ let w=i.width*cfg.s, h=i.height*cfg.s; x.save(); x.translate(cfg.x, cfg.y); x.rotate(cfg.r * Math.PI/180); x.drawImage(i, -w/2, -h/2, w, h); x.restore(); } x.restore(); if(f.src) x.drawImage(f, 0, 0, 800, 800); if (i.src || f.src) sBtn.classList.add('active'); }
 function handleFile(e) { if(!e.target.files[0]) return; let r=new FileReader(); r.onload=v=>{ let n=new Image(); n.onload=()=>{ i=n; cfg.s=Math.max(800/i.width,800/i.height); cfg.x=400; cfg.y=400; cfg.r=0; zSl.value=cfg.s; document.getElementById('r').value=0; rVal.innerText="0°"; updateSliderColor(zSl); d(); playClick(); }; n.src=v.target.result; }; r.readAsDataURL(e.target.files[0]); }
 function handleFrame(e) { let r=new FileReader(); r.onload=v=>{ let n=new Image(); n.onload=()=>{ f=n; d(); playClick(); }; n.src=v.target.result; }; r.readAsDataURL(e.target.files[0]); }
 function updateZ(v) { cfg.s=parseFloat(v); zVal.innerText=Math.round(v*100)+"%"; d(); }
 function updateR(v) { cfg.r=parseInt(v); rVal.innerText=v+"°"; d(); }
+function updateM(v) { cfg.m=parseInt(v); mVal.innerText=v+"px"; d(); } // RE-ADDED CIRCLE CONTROL
 function centerSubject() { if(!i.src) return; playShutter(); cfg.x=400; cfg.y=400; cfg.r=0; rVal.innerText="0°"; d(); }
 
 let lastDist=0, lastAng=0;
