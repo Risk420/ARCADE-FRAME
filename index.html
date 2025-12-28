@@ -26,19 +26,18 @@
     font-size: 12px; box-shadow: 0 2px 5px rgba(0,0,0,0.5);
   }
 
-  /* SWITCH BUTTON & MENU */
   .switch-container { position: fixed; top: 15px; right: 15px; z-index: 100000; }
   #switch-btn {
     background: #ff0000; color: white; border: 2px solid #ffffff; 
     padding: 8px 14px; border-radius: 4px; font-weight: bold; cursor: pointer;
     font-size: 11px; text-transform: uppercase; letter-spacing: 1px;
-    box-shadow: 0 0 10px rgba(255,0,0,0.5); display: flex; align-items: center; gap: 5px;
+    box-shadow: 0 0 10px rgba(255,0,0,0.5); display: flex; gap: 5px; align-items: center;
   }
   #switch-menu {
     position: absolute; top: 45px; right: 0; background: #1a1a1c; 
     border: 1px solid #ff0000; border-radius: 8px; width: 220px;
     display: none; flex-direction: column; overflow: hidden;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.9);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.8);
   }
   #switch-menu button {
     background: transparent; color: #aaa; border: none; padding: 14px;
@@ -47,18 +46,12 @@
     transition: 0.2s;
   }
   #switch-menu button:hover { background: rgba(255,255,255,0.05); color: white; }
-  /* Active State Design */
-  #switch-menu button.active-link { 
-    color: #00ffff; background: rgba(0,255,255,0.1); 
-    border-left: 3px solid #00ffff; padding-left: 11px;
-  }
+  #switch-menu button.active-link { color: #00ffff; background: rgba(0,255,255,0.1); border-left: 3px solid #00ffff; padding-left: 11px; }
 
-  /* SIDE PANEL */
   #menu-panel {
     position: fixed; top: 0; left: -260px; width: 240px; height: 100%;
     background: #1a1a1c; padding-top: 60px; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); z-index: 99999;
     display: flex; flex-direction: column; gap: 10px; padding-left: 15px; padding-right: 15px;
-    box-shadow: 2px 0 15px rgba(0,0,0,0.5);
   }
   #menu-panel.open { left: 0; }
   .lnk, .music-btn {
@@ -69,7 +62,6 @@
   .lnk svg { width: 18px; height: 18px; fill: white; }
   .music-btn { border-color: #ff0000; background: rgba(255,0,0,0.1); justify-content: space-between; }
 
-  /* HEADERS */
   h1 {
     color: #fff; margin: 60px 0 0 0; font-family: "Arial Black", sans-serif; font-style: italic;
     font-size: 36px; text-transform: uppercase; letter-spacing: -1px;
@@ -77,9 +69,9 @@
     animation: arcadeBounce 1.8s infinite ease-in-out;
   }
   @keyframes arcadeBounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-  .sub { color: #fff; font-weight: bold; margin: 2px 0 15px 0; text-transform: uppercase; font-size: 11px; letter-spacing: 2px; text-align: center; }
+  .sub { color: #fff; font-weight: bold; margin: 2px 0 15px 0; text-transform: uppercase; font-size: 11px; letter-spacing: 2px; }
   
-  .studio-sec { display: none; width: 320px; flex-direction: column; align-items: center; }
+  .studio-sec { display: none; width: 310px; flex-direction: column; align-items: center; }
   .active-sec { display: flex; }
 
   /* 🖼️ FRAME STUDIO */
@@ -91,7 +83,7 @@
   }
   canvas { position: absolute; top: 0; left: 0; width: 310px; height: 310px; touch-action: none; z-index: 15; }
   
-  /* ✍️ FONT GENERATOR (ENHANCED) */
+  /* ✍️ FONT GENERATOR (MAXIMIZED) */
   .font-input {
     width: 100%; background: #111; border: 2px solid #00ffff; color: #fff;
     padding: 15px; border-radius: 8px; font-weight: bold; text-align: center; margin-bottom: 10px;
@@ -102,39 +94,10 @@
   }
   .font-item {
     background: #1a1a1c; border: 1px solid rgba(255,255,255,0.1); padding: 14px;
-    border-radius: 6px; font-size: 18px; text-align: center; cursor: pointer; transition: 0.1s;
-    white-space: pre-wrap; overflow-wrap: break-word; line-height: 1.4; color: #ddd;
+    border-radius: 6px; font-size: 16px; text-align: center; cursor: pointer; transition: 0.1s;
+    white-space: pre-wrap; overflow-wrap: break-word; line-height: 1.4; color: #eee;
   }
   .font-item:active { background: #00ffff; color: #000; transform: scale(0.98); }
-
-  /* 🏹 SYMBOL GALLERY (MAX DUMP) */
-  .search-bar {
-    width: 100%; background: #111; border: 1px solid #ff0000; color: white;
-    padding: 12px; border-radius: 6px; margin-bottom: 10px; font-size: 12px;
-    text-transform: uppercase; letter-spacing: 1px; outline: none;
-  }
-  .sym-scroll-box {
-    width: 100%; max-height: 600px; overflow-y: auto; 
-    background: #111; border-radius: 8px; padding: 10px;
-    border: 1px solid rgba(255,255,255,0.1);
-  }
-  .cat-container { margin-bottom: 25px; }
-  .cat-header {
-    display: flex; justify-content: space-between; align-items: center;
-    margin: 5px 0 8px 0; border-left: 4px solid #ff0000; padding: 8px 12px;
-    background: rgba(255,255,255,0.03); border-radius: 0 4px 4px 0;
-  }
-  .cat-title { font-size: 11px; font-weight: 900; color: #00ffff; text-transform: uppercase; letter-spacing: 1px; }
-  
-  /* GRID FOR SYMBOLS */
-  .sym-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; width: 100%; }
-  .sym-item {
-    background: #1a1a1c; aspect-ratio: 1; display: flex; align-items: center;
-    justify-content: center; font-size: 16px; border-radius: 3px; border: 1px solid rgba(255,255,255,0.05);
-    cursor: pointer; color: white;
-    font-family: "Arial", sans-serif;
-  }
-  .sym-item:active { background: #ff0000; transform: scale(0.9); }
 
   /* UI GLOBAL */
   .ui { margin-top: 20px; width: 310px; display: flex; flex-direction: column; gap: 6px; }
@@ -160,7 +123,6 @@
   <div id="switch-menu">
     <button id="nav-frame" class="active-link" onclick="changeStudio('frame')">🖼️ Frame Studio</button>
     <button id="nav-font" onclick="changeStudio('font')">✍️ Font Generator</button>
-    <button id="nav-symbol" onclick="changeStudio('symbol')">🏹 Symbol Gallery</button>
   </div>
 </div>
 
@@ -195,12 +157,6 @@
   <div id="font-results" class="font-scroll"></div>
 </div>
 
-<div id="symbol-studio" class="studio-sec">
-  <input type="text" id="sym-search" class="search-bar" placeholder="SEARCH (E.G. 'MATH', 'ARROW')" oninput="filterSymbols()">
-  <div class="lbl" style="margin-bottom:10px;">ONE-PAGE MASTER LIST <span class="val-tag">20,000+</span></div>
-  <div id="sym-results-container" class="sym-scroll-box"></div>
-</div>
-
 <script src="https://www.youtube.com/iframe_api"></script>
 <script>
 const c=document.getElementById('c'),x=c.getContext('2d'),zSl=document.getElementById('z'),mSl=document.getElementById('m'),sBtn=document.getElementById('save'),panel=document.getElementById('menu-panel'),mStat=document.getElementById('m-status'), sName=document.getElementById('studio-name'), sSub=document.getElementById('studio-sub'), swMenu=document.getElementById('switch-menu');
@@ -208,33 +164,21 @@ const zVal=document.getElementById('z-val'),mVal=document.getElementById('m-val'
 let i=new Image(),f=new Image(),cfg={s:1,m:375,x:400,y:400,r:0,d:false,lx:0,ly:0},player,musicOn=true,audioStarted=false;
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
-// NAVIGATION & HIGHLIGHT
 function changeStudio(mode) {
-  playClick();
-  document.querySelectorAll('.studio-sec').forEach(s => s.classList.remove('active-sec'));
-  document.querySelectorAll('#switch-menu button').forEach(b => b.classList.remove('active-link'));
-  swMenu.style.display = 'none';
-  
+  playClick(); document.querySelectorAll('.studio-sec').forEach(s => s.classList.remove('active-sec')); document.querySelectorAll('#switch-menu button').forEach(b => b.classList.remove('active-link')); swMenu.style.display = 'none';
   if(mode === 'frame') {
-    document.getElementById('frame-studio').classList.add('active-sec');
-    document.getElementById('nav-frame').classList.add('active-link');
+    document.getElementById('frame-studio').classList.add('active-sec'); document.getElementById('nav-frame').classList.add('active-link');
     sName.innerText = "ARCADE"; sSub.innerText = "FRAME STUDIO";
-  } else if(mode === 'font') {
-    document.getElementById('font-studio').classList.add('active-sec');
-    document.getElementById('nav-font').classList.add('active-link');
-    sName.innerText = "FONTS"; sSub.innerText = "GENERATOR STUDIO";
   } else {
-    document.getElementById('symbol-studio').classList.add('active-sec');
-    document.getElementById('nav-symbol').classList.add('active-link');
-    sName.innerText = "SYMBOLS"; sSub.innerText = "MASTER COLLECTION";
-    loadSymbols(); // Load on demand
+    document.getElementById('font-studio').classList.add('active-sec'); document.getElementById('nav-font').classList.add('active-link');
+    sName.innerText = "FONTS"; sSub.innerText = "GENERATOR STUDIO";
   }
 }
 function toggleSwitchMenu(e) { e.stopPropagation(); swMenu.style.display = swMenu.style.display === 'flex' ? 'none' : 'flex'; playClick(); }
 
-// --- 🚀 ADVANCED FONT ENGINE (100+ VARIATIONS) ---
+// --- 🚀 INFINITE FONT GENERATOR (THE MATRIX MIXER) ---
 const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-const maps = [
+const bases = [
   {m:"𝐀𝐁𝐂𝐃𝐄𝐅𝐆𝐇𝐈𝐉𝐊𝐋𝐌𝐍𝐎𝐏𝐐𝐑𝐒𝐓𝐔𝐕𝐖𝐗𝐘𝐙𝐚𝐛𝐜𝐝𝐞𝐟𝐠𝐡𝐢𝐣𝐤𝐥𝐦𝐧𝐨𝐩𝐪𝐫𝐬𝐭𝐮𝐯𝐰𝐱𝐲𝐳𝟎𝟏𝟐𝟑𝟒𝟓𝟔𝟕𝟖𝟗"}, // Bold
   {m:"𝐴𝐵𝐶𝐷𝐸𝐹𝐺𝐻𝐼𝐽𝐾𝐿𝑀𝑁𝑂𝑃𝑄𝑅𝑆𝑇𝑈𝑉𝑊𝑋𝑌𝑍𝑎𝑏𝑐𝑑𝑒𝑓𝑔ℎ𝑖𝑗𝑘𝑙𝑚𝑛𝑜𝑝𝑞𝑟𝑠𝑡𝑢𝑣𝑤𝑥𝑦𝑧0123456789"}, // Italic
   {m:"𝒜ℬ𝒞𝒟ℰℱ𝒢ℋℐ𝒥𝒦ℒℳ𝒩𝒪𝒫𝒬ℛ𝒮𝒯𝒰𝒱𝒲𝒳𝒴𝒵𝒶𝒷𝒸𝒹ℯ𝒻ℊ𝒽𝒾𝒿𝓀𝓁𝓂𝓃ℴ𝓅𝓆𝓇𝓈𝓉𝓊𝓋𝓌𝓍𝓎𝓏0123456789"}, // Script
@@ -252,99 +196,57 @@ const maps = [
   {m:"ᴀʙᴄᴅᴇғɢʜɪᴊᴋʟᴍɴᴏᴘǫʀsᴛᴜᴠᴡxʏᴢᴀʙᴄᴅᴇғɢʜɪᴊᴋʟᴍɴᴏᴘǫʀsᴛᴜᴠᴡxʏᴢ0123456789"}  // Small Caps
 ];
 
+// 50+ Professional Decorators (Mix with fonts = 750+ Combinations)
+const decorators = [
+  " ", "★|★", "『|』", "【|】", "꧁|꧂", "˗ˏ|ˎ˗", "⦗|⦘", "⁅|⁆", "☾|☽", "×|×", "☆|☆", "●|●", "■|■", 
+  "→|←", "⚡|⚡", "☠|☠", "☮|☮", "✈|✈", "❤|❤", "♛|♛", "∞|∞", "§|§", "₪|₪", "↺|↻", "❄|❄", 
+  "☁|☁", "☂|☂", "✂|✂", "✎|✎", "⚔|⚔", "⚓|⚓", "⚙|⚙", "⚛|⚛", "⚜|⚜", "⚠|⚠", "⚡️|⚡️", 
+  "✧|✧", "✩|✩", "✪|✪", "✫|✫", "✬|✬", "✭|✭", "✮|✮", "✯|✯", "✰|✰", "✱|✱", "✲|✲", "✳|✳"
+];
+
 function genFonts() {
   const val = document.getElementById('font-input').value;
   const c = document.getElementById('font-results');
   c.innerHTML = ""; if(!val) return;
   
   let count = 0;
-  // 1. Direct Mappings
-  maps.forEach(style => {
-    let out = ""; for(let char of val) { let i = chars.indexOf(char); out += i!==-1 ? Array.from(style.m)[i] : char; }
-    addF(out, c); count++;
+  
+  // 1. BASE FONTS (PLAIN)
+  bases.forEach(b => { 
+    let txt = mapText(val, b.m);
+    addF(txt, c); count++;
   });
 
-  // 2. Algorithmics
-  addF(val.split('').map(c=>c+'\u0336').join(''), c); // Strike
+  // 2. MIXER (Combinations) - This generates 100s of fonts
+  bases.forEach((b, idx) => {
+    // Only mix common readable fonts to avoid clutter
+    if([0, 1, 4, 6, 8, 9].includes(idx)) { 
+      let baseTxt = mapText(val, b.m);
+      decorators.forEach(dec => {
+        let [pre, post] = dec.split("|");
+        addF(pre + " " + baseTxt + " " + post, c);
+        count++;
+      });
+    }
+  });
+
+  // 3. TRANSFORMATIONS
+  addF(val.split('').map(c=>c+'\u0336').join(''), c); // Strikethrough
   addF(val.split('').map(c=>c+'\u0332').join(''), c); // Underline
   addF(val.split('').map(c=>c+'\u0338').join(''), c); // Slash
   addF(val.split('').map(c=>c+'\u20DE').join(''), c); // Boxed
-  addF(val.split('').join(' '), c); // Spaced
-  addF("‮"+val, c); // Reversed
-  
-  // 3. Decorators
-  ["★ "," ✮","『 』","【 】","꧁ ꧂","˗ˏˎ˗","⦗ ⦘","⁅ ⁆","☾ ☽","× ×","☆ ☆"].forEach(d=>{
-      let p=d.split(" ");
-      addF((p[0]||"")+val+(p[1]||""), c); // Normal Deco
-      addF((p[0]||"")+maps[6].m.substr(0, val.length)+(p[1]||""), c); // DoubleStruck Deco
-      count+=2;
-  });
-  
-  document.getElementById('font-count').innerText = (count + 20) + " STYLES";
+  addF("░▒▓ "+val.toUpperCase()+" ▓▒░", c); // Vaporwave
+  count += 5;
+
+  document.getElementById('font-count').innerText = count + " STYLES";
+}
+
+function mapText(t, m) {
+  let r=""; for(let c of t) { let i=chars.indexOf(c); r+=i!==-1?Array.from(m)[i]:c; } return r;
 }
 function addF(t, c) { let d=document.createElement('div'); d.className="font-item"; d.innerText=t; d.onclick=()=>{navigator.clipboard.writeText(t); playShutter();}; c.appendChild(d); }
 
-// --- 🏹 MAX SYMBOL DUMP (BY UNICODE RANGE) ---
-function loadSymbols() {
-  const box = document.getElementById('sym-results-container');
-  if(box.children.length > 0) return;
-  
-  const ranges = {
-    "Hearts & Love": ["♡","♥","❥","❣","❦","☙","❤","ღ","დ","🏩","💌"],
-    "Mathematical Operators": [0x2200, 0x22FF],
-    "Arrows Set A": [0x2190, 0x21FF],
-    "Arrows Set B": [0x2900, 0x297F],
-    "Arrows Set C": [0x27F0, 0x27FF],
-    "Technical Symbols": [0x2300, 0x23FF],
-    "Box Drawing": [0x2500, 0x257F],
-    "Block Elements": [0x2580, 0x259F],
-    "Geometric Shapes": [0x25A0, 0x25FF],
-    "Misc Symbols": [0x2600, 0x26FF],
-    "Dingbats": [0x2700, 0x27BF],
-    "Braille Patterns": [0x2800, 0x28FF],
-    "Enclosed Alphanumerics": [0x2460, 0x24FF],
-    "Currency Symbols": [0x20A0, 0x20CF],
-    "Superscripts & Subscripts": [0x2070, 0x209F],
-    "Number Forms": [0x2150, 0x218F],
-    "Control Pictures": [0x2400, 0x243F],
-    "Letterlike Symbols": [0x2100, 0x214F],
-    "Alchemical Symbols": [0x1F700, 0x1F77F], 
-    "Chess & Games": [0x2650, 0x266F]
-  };
-
-  Object.entries(ranges).forEach(([name, range]) => {
-    const sec = document.createElement('div');
-    sec.className = "cat-container";
-    sec.dataset.name = name.toLowerCase();
-    
-    const h = document.createElement('div'); h.className="cat-header";
-    h.innerHTML = `<span class="cat-title">${name}</span>`;
-    sec.appendChild(h);
-    
-    const g = document.createElement('div'); g.className="sym-grid";
-    
-    // Generator Logic
-    if(Array.isArray(range) && typeof range[0] === 'string') {
-        range.forEach(s => addSym(s, g));
-    } else {
-        for(let c=range[0]; c<=range[1]; c++) {
-            addSym(String.fromCodePoint(c), g);
-        }
-    }
-    sec.appendChild(g);
-    box.appendChild(sec);
-  });
-}
-function addSym(s, g) { let d=document.createElement('div'); d.className="sym-item"; d.innerText=s; d.onclick=()=>{navigator.clipboard.writeText(s); playShutter();}; g.appendChild(d); }
-
-function filterSymbols() {
-    const term = document.getElementById('sym-search').value.toLowerCase();
-    document.querySelectorAll('.cat-container').forEach(sec => {
-        sec.style.display = sec.dataset.name.includes(term) || term === "" ? "block" : "none";
-    });
-}
-
-// --- STANDARD LOGIC ---
+// --- GLOBAL UTILS ---
 window.onclick = e => { if (panel.classList.contains('open') && !panel.contains(e.target) && !e.target.classList.contains('menu-toggle')) { panel.classList.remove('open'); playClick(); } swMenu.style.display = 'none'; }
 function startAudio() { if (audioStarted) return; audioCtx.resume(); audioStarted = true; }
 function toggleMusic() { startAudio(); playClick(); musicOn = !musicOn; if(musicOn) { player.playVideo(); mStat.innerText = "ON"; mStat.style.color = "#ff0000"; } else { player.pauseVideo(); mStat.innerText = "OFF"; mStat.style.color = "#888"; } }
