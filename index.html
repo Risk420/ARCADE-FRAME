@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Arcade Studio</title>
 <style>
+  /* GLOBAL SCROLLING ENABLED */
   html { scroll-behavior: smooth; overflow-y: auto; }
   body {
     background: #0a0a0c; color: white; font-family: sans-serif;
@@ -13,7 +14,7 @@
     -webkit-overflow-scrolling: touch; 
     background-image: linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px);
     background-size: 100% 4px;
-    touch-action: auto; 
+    touch-action: pan-y; /* CRITICAL: Allows vertical scrolling on the page */
   }
   
   /* --- NAVIGATION --- */
@@ -93,7 +94,12 @@
     background-color: transparent; background-size: 20px 20px; box-shadow: 0 0 20px rgba(0,0,0,0.5); 
     -webkit-mask-image: -webkit-radial-gradient(white,black); z-index: 10;
   }
-  canvas { position: absolute; top: 0; left: 0; width: 310px; height: 310px; z-index: 15; touch-action: none; }
+  
+  /* CRITICAL FIX: Only block touch gestures ON THE CANVAS, allow scroll elsewhere */
+  canvas { 
+    position: absolute; top: 0; left: 0; width: 310px; height: 310px; z-index: 15; 
+    touch-action: none; /* Prevents scroll ONLY on the image */
+  }
   
   /* ✍️ FONT GENERATOR (PERFECT LAYOUT) */
   .font-input {
@@ -102,8 +108,13 @@
     font-size: 16px; outline: none; box-sizing: border-box;
   }
   .font-scroll {
-    width: 100%; max-height: 500px; overflow-y: auto; display: flex; flex-direction: column;
-    gap: 0; border-radius: 8px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); box-sizing: border-box;
+    width: 100%; max-height: 500px; 
+    overflow-y: auto; /* Enable Scrolling */
+    -webkit-overflow-scrolling: touch; /* Smooth iOS scroll */
+    display: flex; flex-direction: column;
+    gap: 0; border-radius: 8px; overflow-x: hidden;
+    border: 1px solid rgba(255,255,255,0.1); box-sizing: border-box;
+    touch-action: pan-y; /* Explicitly allow vertical panning */
   }
   .font-item {
     background: #1a1a1c; border: none; border-bottom: 1px solid rgba(255,255,255,0.1);
@@ -275,8 +286,20 @@ function mapText(t, m) { let r="", mArr=Array.from(m); for(let c of t) { let idx
 function addF(t, b) { let d=document.createElement('div'); d.className="font-item"; d.innerText=t; d.onclick=()=>{navigator.clipboard.writeText(t); playShutter();}; b.appendChild(d); }
 
 // --- AUDIO TRIGGER ---
-function initAudio() { if(!audioStarted) { audioCtx.resume(); if(player && musicOn) player.playVideo(); audioStarted=true; } }
-window.addEventListener('mousedown', initAudio); window.addEventListener('touchstart', initAudio); window.addEventListener('scroll', initAudio);
+function initAudio() {
+    if(!audioStarted) { 
+        audioCtx.resume().then(() => {
+            audioStarted = true;
+            if(player && musicOn) { player.unMute(); player.playVideo(); }
+            window.removeEventListener('click', initAudio);
+            window.removeEventListener('touchstart', initAudio);
+            window.removeEventListener('scroll', initAudio);
+        });
+    }
+}
+window.addEventListener('click', initAudio, {capture: true});
+window.addEventListener('touchstart', initAudio, {capture: true});
+window.addEventListener('scroll', initAudio, {capture: true});
 
 window.onclick = e => { if (panel.classList.contains('open') && !panel.contains(e.target) && !e.target.classList.contains('menu-toggle')) { panel.classList.remove('open'); playClick(); } swMenu.style.display = 'none'; }
 function onYouTubeIframeAPIReady() { player = new YT.Player('yt-player', { height: '0', width: '0', videoId: 'jfKfPfyJRdk', playerVars: { 'autoplay': 1, 'loop': 1, 'playlist': 'jfKfPfyJRdk', 'mute':0 }, events: { 'onReady': e => { e.target.setVolume(25); } } }); }
