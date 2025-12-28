@@ -12,6 +12,8 @@
     min-height: 100vh; margin: 0; padding-bottom: 120px;
     -webkit-overflow-scrolling: touch; transition: 0.5s ease;
     overflow-x: hidden; position: relative;
+    /* DEFAULT THEME: SCANLINE */
+    background-image: linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px); background-size: 100% 4px;
   }
   
   /* STABLE BACKGROUND ENGINE */
@@ -22,18 +24,18 @@
   @keyframes scan { from { background-position: 0 0; } to { background-position: 0 100%; } }
 
   /* 11 ORDERED THEME CLASSES */
-  .t1 .bg-layer { background-image: linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px); background-size: 100% 4px; } /* 1. Scanline */
-  .t2 .bg-layer { background: #fff; background-image: radial-gradient(white 1px, transparent 1px); background-size: 50px 50px; } /* 2. Cyber Warp */
-  .t3 .bg-layer { background: #000; background-image: linear-gradient(rgba(0,255,255,0.1) 1px, transparent 1px); background-size: 100% 20px; animation: scan 3s linear infinite; } /* 3. Laser Grid */
-  .t4 .bg-layer { background: #000; background-image: linear-gradient(180deg, transparent, #0f0 2px, transparent); background-size: 100% 50px; animation: scan 2s linear infinite; } /* 4. Digital Rain */
-  .t5 .bg-layer { background: #111; background-image: radial-gradient(circle, #ff00ff 1px, transparent 1px); background-size: 30px 30px; animation: flow 4s linear infinite; } /* 5. Neon Flow */
-  .t6 .bg-layer { background: radial-gradient(circle at bottom, #ff4500, #8b0000, #000); background-size: 200% 200%; animation: flow 8s infinite linear; } /* 6. Inferno */
-  .t7 .bg-layer { background: #0a001a; background-image: linear-gradient(45deg, #4b0082 25%, transparent 25%); background-size: 10px 10px; animation: flow 2s linear infinite; } /* 7. Plasma */
-  .t8 .bg-layer { background: #000; border-top: 5px solid #00ffff; } /* 8. Ghost City */
-  .t9 .bg-layer { background: #1a1a1a; background-image: repeating-linear-gradient(0deg, #333, #333 1px, transparent 1px, transparent 20px); animation: scan 10s linear infinite; } /* 9. Static VHS */
-  .t10 .bg-layer { background: #000; background-image: radial-gradient(rgba(255,255,255,0.1) 2px, transparent 0); background-size: 40px 40px; } /* 10. Space Drift */
-  .t11 .bg-layer { background: #050505; background-image: linear-gradient(90deg, #ff0000 1px, transparent 1px); background-size: 50px 100%; animation: flow 5s linear infinite; } /* 11. Alert Mode */
-  .t12 .bg-layer { background: #0a0a0c; background-image: none; } /* 12. Original Black */
+  .t1 .bg-layer { background-image: linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px); background-size: 100% 4px; }
+  .t2 .bg-layer { background: #fff; background-image: radial-gradient(white 1px, transparent 1px); background-size: 50px 50px; }
+  .t3 .bg-layer { background: #000; background-image: linear-gradient(rgba(0,255,255,0.1) 1px, transparent 1px); background-size: 100% 20px; animation: scan 3s linear infinite; }
+  .t4 .bg-layer { background: #000; background-image: linear-gradient(180deg, transparent, #0f0 2px, transparent); background-size: 100% 50px; animation: scan 2s linear infinite; }
+  .t5 .bg-layer { background: #111; background-image: radial-gradient(circle, #ff00ff 1px, transparent 1px); background-size: 30px 30px; animation: flow 4s linear infinite; }
+  .t6 .bg-layer { background: radial-gradient(circle at bottom, #ff4500, #8b0000, #000); background-size: 200% 200%; animation: flow 8s infinite linear; }
+  .t7 .bg-layer { background: #0a001a; background-image: linear-gradient(45deg, #4b0082 25%, transparent 25%); background-size: 10px 10px; animation: flow 2s linear infinite; }
+  .t8 .bg-layer { background: #000; border-top: 5px solid #00ffff; }
+  .t9 .bg-layer { background: #1a1a1a; background-image: repeating-linear-gradient(0deg, #333, #333 1px, transparent 1px, transparent 20px); animation: scan 10s linear infinite; }
+  .t10 .bg-layer { background: #000; background-image: radial-gradient(rgba(255,255,255,0.1) 2px, transparent 0); background-size: 40px 40px; }
+  .t11 .bg-layer { background: #050505; background-image: linear-gradient(90deg, #ff0000 1px, transparent 1px); background-size: 50px 100%; animation: flow 5s linear infinite; }
+  .t12 .bg-layer { background: #0a0a0c; background-image: none; }
 
   .menu-toggle { position: absolute; top: 15px; left: 15px; background: #1a1a1c; color: #fff; border: 1px solid rgba(255,255,255,0.1); padding: 8px 12px; border-radius: 4px; font-weight: bold; cursor: pointer; z-index: 1000; font-size: 11px; }
 
@@ -60,13 +62,13 @@
   }
   canvas { position: absolute; top: 0; left: 0; width: 280px; height: 280px; touch-action: none; z-index: 15; }
 
-  .ui { margin-top: 20px; width: 260px; display: flex; flex-direction: column; gap: 6px; margin-left: auto; margin-right: auto; z-index: 100; position: relative; }
+  .ui { margin-top: 20px; width: 260px; display: flex; flex-direction: column; align-items: stretch; gap: 6px; margin-left: auto; margin-right: auto; z-index: 100; position: relative; }
   .btn { background: #111; border: 1px solid #ffffff; color: white; padding: 10px; text-align: center; border-radius: 8px; font-weight: bold; font-size: 11px; cursor: pointer; display: block; }
   .btn-center { border-color: #00ffff; color: #00ffff; }
   .val-tag { color: #ff0000; font-weight: bold; font-family: monospace; font-size: 10px; }
   #save { background: #ff0000; border: none; font-size: 13px; color: white; padding: 12px; border-radius: 8px; font-weight: bold; margin-top: 10px; cursor: pointer; }
 
-  input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; height: 25px; cursor: pointer; }
+  input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; margin: 10px 0; }
   input[type=range]::-webkit-slider-runnable-track { height: 6px; background: #333; border-radius: 3px; }
   input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 18px; width: 18px; border-radius: 50%; background: #ff0000; margin-top: -6px; border: 2px solid white; }
   
@@ -79,7 +81,7 @@
 <button class="menu-toggle" onclick="toggleMenu(event)">MENU ☰</button>
 
 <div id="menu-panel">
-  <div class="lnk" onclick="toggleMusic()">MUSIC: <span id="m-status">ON</span></div>
+  <div class="lnk" onclick="toggleMusic()">MUSIC: <span id="m-status" style="color:#ff0000;">ON</span></div>
   <div class="lnk" style="border-color:#00ffff;" onclick="openThemeSelector()">Switch Theme</div>
   
   <a href="https://discord.gg/ardc" target="_blank" class="lnk" style="border-color:#5865F2;">
@@ -154,6 +156,12 @@ function st(e){ if(e.target==c){ cfg.d=true; if(e.touches && e.touches.length ==
 function mv(e){ if(cfg.d){ if(e.touches && e.touches.length === 2) { let a = Math.atan2(e.touches[1].pageY - e.touches[0].pageY, e.touches[1].pageX - e.touches[0].pageX); cfg.r = cfg.ir + (a - cfg.ia); } else { let p=gp(e); cfg.x=p.x-cfg.lx; cfg.y=p.y-cfg.ly; } d(); } }
 c.ontouchstart=st; window.ontouchmove=mv; window.ontouchend=()=>cfg.d=false; c.onmousedown=st; window.onmousemove=mv; window.onmouseup=()=>cfg.d=false;
 
+function playClick() { const o = audioCtx.createOscillator(); const g = audioCtx.createGain(); o.frequency.setValueAtTime(800, audioCtx.currentTime); g.gain.setValueAtTime(0.1, audioCtx.currentTime); o.connect(g); g.connect(audioCtx.destination); o.start(); o.stop(audioCtx.currentTime + 0.1); }
 function playShutter() { const o = audioCtx.createOscillator(); const g = audioCtx.createGain(); o.type = 'square'; o.frequency.setValueAtTime(200, audioCtx.currentTime); g.gain.setValueAtTime(0.1, audioCtx.currentTime); o.connect(g); g.connect(audioCtx.destination); o.start(); o.stop(audioCtx.currentTime + 0.15); }
 function downloadPic() { 
-  const notes = [523.25, 659.25, 783.99, 1046.50]; notes.forEach((freq, idx) => { const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain(); osc.frequency.setValueAtTime(freq, audioCtx.currentTime + (
+  const notes = [523.25, 659.25, 783.99, 1046.50]; notes.forEach((freq, idx) => { const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain(); osc.frequency.setValueAtTime(freq, audioCtx.currentTime + (idx * 0.1)); gain.gain.setValueAtTime(0.1, audioCtx.currentTime + (idx * 0.1)); gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + (idx * 0.1) + 0.1); osc.connect(gain); gain.connect(audioCtx.destination); osc.start(audioCtx.currentTime + (idx * 0.1)); osc.stop(audioCtx.currentTime + (idx * 0.1) + 0.1); });
+  let a=document.createElement('a'); a.download='Arcade_Edit.png'; a.href=c.toDataURL(); a.click(); 
+}
+</script>
+</body>
+</html>
