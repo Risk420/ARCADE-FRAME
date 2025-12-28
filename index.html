@@ -13,10 +13,10 @@
     -webkit-overflow-scrolling: touch; 
     background-image: linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px);
     background-size: 100% 4px;
-    overflow-x: hidden; touch-action: none; /* Critical for gestures */
+    overflow-x: hidden; touch-action: none;
   }
   
-  /* --- NAVIGATION --- */
+  /* --- FIXED TOP NAV --- */
   .menu-toggle {
     position: fixed; top: 15px; left: 15px; 
     background: #1a1a1c; color: #fff; border: 1px solid rgba(255,255,255,0.1); 
@@ -41,6 +41,7 @@
     text-align: left; font-weight: bold; font-size: 11px; cursor: pointer;
     border-bottom: 1px solid rgba(255,255,255,0.05); text-transform: uppercase; transition: 0.2s;
   }
+  #switch-menu button:hover { background: rgba(255,255,255,0.05); color: white; }
   #switch-menu button.active-link { color: #00ffff; background: rgba(0,255,255,0.1); border-left: 3px solid #00ffff; padding-left: 11px; }
 
   /* SIDE PANEL */
@@ -110,6 +111,33 @@
   }
   .font-item:active { background: #00ffff; color: #000; transform: scale(0.98); }
 
+  /* 🏹 SYMBOL GALLERY */
+  .search-bar {
+    width: 100%; background: #111; border: 1px solid #ff0000; color: white;
+    padding: 12px; border-radius: 6px; margin-bottom: 10px; font-size: 12px;
+    text-transform: uppercase; letter-spacing: 1px; outline: none;
+  }
+  .sym-scroll-box {
+    width: 100%; max-height: 600px; overflow-y: auto; 
+    background: #111; border-radius: 8px; padding: 10px;
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+  .cat-container { margin-bottom: 25px; }
+  .cat-header {
+    display: flex; justify-content: space-between; align-items: center;
+    margin: 5px 0 8px 0; border-left: 4px solid #ff0000; padding: 8px 12px;
+    background: rgba(255,255,255,0.03); border-radius: 0 4px 4px 0;
+  }
+  .cat-title { font-size: 11px; font-weight: 900; color: #00ffff; text-transform: uppercase; letter-spacing: 1px; }
+  .sym-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; width: 100%; }
+  .sym-item {
+    background: #1a1a1c; aspect-ratio: 1; display: flex; align-items: center;
+    justify-content: center; font-size: 16px; border-radius: 3px; border: 1px solid rgba(255,255,255,0.05);
+    cursor: pointer; color: white; font-family: "Arial", sans-serif;
+    filter: grayscale(100%);
+  }
+  .sym-item:active { background: #ff0000; transform: scale(0.9); filter: none; }
+
   /* UI GLOBAL */
   .ui { margin-top: 20px; width: 310px; display: flex; flex-direction: column; gap: 6px; }
   .btn { background: #111; border: 2px solid #ffffff; color: white; padding: 10px; text-align: center; border-radius: 8px; font-weight: bold; display: block; font-size: 12px; cursor: pointer; text-transform: uppercase; }
@@ -134,6 +162,7 @@
   <div id="switch-menu">
     <button id="nav-frame" class="active-link" onclick="changeStudio('frame')">🖼️ Frame Studio</button>
     <button id="nav-font" onclick="changeStudio('font')">✍️ Font Generator</button>
+    <button id="nav-symbol" onclick="changeStudio('symbol')">🏹 Symbol Gallery</button>
   </div>
 </div>
 
@@ -144,8 +173,8 @@
       <span id="m-status" style="color:#ff0000;">ON</span>
     </div>
     <select class="station-select" onchange="changeMusic(this.value)">
-      <option value="nv_2rz5BFDA">🕹️ Retro Wave</option>
       <option value="jfKfPfyJRdk" selected>☕ Lofi Focus</option>
+      <option value="nv_2rz5BFDA">🕹️ Retro Wave</option>
     </select>
   </div>
 
@@ -178,6 +207,12 @@
   <div id="font-results" class="font-scroll"></div>
 </div>
 
+<div id="symbol-studio" class="studio-sec">
+  <input type="text" id="sym-search" class="search-bar" placeholder="SEARCH (E.G. 'MATH', 'ARROW')" oninput="filterSymbols()">
+  <div class="lbl" style="margin-bottom:10px;">ONE-PAGE MASTER LIST <span class="val-tag">20,000+</span></div>
+  <div id="sym-results-container" class="sym-scroll-box"></div>
+</div>
+
 <script src="https://www.youtube.com/iframe_api"></script>
 <script>
 const c=document.getElementById('c'),x=c.getContext('2d'),zSl=document.getElementById('z'),mSl=document.getElementById('r'),sBtn=document.getElementById('save'),panel=document.getElementById('menu-panel'),mStat=document.getElementById('m-status'), sName=document.getElementById('studio-name'), sSub=document.getElementById('studio-sub'), swMenu=document.getElementById('switch-menu');
@@ -190,14 +225,17 @@ function changeStudio(mode) {
   if(mode === 'frame') {
     document.getElementById('frame-studio').classList.add('active-sec'); document.getElementById('nav-frame').classList.add('active-link');
     sName.innerText = "ARCADE"; sSub.innerText = "FRAME STUDIO";
-  } else {
+  } else if(mode === 'font') {
     document.getElementById('font-studio').classList.add('active-sec'); document.getElementById('nav-font').classList.add('active-link');
     sName.innerText = "FONTS"; sSub.innerText = "GENERATOR STUDIO";
+  } else {
+    document.getElementById('symbol-studio').classList.add('active-sec'); document.getElementById('nav-symbol').classList.add('active-link');
+    sName.innerText = "SYMBOLS"; sSub.innerText = "MASTER COLLECTION"; loadSymbols();
   }
 }
 function toggleSwitchMenu(e) { e.stopPropagation(); swMenu.style.display = swMenu.style.display === 'flex' ? 'none' : 'flex'; playClick(); }
 
-// --- FONT ENGINE (FIXED UNDEFINED) ---
+// --- FONT ENGINE ---
 const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 const bases = [
   {m:"𝐀𝐁𝐂𝐃𝐄𝐅𝐆𝐇𝐈𝐉𝐊𝐋𝐌𝐍𝐎𝐏𝐐𝐑𝐒𝐓𝐔𝐕𝐖𝐗𝐘𝐙𝐚𝐛𝐜𝐝𝐞𝐟𝐠𝐡𝐢𝐣𝐤𝐥𝐦𝐧𝐨𝐩𝐪𝐫𝐬𝐭𝐮𝐯𝐰𝐱𝐲𝐳𝟎𝟏𝟐𝟑𝟒𝟓𝟔𝟕𝟖𝟗"},
@@ -231,16 +269,61 @@ function mapText(t, m) {
     let r="", mArr=Array.from(m); 
     for(let c of t) { 
         let i=chars.indexOf(c); 
-        // FIX: Check if mapped char exists, else return original
         r += (i!==-1 && mArr[i]) ? mArr[i] : c; 
     } 
     return r; 
 }
 function addF(t, c) { let d=document.createElement('div'); d.className="font-item"; d.innerText=t; d.onclick=()=>{navigator.clipboard.writeText(t); playShutter();}; c.appendChild(d); }
 
-// --- AUDIO TRIGGER (ANYWHERE) ---
-function initAudio() { if(!audioStarted) { audioCtx.resume(); if(player && musicOn) player.playVideo(); audioStarted=true; } }
-window.addEventListener('click', initAudio); window.addEventListener('touchstart', initAudio); window.addEventListener('scroll', initAudio);
+// --- SYMBOL DUMP ---
+function loadSymbols() {
+  const box = document.getElementById('sym-results-container');
+  if(box.children.length > 0) return;
+  const ranges = {
+    "Hearts & Love": ["♡","♥","❥","❣","❦","☙","❤","ღ","დ","🏩","💌"],
+    "Math Operators": [0x2200, 0x22FF],
+    "Arrows A": [0x2190, 0x21FF],
+    "Arrows B": [0x2900, 0x297F],
+    "Technical": [0x2300, 0x23FF],
+    "Box Drawing": [0x2500, 0x257F],
+    "Geometric": [0x25A0, 0x25FF],
+    "Misc": [0x2600, 0x26FF],
+    "Dingbats": [0x2700, 0x27BF],
+    "Braille": [0x2800, 0x28FF],
+    "Enclosed": [0x2460, 0x24FF],
+    "Currency": [0x20A0, 0x20CF],
+    "Music": ["♩","♪","♫","♬","♭","♮","♯","𝄞"],
+    "Games": ["♔","♕","♖","♗","♘","♙","♠","♡","♢","♣"]
+  };
+  Object.entries(ranges).forEach(([name, range]) => {
+    const sec = document.createElement('div'); sec.className="cat-container"; sec.dataset.name=name.toLowerCase();
+    const h = document.createElement('div'); h.className="cat-header"; h.innerHTML=`<span class="cat-title">${name}</span>`; sec.appendChild(h);
+    const g = document.createElement('div'); g.className="sym-grid";
+    if(Array.isArray(range) && typeof range[0]==='string') range.forEach(s=>addSym(s,g));
+    else for(let c=range[0]; c<=range[1]; c++) addSym(String.fromCodePoint(c),g);
+    sec.appendChild(g); box.appendChild(sec);
+  });
+}
+function addSym(s,g){ let d=document.createElement('div'); d.className="sym-item"; d.innerText=s; d.onclick=()=>{navigator.clipboard.writeText(s); playShutter();}; g.appendChild(d); }
+function filterSymbols(){ const t=document.getElementById('sym-search').value.toLowerCase(); document.querySelectorAll('.cat-container').forEach(s=>{s.style.display=s.dataset.name.includes(t)||t===""?"block":"none"}); }
+
+// --- AUDIO TRIGGER (THE FIX) ---
+function initAudio() {
+    if(!audioStarted) { 
+        audioCtx.resume().then(() => {
+            audioStarted = true;
+            if(player && musicOn) { player.unMute(); player.playVideo(); }
+            // Remove listeners once active
+            window.removeEventListener('click', initAudio);
+            window.removeEventListener('touchstart', initAudio);
+            window.removeEventListener('scroll', initAudio);
+        });
+    }
+}
+// Add listeners to WINDOW to catch EVERYTHING
+window.addEventListener('click', initAudio, {capture: true});
+window.addEventListener('touchstart', initAudio, {capture: true});
+window.addEventListener('scroll', initAudio, {capture: true});
 
 window.onclick = e => { if (panel.classList.contains('open') && !panel.contains(e.target) && !e.target.classList.contains('menu-toggle')) { panel.classList.remove('open'); playClick(); } swMenu.style.display = 'none'; }
 function onYouTubeIframeAPIReady() { player = new YT.Player('yt-player', { height: '0', width: '0', videoId: 'jfKfPfyJRdk', playerVars: { 'autoplay': 1, 'loop': 1, 'playlist': 'jfKfPfyJRdk', 'mute':0 }, events: { 'onReady': e => { e.target.setVolume(25); } } }); }
@@ -251,68 +334,36 @@ function playClick() { const o=audioCtx.createOscillator(), g=audioCtx.createGai
 function playShutter() { const o=audioCtx.createOscillator(), g=audioCtx.createGain(); o.type='square'; o.frequency.setValueAtTime(200, audioCtx.currentTime); g.gain.setValueAtTime(0.05, audioCtx.currentTime); o.connect(g); g.connect(audioCtx.destination); o.start(); o.stop(audioCtx.currentTime + 0.1); }
 function updateSliderColor(el) { el.style.setProperty('--v', ((el.value-el.min)/(el.max-el.min)*100)+'%'); }
 
-// --- DRAW & TOUCH LOGIC (FIXED ROTATION) ---
+// --- DRAW & TOUCH (GESTURE FIX) ---
 function d(){ 
-    x.clearRect(0,0,800,800); 
-    x.save(); x.beginPath(); x.arc(400,400,cfg.m,0,6.28); x.clip(); 
+    x.clearRect(0,0,800,800); x.save(); x.beginPath(); x.arc(400,400,cfg.m,0,6.28); x.clip(); 
     if(i.src){ 
-        let w=i.width*cfg.s, h=i.height*cfg.s; 
-        x.save(); 
-        x.translate(cfg.x, cfg.y); 
-        x.rotate(cfg.r * Math.PI/180); // Rotation applied here
-        x.drawImage(i, -w/2, -h/2, w, h); 
-        x.restore(); 
+        let w=i.width*cfg.s, h=i.height*cfg.s; x.save(); x.translate(cfg.x, cfg.y); 
+        x.rotate(cfg.r * Math.PI/180); x.drawImage(i, -w/2, -h/2, w, h); x.restore(); 
     } 
-    x.restore(); 
-    if(f.src) x.drawImage(f, 0, 0, 800, 800); 
-    if (i.src || f.src) sBtn.classList.add('active'); 
+    x.restore(); if(f.src) x.drawImage(f, 0, 0, 800, 800); if (i.src || f.src) sBtn.classList.add('active'); 
 }
-
-function handleFile(e) { 
-    if(!e.target.files[0]) return;
-    let r=new FileReader(); r.onload=v=>{ 
-        let n=new Image(); n.onload=()=>{ 
-            i=n; cfg.s=Math.max(800/i.width,800/i.height); cfg.x=400; cfg.y=400; cfg.r=0; // Reset
-            zSl.value=cfg.s; document.getElementById('r').value=0; rVal.innerText="0°"; 
-            updateSliderColor(zSl); d(); playClick(); 
-        }; n.src=v.target.result; 
-    }; r.readAsDataURL(e.target.files[0]); 
-}
+function handleFile(e) { if(!e.target.files[0]) return; let r=new FileReader(); r.onload=v=>{ let n=new Image(); n.onload=()=>{ i=n; cfg.s=Math.max(800/i.width,800/i.height); cfg.x=400; cfg.y=400; cfg.r=0; zSl.value=cfg.s; document.getElementById('r').value=0; rVal.innerText="0°"; updateSliderColor(zSl); d(); playClick(); }; n.src=v.target.result; }; r.readAsDataURL(e.target.files[0]); }
 function handleFrame(e) { let r=new FileReader(); r.onload=v=>{ let n=new Image(); n.onload=()=>{ f=n; d(); playClick(); }; n.src=v.target.result; }; r.readAsDataURL(e.target.files[0]); }
 function updateZ(v) { cfg.s=parseFloat(v); zVal.innerText=Math.round(v*100)+"%"; d(); }
 function updateR(v) { cfg.r=parseInt(v); rVal.innerText=v+"°"; d(); }
 function centerSubject() { if(!i.src) return; playShutter(); cfg.x=400; cfg.y=400; cfg.r=0; document.getElementById('r').value=0; rVal.innerText="0°"; d(); }
 
-// MULTI-TOUCH LOGIC
+// GESTURES
 let lastDist=0, lastAng=0;
 function getDist(t){ return Math.hypot(t[0].clientX-t[1].clientX, t[0].clientY-t[1].clientY); }
 function getAng(t){ return Math.atan2(t[1].clientY-t[0].clientY, t[1].clientX-t[0].clientX) * 180/Math.PI; }
-
 c.addEventListener('touchstart', e => {
-    if(e.touches.length===1) {
-        cfg.lx = e.touches[0].clientX - cfg.x;
-        cfg.ly = e.touches[0].clientY - cfg.y;
-    } else if(e.touches.length===2) {
-        lastDist = getDist(e.touches);
-        lastAng = getAng(e.touches);
-    }
+    initAudio(); // Force audio on canvas touch
+    if(e.touches.length===1) { cfg.lx = e.touches[0].clientX - cfg.x; cfg.ly = e.touches[0].clientY - cfg.y; }
+    else if(e.touches.length===2) { lastDist = getDist(e.touches); lastAng = getAng(e.touches); }
 }, {passive:false});
-
 c.addEventListener('touchmove', e => {
-    e.preventDefault(); // Prevent scroll while editing
-    if(e.touches.length===1) {
-        cfg.x = e.touches[0].clientX - cfg.lx;
-        cfg.y = e.touches[0].clientY - cfg.ly;
-    } else if(e.touches.length===2) {
-        // Zoom
-        let d = getDist(e.touches);
-        cfg.s *= (d / lastDist);
-        lastDist = d;
-        // Rotate
-        let a = getAng(e.touches);
-        cfg.r += (a - lastAng);
-        lastAng = a;
-        // Sync sliders
+    e.preventDefault();
+    if(e.touches.length===1) { cfg.x = e.touches[0].clientX - cfg.lx; cfg.y = e.touches[0].clientY - cfg.ly; }
+    else if(e.touches.length===2) {
+        let d = getDist(e.touches); cfg.s *= (d / lastDist); lastDist = d;
+        let a = getAng(e.touches); cfg.r += (a - lastAng); lastAng = a;
         zSl.value = cfg.s; zVal.innerText=Math.round(cfg.s*100)+"%";
         document.getElementById('r').value = (cfg.r%360); rVal.innerText=Math.round(cfg.r%360)+"°";
     }
