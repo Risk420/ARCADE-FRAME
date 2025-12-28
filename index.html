@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Arcade Studio</title>
 <style>
+  /* FIX: Allow scrolling globally, only block touch on specific elements */
   html { scroll-behavior: smooth; overflow-y: auto; }
   body {
     background: #0a0a0c; color: white; font-family: sans-serif;
@@ -13,6 +14,7 @@
     -webkit-overflow-scrolling: touch; 
     background-image: linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px);
     background-size: 100% 4px;
+    touch-action: auto; /* ALLOW SCROLLING */
   }
   
   /* --- NAVIGATION --- */
@@ -92,17 +94,23 @@
     background-color: transparent; background-size: 20px 20px; box-shadow: 0 0 20px rgba(0,0,0,0.5); 
     -webkit-mask-image: -webkit-radial-gradient(white,black); z-index: 10;
   }
+  /* FIX: Block touch only here to allow page scroll elsewhere */
   canvas { position: absolute; top: 0; left: 0; width: 310px; height: 310px; z-index: 15; touch-action: none; }
   
-  /* ✍️ FONT GENERATOR (PERFECT LAYOUT) */
+  /* ✍️ FONT GENERATOR (PERFECT LAYOUT + SCROLLABLE) */
   .font-input {
     width: 100%; background: #111; border: 2px solid #00ffff; color: #fff;
     padding: 15px; border-radius: 8px; font-weight: bold; text-align: center; margin-bottom: 15px;
     font-size: 16px; outline: none; box-sizing: border-box;
   }
   .font-scroll {
-    width: 100%; max-height: 500px; overflow-y: auto; display: flex; flex-direction: column;
-    gap: 0; border-radius: 8px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); box-sizing: border-box;
+    width: 100%; max-height: 500px; 
+    overflow-y: auto; /* Enable Scroll */
+    -webkit-overflow-scrolling: touch; /* Smooth iOS Scroll */
+    display: flex; flex-direction: column;
+    gap: 0; border-radius: 8px; overflow-x: hidden; 
+    border: 1px solid rgba(255,255,255,0.1); box-sizing: border-box;
+    touch-action: auto; /* Force allow scroll here */
   }
   .font-item {
     background: #1a1a1c; border: none; border-bottom: 1px solid rgba(255,255,255,0.1);
@@ -199,7 +207,7 @@ function changeStudio(mode) {
 }
 function toggleSwitchMenu(e) { e.stopPropagation(); swMenu.style.display = swMenu.style.display === 'flex' ? 'none' : 'flex'; playClick(); }
 
-// --- 🚀 INFINITE FONT GENERATOR (30+ BASES) ---
+// --- 🚀 REAL INFINITE FONT GENERATOR (30+ BASES HARDCODED) ---
 const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 const bases = [
   {m:"𝐀𝐁𝐂𝐃𝐄𝐅𝐆𝐇𝐈𝐉𝐊𝐋𝐌𝐍𝐎𝐏𝐐𝐑𝐒𝐓𝐔𝐕𝐖𝐗𝐘𝐙𝐚𝐛𝐜𝐝𝐞𝐟𝐠𝐡𝐢𝐣𝐤𝐥𝐦𝐧𝐨𝐩𝐪𝐫𝐬𝐭𝐮𝐯𝐰𝐱𝐲𝐳𝟎𝟏𝟐𝟑𝟒𝟓𝟔𝟕𝟖𝟗"}, // Bold
