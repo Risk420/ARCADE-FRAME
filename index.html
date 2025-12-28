@@ -25,7 +25,7 @@
     border: 1px solid rgba(255,255,255,0.1); 
     padding: 8px 12px; border-radius: 4px; 
     font-weight: bold; cursor: pointer; 
-    z-index: 100000; /* Highest possible layer */
+    z-index: 100000; 
     font-size: 12px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.5);
   }
@@ -53,7 +53,6 @@
   }
   #studio-toggle.gif-active { background: #00ffff; color: #000; box-shadow: 0 0 10px rgba(0,255,255,0.5); }
 
-  /* LINKS & HEADERS */
   .lnk, .music-btn {
     display: flex; align-items: center; gap: 10px; padding: 12px;
     text-decoration: none; color: white; font-size: 13px; font-weight: bold;
@@ -73,13 +72,19 @@
   /* CANVAS */
   #box {
     position: relative; width: 310px; height: 310px; border-radius: 50%; overflow: hidden;
-    background-image: linear-gradient(45deg,#111 25%,transparent 25%),linear-gradient(-45deg,#111 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#111 75%),linear-gradient(-45deg,transparent 75%,#111 75%);
-    background-size: 20px 20px; box-shadow: 0 0 20px rgba(0,0,0,0.5); border: 2px solid transparent; 
+    /* GRID TRANSPARENCY BACKGROUND TO SHOW IT IS TRANSPARENT */
+    background-image: 
+      linear-gradient(45deg, #1a1a1c 25%, transparent 25%), 
+      linear-gradient(-45deg, #1a1a1c 25%, transparent 25%), 
+      linear-gradient(45deg, transparent 75%, #1a1a1c 75%), 
+      linear-gradient(-45deg, transparent 75%, #1a1a1c 75%);
+    background-color: #0a0a0c;
+    background-size: 20px 20px; 
+    box-shadow: 0 0 20px rgba(0,0,0,0.5); border: 2px solid transparent; 
     -webkit-mask-image: -webkit-radial-gradient(white,black); z-index: 10;
   }
   canvas { position: absolute; top: 0; left: 0; width: 310px; height: 310px; touch-action: none; z-index: 15; }
   
-  /* UI BUTTONS */
   .ui { margin-top: 20px; width: 300px; display: flex; flex-direction: column; gap: 6px; z-index: 100; position: relative; }
   .btn {
     background: #111; border: 2px solid #fff; color: white; padding: 10px; text-align: center;
@@ -91,7 +96,6 @@
   .lbl { font-size: 9px; color: #888; text-transform: uppercase; margin-top: 2px; display: flex; justify-content: space-between; align-items: center; }
   .val-tag { color: #ff0000; font-weight: bold; font-family: monospace; font-size: 10px; }
 
-  /* SLIDERS */
   input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; margin: 10px 0; cursor: pointer; }
   input[type=range]::-webkit-slider-runnable-track {
     width: 100%; height: 8px; background: linear-gradient(to right, #ff0000 var(--v, 0%), #00ffff var(--v, 0%)); border-radius: 4px;
@@ -175,7 +179,6 @@ let mediaRecorder, recordedChunks = [];
 
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
-// 1. MENU CLOSE LOGIC
 window.addEventListener('click', (e) => {
   if (panel.classList.contains('open') && !panel.contains(e.target) && !e.target.classList.contains('menu-toggle')) {
     panel.classList.remove('open');
@@ -190,7 +193,6 @@ function toggleStudioMode() {
     document.getElementById('video-controls').style.display = isVideoMode ? 'block' : 'none';
     
     sBtn.style.display = isVideoMode ? 'none' : 'block';
-    // Show record button ONLY if video is already selected
     rBtn.style.display = (isVideoMode && vActive) ? 'block' : 'none';
     
     document.getElementById('main-title').innerText = isVideoMode ? 'VIDEO' : 'ARCADE';
@@ -208,7 +210,6 @@ function toggleStudioMode() {
     d();
 }
 
-// 2. VIDEO HANDLER - INSTANT PREVIEW
 function handleVideo(e) {
     const file = e.target.files[0];
     if (file) {
@@ -221,7 +222,6 @@ function handleVideo(e) {
             vEl.playbackRate = playbackSpeed;
             vEl.play();
             
-            // SHOW RECORD BUTTON IMMEDIATELY
             rBtn.style.display = 'block';
             rBtn.innerText = "RECORD CLIP (5s) 🔴";
             rBtn.disabled = false;
@@ -240,12 +240,10 @@ function updateSpeed(v) {
     updateSliderColor(document.getElementById('speed'));
 }
 
-// 3. DRAW LOOP
 function drawLoop() {
     if(isVideoMode && vActive) { d(); requestAnimationFrame(drawLoop); }
 }
 
-// 4. RECORDING LOGIC (MEDIARECORDER)
 function recordVideo() {
     if (!vActive) return;
     
@@ -253,24 +251,14 @@ function recordVideo() {
     rBtn.classList.add('recording');
     rBtn.disabled = true;
 
-    const stream = c.captureStream(30); // Capture canvas at 30 FPS
-    const options = { mimeType: 'video/webm;codecs=vp9' };
+    // Use default MediaRecorder which supports Alpha in WebM on Chrome/Firefox
+    const stream = c.captureStream(30); 
+    const options = { mimeType: 'video/webm;codecs=vp9' }; // VP9 supports transparency
     
-    // Fallback for Safari/other browsers
-    if (!MediaRecorder.isTypeSupported('video/webm;codecs=vp9')) {
-        if (MediaRecorder.isTypeSupported('video/webm')) {
-             options.mimeType = 'video/webm';
-        } else if (MediaRecorder.isTypeSupported('video/mp4')) {
-             options.mimeType = 'video/mp4';
-        } else {
-             options.mimeType = ''; // Let browser decide
-        }
-    }
-
     try {
         mediaRecorder = new MediaRecorder(stream, options);
     } catch (e) {
-        mediaRecorder = new MediaRecorder(stream);
+        mediaRecorder = new MediaRecorder(stream); // Fallback
     }
 
     recordedChunks = [];
@@ -284,32 +272,39 @@ function recordVideo() {
         a.download = 'Arcade_Motion.webm';
         a.click();
         
-        // Reset Button
         rBtn.innerText = "RECORD CLIP (5s) 🔴";
         rBtn.classList.remove('recording');
         rBtn.disabled = false;
     };
 
     mediaRecorder.start();
-
-    // Stop after 5 seconds
-    setTimeout(() => {
-        mediaRecorder.stop();
-    }, 5000);
+    setTimeout(() => { mediaRecorder.stop(); }, 5000);
 }
 
 function d(){
-  x.clearRect(0,0,800,800); x.save(); x.beginPath(); x.arc(400,400,cfg.m,0,6.28); x.clip();
+  // CLEAR CANVAS for TRANSPARENCY
+  x.clearRect(0,0,800,800); 
+  
+  x.save(); x.beginPath(); x.arc(400,400,cfg.m,0,6.28); x.clip();
   
   if(isVideoMode && vActive){
       let w=vEl.videoWidth*cfg.s, h=vEl.videoHeight*cfg.s;
-      x.save(); x.translate(cfg.x, cfg.y); x.drawImage(vEl, -w/2, -h/2, w, h); x.restore();
+      x.save(); 
+      // APPLY PAN & ZOOM to VIDEO
+      x.translate(cfg.x, cfg.y); 
+      x.drawImage(vEl, -w/2, -h/2, w, h); 
+      x.restore();
   } else if(i.src){ 
       let w=i.width*cfg.s, h=i.height*cfg.s; 
-      x.save(); x.translate(cfg.x, cfg.y); x.drawImage(i, -w/2, -h/2, w, h); x.restore(); 
+      x.save(); 
+      x.translate(cfg.x, cfg.y); 
+      x.drawImage(i, -w/2, -h/2, w, h); 
+      x.restore(); 
   }
   
-  x.restore(); if(f.src) x.drawImage(f, 0, 0, 800, 800);
+  x.restore(); 
+  // Frame Overlay
+  if(f.src) x.drawImage(f, 0, 0, 800, 800);
   
   if ((i.src && !isVideoMode) || (f.src && !isVideoMode)) sBtn.classList.add('active');
 }
@@ -330,11 +325,24 @@ function playShutter() { const osc = audioCtx.createOscillator(); const gain = a
 function updateSliderColor(el) { const percent = ((el.value - el.min) / (el.max - el.min)) * 100; el.style.setProperty('--v', percent + '%'); }
 function updateZ(v) { cfg.s=parseFloat(v); zVal.innerText=Math.round(v*100)+"%"; d(); }
 function updateM(v) { cfg.m=parseInt(v); mVal.innerText=v+"px"; d(); }
-function centerSubject() { if(!i.src && !vActive) return; playShutter(); cfg.x = 400; cfg.y = 400; d(); }
+
+// Center Subject (Works for Video too)
+function centerSubject() { 
+    if((!i.src && !vActive)) return; 
+    playShutter(); 
+    cfg.x = 400; cfg.y = 400; 
+    d(); 
+}
+
+// DRAG / TOUCH LOGIC (WORKS FOR VIDEO NOW)
 function gp(e, idx=0){ let r=c.getBoundingClientRect(), t=e.touches?e.touches[idx]:e; return {x:(t.clientX-r.left)*(800/r.width),y:(t.clientY-r.top)*(800/r.height)}; }
 function st(e){ if(e.target==c){ e.preventDefault(); cfg.d=true; let p=gp(e); cfg.lx=p.x-cfg.x; cfg.ly=p.y-cfg.y; } }
 function mv(e){ if(cfg.d){ e.preventDefault(); let p=gp(e); cfg.x=p.x-cfg.lx; cfg.y=p.y-cfg.ly; d(); } }
 function en(){ cfg.d=false; }
+
+c.ontouchstart=st; window.ontouchmove=mv; window.ontouchend=en;
+c.onmousedown=st; window.onmousemove=mv; window.onmouseup=en;
+
 function downloadPic() { if(!i.src && !f.src) return; let a=document.createElement('a'); a.download = 'Arcade_Studio_Picture.png'; a.href=c.toDataURL(); a.click(); }
 document.querySelectorAll('input[type=range]').forEach(el => { el.addEventListener('input', () => { updateSliderColor(el); }); updateSliderColor(el); });
 </script>
