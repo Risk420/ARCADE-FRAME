@@ -12,36 +12,35 @@
     display: flex; flex-direction: column; align-items: center;
     min-height: 100vh; margin: 0; padding-bottom: 120px; 
     -webkit-overflow-scrolling: touch; 
-    /* RETRO SCANLINE BACKGROUND */
     background-image: linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px);
     background-size: 100% 4px;
     overflow-x: hidden;
   }
   
-  /* --- FIXED MENU TOGGLE (ALWAYS ON TOP) --- */
+  /* --- 1. MENU FIXED TO SCREEN --- */
   .menu-toggle {
-    position: fixed; 
+    position: fixed; /* Stays stuck to screen */
     top: 15px; left: 15px; 
     background: #1a1a1c; color: #fff; 
     border: 1px solid rgba(255,255,255,0.1); 
     padding: 8px 12px; border-radius: 4px; 
     font-weight: bold; cursor: pointer; 
-    z-index: 9999; /* Highest priority */
+    z-index: 99999; /* Highest priority: Always on top */
     font-size: 12px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
   }
 
   #menu-panel {
     position: fixed; top: 0; left: -260px; width: 240px; height: 100%;
     background: #1a1a1c; padding-top: 60px; 
     transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
-    z-index: 9998; /* Just below toggle */
+    z-index: 99998; /* Below toggle, above everything else */
     display: flex; flex-direction: column; gap: 10px; padding-left: 15px; padding-right: 15px;
     box-shadow: 2px 0 15px rgba(0,0,0,0.8);
   }
   #menu-panel.open { left: 0; }
 
-  /* STUDIO TOGGLE (TOP RIGHT) */
+  /* --- 2. SWITCH BUTTON FIXED --- */
   #studio-toggle {
     position: absolute; top: 15px; right: 15px; 
     background: #ff0000; color: white;
@@ -54,6 +53,7 @@
   }
   #studio-toggle.gif-active { background: #00ffff; color: #000; box-shadow: 0 0 10px rgba(0,255,255,0.5); }
 
+  /* LINKS & HEADERS */
   .lnk, .music-btn {
     display: flex; align-items: center; gap: 10px; padding: 12px;
     text-decoration: none; color: white; font-size: 13px; font-weight: bold;
@@ -62,7 +62,7 @@
   .music-btn { border-color: #ff0000; background: rgba(255,0,0,0.1); justify-content: space-between; }
 
   h1 {
-    color: #fff; margin: 50px 0 0 0; font-family: "Arial Black", sans-serif; font-style: italic;
+    color: #fff; margin: 60px 0 0 0; font-family: "Arial Black", sans-serif; font-style: italic;
     font-size: 36px; text-transform: uppercase; letter-spacing: -1px;
     text-shadow: 2px 2px 0px #ff0000, -1px -1px 10px rgba(255, 0, 0, 0.8);
     animation: arcadeBounce 1.8s infinite ease-in-out;
@@ -70,6 +70,7 @@
   @keyframes arcadeBounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
   .sub { color: #fff; font-weight: bold; margin: 2px 0 15px 0; text-transform: uppercase; font-size: 11px; letter-spacing: 2px; }
   
+  /* CANVAS */
   #box {
     position: relative; width: 310px; height: 310px; border-radius: 50%; overflow: hidden;
     background-image: linear-gradient(45deg,#111 25%,transparent 25%),linear-gradient(-45deg,#111 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#111 75%),linear-gradient(-45deg,transparent 75%,#111 75%);
@@ -78,6 +79,7 @@
   }
   canvas { position: absolute; top: 0; left: 0; width: 310px; height: 310px; touch-action: none; z-index: 15; }
   
+  /* UI BUTTONS */
   .ui { margin-top: 20px; width: 300px; display: flex; flex-direction: column; gap: 6px; z-index: 100; position: relative; }
   .btn {
     background: #111; border: 2px solid #fff; color: white; padding: 10px; text-align: center;
@@ -89,6 +91,7 @@
   .lbl { font-size: 9px; color: #888; text-transform: uppercase; margin-top: 2px; display: flex; justify-content: space-between; align-items: center; }
   .val-tag { color: #ff0000; font-weight: bold; font-family: monospace; font-size: 10px; }
 
+  /* SLIDERS */
   input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; margin: 10px 0; cursor: pointer; }
   input[type=range]::-webkit-slider-runnable-track {
     width: 100%; height: 8px; background: linear-gradient(to right, #ff0000 var(--v, 0%), #00ffff var(--v, 0%)); border-radius: 4px;
@@ -105,7 +108,7 @@
   }
   #save.active { opacity: 1; pointer-events: auto; }
   
-  /* DOWNLOAD GIF BUTTON (Visible immediately after video select) */
+  /* DOWNLOAD GIF BUTTON (HIDDEN INITIALLY) */
   #dl-gif-btn {
     background: #00ffff; color: #000; border: none; font-size: 14px; padding: 12px;
     border-radius: 8px; font-weight: bold; margin-top: 10px; cursor: pointer; text-transform: uppercase;
@@ -202,7 +205,7 @@ function toggleStudioMode() {
     d();
 }
 
-// 2. VIDEO HANDLER - INSTANT PREVIEW
+// 2. VIDEO HANDLER - NO LOADING TEXT, NO DELAY
 function handleVideo(e) {
     const file = e.target.files[0];
     if (file) {
@@ -216,7 +219,7 @@ function handleVideo(e) {
             vEl.playbackRate = playbackSpeed;
             vEl.play();
             
-            // INSTANTLY Show Download Button (No waiting for render)
+            // SHOW BUTTON IMMEDIATELY - NO PROCESSING
             gBtn.style.display = 'block';
             playShutter();
             requestAnimationFrame(drawLoop);
@@ -231,12 +234,12 @@ function updateSpeed(v) {
     updateSliderColor(document.getElementById('speed'));
 }
 
-// 3. DRAW LOOP (The "Virtual GIF")
+// 3. DRAW LOOP (This makes it look like a GIF instantly)
 function drawLoop() {
     if(isGifMode && vActive) { d(); requestAnimationFrame(drawLoop); }
 }
 
-// 4. DOWNLOAD LOGIC (Processing only happens here)
+// 4. DOWNLOAD LOGIC (Processing ONLY happens here)
 function downloadGif() {
     if (!vActive) return;
     gBtn.innerText = "RENDERING GIF... (PLEASE WAIT)";
