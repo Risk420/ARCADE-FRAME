@@ -16,7 +16,7 @@
     overflow-x: hidden; touch-action: none;
   }
   
-  /* --- FIXED TOP NAV --- */
+  /* --- NAVIGATION --- */
   .menu-toggle {
     position: fixed; top: 15px; left: 15px; 
     background: #1a1a1c; color: #fff; border: 1px solid rgba(255,255,255,0.1); 
@@ -52,6 +52,15 @@
     box-shadow: 2px 0 15px rgba(0,0,0,0.5);
   }
   #menu-panel.open { left: 0; }
+  
+  /* BRANDING AT BOTTOM OF MENU */
+  .designed-by {
+    margin-top: auto; padding: 20px 0; border-top: 1px solid rgba(255,255,255,0.05);
+    text-align: center; font-size: 10px; font-weight: bold; color: #555;
+    text-transform: uppercase; letter-spacing: 2px;
+  }
+  .designed-by span { color: #ff0000; text-shadow: 0 0 5px rgba(255,0,0,0.5); }
+
   .music-section {
     border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.03);
     border-radius: 6px; padding: 10px; display: flex; flex-direction: column; gap: 8px;
@@ -81,9 +90,9 @@
     animation: arcadeBounce 1.8s infinite ease-in-out;
   }
   @keyframes arcadeBounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-  .sub { color: #fff; font-weight: bold; margin: 2px 0 15px 0; text-transform: uppercase; font-size: 11px; letter-spacing: 2px; }
+  .sub { color: #fff; font-weight: bold; margin: 2px 0 15px 0; text-transform: uppercase; font-size: 11px; letter-spacing: 2px; text-align: center; }
   
-  .studio-sec { display: none; width: 320px; flex-direction: column; align-items: center; }
+  .studio-sec { display: none; width: 310px; flex-direction: column; align-items: center; }
   .active-sec { display: flex; }
 
   /* 🖼️ FRAME STUDIO */
@@ -111,33 +120,6 @@
   }
   .font-item:active { background: #00ffff; color: #000; transform: scale(0.98); }
 
-  /* 🏹 SYMBOL GALLERY */
-  .search-bar {
-    width: 100%; background: #111; border: 1px solid #ff0000; color: white;
-    padding: 12px; border-radius: 6px; margin-bottom: 10px; font-size: 12px;
-    text-transform: uppercase; letter-spacing: 1px; outline: none;
-  }
-  .sym-scroll-box {
-    width: 100%; max-height: 600px; overflow-y: auto; 
-    background: #111; border-radius: 8px; padding: 10px;
-    border: 1px solid rgba(255,255,255,0.1);
-  }
-  .cat-container { margin-bottom: 25px; }
-  .cat-header {
-    display: flex; justify-content: space-between; align-items: center;
-    margin: 5px 0 8px 0; border-left: 4px solid #ff0000; padding: 8px 12px;
-    background: rgba(255,255,255,0.03); border-radius: 0 4px 4px 0;
-  }
-  .cat-title { font-size: 11px; font-weight: 900; color: #00ffff; text-transform: uppercase; letter-spacing: 1px; }
-  .sym-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; width: 100%; }
-  .sym-item {
-    background: #1a1a1c; aspect-ratio: 1; display: flex; align-items: center;
-    justify-content: center; font-size: 16px; border-radius: 3px; border: 1px solid rgba(255,255,255,0.05);
-    cursor: pointer; color: white; font-family: "Arial", sans-serif;
-    filter: grayscale(100%);
-  }
-  .sym-item:active { background: #ff0000; transform: scale(0.9); filter: none; }
-
   /* UI GLOBAL */
   .ui { margin-top: 20px; width: 310px; display: flex; flex-direction: column; gap: 6px; }
   .btn { background: #111; border: 2px solid #ffffff; color: white; padding: 10px; text-align: center; border-radius: 8px; font-weight: bold; display: block; font-size: 12px; cursor: pointer; text-transform: uppercase; }
@@ -162,7 +144,6 @@
   <div id="switch-menu">
     <button id="nav-frame" class="active-link" onclick="changeStudio('frame')">🖼️ Frame Studio</button>
     <button id="nav-font" onclick="changeStudio('font')">✍️ Font Generator</button>
-    <button id="nav-symbol" onclick="changeStudio('symbol')">🏹 Symbol Gallery</button>
   </div>
 </div>
 
@@ -180,6 +161,8 @@
 
   <a href="https://discord.gg/ardc" target="_blank" class="lnk" style="border-color:#5865F2;"><svg viewBox="0 0 127.14 96.36"><path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36,77.11,77.11,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1A105.25,105.25,0,0,0,126.6,80.22c2.36-24.44-5.42-48.18-18.9-72.15ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54,46,53.89,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.25,60,73.25,53s5-12.74,11.44-12.74S96.23,46,96.12,53,91.08,65.69,84.69,65.69Z"/></svg><span>Discord Server</span></a>
   <a href="https://platopedia.com/groups/arcade" target="_blank" class="lnk" style="border-color:#00ffff;"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg><span>Arcade Website</span></a>
+
+  <div class="designed-by">DESIGNED BY <span>RISK</span></div>
 </div>
 
 <div id="yt-player"></div>
@@ -207,12 +190,6 @@
   <div id="font-results" class="font-scroll"></div>
 </div>
 
-<div id="symbol-studio" class="studio-sec">
-  <input type="text" id="sym-search" class="search-bar" placeholder="SEARCH (E.G. 'MATH', 'ARROW')" oninput="filterSymbols()">
-  <div class="lbl" style="margin-bottom:10px;">ONE-PAGE MASTER LIST <span class="val-tag">20,000+</span></div>
-  <div id="sym-results-container" class="sym-scroll-box"></div>
-</div>
-
 <script src="https://www.youtube.com/iframe_api"></script>
 <script>
 const c=document.getElementById('c'),x=c.getContext('2d'),zSl=document.getElementById('z'),mSl=document.getElementById('r'),sBtn=document.getElementById('save'),panel=document.getElementById('menu-panel'),mStat=document.getElementById('m-status'), sName=document.getElementById('studio-name'), sSub=document.getElementById('studio-sub'), swMenu=document.getElementById('switch-menu');
@@ -225,12 +202,9 @@ function changeStudio(mode) {
   if(mode === 'frame') {
     document.getElementById('frame-studio').classList.add('active-sec'); document.getElementById('nav-frame').classList.add('active-link');
     sName.innerText = "ARCADE"; sSub.innerText = "FRAME STUDIO";
-  } else if(mode === 'font') {
+  } else {
     document.getElementById('font-studio').classList.add('active-sec'); document.getElementById('nav-font').classList.add('active-link');
     sName.innerText = "FONTS"; sSub.innerText = "GENERATOR STUDIO";
-  } else {
-    document.getElementById('symbol-studio').classList.add('active-sec'); document.getElementById('nav-symbol').classList.add('active-link');
-    sName.innerText = "SYMBOLS"; sSub.innerText = "MASTER COLLECTION"; loadSymbols();
   }
 }
 function toggleSwitchMenu(e) { e.stopPropagation(); swMenu.style.display = swMenu.style.display === 'flex' ? 'none' : 'flex'; playClick(); }
@@ -244,15 +218,15 @@ const bases = [
   {m:"𝓐𝓑𝓒𝓓𝓔𝓕𝓖𝓗𝓘𝓙𝓚𝓛𝓜𝓝𝓞𝓟𝓠𝓡𝓢𝓣𝓤𝓥𝓦𝓧𝓨𝓩𝓪𝓫𝓬𝓭𝓮𝓯𝓰𝓱𝓲𝓳𝓴𝓵𝓶𝓷𝓸𝓹𝓺𝓻𝓼𝓽𝓾𝓿𝔀𝔁𝔂𝔃0123456789"},
   {m:"𝔄𝔅ℭ𝔇𝔈𝔉𝔊ℌℑ𝔍𝔎𝔏𝔐𝔑𝔒𝔓𝔔ℜ𝔖𝔗𝔘𝔙𝔚𝔛𝔜𝔝𝔞𝔟𝔠𝔡𝔢𝔣𝔤𝔥𝔦𝔧𝔨𝔩𝔪𝔫𝔬𝔭𝔮𝔯𝔰𝔱𝔲𝔳𝔴𝔵𝔶𝔷0123456789"},
   {m:"𝕬𝕭𝕮𝕯𝕰𝕱𝕲𝕳𝕴𝕵𝕶𝕷𝕸𝕹𝕺𝕻𝕼𝕽𝕾𝕿𝖀𝖁𝖂𝖃𝖄𝖅𝖆𝖇𝖈𝖉𝖊𝖋𝖌𝖍𝖎𝖏𝖐𝖑𝖒𝖓𝖔𝖕𝖖𝖗𝖘𝖙𝖚𝖛𝖜𝖝𝖞𝖟0123456789"},
-  {m:"𝔸𝔹ℂ𝔻𝔼𝔽𝔾ℍ𝕀𝕁𝕂𝕃𝕄ℕ𝕆ℙℚℝ𝕊𝕋𝕌𝕍𝕎𝕏𝕐ℤ𝕒𝕓𝕔𝕕𝕖𝕗𝕘𝕙𝕚𝕛𝕜𝕝𝕞𝕟𝕠𝕡𝕢𝕣𝕤𝕥𝕦𝕧𝕨𝕩𝕪𝕫𝟘𝟙𝟚𝟛𝟜𝟝𝟞𝟟𝟠𝟡"},
+  {m:"𝔸𝔹ℂ𝔻𝔼𝔽𝔾ℍ𝕀𝕁𝕂𝕃𝕄ℕ𝕆ℙℚℝ𝕊𝕋𝕌𝕍𝕎𝕏𝕐ℤ𝕒𝕓𝕔𝕕𝕖𝕗𝕘𝕙𝕚𝕛𝕜𝕝𝕞𝕟𝕠𝐩𝕢𝕣𝕤𝕥𝕦𝕧𝕨𝕩𝕪𝕫𝟘𝟙𝟚𝟛𝟜𝟝𝟞𝟟𝟠𝟡"},
   {m:"𝖠𝖡𝖢𝖣𝖤𝖥𝖦𝖧𝖨𝖩𝖪𝖫𝖬𝖭𝖮𝖯𝖰𝖱𝖲𝖳𝖴𝖵𝖶𝖷𝖸𝖹𝖺𝖻𝖼𝖽𝖾𝖿𝗀𝗁𝗂𝗃𝗄𝗅𝗆𝗇𝗈𝗉𝗊𝗋𝗌𝗍𝗎𝗏𝗐𝗑𝗒𝗓𝟢𝟣𝟤𝟥𝟦𝟧𝟨𝟩𝟪𝟫"},
-  {m:"𝗔𝗕𝗖𝗗𝗘𝗙𝗚𝗛𝗜𝗝𝗞𝗟𝗠𝗡𝗢𝗣𝗤𝗥𝗦𝗧𝗨𝗩𝗪𝗫𝗬𝗭𝗮𝗯𝗰𝗱𝗲𝗳𝗴𝗵𝗶𝗷𝗸𝗹𝗺𝗻𝗼𝗽𝗾𝗿𝘀𝘁𝘂𝘃𝘄𝘅𝘆𝘇𝟬𝟭𝟮𝟯𝟰𝟱𝟲𝟳𝟴𝟵"},
-  {m:"𝙰𝙱𝙲𝙳𝙴𝙵𝙶𝙷𝙸𝙹𝙺𝙻𝙼𝙽𝙾𝙿𝚀𝚁𝚂𝚃𝚄𝚅𝚆𝚇𝚈𝚉𝚊𝚋𝚌𝚍𝚎𝚏𝚐𝚑𝚒𝚓𝚔𝚕𝚖𝚗𝚘𝚙𝚚𝚛𝚜𝚝𝚞𝚟𝚠𝚡𝚢𝚣𝟶𝟷𝟸𝟹𝟺𝟻𝟼𝟽𝟾𝟿"},
+  {m:"𝗔𝗕𝗖𝗗𝗘𝗙𝗚𝗛𝗜𝗝𝗞𝗟𝗠𝗡𝗢𝗣𝗤𝗥𝗦𝗧𝗨 시민𝗩𝗪𝗫𝗬𝗭𝗮𝗯𝗰𝗱𝗲𝗳𝗴𝗵𝗶𝗷𝗸𝗹𝗺𝗻𝗼𝗽𝗾𝗿𝘀𝘁𝘂𝘃𝘄𝘅𝘆𝘇𝟬𝟭𝟮𝟯𝟰𝟱𝟲𝟳𝟴𝟵"},
+  {m:"𝙰𝙱ＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚ０１２３４５６７８９"},
   {m:"ⒶⒷⒸⒹⒺⒻⒼⒽⒾⒿⓀⓁⓂⓃⓄⓅⓆⓇⓈⓉⓊⓋⓌⓍⓎⓏⓐⓑⓒⓓⓔⓕⓖⓗⓘⓙⓚⓛⓜⓝⓞⓟⓠⓡⓢⓣⓤⓥⓦⓧⓨⓩ⓪①②③④⑤⑥⑦⑧⑨"},
   {m:"🅐🅑🅒🅓🅔🅕🅖🅗🅘🅙🅚🅛🅜🅝🅞🅟🅠🅡🅢🅣🅤🅥🅦🅧🅨🅩🅐🅑🅒🅓🅔🅕🅖🅗🅘🅙🅚🅛🅜🅝🅞🅟🅠🅡🅢🅣🅤🅥🅦🅧🅨🅩⓿➊➋➌➍➎➏➐➑➒"},
   {m:"🄐🄑🄒🄓🄔🄕🄖🄗🄘🄙🄚🄛🄜🄝🄞🄟🄠🄡🄢🄣🄤🄥🄦🄧🄨🄩🄐🄑🄒🄓🄔🄕🄖🄗🄘🄙🄚🄛🄜🄝🄞🄟🄠🄡🄢🄣🄤🄥🄦🄧🄨🄩0123456789"},
   {m:"ＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚ０１２３４５６７８９"},
-  {m:"ᴀʙᴄᴅᴇғɢʜɪᴊᴋʟᴍɴᴏᴘǫʀsᴛᴜᴠᴡxʏᴢᴀʙᴄᴅᴇғɢʜɪᴊᴋʟᴍɴᴏᴘǫʀsᴛᴜᴠᴡxʏᴢ0123456789"}
+  {m:"ᴀʙᴄᴅᴇғɢʜɪᴊᴋʟᴍɴᴏᴘǫʀsᴛᴜᴠｗxʏᴢᴀʙᴄᴅᴇғɢʜɪᴊᴋʟｍɴᴏᴘǫʀsᴛᴜᴠｗxʏｚ0123456789"}
 ];
 const decorators = [" ","★|★","『|』","【|】","꧁|꧂","˗ˏ|ˎ˗","⦗|⦘","⁅|⁆","☾|☽","×|×","☆|☆","●|●","■|■","→|←","⚡|⚡","☠|☠","✈|✈","❤|❤","♛|♛","∞|∞"];
 
@@ -275,52 +249,18 @@ function mapText(t, m) {
 }
 function addF(t, c) { let d=document.createElement('div'); d.className="font-item"; d.innerText=t; d.onclick=()=>{navigator.clipboard.writeText(t); playShutter();}; c.appendChild(d); }
 
-// --- SYMBOL DUMP ---
-function loadSymbols() {
-  const box = document.getElementById('sym-results-container');
-  if(box.children.length > 0) return;
-  const ranges = {
-    "Hearts & Love": ["♡","♥","❥","❣","❦","☙","❤","ღ","დ","🏩","💌"],
-    "Math Operators": [0x2200, 0x22FF],
-    "Arrows A": [0x2190, 0x21FF],
-    "Arrows B": [0x2900, 0x297F],
-    "Technical": [0x2300, 0x23FF],
-    "Box Drawing": [0x2500, 0x257F],
-    "Geometric": [0x25A0, 0x25FF],
-    "Misc": [0x2600, 0x26FF],
-    "Dingbats": [0x2700, 0x27BF],
-    "Braille": [0x2800, 0x28FF],
-    "Enclosed": [0x2460, 0x24FF],
-    "Currency": [0x20A0, 0x20CF],
-    "Music": ["♩","♪","♫","♬","♭","♮","♯","𝄞"],
-    "Games": ["♔","♕","♖","♗","♘","♙","♠","♡","♢","♣"]
-  };
-  Object.entries(ranges).forEach(([name, range]) => {
-    const sec = document.createElement('div'); sec.className="cat-container"; sec.dataset.name=name.toLowerCase();
-    const h = document.createElement('div'); h.className="cat-header"; h.innerHTML=`<span class="cat-title">${name}</span>`; sec.appendChild(h);
-    const g = document.createElement('div'); g.className="sym-grid";
-    if(Array.isArray(range) && typeof range[0]==='string') range.forEach(s=>addSym(s,g));
-    else for(let c=range[0]; c<=range[1]; c++) addSym(String.fromCodePoint(c),g);
-    sec.appendChild(g); box.appendChild(sec);
-  });
-}
-function addSym(s,g){ let d=document.createElement('div'); d.className="sym-item"; d.innerText=s; d.onclick=()=>{navigator.clipboard.writeText(s); playShutter();}; g.appendChild(d); }
-function filterSymbols(){ const t=document.getElementById('sym-search').value.toLowerCase(); document.querySelectorAll('.cat-container').forEach(s=>{s.style.display=s.dataset.name.includes(t)||t===""?"block":"none"}); }
-
-// --- AUDIO TRIGGER (THE FIX) ---
+// --- AUDIO TRIGGER ---
 function initAudio() {
     if(!audioStarted) { 
         audioCtx.resume().then(() => {
             audioStarted = true;
             if(player && musicOn) { player.unMute(); player.playVideo(); }
-            // Remove listeners once active
             window.removeEventListener('click', initAudio);
             window.removeEventListener('touchstart', initAudio);
             window.removeEventListener('scroll', initAudio);
         });
     }
 }
-// Add listeners to WINDOW to catch EVERYTHING
 window.addEventListener('click', initAudio, {capture: true});
 window.addEventListener('touchstart', initAudio, {capture: true});
 window.addEventListener('scroll', initAudio, {capture: true});
@@ -334,7 +274,7 @@ function playClick() { const o=audioCtx.createOscillator(), g=audioCtx.createGai
 function playShutter() { const o=audioCtx.createOscillator(), g=audioCtx.createGain(); o.type='square'; o.frequency.setValueAtTime(200, audioCtx.currentTime); g.gain.setValueAtTime(0.05, audioCtx.currentTime); o.connect(g); g.connect(audioCtx.destination); o.start(); o.stop(audioCtx.currentTime + 0.1); }
 function updateSliderColor(el) { el.style.setProperty('--v', ((el.value-el.min)/(el.max-el.min)*100)+'%'); }
 
-// --- DRAW & TOUCH (GESTURE FIX) ---
+// --- DRAW & TOUCH ---
 function d(){ 
     x.clearRect(0,0,800,800); x.save(); x.beginPath(); x.arc(400,400,cfg.m,0,6.28); x.clip(); 
     if(i.src){ 
@@ -354,7 +294,7 @@ let lastDist=0, lastAng=0;
 function getDist(t){ return Math.hypot(t[0].clientX-t[1].clientX, t[0].clientY-t[1].clientY); }
 function getAng(t){ return Math.atan2(t[1].clientY-t[0].clientY, t[1].clientX-t[0].clientX) * 180/Math.PI; }
 c.addEventListener('touchstart', e => {
-    initAudio(); // Force audio on canvas touch
+    initAudio(); 
     if(e.touches.length===1) { cfg.lx = e.touches[0].clientX - cfg.x; cfg.ly = e.touches[0].clientY - cfg.y; }
     else if(e.touches.length===2) { lastDist = getDist(e.touches); lastAng = getAng(e.touches); }
 }, {passive:false});
