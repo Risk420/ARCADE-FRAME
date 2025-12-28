@@ -7,17 +7,20 @@
 <style>
   html { scroll-behavior: smooth; }
   body {
-    background: #0a0a0c; color: white; font-family: sans-serif;
+    background: #000; color: white; font-family: sans-serif;
     display: flex; flex-direction: column; align-items: center;
     min-height: 100vh; margin: 0; padding-bottom: 120px;
     -webkit-overflow-scrolling: touch; transition: 0.5s ease;
     overflow-x: hidden; position: relative;
+    /* OFFICIAL SCANLINE RETRO BACKGROUND */
+    background-image: linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px);
+    background-size: 100% 4px;
   }
   
   .menu-toggle { position: absolute; top: 15px; left: 15px; background: #1a1a1c; color: #fff; border: 1px solid rgba(255,255,255,0.1); padding: 8px 12px; border-radius: 4px; font-weight: bold; cursor: pointer; z-index: 1000; font-size: 11px; }
 
-  #menu-panel { position: fixed; top: 0; left: -250px; width: 230px; height: 100%; background: #000; padding-top: 60px; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); z-index: 999; display: flex; flex-direction: column; gap: 10px; padding-left: 15px; padding-right: 15px; overflow-y: auto; }
-  #menu-panel.open { left: 0; }
+  #menu-panel { position: fixed; top: 0; left: -250px; width: 230px; height: 100%; background: #000; padding-top: 60px; transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); z-index: 2000; display: flex; flex-direction: column; gap: 10px; padding-left: 15px; padding-right: 15px; overflow-y: auto; }
+  #menu-panel.open { transform: translateX(255px); }
   
   .lnk, .music-btn { display: flex; align-items: center; gap: 10px; padding: 12px; text-decoration: none; color: white; font-size: 13px; font-weight: bold; border-radius: 4px; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.05); cursor: pointer; }
   .music-btn { border-color: #ff0000; background: rgba(255,0,0,0.1); justify-content: space-between; }
@@ -35,12 +38,17 @@
     50% { transform: translateY(-10px); }
   }
 
-  p.sub { color: #ffffff; font-weight: bold; margin: 2px 0 15px 0; text-transform: uppercase; font-size: 11px; letter-spacing: 2px; text-align: center; }
+  .sub { color: #ffffff; font-weight: bold; margin: 2px 0 15px 0; text-transform: uppercase; font-size: 11px; letter-spacing: 2px; text-align: center; }
 
-  #box { position: relative; width: 280px; height: 280px; border-radius: 50%; overflow: hidden; background-image: linear-gradient(45deg,#111 25%,transparent 25%),linear-gradient(-45deg,#111 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#111 75%),linear-gradient(-45deg,transparent 75%,#111 75%); background-size: 20px 20px; box-shadow: 0 0 20px rgba(0,0,0,0.5); border: 2px solid transparent; margin: 0 auto; -webkit-mask-image: -webkit-radial-gradient(white,black); }
-  canvas { position: absolute; top: 0; left: 0; width: 280px; height: 280px; touch-action: none; }
+  /* WORKSPACE CIRCLE */
+  #box { 
+    position: relative; width: 280px; height: 280px; border-radius: 50%; overflow: hidden; background: #111; margin: 0 auto; 
+    -webkit-mask-image: -webkit-radial-gradient(white,black); box-shadow: 0 0 20px rgba(0,0,0,0.5); 
+    background-image: linear-gradient(45deg,#111 25%,transparent 25%),linear-gradient(-45deg,#111 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#111 75%),linear-gradient(-45deg,transparent 75%,#111 75%); background-size: 20px 20px; z-index: 10;
+  }
+  canvas { position: absolute; top: 0; left: 0; width: 280px; height: 280px; touch-action: none; z-index: 15; }
 
-  .ui { margin-top: 20px; width: 260px; display: flex; flex-direction: column; align-items: stretch; gap: 6px; margin-left: auto; margin-right: auto; }
+  .ui { margin-top: 20px; width: 260px; display: flex; flex-direction: column; align-items: stretch; gap: 6px; margin-left: auto; margin-right: auto; z-index: 100; position: relative; }
   .btn { background: #111; border: 2px solid #ffffff; color: white; padding: 10px; text-align: center; border-radius: 8px; font-weight: bold; display: block; font-size: 11px; cursor: pointer; }
   .btn-r { border-color: #ff0000; }
   .btn-center { border-color: #00ffff; color: #00ffff; margin-bottom: 5px; }
@@ -48,8 +56,13 @@
   .lbl { font-size: 9px; color: #888; text-transform: uppercase; margin-top: 2px; display: flex; justify-content: space-between; align-items: center; }
   .val-tag { color: #ff0000; font-weight: bold; font-family: monospace; font-size: 10px; }
 
+  /* SLIDER COLOR FIX: CYAN INSIDE, RED OUTSIDE */
   input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; margin: 10px 0; cursor: pointer; }
-  input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 8px; background: linear-gradient(to right, #ff0000 var(--v, 0%), #00ffff var(--v, 0%)); border-radius: 4px; }
+  input[type=range]::-webkit-slider-runnable-track { 
+    width: 100%; height: 8px; 
+    background: linear-gradient(to right, #00ffff var(--v, 0%), #ff0000 var(--v, 0%)); 
+    border-radius: 4px; 
+  }
   input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 20px; width: 20px; border-radius: 50%; background: #ff0000; margin-top: -6px; box-shadow: 0 0 10px #ff0000; border: 2px solid #ffffff; }
   
   #save { background: #ff0000; border: none; font-size: 13px; color: white; padding: 12px; border-radius: 8px; font-weight: bold; margin-top: 10px; cursor: not-allowed; opacity: 0.4; transition: 0.2s; }
@@ -106,16 +119,61 @@ function startAudio() { if (!audioStarted) { audioCtx.resume(); if(player && mus
 
 function centerSubject() { if(!i.src) return; playShutter(); cfg.x = 400; cfg.y = 400; d(); }
 function toggleMusic() { startAudio(); playClick(); musicOn = !musicOn; if(musicOn) { player.playVideo(); mStat.innerText = "ON"; mStat.style.color = "#ff0000"; } else { player.pauseVideo(); mStat.innerText = "OFF"; mStat.style.color = "#888"; } }
-function toggleMenu(e) { e.stopPropagation(); startAudio(); playClick(); panel.classList.toggle('open'); }
+function toggleMenu(e) { e.stopPropagation(); startAudio(); panel.classList.toggle('open'); }
 window.onclick = e => { if (panel.classList.contains('open') && !panel.contains(e.target)) { panel.classList.remove('open'); playClick(); } };
 
 function updateSliderColor(el) { const percent = ((el.value - el.min) / (el.max - el.min)) * 100; el.style.setProperty('--v', percent + '%'); }
 
-function d(){ x.clearRect(0,0,800,800); x.save(); x.beginPath(); x.arc(400,400,cfg.m,0,6.28); x.clip(); if(i.src){ let w=i.width*cfg.s, h=i.height*cfg.s; x.save(); x.translate(cfg.x, cfg.y); x.rotate(cfg.r); x.drawImage(i, -w/2, -h/2,w,h); x.restore(); } x.restore(); if(f.src) { x.drawImage(f, 0, 0, 800, 800); } if (i.src || f.src) sBtn.classList.add('active'); }
-function handleFile(e) { originalFileName = e.target.files[0].name.split('.').slice(0, -1).join('.') || "Arcade_PFP"; let r=new FileReader(); r.onload=v=>{ const nextI = new Image(); nextI.onload=()=>{ i=nextI; cfg.s=Math.max(800/i.width,800/i.height); zSl.value=cfg.s; zVal.innerText=Math.round(cfg.s*100)+"%"; d(); playClick(); }; nextI.src=v.target.result; }; r.readAsDataURL(e.target.files[0]); }
-function handleFrame(e) { let r=new FileReader(); r.onload=v=>{ const nF=new Image(); nF.onload=()=>{ f=nF; d(); playClick(); }; nF.src=v.target.result; }; r.readAsDataURL(e.target.files[0]); }
-function updateZ(v) { cfg.s=parseFloat(v); zVal.innerText=Math.round(v*100)+"%"; d(); }
-function updateM(v) { cfg.m=parseInt(v); mVal.innerText=v+"px"; d(); }
+function d(){ 
+  x.clearRect(0,0,800,800); 
+  x.save(); 
+  x.beginPath(); 
+  x.arc(400,400,cfg.m,0,6.28); 
+  x.clip(); 
+  if(i.src){ 
+    let w=i.width*cfg.s, h=i.height*cfg.s; 
+    x.save(); 
+    x.translate(cfg.x, cfg.y); 
+    x.rotate(cfg.r); 
+    x.drawImage(i, -w/2, -h/2,w,h); 
+    x.restore(); 
+  } 
+  x.restore(); 
+  if(f.src) { x.drawImage(f, 0, 0, 800, 800); } 
+  if (i.src || f.src) sBtn.classList.add('active'); 
+}
+
+function handleFile(e) { 
+  originalFileName = e.target.files[0].name.split('.').slice(0, -1).join('.') || "Arcade_PFP"; 
+  let r=new FileReader(); 
+  r.onload=v=>{ 
+    const nextI = new Image(); 
+    nextI.onload=()=>{ 
+      i=nextI; 
+      cfg.s=Math.max(800/i.width,800/i.height); 
+      zSl.value=cfg.s; 
+      zVal.innerText=Math.round(cfg.s*100)+"%"; 
+      updateSliderColor(zSl); 
+      d(); 
+      playClick(); 
+    }; 
+    nextI.src=v.target.result; 
+  }; 
+  r.readAsDataURL(e.target.files[0]); 
+}
+
+function handleFrame(e) { 
+  let r=new FileReader(); 
+  r.onload=v=>{ 
+    const nF=new Image(); 
+    nF.onload=()=>{ f=nF; d(); playClick(); }; 
+    nF.src=v.target.result; 
+  }; 
+  r.readAsDataURL(e.target.files[0]); 
+}
+
+function updateZ(v) { cfg.s=parseFloat(v); zVal.innerText=Math.round(v*100)+"%"; updateSliderColor(zSl); d(); }
+function updateM(v) { cfg.m=parseInt(v); mVal.innerText=v+"px"; updateSliderColor(mSl); d(); }
 
 function gp(e, idx=0){ let r=c.getBoundingClientRect(), t=e.touches?e.touches[idx]:e; return {x:(t.clientX-r.left)*(800/r.width),y:(t.clientY-r.top)*(800/r.height)}; }
 function st(e){ if(e.target==c){ e.preventDefault(); cfg.d=true; if(e.touches && e.touches.length === 2) { cfg.ia = Math.atan2(e.touches[1].pageY - e.touches[0].pageY, e.touches[1].pageX - e.touches[0].pageX); cfg.ir = cfg.r; } else { let p=gp(e); cfg.lx=p.x-cfg.x; cfg.ly=p.y-cfg.y; } } }
