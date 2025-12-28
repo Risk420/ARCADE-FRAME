@@ -12,32 +12,45 @@
     display: flex; flex-direction: column; align-items: center;
     min-height: 100vh; margin: 0; padding-bottom: 120px; 
     -webkit-overflow-scrolling: touch; 
-    /* RETRO SCANLINE BACKGROUND */
     background-image: linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px);
     background-size: 100% 4px;
+    overflow-x: hidden; /* Prevent side scrolling */
   }
   
-  /* MENU & TOGGLES */
+  /* --- FIXED MENU LAYOUT --- */
   .menu-toggle {
-    position: absolute; top: 15px; left: 15px; background: #1a1a1c; color: #fff; 
-    border: 1px solid rgba(255,255,255,0.1); padding: 8px 12px; border-radius: 4px; 
-    font-weight: bold; cursor: pointer; z-index: 1000; font-size: 12px;
+    position: fixed; /* Fixed to screen */
+    top: 15px; left: 15px; 
+    background: #1a1a1c; color: #fff; 
+    border: 1px solid rgba(255,255,255,0.1); 
+    padding: 8px 12px; border-radius: 4px; 
+    font-weight: bold; cursor: pointer; 
+    z-index: 2000; /* Above everything */
+    font-size: 12px;
   }
+
+  #menu-panel {
+    position: fixed; top: 0; left: -260px; width: 240px; height: 100%;
+    background: #1a1a1c; padding-top: 60px; 
+    transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+    z-index: 1999; /* Just below toggle button but above content */
+    display: flex; flex-direction: column; gap: 10px; padding-left: 15px; padding-right: 15px;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.5);
+  }
+  #menu-panel.open { left: 0; }
+
+  /* STUDIO TOGGLE (TOP RIGHT) */
   #studio-toggle {
-    position: absolute; top: 15px; right: 15px; background: #ff0000; color: white;
+    position: absolute; top: 15px; right: 15px; 
+    background: #ff0000; color: white;
     border: 2px solid #ffffff; padding: 8px 14px; border-radius: 4px; 
-    font-weight: bold; cursor: pointer; z-index: 1000; font-size: 11px;
-    text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 0 10px rgba(255,0,0,0.5);
+    font-weight: bold; cursor: pointer; 
+    z-index: 1000; font-size: 11px;
+    text-transform: uppercase; letter-spacing: 1px; 
+    box-shadow: 0 0 10px rgba(255,0,0,0.5);
     transition: 0.3s;
   }
   #studio-toggle.gif-active { background: #00ffff; color: #000; box-shadow: 0 0 10px rgba(0,255,255,0.5); }
-
-  #menu-panel {
-    position: fixed; top: 0; left: -250px; width: 230px; height: 100%;
-    background: #1a1a1c; padding-top: 60px; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
-    z-index: 999; display: flex; flex-direction: column; gap: 10px; padding: 0 15px;
-  }
-  #menu-panel.open { left: 0; }
 
   .lnk, .music-btn {
     display: flex; align-items: center; gap: 10px; padding: 12px;
@@ -46,9 +59,8 @@
   }
   .music-btn { border-color: #ff0000; background: rgba(255,0,0,0.1); justify-content: space-between; }
 
-  /* TITLE */
   h1 {
-    color: #fff; margin: 30px 0 0 0; font-family: "Arial Black", sans-serif; font-style: italic;
+    color: #fff; margin: 50px 0 0 0; font-family: "Arial Black", sans-serif; font-style: italic;
     font-size: 36px; text-transform: uppercase; letter-spacing: -1px;
     text-shadow: 2px 2px 0px #ff0000, -1px -1px 10px rgba(255, 0, 0, 0.8);
     animation: arcadeBounce 1.8s infinite ease-in-out;
@@ -56,7 +68,6 @@
   @keyframes arcadeBounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
   .sub { color: #fff; font-weight: bold; margin: 2px 0 15px 0; text-transform: uppercase; font-size: 11px; letter-spacing: 2px; }
   
-  /* CANVAS & PREVIEW */
   #box {
     position: relative; width: 310px; height: 310px; border-radius: 50%; overflow: hidden;
     background-image: linear-gradient(45deg,#111 25%,transparent 25%),linear-gradient(-45deg,#111 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#111 75%),linear-gradient(-45deg,transparent 75%,#111 75%);
@@ -65,7 +76,6 @@
   }
   canvas { position: absolute; top: 0; left: 0; width: 310px; height: 310px; touch-action: none; z-index: 15; }
   
-  /* UI BUTTONS */
   .ui { margin-top: 20px; width: 300px; display: flex; flex-direction: column; gap: 6px; z-index: 100; position: relative; }
   .btn {
     background: #111; border: 2px solid #fff; color: white; padding: 10px; text-align: center;
@@ -74,18 +84,9 @@
   .btn-r { border-color: #ff0000; }
   .btn-center { border-color: #00ffff; color: #00ffff; margin-bottom: 5px; }
 
-  /* STATUS BAR */
-  #status-bar {
-    width: 100%; text-align: center; font-size: 11px; font-weight: bold; 
-    color: #888; margin-bottom: 5px; display: none;
-  }
-  #status-bar.processing { color: #00ffff; animation: blink 1s infinite; display: block; }
-  @keyframes blink { 50% { opacity: 0.5; } }
-
   .lbl { font-size: 9px; color: #888; text-transform: uppercase; margin-top: 2px; display: flex; justify-content: space-between; align-items: center; }
   .val-tag { color: #ff0000; font-weight: bold; font-family: monospace; font-size: 10px; }
 
-  /* SLIDERS */
   input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; margin: 10px 0; cursor: pointer; }
   input[type=range]::-webkit-slider-runnable-track {
     width: 100%; height: 8px; background: linear-gradient(to right, #ff0000 var(--v, 0%), #00ffff var(--v, 0%)); border-radius: 4px;
@@ -101,14 +102,15 @@
     opacity: 0.4; pointer-events: none;
   }
   #save.active { opacity: 1; pointer-events: auto; }
-
-  /* GIF DOWNLOAD BUTTON (Hidden until ready) */
-  #gif-dl-btn {
+  
+  /* DOWNLOAD GIF BUTTON */
+  #dl-gif-btn {
     background: #00ffff; color: #000; border: none; font-size: 14px; padding: 12px;
     border-radius: 8px; font-weight: bold; margin-top: 10px; cursor: pointer; text-transform: uppercase;
-    display: none; box-shadow: 0 0 15px rgba(0,255,255,0.4);
+    display: none;
   }
 
+  /* HIDDEN ELEMENTS */
   input[type=file] { display: none; }
   #yt-player, #hidden-video { display: none; }
 </style>
@@ -133,10 +135,6 @@
 <div id="box"><canvas id="c" width="800" height="800"></canvas></div>
 
 <div class="ui">
-  <div id="common-controls">
-    <div id="status-bar">WAITING FOR INPUT...</div>
-  </div>
-
   <div id="img-controls">
     <label class="btn" onclick="playClick()">CHOOSE IMAGE<input type="file" id="u1" accept="image/*" onchange="handleFile(event)"></label>
     <label class="btn btn-r" onclick="playClick()">APPLY FRAME<input type="file" id="u2" accept="image/*" onchange="handleFrame(event)"></label>
@@ -149,6 +147,8 @@
     
     <div class="lbl">GIF SPEED <span id="speed-val" class="val-tag">1.0x</span></div>
     <input type="range" id="speed" min="0.5" max="3.0" step="0.1" value="1.0" oninput="updateSpeed(this.value)">
+    
+    <button id="dl-gif-btn" onclick="downloadGif()">DOWNLOAD GIF ⬇️</button>
   </div>
   
   <div class="lbl">SCALE ADJUSTMENT <span id="z-val" class="val-tag">100%</span></div>
@@ -158,18 +158,17 @@
   <input type="range" id="m" min="300" max="400" step="1" value="375" oninput="updateM(this.value)">
   
   <button id="save" onclick="downloadPic()">EXPORT PICTURE</button>
-  <button id="gif-dl-btn">DOWNLOAD GIF ⬇️</button>
 </div>
 
 <script src="https://www.youtube.com/iframe_api"></script>
 <script>
-const c=document.getElementById('c'),x=c.getContext('2d'),zSl=document.getElementById('z'),mSl=document.getElementById('m'),sBtn=document.getElementById('save'),panel=document.getElementById('menu-panel'),mStat=document.getElementById('m-status'),toggleBtn=document.getElementById('studio-toggle'),vEl=document.getElementById('hidden-video'),gBtn=document.getElementById('gif-dl-btn'),statusBar=document.getElementById('status-bar');
+const c=document.getElementById('c'),x=c.getContext('2d'),zSl=document.getElementById('z'),mSl=document.getElementById('m'),sBtn=document.getElementById('save'),panel=document.getElementById('menu-panel'),mStat=document.getElementById('m-status'),toggleBtn=document.getElementById('studio-toggle'),vEl=document.getElementById('hidden-video'),gBtn=document.getElementById('dl-gif-btn');
 const zVal=document.getElementById('z-val'),mVal=document.getElementById('m-val'),sVal=document.getElementById('speed-val');
-let i=new Image(),f=new Image(),cfg={s:1,m:375,x:400,y:400,r:0,d:false,lx:0,ly:0},player,musicOn=true,audioStarted=false,isGifMode=false,vActive=false,playbackSpeed=1.0,gifBlob=null,processTimeout=null;
+let i=new Image(),f=new Image(),cfg={s:1,m:375,x:400,y:400,r:0,d:false,lx:0,ly:0},player,musicOn=true,audioStarted=false,isGifMode=false,vActive=false,playbackSpeed=1.0;
 
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
-// MENU LOGIC
+// MENU CLOSE LOGIC
 window.addEventListener('click', (e) => {
   if (panel.classList.contains('open') && !panel.contains(e.target) && !e.target.classList.contains('menu-toggle')) {
     panel.classList.remove('open');
@@ -183,9 +182,9 @@ function toggleStudioMode() {
     document.getElementById('img-controls').style.display = isGifMode ? 'none' : 'block';
     document.getElementById('gif-controls').style.display = isGifMode ? 'block' : 'none';
     
-    // Toggle Buttons
     sBtn.style.display = isGifMode ? 'none' : 'block';
-    gBtn.style.display = 'none'; // Hide GIF download until generated
+    // Show download button ONLY if video is active in gif mode
+    gBtn.style.display = (isGifMode && vActive) ? 'block' : 'none';
     
     document.getElementById('main-title').innerText = isGifMode ? 'GIF' : 'ARCADE';
     document.getElementById('main-sub').innerText = isGifMode ? 'MOTION STUDIO' : 'PICTURE STUDIO';
@@ -193,7 +192,7 @@ function toggleStudioMode() {
     if (isGifMode) {
         toggleBtn.innerText = "SWITCH TO PICTURE STUDIO 🖼️";
         toggleBtn.classList.add('gif-active');
-        if(vActive) { vEl.play(); triggerGifGeneration(); }
+        if(vActive) vEl.play();
     } else {
         toggleBtn.innerText = "GIF STUDIO 🎬";
         toggleBtn.classList.remove('gif-active');
@@ -202,7 +201,6 @@ function toggleStudioMode() {
     d();
 }
 
-// VIDEO HANDLING
 function handleVideo(e) {
     const file = e.target.files[0];
     if (file) {
@@ -212,10 +210,13 @@ function handleVideo(e) {
             cfg.s = Math.max(800/vEl.videoWidth, 800/vEl.videoHeight);
             zSl.value = cfg.s;
             zVal.innerText = Math.round(cfg.s*100)+"%";
+            vEl.playbackRate = playbackSpeed;
             vEl.play();
+            
+            // INSTANTLY SHOW DOWNLOAD BUTTON - NO WAITING
+            gBtn.style.display = 'block';
             playShutter();
             requestAnimationFrame(drawLoop);
-            triggerGifGeneration(); // AUTO START
         };
     }
 }
@@ -225,45 +226,37 @@ function updateSpeed(v) {
     sVal.innerText = playbackSpeed.toFixed(1) + "x";
     vEl.playbackRate = playbackSpeed;
     updateSliderColor(document.getElementById('speed'));
-    // Debounce GIF regeneration so it doesn't crash browser while sliding
-    clearTimeout(processTimeout);
-    processTimeout = setTimeout(triggerGifGeneration, 500);
 }
 
-function triggerGifGeneration() {
-    if (!vActive || !isGifMode) return;
-    
-    statusBar.innerText = "GENERATING GIF...";
-    statusBar.classList.add('processing');
-    gBtn.style.display = 'none';
+// THE VISUAL LOOP - This acts as your "GIF" preview
+function drawLoop() {
+    if(isGifMode && vActive) { d(); requestAnimationFrame(drawLoop); }
+}
 
-    // GIFSHOT GENERATION
+// ACTUAL DOWNLOAD LOGIC - Only happens when button pressed
+function downloadGif() {
+    if (!vActive) return;
+    gBtn.innerText = "RENDERING... (PLEASE WAIT)";
+    gBtn.disabled = true;
+
+    // Use current video settings to create the GIF
     gifshot.createGIF({
         video: [vEl.src],
         gifWidth: 400,
         gifHeight: 400,
         interval: 0.1 / playbackSpeed,
-        numFrames: 10,
-        sampleInterval: 20, 
+        numFrames: 15,
+        sampleInterval: 15, 
     }, function(obj) {
         if(!obj.error) {
-            gifBlob = obj.image;
-            statusBar.innerText = "GIF READY";
-            statusBar.classList.remove('processing');
-            gBtn.style.display = 'block';
-            
-            gBtn.onclick = () => {
-                let a = document.createElement('a');
-                a.download = 'Arcade_Loop.gif';
-                a.href = gifBlob;
-                a.click();
-            };
+            let a = document.createElement('a');
+            a.download = 'Arcade_Motion.gif';
+            a.href = obj.image;
+            a.click();
         }
+        gBtn.innerText = "DOWNLOAD GIF ⬇️";
+        gBtn.disabled = false;
     });
-}
-
-function drawLoop() {
-    if(isGifMode && vActive) { d(); requestAnimationFrame(drawLoop); }
 }
 
 function d(){
@@ -276,7 +269,7 @@ function d(){
       x.save(); x.translate(cfg.x, cfg.y); x.drawImage(i, -w/2, -h/2, w, h); x.restore(); 
   }
   x.restore(); if(f.src) x.drawImage(f, 0, 0, 800, 800);
-  if (i.src || f.src || vActive) sBtn.classList.add('active');
+  if ((i.src && !isGifMode) || (f.src && !isGifMode)) sBtn.classList.add('active');
 }
 
 // UTILITIES
