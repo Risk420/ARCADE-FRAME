@@ -9,11 +9,11 @@
 <style>
   html { scroll-behavior: smooth; overflow-y: auto; }
   body {
-    background: #000; color: white; font-family: sans-serif;
+    background: #0a0a0c; color: white; font-family: sans-serif;
     display: flex; flex-direction: column; align-items: center;
-    min-height: 100vh; margin: 0; padding-bottom: 100px; 
-    background-image: radial-gradient(circle at 50% 50%, #111 0%, #000 100%);
-    touch-action: pan-y;
+    min-height: 100vh; margin: 0; padding-bottom: 150px; 
+    background-image: linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px);
+    background-size: 100% 4px; touch-action: pan-y;
   }
   
   /* --- NAVIGATION --- */
@@ -23,43 +23,39 @@
   #switch-menu { position: absolute; top: 45px; right: 0; background: #1a1a1c; border: 1px solid #ff0000; border-radius: 8px; width: 220px; display: none; flex-direction: column; overflow: hidden; box-shadow: 0 10px 20px rgba(0,0,0,0.8); }
   #switch-menu button { background: transparent; color: #aaa; border: none; padding: 14px; text-align: left; font-weight: bold; font-size: 11px; cursor: pointer; border-bottom: 1px solid rgba(255,255,255,0.05); text-transform: uppercase; }
   #switch-menu button.active-link { color: #00ffff; background: rgba(0,255,255,0.1); border-left: 3px solid #00ffff; }
-  #menu-panel { position: fixed; top: 0; left: -260px; width: 240px; height: 100%; background: #1a1a1c; padding-top: 60px; transition: 0.3s; z-index: 99999; display: flex; flex-direction: column; padding-left: 15px; padding-right: 15px; box-shadow: 2px 0 15px rgba(0,0,0,0.5); }
-  #menu-panel.open { left: 0; }
-  .designed-by { position: absolute; bottom: 20px; width: 100%; text-align: center; font-size: 11px; font-weight: 900; color: #888; letter-spacing: 2px; }
-  .designed-by b { color: #ff0000; }
 
   /* HEADERS */
-  h1 { color: #fff; margin: 60px 0 0 0; font-family: "Arial Black", sans-serif; font-style: italic; font-size: 42px; text-transform: uppercase; text-shadow: 3px 3px 0px #ff0000; animation: arcadeBounce 1.8s infinite ease-in-out; }
+  h1 { color: #fff; margin: 60px 0 0 0; font-family: "Arial Black", sans-serif; font-style: italic; font-size: 36px; text-transform: uppercase; text-shadow: 2px 2px 0px #ff0000; animation: arcadeBounce 1.8s infinite ease-in-out; }
   @keyframes arcadeBounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-  .sub { color: #fff; font-weight: bold; margin: 2px 0 25px 0; text-transform: uppercase; font-size: 12px; letter-spacing: 3px; text-align: center; }
+  .sub { color: #fff; font-weight: bold; margin: 2px 0 15px 0; text-transform: uppercase; font-size: 11px; letter-spacing: 2px; text-align: center; }
   
-  .studio-sec { display: none; width: 350px; flex-direction: column; align-items: center; }
+  .studio-sec { display: none; width: 340px; flex-direction: column; align-items: center; }
   .active-sec { display: flex; }
 
-  /* 🎬 GIF STUDIO LAYOUT */
-  .stage { position: relative; width: 310px; height: 310px; margin-bottom: 30px; touch-action: none; }
+  /* 🖼️ FRAME STUDIO UI */
+  #frame-box { position: relative; width: 310px; height: 310px; border-radius: 50%; overflow: hidden; box-shadow: 0 0 20px rgba(0,0,0,0.5); z-index: 10; }
+  #c { position: absolute; top: 0; left: 0; width: 310px; height: 310px; z-index: 15; touch-action: none; }
+
+  /* 🎬 GIF STUDIO UI (Matches your picture) */
+  .gif-stage { position: relative; width: 310px; height: 310px; margin-bottom: 30px; touch-action: none; }
   .led-ring { position: absolute; inset: -15px; border-radius: 50%; background: conic-gradient(from 180deg, #00f3ff, #bc13fe, #00f3ff); animation: rotate 3s linear infinite; filter: blur(25px); z-index: 1; pointer-events: none; }
   .viewport { position: relative; z-index: 5; width: 100%; height: 100%; border-radius: 50%; overflow: hidden; background-color: #000; background-image: linear-gradient(45deg, #111 25%, transparent 25%), linear-gradient(-45deg, #111 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #111 75%), linear-gradient(-45deg, transparent 75%, #111 75%); background-size: 20px 20px; box-shadow: inset 0 0 30px #000; }
   #v { position: absolute; top: 0; left: 0; pointer-events: none; }
   #o { width: 100%; height: 100%; object-fit: cover; display: none; }
   @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
-  .ui-panel { background: #151517; padding: 25px; border-radius: 35px; width: 100%; border: 1px solid rgba(255,255,255,0.05); display: flex; flex-direction: column; align-items: center; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+  .ui-panel { background: #151517; padding: 25px; border-radius: 35px; width: 100%; border: 1px solid rgba(255,255,255,0.05); display: flex; flex-direction: column; align-items: center; }
   .btn-upload { background: #2a2a2e; color: #fff; border: 1px solid rgba(255,255,255,0.1); padding: 12px 25px; border-radius: 50px; font-weight: 800; cursor: pointer; width: 100%; margin-bottom: 25px; font-size: 12px; text-transform: uppercase; }
-  .label-row { display: flex; justify-content: space-between; font-size: 10px; color: #777; margin-bottom: 8px; width: 100%; font-weight: bold; }
-  input[type="range"] { width: 100%; accent-color: #00f3ff; margin-bottom: 20px; cursor: pointer; height: 5px; }
-  .btn-go { background: linear-gradient(180deg, #ffcc33, #d4af37); color: #000; border: none; padding: 16px; width: 100%; border-radius: 18px; cursor: pointer; font-weight: 900; font-size: 14px; }
-  
-  #msg { margin-top: 15px; font-size: 12px; color: #00f3ff; font-weight: 600; visibility: hidden; }
-  .neon-wrap { position: relative; display: none; margin-top: 15px; padding: 3px; border-radius: 50px; overflow: hidden; width: 100%; }
-  .neon-wrap.blue::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: conic-gradient(transparent, #00f3ff, #bc13fe, transparent); animation: rotate 2s linear infinite; }
-  .neon-wrap.red::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: conic-gradient(transparent, #ff0055, #ff5500, transparent); animation: rotate 2s linear infinite; }
-  .btn-inner { position: relative; display: block; text-decoration: none; text-align: center; color: white; background: #000; padding: 14px; border-radius: 48px; font-weight: 900; font-size: 13px; z-index: 1; cursor: pointer; border: none; }
+  .btn-go { background: linear-gradient(180deg, #ffcc33, #d4af37); color: #000; border: none; padding: 18px; width: 100%; border-radius: 18px; cursor: pointer; font-weight: 900; font-size: 15px; }
+  #msg { margin-top: 15px; font-size: 13px; color: #00f3ff; font-weight: 600; visibility: hidden; }
 
-  /* 🖼️ FRAME STUDIO UI */
-  .frame-ui { margin-top: 20px; width: 310px; display: flex; flex-direction: column; gap: 8px; }
+  /* SHARED UI */
+  .ui-group { margin-top: 20px; width: 310px; display: flex; flex-direction: column; gap: 8px; }
   .btn-std { background: #111; border: 2px solid #fff; color: #fff; padding: 10px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 12px; text-transform: uppercase; text-align: center; }
-  canvas#frame-canvas { width: 310px; height: 310px; border-radius: 50%; box-shadow: 0 0 20px rgba(0,0,0,0.5); touch-action: none; }
+  .lbl { font-size: 9px; color: #888; text-transform: uppercase; width: 100%; display: flex; justify-content: space-between; }
+  input[type=range] { width: 100%; margin: 10px 0; accent-color: #ff0000; }
+  .neon-btn { position: relative; display: none; margin-top: 15px; padding: 3px; border-radius: 50px; overflow: hidden; width: 100%; background: conic-gradient(from 0deg, #00f3ff, #bc13fe, #00f3ff); animation: rotate 2s linear infinite; }
+  .inner-btn { position: relative; display: block; background: #000; color: white; padding: 14px; border-radius: 48px; font-weight: 900; text-align: center; text-decoration: none; font-size: 13px; }
 </style>
 </head>
 <body onclick="startAudio()">
@@ -70,142 +66,132 @@
   <button id="switch-btn" onclick="toggleSwitchMenu(event)">SWITCH TO 📂</button>
   <div id="switch-menu">
     <button id="nav-frame" onclick="changeStudio('frame')">🖼️ Frame Studio</button>
+    <button id="nav-font" onclick="changeStudio('font')">✍️ Font Generator</button>
     <button id="nav-gif" class="active-link" onclick="changeStudio('gif')">🎬 GIF Studio</button>
   </div>
-</div>
-
-<div id="menu-panel">
-  <div class="designed-by">DESIGNED BY <b>RISK</b></div>
 </div>
 
 <h1 id="studio-name">GIFS</h1>
 <p class="sub" id="studio-sub">ARCADE GIF STUDIO</p>
 
 <div id="gif-studio" class="studio-sec active-sec">
-  <div class="stage">
+  <div class="gif-stage">
     <div class="led-ring"></div>
     <div class="viewport" id="vp">
       <video id="v" muted playsinline loop></video>
       <img id="o">
     </div>
   </div>
-
   <div class="ui-panel">
-    <div class="label-row"><span>ZOOM / SCALE</span><span id="zv">100%</span></div>
-    <input type="range" id="zoom" min="100" max="300" value="100">
-
-    <button class="btn-upload" onclick="document.getElementById('f').click()">UPLOAD YOUR VIDEO</button>
-    <input type="file" id="f" accept="video/*" style="display:none">
-
-    <div class="label-row"><span>PLAYBACK SPEED</span><span id="sv">1.0x</span></div>
-    <input type="range" id="speed" min="0.5" max="3.0" step="0.1" value="1.0">
-
+    <div class="lbl">ZOOM / SCALE <span id="gzv">100%</span></div>
+    <input type="range" id="gzoom" min="100" max="300" value="100">
+    <button class="btn-upload" onclick="document.getElementById('gf').click()">UPLOAD YOUR VIDEO</button>
+    <input type="file" id="gf" accept="video/*" style="display:none">
+    <div class="lbl">PLAYBACK SPEED <span id="gsv">1.0x</span></div>
+    <input type="range" id="gspeed" min="0.5" max="3.0" step="0.1" value="1.0">
     <button id="go" class="btn-go">⚡ CREATE HD GIF</button>
     <div id="msg">Processing...</div>
-    
-    <div id="dlBox" class="neon-wrap blue"><a id="dl" class="btn-inner">⬇️ DOWNLOAD GIF</a></div>
-    <div id="resetBox" class="neon-wrap red"><button class="btn-inner" onclick="location.reload()">↻ RESET PROJECT</button></div>
+    <div id="dlBox" class="neon-btn"><a id="dl" class="inner-btn">⬇️ DOWNLOAD GIF</a></div>
   </div>
 </div>
 
 <div id="frame-studio" class="studio-sec">
-  <canvas id="frame-canvas" width="800" height="800"></canvas>
-  <div class="frame-ui">
-    <label class="btn-std">CHOOSE IMAGE<input type="file" accept="image/*" onchange="handleFrameImg(event)" style="display:none"></label>
-    <button class="btn-std" style="background:#ff0000; border:none;" onclick="downloadFrame()">DOWNLOAD PICTURE</button>
+  <div id="frame-box"><canvas id="c" width="800" height="800"></canvas></div>
+  <div class="ui-group">
+    <label class="btn-std">CHOOSE IMAGE<input type="file" id="u1" accept="image/*" onchange="handleFile(event)" style="display:none"></label>
+    <div class="lbl">ZOOM <span id="z-val">100%</span></div>
+    <input type="range" id="z" min="0.1" max="4" step="0.01" value="1" oninput="updateZ(this.value)">
+    <div class="lbl">CIRCLE SIZE <span id="m-val">375px</span></div>
+    <input type="range" id="m" min="300" max="400" value="375" oninput="updateM(this.value)">
+    <button class="btn-std" onclick="downloadPic()" style="background:#ff0000; border:none;">DOWNLOAD PICTURE</button>
   </div>
+</div>
+
+<div id="font-studio" class="studio-sec">
+  <input type="text" id="font-input" class="font-input" placeholder="Type here..." oninput="genFonts()">
+  <div id="font-results" style="width:100%;"></div>
 </div>
 
 <div id="yt-player" style="display:none"></div>
 
 <script>
-const v=document.getElementById('v'), o=document.getElementById('o'), vp=document.getElementById('vp'), f=document.getElementById('f');
-const zoom=document.getElementById('zoom'), speed=document.getElementById('speed'), go=document.getElementById('go'), msg=document.getElementById('msg');
-const dlBox=document.getElementById('dlBox'), dl=document.getElementById('dl'), resetBox=document.getElementById('resetBox');
-const sName=document.getElementById('studio-name'), sSub=document.getElementById('studio-sub'), swMenu=document.getElementById('switch-menu'), panel=document.getElementById('menu-panel');
+// --- GLOBAL ---
+const sName=document.getElementById('studio-name'), sSub=document.getElementById('studio-sub'), swMenu=document.getElementById('switch-menu');
+let audioStarted=false, player;
 
-let isDragging=false, startX, startY, startLeft, startTop, naturalW=0, naturalH=0, audioStarted=false, player;
-
-// --- STUDIO SWITCHER ---
 function changeStudio(mode) {
   document.querySelectorAll('.studio-sec').forEach(s => s.classList.remove('active-sec'));
   swMenu.style.display = 'none';
   if(mode === 'frame') {
     document.getElementById('frame-studio').classList.add('active-sec');
     sName.innerText = "ARCADE"; sSub.innerText = "FRAME STUDIO";
+  } else if(mode === 'font') {
+    document.getElementById('font-studio').classList.add('active-sec');
+    sName.innerText = "FONTS"; sSub.innerText = "GENERATOR STUDIO";
   } else {
     document.getElementById('gif-studio').classList.add('active-sec');
     sName.innerText = "GIFS"; sSub.innerText = "ARCADE GIF STUDIO";
   }
 }
 function toggleSwitchMenu(e) { e.stopPropagation(); swMenu.style.display = swMenu.style.display === 'flex' ? 'none' : 'flex'; }
-function toggleMenu(e) { e.stopPropagation(); panel.classList.toggle('open'); }
+function toggleMenu(e) { e.stopPropagation(); }
 
-// --- AUDIO FIX ---
-function startAudio() {
-  if(!audioStarted) {
-    const tag = document.createElement('script'); tag.src = "https://www.youtube.com/iframe_api";
-    document.head.appendChild(tag);
-    audioStarted = true;
-  }
-}
-function onYouTubeIframeAPIReady() {
-  player = new YT.Player('yt-player', { height: '0', width: '0', videoId: 'jfKfPfyJRdk', playerVars: { 'autoplay': 1, 'loop': 1 }, events: { 'onReady': e => e.target.playVideo() } });
-}
+// --- GIF LOGIC ---
+const v=document.getElementById('v'), o=document.getElementById('o'), vp=document.getElementById('vp'), gf=document.getElementById('gf');
+const gzoom=document.getElementById('gzoom'), gspeed=document.getElementById('gspeed'), go=document.getElementById('go'), msg=document.getElementById('msg');
+let isDragging=false, startX, startY, startL, startT, nW, nH;
 
-// --- GIF ENGINE (NATIVE CANVAS) ---
-f.onchange = e => {
+gf.onchange = e => {
   const file = e.target.files[0]; if(!file) return;
   v.src = URL.createObjectURL(file);
-  v.onloadedmetadata = () => {
-    naturalW = v.videoWidth; naturalH = v.videoHeight;
-    const aspect = naturalW / naturalH; v.style.left = '0px'; v.style.top = '0px';
-    if(aspect > 1) { v.style.height = '310px'; v.style.width = (310 * aspect) + 'px'; }
-    else { v.style.width = '310px'; v.style.height = (310 / aspect) + 'px'; }
-    v.play();
-  };
+  v.onloadedmetadata = () => { nW=v.videoWidth; nH=v.videoHeight; alignVideo(); v.play(); };
 };
-
-zoom.oninput = () => {
-  document.getElementById('zv').innerText = zoom.value + '%'; const z = parseInt(zoom.value)/100;
-  const aspect = naturalW / naturalH;
-  let bW = aspect > 1 ? 310 * aspect : 310, bH = aspect > 1 ? 310 : 310 / aspect;
-  v.style.width = (bW * z) + 'px'; v.style.height = (bH * z) + 'px';
+function alignVideo() {
+  const aspect=nW/nH; v.style.left='0px'; v.style.top='0px';
+  if(aspect > 1) { v.style.height='310px'; v.style.width=(310*aspect)+'px'; } else { v.style.width='310px'; v.style.height=(310/aspect)+'px'; }
+}
+gzoom.oninput = () => {
+  document.getElementById('gzv').innerText=gzoom.value+'%'; const z=parseInt(gzoom.value)/100;
+  const aspect=nW/nH; let bW=aspect>1?310*aspect:310, bH=aspect>1?310:310/aspect;
+  v.style.width=(bW*z)+'px'; v.style.height=(bH*z)+'px';
 };
+const startDragG=(x,y)=>{ isDragging=true; startX=x; startY=y; startL=parseFloat(v.style.left||0); startT=parseFloat(v.style.top||0); };
+vp.ontouchstart=e=>startDragG(e.touches[0].pageX, e.touches[0].pageY);
+window.ontouchmove=e=>{ if(!isDragging)return; v.style.left=(startL+(e.touches[0].pageX-startX))+'px'; v.style.top=(startT+(e.touches[0].pageY-startY))+'px'; };
+window.ontouchend=()=>isDragging=false;
 
-const startDrag = (x, y) => { isDragging=true; startX=x; startY=y; startLeft=parseFloat(v.style.left||0); startTop=parseFloat(v.style.top||0); };
-const doDrag = (x, y) => { if(!isDragging) return; v.style.left = (startLeft + (x - startX)) + 'px'; v.style.top = (startTop + (y - startY)) + 'px'; };
-vp.onmousedown = e => startDrag(e.pageX, e.pageY); window.onmousemove = e => doDrag(e.pageX, e.pageY); window.onmouseup = () => isDragging=false;
-vp.ontouchstart = e => startDrag(e.touches[0].pageX, e.touches[0].pageY); window.ontouchmove = e => doDrag(e.touches[0].pageX, e.touches[0].pageY); window.ontouchend = () => isDragging=false;
-
-go.onclick = () => {
-  if(!v.src) return;
-  go.disabled = true; msg.style.visibility = "visible";
-  const workerBlob = new Blob([`importScripts('https://cdnjs.cloudflare.com/ajax/libs/gif.js/0.2.0/gif.worker.js');`], { type: 'application/javascript' });
-  const gif = new GIF({ workers: 2, quality: 10, width: 480, height: 480, workerScript: URL.createObjectURL(workerBlob) });
-  const canvas = document.createElement('canvas'); canvas.width = 480; canvas.height = 480; const ctx = canvas.getContext('2d');
-  const fps = 24, duration = v.duration, capVid = document.createElement('video');
-  capVid.src = v.src; capVid.onloadeddata = () => {
-    const cW = parseFloat(v.style.width), cH = parseFloat(v.style.height), rW = naturalW / cW, rH = naturalH / cH;
-    let cTime = 0; const capture = () => {
-      if(cTime >= duration) { gif.render(); return; }
-      capVid.currentTime = cTime;
-    };
-    capVid.onseeked = () => {
-      ctx.drawImage(capVid, Math.abs(parseFloat(v.style.left||0))*rW, Math.abs(parseFloat(v.style.top||0))*rH, 310*rW, 310*rH, 0, 0, 480, 480);
-      gif.addFrame(ctx, {copy: true, delay: (1000/fps)/parseFloat(speed.value)});
-      cTime += (1/fps); capture();
-    };
-    capture();
+go.onclick=()=>{
+  if(!v.src)return; go.disabled=true; msg.style.visibility="visible";
+  const workerBlob=new Blob([`importScripts('https://cdnjs.cloudflare.com/ajax/libs/gif.js/0.2.0/gif.worker.js');`],{type:'application/javascript'});
+  const gif=new GIF({workers:2, quality:10, width:480, height:480, workerScript:URL.createObjectURL(workerBlob)});
+  const canvas=document.createElement('canvas'); canvas.width=480; canvas.height=480; const ctx=canvas.getContext('2d');
+  const fps=24, duration=v.duration, capVid=document.createElement('video');
+  capVid.src=v.src; capVid.onloadeddata=()=>{
+    const rW=nW/parseFloat(v.style.width), rH=nH/parseFloat(v.style.height);
+    let cTime=0; const capture=()=>{ if(cTime>=duration){gif.render();return;} capVid.currentTime=cTime; };
+    capVid.onseeked=()=>{
+      ctx.drawImage(capVid, Math.abs(parseFloat(v.style.left||0))*rW, Math.abs(parseFloat(v.style.top||0))*rH, 310*rW, 310*rH, 0,0,480,480);
+      gif.addFrame(ctx,{copy:true, delay:(1000/fps)/parseFloat(gspeed.value)}); cTime+=(1/fps); capture();
+    }; capture();
   };
-  gif.on('finished', blob => {
-    const url = URL.createObjectURL(blob), rNum = Math.floor(Math.random()*90000)+10000;
-    v.style.display = 'none'; o.src = url; o.style.display = 'block';
-    dl.href = url; dl.download = `neon_focus_${rNum}.gif`;
-    dlBox.style.display = 'inline-block'; resetBox.style.display = 'inline-block';
-    msg.style.visibility = "hidden"; go.disabled = false;
+  gif.on('finished', blob=>{
+    o.src=URL.createObjectURL(blob); v.style.display='none'; o.style.display='block';
+    document.getElementById('dl').href=o.src; document.getElementById('dl').download=`neon_focus_${Math.floor(Math.random()*9999)}.gif`;
+    document.getElementById('dlBox').style.display='block'; msg.style.visibility="hidden"; go.disabled=false;
   });
 };
+
+// --- FRAME LOGIC ---
+const canvas=document.getElementById('c'), x=canvas.getContext('2d');
+let i=new Image(), cfg={s:1, m:375};
+function d(){ x.clearRect(0,0,800,800); x.save(); x.beginPath(); x.arc(400,400,cfg.m,0,6.28); x.clip(); if(i.src) x.drawImage(i, 400-(i.width*cfg.s)/2, 400-(i.height*cfg.s)/2, i.width*cfg.s, i.height*cfg.s); x.restore(); }
+function handleFile(e){ let r=new FileReader(); r.onload=v=>{ let n=new Image(); n.onload=()=>{i=n; cfg.s=800/i.width; d();}; n.src=v.target.result; }; r.readAsDataURL(e.target.files[0]); }
+function updateZ(v){ cfg.s=parseFloat(v); document.getElementById('z-val').innerText=Math.round(v*100)+"%"; d(); }
+function updateM(v){ cfg.m=parseInt(v); document.getElementById('m-val').innerText=v+"px"; d(); }
+function downloadPic(){ let a=document.createElement('a'); a.download='arcade.png'; a.href=canvas.toDataURL(); a.click(); }
+
+function startAudio(){ if(!audioStarted){ const tag=document.createElement('script'); tag.src="https://www.youtube.com/iframe_api"; document.head.appendChild(tag); audioStarted=true; } }
+function onYouTubeIframeAPIReady(){ player=new YT.Player('yt-player',{height:'0',width:'0',videoId:'jfKfPfyJRdk',playerVars:{'autoplay':1,'loop':1},events:{'onReady':e=>e.target.playVideo()}}); }
 </script>
 </body>
 </html>
