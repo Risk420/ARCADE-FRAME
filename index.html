@@ -11,63 +11,111 @@
     display: flex; flex-direction: column; align-items: center;
     min-height: 100vh; margin: 0; padding-bottom: 120px; 
     -webkit-overflow-scrolling: touch; 
-    /* OFFICIAL SCANLINE RETRO BACKGROUND */
     background-image: linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px);
     background-size: 100% 4px;
     overflow-x: hidden;
   }
   
-  /* --- FIXED MENU TOGGLE --- */
+  /* --- FIXED TOP NAV --- */
   .menu-toggle {
     position: fixed; top: 15px; left: 15px; 
-    background: #1a1a1c; color: #ffffff; 
+    background: #1a1a1c; color: #fff; 
     border: 1px solid rgba(255,255,255,0.1); 
-    padding: 8px 12px; border-radius: 4px; font-weight: bold; cursor: pointer; z-index: 100000;
+    padding: 8px 12px; border-radius: 4px; 
+    font-weight: bold; cursor: pointer; z-index: 100000;
     font-size: 12px;
   }
+
+  .switch-container { position: fixed; top: 15px; right: 15px; z-index: 100000; }
+  #switch-btn {
+    background: #ff0000; color: white; border: 2px solid #ffffff; 
+    padding: 8px 14px; border-radius: 4px; font-weight: bold; cursor: pointer;
+    font-size: 11px; text-transform: uppercase; letter-spacing: 1px;
+    box-shadow: 0 0 10px rgba(255,0,0,0.5);
+  }
+  #switch-menu {
+    position: absolute; top: 45px; right: 0; background: #1a1a1c; 
+    border: 1px solid #ff0000; border-radius: 8px; width: 200px;
+    display: none; flex-direction: column; overflow: hidden;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.8);
+  }
+  #switch-menu button {
+    background: transparent; color: white; border: none; padding: 12px;
+    text-align: left; font-weight: bold; font-size: 11px; cursor: pointer;
+    border-bottom: 1px solid rgba(255,255,255,0.05); text-transform: uppercase;
+  }
+  #switch-menu button:hover { background: rgba(255,0,0,0.1); color: #ff0000; }
 
   #menu-panel {
     position: fixed; top: 0; left: -260px; width: 240px; height: 100%;
     background: #1a1a1c; padding-top: 60px; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); z-index: 99999;
     display: flex; flex-direction: column; gap: 10px; padding-left: 15px; padding-right: 15px;
-    box-shadow: 2px 0 15px rgba(0,0,0,0.8);
   }
   #menu-panel.open { left: 0; }
 
   .lnk, .music-btn {
     display: flex; align-items: center; gap: 10px; padding: 12px;
     text-decoration: none; color: white; font-size: 13px; font-weight: bold;
-    border-radius: 4px; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.05); cursor: pointer;
+    border-radius: 4px; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.05);
   }
+  .lnk svg { width: 18px; height: 18px; fill: white; }
   .music-btn { border-color: #ff0000; background: rgba(255,0,0,0.1); justify-content: space-between; }
 
   h1 {
-    color: #ffffff; margin: 60px 0 0 0; font-family: "Arial Black", sans-serif; font-style: italic;
+    color: #fff; margin: 60px 0 0 0; font-family: "Arial Black", sans-serif; font-style: italic;
     font-size: 36px; text-transform: uppercase; letter-spacing: -1px;
     text-shadow: 2px 2px 0px #ff0000, -1px -1px 10px rgba(255, 0, 0, 0.8);
     animation: arcadeBounce 1.8s infinite ease-in-out;
   }
-  @keyframes arcadeBounce {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
-  }
-  .sub { color: #ffffff; font-weight: bold; margin: 2px 0 15px 0; text-transform: uppercase; font-size: 11px; letter-spacing: 2px; text-align: center; }
+  @keyframes arcadeBounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+  .sub { color: #fff; font-weight: bold; margin: 2px 0 15px 0; text-transform: uppercase; font-size: 11px; letter-spacing: 2px; }
   
+  .studio-sec { display: none; width: 310px; flex-direction: column; align-items: center; }
+  .active-sec { display: flex; }
+
+  /* 🖼️ FRAME STUDIO */
   #box {
     position: relative; width: 310px; height: 310px; border-radius: 50%; overflow: hidden;
-    background-image: 
-      linear-gradient(45deg, #1a1a1c 25%, transparent 25%), 
-      linear-gradient(-45deg, #1a1a1c 25%, transparent 25%), 
-      linear-gradient(45deg, transparent 75%, #1a1a1c 75%), 
-      linear-gradient(-45deg, transparent 75%, #1a1a1c 75%);
-    background-color: transparent;
-    background-size: 20px 20px; 
-    box-shadow: 0 0 20px rgba(0,0,0,0.5); border: 2px solid transparent; 
+    background-image: linear-gradient(45deg, #1a1a1c 25%, transparent 25%), linear-gradient(-45deg, #1a1a1c 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #1a1a1c 75%), linear-gradient(-45deg, transparent 75%, #1a1a1c 75%);
+    background-color: transparent; background-size: 20px 20px; box-shadow: 0 0 20px rgba(0,0,0,0.5); 
     -webkit-mask-image: -webkit-radial-gradient(white,black); z-index: 10;
   }
   canvas { position: absolute; top: 0; left: 0; width: 310px; height: 310px; touch-action: none; z-index: 15; }
   
-  .ui { margin-top: 20px; width: 300px; display: flex; flex-direction: column; gap: 6px; z-index: 100; position: relative; }
+  /* ✍️ FONT GENERATOR */
+  .font-input {
+    width: 100%; background: #111; border: 2px solid #00ffff; color: #fff;
+    padding: 15px; border-radius: 8px; font-weight: bold; text-align: center; margin-bottom: 10px;
+  }
+  .font-list { width: 100%; display: flex; flex-direction: column; gap: 8px; }
+  .font-item {
+    background: #1a1a1c; border: 1px solid rgba(255,255,255,0.1); padding: 12px;
+    border-radius: 6px; font-size: 16px; text-align: center; cursor: pointer; transition: 0.2s;
+  }
+  .font-item:active { background: #00ffff; color: #000; }
+
+  /* 🏹 SYMBOL GALLERY - CATEGORIZED */
+  .sym-scroll-box {
+    width: 100%; max-height: 450px; overflow-y: auto; 
+    background: #111; border-radius: 8px; padding: 10px;
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+  .cat-title {
+    font-size: 11px; font-weight: 900; color: #00ffff;
+    text-transform: uppercase; margin: 15px 0 8px 0; border-left: 3px solid #ff0000; padding-left: 8px;
+  }
+  .sym-grid {
+    display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; width: 100%; margin-bottom: 20px;
+  }
+  .sym-item {
+    background: #1a1a1c; aspect-ratio: 1; display: flex; align-items: center;
+    justify-content: center; font-size: 18px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.05);
+    cursor: pointer;
+  }
+  .sym-item:active { background: #ff0000; transform: scale(0.9); }
+
+  /* UI GLOBAL */
+  .ui { margin-top: 20px; width: 310px; display: flex; flex-direction: column; gap: 6px; }
   .btn {
     background: #111; border: 2px solid #ffffff; color: white; padding: 10px; text-align: center;
     border-radius: 8px; font-weight: bold; display: block; font-size: 12px; cursor: pointer; text-transform: uppercase;
@@ -75,25 +123,21 @@
   .btn-r { border-color: #ff0000; }
   .btn-center { border-color: #00ffff; color: #00ffff; margin-bottom: 5px; }
 
-  .lbl { font-size: 9px; color: #888; text-transform: uppercase; margin-top: 2px; display: flex; justify-content: space-between; align-items: center; }
+  .lbl { font-size: 9px; color: #888; text-transform: uppercase; margin-top: 2px; display: flex; justify-content: space-between; align-items: center; width: 100%; }
   .val-tag { color: #ff0000; font-weight: bold; font-family: monospace; font-size: 10px; }
 
   input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; margin: 10px 0; cursor: pointer; }
   input[type=range]::-webkit-slider-runnable-track {
-    width: 100%; height: 8px; 
-    background: linear-gradient(to right, #ff0000 var(--v, 0%), #00ffff var(--v, 0%)); border-radius: 4px;
+    width: 100%; height: 8px; background: linear-gradient(to right, #ff0000 var(--v, 0%), #00ffff var(--v, 0%)); border-radius: 4px;
   }
   input[type=range]::-webkit-slider-thumb {
     -webkit-appearance: none; height: 20px; width: 20px; border-radius: 50%;
     background: #ff0000; margin-top: -6px; box-shadow: 0 0 10px #ff0000; border: 2px solid #ffffff;
   }
   
-  #save {
-    background: #ff0000; border: none; font-size: 14px; color: white; padding: 12px;
-    border-radius: 8px; font-weight: bold; margin-top: 10px; cursor: pointer; text-transform: uppercase;
-    opacity: 0.4; pointer-events: none; transition: 0.2s;
-  }
-  #save.active { cursor: pointer; opacity: 1; pointer-events: auto; }
+  #save { background: #ff0000; border: none; font-size: 14px; color: white; padding: 12px; border-radius: 8px; font-weight: bold; margin-top: 10px; cursor: pointer; text-transform: uppercase; opacity: 0.4; pointer-events: none; }
+  #save.active { opacity: 1; pointer-events: auto; }
+  
   input[type=file] { display: none; }
   #yt-player { display: none; }
 </style>
@@ -102,51 +146,157 @@
 
 <button class="menu-toggle" onclick="toggleMenu(event)">MENU ☰</button>
 
+<div class="switch-container">
+  <button id="switch-btn" onclick="toggleSwitchMenu(event)">SWITCH STUDIO 📂</button>
+  <div id="switch-menu">
+    <button onclick="changeStudio('frame')">🖼️ Picture Studio</button>
+    <button onclick="changeStudio('font')">✍️ Font Generator</button>
+    <button onclick="changeStudio('symbol')">🏹 Symbol Gallery</button>
+  </div>
+</div>
+
 <div id="menu-panel">
   <div class="music-btn" onclick="toggleMusic()">MUSIC CONTROL <span id="m-status" style="color:#ff0000;">ON</span></div>
+  
   <a href="https://discord.gg/ardc" target="_blank" class="lnk" style="border-color:#5865F2;">
+    <svg viewBox="0 0 127.14 96.36"><path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36,77.11,77.11,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1A105.25,105.25,0,0,0,126.6,80.22c2.36-24.44-5.42-48.18-18.9-72.15ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54,46,53.89,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.25,60,73.25,53s5-12.74,11.44-12.74S96.23,46,96.12,53,91.08,65.69,84.69,65.69Z"/></svg>
     <span>Discord Server</span>
   </a>
+
   <a href="https://platopedia.com/groups/arcade" target="_blank" class="lnk" style="border-color:#00ffff;">
+    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
     <span>Arcade Website</span>
   </a>
 </div>
 
 <div id="yt-player"></div>
 
-<h1>ARCADE</h1>
-<p class="sub">PICTURE STUDIO</p>
+<h1 id="studio-name">ARCADE</h1>
+<p class="sub" id="studio-sub">PICTURE STUDIO</p>
 
-<div id="box"><canvas id="c" width="800" height="800"></canvas></div>
+<div id="frame-studio" class="studio-sec active-sec">
+  <div id="box"><canvas id="c" width="800" height="800"></canvas></div>
+  <div class="ui">
+    <label class="btn" onclick="playClick()">CHOOSE IMAGE<input type="file" id="u1" accept="image/*" onchange="handleFile(event)"></label>
+    <label class="btn btn-r" onclick="playClick()">APPLY FRAME<input type="file" id="u2" accept="image/*" onchange="handleFrame(event)"></label>
+    <button class="btn btn-center" onclick="centerSubject()">CENTER SUBJECT 🎯</button>
+    <div class="lbl">SCALE ADJUSTMENT <span id="z-val" class="val-tag">100%</span></div>
+    <input type="range" id="z" min="0.1" max="4" step="0.01" value="1" oninput="updateZ(this.value)">
+    <div class="lbl">CANVAS RADIUS <span id="m-val" class="val-tag">375px</span></div>
+    <input type="range" id="m" min="300" max="400" step="1" value="375" oninput="updateM(this.value)">
+    <button id="save" onclick="downloadPic()">EXPORT PICTURE</button>
+  </div>
+</div>
 
-<div class="ui">
-  <label class="btn" onclick="playClick()">CHOOSE IMAGE<input type="file" id="u1" accept="image/*" onchange="handleFile(event)"></label>
-  <label class="btn btn-r" onclick="playClick()">APPLY FRAME<input type="file" id="u2" accept="image/*" onchange="handleFrame(event)"></label>
-  <button class="btn btn-center" onclick="centerSubject()">CENTER SUBJECT 🎯</button>
-  
-  <div class="lbl">SCALE ADJUSTMENT <span id="z-val" class="val-tag">100%</span></div>
-  <input type="range" id="z" min="0.1" max="4" step="0.01" value="1" oninput="updateZ(this.value)">
-  
-  <div class="lbl">CANVAS RADIUS <span id="m-val" class="val-tag">375px</span></div>
-  <input type="range" id="m" min="300" max="400" step="1" value="375" oninput="updateM(this.value)">
-  
-  <button id="save" onclick="downloadPic()">EXPORT PICTURE</button>
+<div id="font-studio" class="studio-sec">
+  <input type="text" id="font-input" class="font-input" placeholder="Type word here..." oninput="genFonts()">
+  <div class="lbl">TAP TO COPY <span class="val-tag">FANCY STYLES</span></div>
+  <div id="font-results" class="font-list"></div>
+</div>
+
+<div id="symbol-studio" class="studio-sec">
+  <div class="lbl" style="margin-bottom:10px;">TAP TO COPY <span class="val-tag">ANY SYMBOL</span></div>
+  <div id="sym-results-container" class="sym-scroll-box">
+      </div>
 </div>
 
 <script src="https://www.youtube.com/iframe_api"></script>
 <script>
-const c=document.getElementById('c'),x=c.getContext('2d'),zSl=document.getElementById('z'),mSl=document.getElementById('m'),sBtn=document.getElementById('save'),panel=document.getElementById('menu-panel'),mStat=document.getElementById('m-status');
+const c=document.getElementById('c'),x=c.getContext('2d'),zSl=document.getElementById('z'),mSl=document.getElementById('m'),sBtn=document.getElementById('save'),panel=document.getElementById('menu-panel'),mStat=document.getElementById('m-status'), sName=document.getElementById('studio-name'), sSub=document.getElementById('studio-sub'), swMenu=document.getElementById('switch-menu');
 const zVal=document.getElementById('z-val'),mVal=document.getElementById('m-val');
 let i=new Image(),f=new Image(),cfg={s:1,m:375,x:400,y:400,r:0,d:false,lx:0,ly:0},player,musicOn=true,audioStarted=false;
 
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
-window.addEventListener('click', (e) => {
-  if (panel.classList.contains('open') && !panel.contains(e.target) && !e.target.classList.contains('menu-toggle')) {
-    panel.classList.remove('open');
-    playClick();
+function changeStudio(mode) {
+  playClick();
+  document.querySelectorAll('.studio-sec').forEach(s => s.classList.remove('active-sec'));
+  swMenu.style.display = 'none';
+  
+  if(mode === 'frame') {
+    document.getElementById('frame-studio').classList.add('active-sec');
+    sName.innerText = "ARCADE"; sSub.innerText = "PICTURE STUDIO";
+  } else if(mode === 'font') {
+    document.getElementById('font-studio').classList.add('active-sec');
+    sName.innerText = "FONTS"; sSub.innerText = "GENERATOR STUDIO";
+  } else {
+    document.getElementById('symbol-studio').classList.add('active-sec');
+    sName.innerText = "SYMBOLS"; sSub.innerText = "FULL COLLECTION";
+    loadSymbols();
   }
-});
+}
+
+function toggleSwitchMenu(e) { e.stopPropagation(); swMenu.style.display = swMenu.style.display === 'flex' ? 'none' : 'flex'; playClick(); }
+
+// FONT GENERATOR LOGIC
+const normalStr = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+const stylesMap = {
+  "BOLD": "𝐀𝐁𝐂𝐃𝐄𝐅𝐆𝐇𝐈𝐉𝐊𝐋𝐌𝐍𝐎𝐏𝐐𝐑𝐒𝐓𝐔𝐕𝐖𝐗𝐘𝐙𝐚𝐛𝐜𝐝𝐞𝐟𝐠𝐡𝐢𝐣𝐤𝐥𝐦𝐧𝐨𝐩𝐪𝐫𝐬𝐭𝐮𝐯𝐰𝐱𝐲𝐳𝟎𝟏𝟐𝟑𝟒𝟓𝟔𝟕𝟖𝟗",
+  "SCRIPT": "𝒜ℬ𝒞𝒟ℰℱ𝒢ℋℐ𝒥𝒦ℒℳ𝒩𝒪𝒫𝒬ℛ𝒮𝒯𝒰𝒱𝒲𝒳𝒴𝒵𝒶𝒷𝒸𝒹ℯ𝒻ℊ𝒽𝒾𝒿𝓀𝓁𝓂𝓃ℴ𝓅𝓆𝓇𝓈𝓉𝓊𝓋𝓌𝓍𝓎𝓏𝟢𝟣𝟤𝟥𝟦𝟧𝟨𝟩𝟪𝟫",
+  "BUBBLES": "ⒶⒷⒸⒹⒺⒻⒼⒽⒾⒿⓀⓁⓂⓃⓄⓅⓆⓇⓈⓉⓊⓋⓌⓍⓎⓏⓐⓑⓒⓓⓔⓕⓖⓗⓘⓙⓚⓛⓜⓝⓞⓟⓠⓡⓢⓣⓤⓥⓦⓧⓨⓩ⓪①②③④⑤⑥⑦⑧⑨",
+  "SQUARE": "🄰🄱🄲🄳🄴🄵🄿🄷🄸🄹🄺🄼🄽🄾🄿🅀🅁🅂🅃🅄🅅🅄🅇🅈🅉🄰🄱🄲🄳🄴🄵🄿🄷🄸🄹🄺🄼🄽🄾🄿🅀🅁🅂🅃🅄🅅🅄🅇🅈🅉0123456789"
+};
+
+function genFonts() {
+  const input = document.getElementById('font-input').value;
+  const container = document.getElementById('font-results');
+  container.innerHTML = "";
+  if(!input) return;
+
+  Object.keys(stylesMap).forEach(key => {
+    let res = "";
+    for(let char of input) {
+      let idx = normalStr.indexOf(char);
+      res += idx !== -1 ? Array.from(stylesMap[key])[idx] : char;
+    }
+    let div = document.createElement('div');
+    div.className = "font-item";
+    div.innerText = res;
+    div.onclick = () => { navigator.clipboard.writeText(res); playShutter(); };
+    container.appendChild(div);
+  });
+}
+
+// SYMBOL GALLERY CATEGORIES
+const symbolCategories = {
+  "Hearts": ["❤️","🧡","💛","💚","💙","💜","🖤","🤍","🤎","💔","❣️","💕","💞","💓","💗","💖","💘","💝","💟"],
+  "Stars": ["⭐","🌟","✨","💫","☄️","✡️","☪️","💠","❇️","✳️","✴️","❂","✫","✬","✭","✮","✯","✰"],
+  "Arrows": ["⬆️","↗️","➡️","↘️","⬇️","↙️","⬅️","↖️","↔️","↕️","↩️","↪️","⤴️","⤵️","🔃","🔄","🔙","🔚","🔛","🔝","🔜","➹","➷","➸","➳","➵","➳"],
+  "Fancy": ["👑","💎","💍","🦋","🕊️","⚓","🧭","🛸","👾","🎮","🎸","🎷","🎺","🎻","🎹","🎵","🎶","🔊","🚩","🏁","🏴‍☠️"],
+  "Shapes": ["🌀","🌈","☀️","🌙","⚡","🔥","❄️","🌊","⚪","⚫","🔴","🔵","🟢","🟡","🟠","🟣","🟤","⬜","⬛","🟥","🟦","🟩","🟨","🟧","🟪"]
+};
+
+function loadSymbols() {
+  const box = document.getElementById('sym-results-container');
+  if(box.children.length > 0) return;
+  
+  Object.keys(symbolCategories).forEach(cat => {
+    const title = document.createElement('div');
+    title.className = "cat-title";
+    title.innerText = cat;
+    box.appendChild(title);
+    
+    const grid = document.createElement('div');
+    grid.className = "sym-grid";
+    
+    symbolCategories[cat].forEach(s => {
+      let item = document.createElement('div');
+      item.className = "sym-item";
+      item.innerText = s;
+      item.onclick = () => { navigator.clipboard.writeText(s); playShutter(); };
+      grid.appendChild(item);
+    });
+    box.appendChild(grid);
+  });
+}
+
+// CORE MENU & AUDIO
+window.onclick = function(event) {
+  if (panel.classList.contains('open') && !panel.contains(event.target) && !event.target.classList.contains('menu-toggle')) {
+    panel.classList.remove('open'); playClick();
+  }
+  swMenu.style.display = 'none';
+}
 
 function onYouTubeIframeAPIReady() {
   player = new YT.Player('yt-player', {
@@ -156,67 +306,33 @@ function onYouTubeIframeAPIReady() {
   });
 }
 
-function startAudio() {
-  if (audioStarted) return;
-  audioCtx.resume();
-  if(player && musicOn) player.playVideo();
-  audioStarted = true;
-}
-
-function centerSubject() { if(!i.src) return; playShutter(); cfg.x = 400; cfg.y = 400; d(); }
-
-function toggleMusic() {
-  startAudio(); playClick(); musicOn = !musicOn;
-  if(musicOn) { player.playVideo(); mStat.innerText = "ON"; mStat.style.color = "#ff0000"; }
-  else { player.pauseVideo(); mStat.innerText = "OFF"; mStat.style.color = "#888"; }
-}
-
-function toggleMenu(e) { 
-  e.stopPropagation(); startAudio(); playClick(); panel.classList.toggle('open'); 
-}
-
+function startAudio() { if (audioStarted) return; audioCtx.resume(); if(player && musicOn) player.playVideo(); audioStarted = true; }
+function toggleMusic() { startAudio(); playClick(); musicOn = !musicOn; if(musicOn) { player.playVideo(); mStat.innerText = "ON"; mStat.style.color = "#ff0000"; } else { player.pauseVideo(); mStat.innerText = "OFF"; mStat.style.color = "#888"; } }
+function toggleMenu(e) { e.stopPropagation(); startAudio(); playClick(); panel.classList.toggle('open'); }
 function playClick() { const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain(); osc.frequency.setValueAtTime(800, audioCtx.currentTime); osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.1); gain.gain.setValueAtTime(0.1, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1); osc.connect(gain); gain.connect(audioCtx.destination); osc.start(); osc.stop(audioCtx.currentTime + 0.1); }
 function playShutter() { const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain(); osc.type = 'square'; osc.frequency.setValueAtTime(200, audioCtx.currentTime); osc.frequency.setValueAtTime(400, audioCtx.currentTime + 0.05); gain.gain.setValueAtTime(0.1, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.15); osc.connect(gain); gain.connect(audioCtx.destination); osc.start(); osc.stop(audioCtx.currentTime + 0.15); }
 
-function updateSliderColor(el) { 
-  const percent = ((el.value - el.min) / (el.max - el.min)) * 100;
-  el.style.setProperty('--v', percent + '%');
-}
-
+// PICTURE STUDIO DRAW
+function updateSliderColor(el) { const percent = ((el.value - el.min) / (el.max - el.min)) * 100; el.style.setProperty('--v', percent + '%'); }
 function d(){
   x.clearRect(0,0,800,800); x.save(); x.beginPath(); x.arc(400,400,cfg.m,0,6.28); x.clip();
-  if(i.src){ 
-    let w=i.width*cfg.s, h=i.height*cfg.s; 
-    x.save(); x.translate(cfg.x, cfg.y); x.drawImage(i, -w/2, -h/2, w, h); x.restore(); 
-  }
+  if(i.src){ let w=i.width*cfg.s, h=i.height*cfg.s; x.save(); x.translate(cfg.x, cfg.y); x.drawImage(i, -w/2, -h/2, w, h); x.restore(); }
   x.restore(); if(f.src) x.drawImage(f, 0, 0, 800, 800);
   if (i.src || f.src) sBtn.classList.add('active');
 }
-
-function handleFile(e) {
-  let r=new FileReader(); r.onload=v=>{ const nextI = new Image(); nextI.onload=()=>{ i=nextI; cfg.s=Math.max(800/i.width,800/i.height); zSl.value=cfg.s; zVal.innerText=Math.round(cfg.s*100)+"%"; updateSliderColor(zSl); d(); playClick(); }; nextI.src=v.target.result; }; r.readAsDataURL(e.target.files[0]);
-}
-
-function handleFrame(e) { 
-  let r=new FileReader(); r.onload=v=>{ const nF=new Image(); nF.onload=()=>{ f=nF; d(); playClick(); }; nF.src=v.target.result; }; r.readAsDataURL(e.target.files[0]); 
-}
-
-document.querySelectorAll('input[type=range]').forEach(el => {
-  el.addEventListener('input', () => { updateSliderColor(el); });
-  updateSliderColor(el);
-});
-
+function handleFile(e) { let r=new FileReader(); r.onload=v=>{ const nextI = new Image(); nextI.onload=()=>{ i=nextI; cfg.s=Math.max(800/i.width,800/i.height); zSl.value=cfg.s; zVal.innerText=Math.round(cfg.s*100)+"%"; updateSliderColor(zSl); d(); playClick(); }; nextI.src=v.target.result; }; r.readAsDataURL(e.target.files[0]); }
+function handleFrame(e) { let r=new FileReader(); r.onload=v=>{ const nF=new Image(); nF.onload=()=>{ f=nF; d(); playClick(); }; nF.src=v.target.result; }; r.readAsDataURL(e.target.files[0]); }
 function updateZ(v) { cfg.s=parseFloat(v); zVal.innerText=Math.round(v*100)+"%"; d(); }
 function updateM(v) { cfg.m=parseInt(v); mVal.innerText=v+"px"; d(); }
-
+function centerSubject() { if(!i.src) return; playShutter(); cfg.x = 400; cfg.y = 400; d(); }
 function gp(e, idx=0){ let r=c.getBoundingClientRect(), t=e.touches?e.touches[idx]:e; return {x:(t.clientX-r.left)*(800/r.width),y:(t.clientY-r.top)*(800/r.height)}; }
 function st(e){ if(e.target==c){ e.preventDefault(); cfg.d=true; let p=gp(e); cfg.lx=p.x-cfg.x; cfg.ly=p.y-cfg.y; } }
 function mv(e){ if(cfg.d){ e.preventDefault(); let p=gp(e); cfg.x=p.x-cfg.lx; cfg.y=p.y-cfg.ly; d(); } }
 function en(){ cfg.d=false; }
 c.ontouchstart=st; window.ontouchmove=mv; window.ontouchend=en;
 c.onmousedown=st; window.onmousemove=mv; window.onmouseup=en;
-
-function downloadPic() { if(!i.src && !f.src) return; let a=document.createElement('a'); a.download = 'Arcade_Studio_Export.png'; a.href=c.toDataURL(); a.click(); }
+function downloadPic() { if(!i.src && !f.src) return; let a=document.createElement('a'); a.download = 'Arcade_Export.png'; a.href=c.toDataURL(); a.click(); }
+document.querySelectorAll('input[type=range]').forEach(el => { el.addEventListener('input', () => { updateSliderColor(el); }); updateSliderColor(el); });
 </script>
 </body>
 </html>
