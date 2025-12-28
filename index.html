@@ -14,11 +14,10 @@
     -webkit-overflow-scrolling: touch; 
   }
   
-  /* UPDATED: DARK GRAY MENU TOGGLE */
   .menu-toggle {
     position: absolute; top: 15px; left: 15px; 
-    background: #1a1a1c; /* Dark gray close to black */
-    color: #ffffff; /* White text for visibility */
+    background: #1a1a1c; 
+    color: #ffffff; 
     border: 1px solid rgba(255,255,255,0.1); 
     padding: 8px 12px; border-radius: 4px; font-weight: bold; cursor: pointer; z-index: 1000;
     font-size: 12px;
@@ -44,6 +43,11 @@
     color: #ffffff; margin: 30px 0 0 0; font-family: "Arial Black", sans-serif; font-style: italic;
     font-size: 36px; text-transform: uppercase; letter-spacing: -1px;
     text-shadow: 2px 2px 0px #ff0000, -1px -1px 10px rgba(255, 0, 0, 0.8);
+    animation: arcadeBounce 1.8s infinite ease-in-out;
+  }
+  @keyframes arcadeBounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
   }
   p { color: #ffffff; font-weight: bold; margin: 2px 0 15px 0; text-transform: uppercase; font-size: 11px; letter-spacing: 2px; }
   
@@ -65,6 +69,7 @@
 
   .lbl { font-size: 9px; color: #888; text-transform: uppercase; margin-top: 2px; display: flex; justify-content: space-between; }
   
+  /* SLIDER FIX: RED FILLED, CYAN TRACK */
   input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; margin: 10px 0; }
   input[type=range]::-webkit-slider-runnable-track {
     width: 100%; height: 8px; cursor: pointer;
@@ -126,7 +131,7 @@
 <script src="https://www.youtube.com/iframe_api"></script>
 <script>
 const c=document.getElementById('c'),x=c.getContext('2d'),z=document.getElementById('z'),m=document.getElementById('m'),sBtn=document.getElementById('save'),panel=document.getElementById('menu-panel'),box=document.getElementById('box'),mStat=document.getElementById('m-status');
-let i=new Image(),f=new Image(),cfg={s:1,m:375,x:400,y:400,d:false,lx:0,ly:0},originalFileName="Arcade_PFP",player,musicOn=true,audioStarted=false;
+let i=new Image(),f=new Image(),cfg={s:1,m:375,x:400,y:400,r:0,d:false,lx:0,ly:0,ia:0,ir:0},originalFileName="Arcade_PFP",player,musicOn=true,audioStarted=false;
 
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
@@ -148,7 +153,7 @@ function startAudio() {
 function resetProject() {
   playDown();
   i = new Image(); f = new Image();
-  cfg = {s:1,m:375,x:400,y:400,d:false,lx:0,ly:0};
+  cfg = {s:1,m:375,x:400,y:400,r:0,d:false,lx:0,ly:0,ia:0,ir:0};
   z.value = 1; m.value = 375;
   document.querySelectorAll('input[type=range]').forEach(updateSliderColor);
   sBtn.classList.remove('active');
@@ -185,7 +190,14 @@ function updateSliderColor(el) {
 
 function d(){
   x.clearRect(0,0,800,800); x.save(); x.beginPath(); x.arc(400,400,cfg.m,0,6.28); x.clip();
-  if(i.src){ let w=i.width*cfg.s, h=i.height*cfg.s; x.drawImage(i,cfg.x-w/2,cfg.y-h/2,w,h); }
+  if(i.src){ 
+    let w=i.width*cfg.s, h=i.height*cfg.s; 
+    x.save(); 
+    x.translate(cfg.x, cfg.y); 
+    x.rotate(cfg.r); 
+    x.drawImage(i, -w/2, -h/2, w, h); 
+    x.restore(); 
+  }
   x.restore(); if(f.src) x.drawImage(f, 0, 0, 800, 800);
   if (i.src || f.src) sBtn.classList.add('active');
 }
@@ -210,9 +222,9 @@ document.getElementById('u2').onchange=e=>{ const file = e.target.files[0]; if(!
 z.oninput=e=>{ cfg.s=parseFloat(e.target.value); d(); };
 m.oninput=e=>{ cfg.m=parseInt(e.target.value); d(); };
 
-function gp(e){ let r=c.getBoundingClientRect(), t=e.touches?e.touches[0]:e; return {x:(t.clientX-r.left)*(800/r.width),y:(t.clientY-r.top)*(800/r.height)}; }
-function st(e){ if(e.target==c){ e.preventDefault(); cfg.d=true; let p=gp(e); cfg.lx=p.x-cfg.x; cfg.ly=p.y-cfg.y; } }
-function mv(e){ if(cfg.d){ e.preventDefault(); let p=gp(e); cfg.x=p.x-cfg.lx; cfg.y=p.y-cfg.ly; d(); } }
+function gp(e, idx=0){ let r=c.getBoundingClientRect(), t=e.touches?e.touches[idx]:e; return {x:(t.clientX-r.left)*(800/r.width),y:(t.clientY-r.top)*(800/r.height)}; }
+function st(e){ if(e.target==c){ e.preventDefault(); cfg.d=true; if(e.touches && e.touches.length === 2) { cfg.ia = Math.atan2(e.touches[1].pageY - e.touches[0].pageY, e.touches[1].pageX - e.touches[0].pageX); cfg.ir = cfg.r; } else { let p=gp(e); cfg.lx=p.x-cfg.x; cfg.ly=p.y-cfg.y; } } }
+function mv(e){ if(cfg.d){ e.preventDefault(); if(e.touches && e.touches.length === 2) { let a = Math.atan2(e.touches[1].pageY - e.touches[0].pageY, e.touches[1].pageX - e.touches[0].pageX); cfg.r = cfg.ir + (a - cfg.ia); } else { let p=gp(e); cfg.x=p.x-cfg.lx; cfg.y=p.y-cfg.ly; } d(); } }
 function en(){ cfg.d=false; }
 c.ontouchstart=st; window.ontouchmove=mv; window.ontouchend=en;
 c.onmousedown=st; window.onmousemove=mv; window.onmouseup=en;
