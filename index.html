@@ -94,39 +94,20 @@
   }
   canvas { position: absolute; top: 0; left: 0; width: 310px; height: 310px; z-index: 15; touch-action: none; }
   
-  /* ✍️ FONT GENERATOR (NO GAP & CENTERED) */
+  /* ✍️ FONT GENERATOR (PERFECT LAYOUT) */
   .font-input {
     width: 100%; background: #111; border: 2px solid #00ffff; color: #fff;
     padding: 15px; border-radius: 8px; font-weight: bold; text-align: center; margin-bottom: 15px;
     font-size: 16px; outline: none; box-sizing: border-box;
   }
-  
   .font-scroll {
-    width: 100%; 
-    max-height: 500px; 
-    overflow-y: auto; 
-    display: flex; 
-    flex-direction: column; 
-    gap: 0; /* NO GAP REQUEST */
-    border-radius: 8px;
-    overflow: hidden; /* Smooth corners for the whole list */
-    border: 1px solid rgba(255,255,255,0.1);
-    box-sizing: border-box;
+    width: 100%; max-height: 500px; overflow-y: auto; display: flex; flex-direction: column;
+    gap: 0; border-radius: 8px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); box-sizing: border-box;
   }
-  
   .font-item {
-    background: #1a1a1c; 
-    border: none;
-    border-bottom: 1px solid rgba(255,255,255,0.1); /* Divider Line */
-    padding: 16px; 
-    width: 100%;
-    text-align: center; 
-    cursor: pointer; 
-    color: #eee;
-    white-space: pre-wrap; 
-    overflow-wrap: break-word;
-    box-sizing: border-box; /* Ensures width includes padding */
-    font-size: 16px;
+    background: #1a1a1c; border: none; border-bottom: 1px solid rgba(255,255,255,0.1);
+    padding: 16px; width: 100%; text-align: center; cursor: pointer; color: #eee;
+    white-space: pre-wrap; overflow-wrap: break-word; box-sizing: border-box; font-size: 16px;
   }
   .font-item:last-child { border-bottom: none; }
   .font-item:active { background: #00ffff; color: #000; }
@@ -218,38 +199,66 @@ function changeStudio(mode) {
 }
 function toggleSwitchMenu(e) { e.stopPropagation(); swMenu.style.display = swMenu.style.display === 'flex' ? 'none' : 'flex'; playClick(); }
 
-// --- FONT ENGINE ---
+// --- 🚀 MATRIX MIXER FONT ENGINE ---
 const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 const bases = [
-  {m:"𝐀𝐁𝐂𝐃𝐄𝐅𝐆𝐇𝐈𝐉𝐊𝐋𝐌𝐍𝐎𝐏𝐐𝐑𝐒𝐓𝐔batch𝐕𝐖𝐗𝐘𝐙𝐚𝐛𝐜𝐝𝐞𝐟𝐠𝐡𝐢𝐣𝐤𝐥𝐦𝐧𝐨𝐩𝐪𝐫𝐬𝐭𝐮𝐯𝐰𝐱𝐲𝐳𝟎𝟏𝟐𝟑𝟒𝟓𝟔𝟕𝟖𝟗"},
-  {m:"𝒜ℬ𝒞𝒟ℰℱ𝒢ℋℐ𝒥𝒦ℒℳ𝒩𝒪𝒫𝒬ℛ𝒮𝒯𝒰𝒱𝒲𝒳𝒴𝒵𝒶𝒷𝒸𝒹ℯ𝒻ℊ𝒽𝒾𝒿𝓀𝓁𝓂𝓃ℴ𝓅𝓆𝓇𝓈𝓉𝓊𝓋𝓌𝓍𝓎𝓏0123456789"},
-  {m:"𝔄𝔅ℭ𝔇𝔈𝔉𝔊ℌℑ𝔍𝔎𝔏𝔐𝔑𝔒𝔓𝔔ℜ𝔖𝔗𝔘𝔙𝔚𝔛𝔜𝔝𝔞𝔟𝔠𝔡𝔢𝔣𝔤𝔥𝔦𝔧𝔨𝔩𝔪ℴ𝓅𝓆𝓇𝓈𝓉𝓊𝓋𝓌𝓍𝓎𝓏0123456789"},
-  {m:"𝕬𝕭𝕮𝕯𝕰𝕱𝕲𝕳𝕴𝕵𝕶𝕷𝕸𝕹𝕺𝕻𝕼𝕽𝕾𝕿𝖀𝖁𝖂𝖃𝖄𝖅𝖆𝖇𝖈𝖉𝖊𝖋𝖌𝖍𝖎𝖏𝖐𝖑𝖒𝖓𝖔𝖕𝖖𝖗𝖘𝖙𝖚𝖛𝖜𝖝𝖞𝖟0123456789"},
-  {m:"𝔸𝔹ℂ𝔻𝔼𝔽𝔾ℍ𝕀𝕁𝕂𝕃𝕄ℕ𝕆ℙℚℝ𝕊𝕋𝕌𝕍𝕎𝕏𝕐ℤ𝕒𝕓𝕔𝕕𝕖𝕗𝕘𝕙𝕚𝕛𝕜𝕝𝕞𝕟𝕠𝐩𝕢𝕣𝕤𝕥𝕦𝕧𝕨𝕩𝕪𝕫𝟘𝟙𝟚𝟛𝟜𝟝𝟞𝟟𝟠𝟡"},
-  {m:"𝖠𝖡𝖢𝖣𝖤𝖥𝖦𝖧𝖨𝖩𝖪𝖫𝖬𝖭𝖮𝖯𝖰𝖱𝖲𝖳𝖴𝖵𝖶𝖷𝖸𝖹𝖺𝖻𝖼𝖽𝖾𝖿𝗀𝗁𝗂𝗃𝗄𝗅𝗆𝗇𝗈𝗉𝗊𝗋𝗌𝗍𝗎𝗏𝗐𝗑𝗒𝗓𝟢𝟣𝟤𝟥𝟦𝟧𝟨𝟩𝟪𝟫"},
-  {m:"𝗔𝗕𝗖𝗗𝗘𝗙𝗚𝗛𝗜𝗝𝗞𝗟𝗠𝗡𝗢𝗣𝗤𝗥𝗦𝗧𝗨𝗩𝗪𝗫𝗬𝗭𝗮𝗯𝗰𝗱𝗲𝗳𝗴𝗵𝗶𝗷𝗸𝗹𝗺𝗻𝗼𝗽𝗾𝗿𝘀𝘁𝘂𝘃𝘄𝘅𝘆𝘇𝟬𝟭𝟮𝟯𝟰𝟱𝟲𝟳𝟴𝟵"},
-  {m:"𝙰𝙱𝙲𝙳𝙴𝙵𝙶𝙷𝙸𝙹𝙺𝙻𝙼𝙽𝙾𝙿𝚀𝚁𝚂𝚃𝚄𝚅𝚆𝚇𝚈𝚉𝚊𝚋𝚌𝚍𝚎𝚏𝚐𝚑𝚒𝚓𝚔𝚕𝚖𝚗𝚘𝚙𝚚𝚛𝚜𝚝𝚞𝚟𝚠𝚡𝚢𝚣𝟶𝟷𝟸𝟹𝟺𝟻𝟼𝟽𝟾𝟿"},
-  {m:"ⒶⒷⒸⒹⒺⒻⒼⒽⒾⒿⓀⓁⓂⓃⓄⓅⓆⓇⓈⓉⓊⓋⓌⓍⓎⓏⓐⓑⓒⓓⓔⓕⓖⓗⓘⓙⓚⓛⓜⓝⓞⓟⓠⓡⓢⓣⓤⓥⓦⓧⓨⓩ⓪①②③④⑤⑥⑦⑧⑨"},
-  {m:"🅐🅑🅒🅓🅔🅕🅖🅗🅘🅙🅚🅛🅜🅝🅞🅟🅠🅡🅢🅣🅤🅥🅦🅧🅨🅩🅐🅑🅒🅓🅔🅕🅖🅗🅘🅙🅚🅛🅜🅝🅞🅟🅠🅡🅢🅣🅤🅥🅦🅧🅨🅩⓿➊➋➌➍➎➏➐➑➒"},
-  {m:"🄐🄑🄒🄓🄔🄕🄖🄗🄘🄙🄚🄛🄜🄝🄞🄟🄠🄡🄢🄣🄤🄥🄦🄧🄨🄩🄐🄑🄒🄓🄔🄕🄖🄗🄘🄙🄚🄛🄜🄝🄞🄟🄠🄡🄢🄣🄤🄥🄦🄧🄨🄩0123456789"},
-  {m:"ＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚ０１２３４５６７８９"},
-  {m:"ᴀʙᴄᴅᴇғɢʜɪᴊᴋʟᴍɴᴏᴘǫʀsᴛᴜᴠᴡxʏᴢᴀʙᴄᴅᴇғɢʜɪᴊᴋʟᴍɴᴏᴘǫʀsᴛᴜᴠᴡxʏᴢ0123456789"},
-  {m:"𝓐𝓑𝓒𝓓𝓔𝓕𝓖𝓗𝓘𝓙𝓚𝓛𝓜𝓝𝓞𝓟𝓠𝓡𝓢𝓣𝓤𝓥𝓦𝓧𝓨𝓩𝓪𝓫𝓬𝓭𝓮𝓯𝓰𝓱𝓲𝓳𝓴𝓵𝓶𝓷𝓸𝓹𝓺𝓻𝓼𝓽𝓾𝓿𝔀𝔁𝔂𝔃0123456789"},
-  {m:"𝐴𝐵𝐶𝐷𝐸𝐹𝐺𝐻𝐼𝐽𝐾𝐿𝑀𝑁𝑂𝑃𝑄𝑅𝑆𝑇𝑈𝑉𝑊𝑋𝑌𝑍𝑎𝑏𝑐𝑑𝑒𝑓𝑔ℎ𝑖𝑗𝑘𝑙𝑚𝑛𝑜𝑝𝑞𝑟𝑠𝑡𝑢𝑣𝑤𝑥𝑦𝑧0123456789"}
+  {m:"𝐀𝐁𝐂𝐃𝐄𝐅𝐆𝐇𝐈𝐉𝐊𝐋𝐌𝐍𝐎𝐏𝐐𝐑𝐒𝐓𝐔𝐕𝐖𝐗𝐘𝐙𝐚𝐛𝐜𝐝𝐞𝐟𝐠𝐡𝐢𝐣𝐤𝐥𝐦𝐧𝐨𝐩𝐪𝐫𝐬𝐭𝐮𝐯𝐰𝐱𝐲𝐳𝟎𝟏𝟐𝟑𝟒𝟓𝟔𝟕𝟖𝟗"}, // Bold
+  {m:"𝐴𝐵𝐶𝐷𝐸𝐹𝐺𝐻𝐼𝐽𝐾𝐿𝑀𝑁𝑂𝑃𝑄𝑅𝑆𝑇𝑈𝑉𝑊𝑋𝑌𝑍𝑎𝑏𝑐𝑑𝑒𝑓𝑔ℎ𝑖𝑗𝑘𝑙𝑚𝑛𝑜𝑝𝑞𝑟𝑠𝑡𝑢𝑣𝑤𝑥𝑦𝑧0123456789"}, // Italic
+  {m:"𝑨𝑩𝑪𝑫𝑬𝑭𝑮𝑯𝑰𝑱𝑲𝑳𝑴𝑵𝑶𝑷𝑸𝑹𝑺𝑻𝑼𝑽𝑾𝑿𝒀𝒁𝒂𝒃𝒄𝒅𝒆𝒇𝒈𝒉𝒊𝒋𝒌𝒍𝒎𝒏𝒐𝒑𝒒𝒓𝒔𝒕𝒖𝒗𝒘𝒙𝒚𝒛0123456789"}, // Bold Italic
+  {m:"𝒜ℬ𝒞𝒟ℰℱ𝒢ℋℐ𝒥𝒦ℒℳ𝒩𝒪𝒫𝒬ℛ𝒮𝒯𝒰𝒱𝒲𝒳𝒴𝒵𝒶𝒷𝒸𝒹ℯ𝒻ℊ𝒽𝒾𝒿𝓀𝓁𝓂𝓃ℴ𝓅𝓆𝓇𝓈𝓉𝓊𝓋𝓌𝓍𝓎𝓏0123456789"}, // Script
+  {m:"𝓐𝓑𝓒𝓓𝓔𝓕𝓖𝓗𝓘𝓙𝓚𝓛𝓜𝓝𝓞𝓟𝓠𝓡𝓢𝓣𝓤𝓥𝓦𝓧𝓨𝓩𝓪𝓫𝓬𝓭𝓮𝓯𝓰𝓱𝓲𝓳𝓴𝓵𝓶𝓷𝓸𝓹𝓺𝓻𝓼𝓽𝓾𝓿𝔀𝔁𝔂𝔃0123456789"}, // Bold Script
+  {m:"𝔄𝔅ℭ𝔇𝔈𝔉𝔊ℌℑ𝔍𝔎𝔏𝔐𝔑𝔒𝔓𝔔ℜ𝔖𝔗𝔘𝔙𝔚𝔛𝔜𝔝𝔞𝔟𝔠𝔡𝔢𝔣𝔤𝔥𝔦𝔧𝔨𝔩𝔪𝔫𝔬𝔭𝔮𝔯𝔰𝔱𝔲𝔳𝔴𝔵𝔶𝔷0123456789"}, // Fraktur
+  {m:"𝕬𝕭𝕮𝕯𝕰𝕱𝕲𝕳𝕴𝕵𝕶𝕷𝕸𝕹𝕺𝕻𝕼𝕽𝕾𝕿𝖀𝖁𝖂𝖃𝖄𝖅𝖆𝖇𝖈𝖉𝖊𝖋𝖌𝖍𝖎𝖏𝖐𝖑𝖒𝖓𝖔𝖕𝖖𝖗𝖘𝖙𝖚𝖛𝖜𝖝𝖞𝖟0123456789"}, // Bold Fraktur
+  {m:"𝔸𝔹ℂ𝔻𝔼𝔽𝔾ℍ𝕀𝕁𝕂𝕃𝕄ℕ𝕆ℙℚℝ𝕊𝕋𝕌𝕍𝕎𝕏𝕐ℤ𝕒𝕓𝕔𝕕𝕖𝕗𝕘𝕙𝕚𝕛𝕜𝕝𝕞𝕟𝕠𝕡𝕢𝕣𝕤𝕥𝕦𝕧𝕨𝕩𝕪𝕫𝟘𝟙𝟚𝟛𝟜𝟝𝟞𝟟𝟠𝟡"}, // Double
+  {m:"𝖠𝖡𝖢𝖣𝖤𝖥𝖦𝖧𝖨𝖩𝖪𝖫𝖬𝖭𝖮𝖯𝖰𝖱𝖲𝖳𝖴𝖵𝖶𝖷𝖸𝖹𝖺𝖻𝖼𝖽𝖾𝖿𝗀𝗁𝗂𝗃𝗄𝗅𝗆𝗇𝗈𝗉𝗊𝗋𝗌𝗍𝗎𝗏𝗐𝗑𝗒𝗓𝟢𝟣𝟤𝟥𝟦𝟧𝟨𝟩𝟪𝟫"}, // Sans
+  {m:"𝗔𝗕𝗖𝗗𝗘𝗙𝗚𝗛𝗜𝗝𝗞𝗟𝗠𝗡𝗢𝗣𝗤𝗥𝗦𝗧𝗨𝗩𝗪𝗫𝗬𝗭𝗮𝗯𝗰𝗱𝗲𝗳𝗴𝗵𝗶𝗷𝗸𝗹𝗺𝗻𝗼𝗽𝗾𝗿𝘀𝘁𝘂𝘃𝘄𝘅𝘆𝘇𝟬𝟭𝟮𝟯𝟰𝟱𝟲𝟳𝟴𝟵"}, // Sans Bold
+  {m:"𝘈𝘉𝘊𝘋𝘌𝘍𝘎𝘏𝘐𝘑𝘒𝘓𝘔𝘕𝘖𝘗𝘘𝘙𝘚𝘛𝘜𝘝𝘞𝘟𝘠𝘡𝘢𝘣𝘤𝘥𝘦𝘧𝘨𝘩𝘪𝘫𝘬𝘭𝘮𝘯𝘰𝘱𝘲𝘳𝘴𝘵𝘶𝘷𝘸𝘹𝘺𝘻0123456789"}, // Sans Italic
+  {m:"𝘼𝘽𝘾𝘿𝙀𝙁𝙂𝙃𝙄𝙅𝙆𝙇𝙈𝙉𝙊𝙋𝙌𝙍𝙎𝙏𝙐𝙑𝙒𝙓𝙔𝙕𝙖𝙗𝙘𝙙𝙚𝙛𝙜𝙝𝙞𝙟𝙠𝙡𝙢𝙣𝙤𝙥𝙦𝙧𝙨𝙩𝙪𝙫𝙬𝙭𝙮𝙯0123456789"}, // Sans Bold Italic
+  {m:"𝙰𝙱𝙲𝙳𝙴𝙵𝙶𝙷𝙸𝙹𝙺𝙻𝙼𝙽𝙾𝙿𝚀𝚁𝚂𝚃𝚄𝚅𝚆𝚇𝚈𝚉𝚊𝚋𝚌𝚍𝚎𝚏𝚐𝚑𝚒𝚓𝚔𝚕𝚖𝚗𝚘𝚙𝚚𝚛𝚜𝚝𝚞𝚟𝚠𝚡𝚢𝚣𝟶𝟷𝟸𝟹𝟺𝟻𝟼𝟽𝟾𝟿"}, // Mono
+  {m:"ⒶⒷⒸⒹⒺⒻⒼⒽⒾⒿⓀⓁⓂⓃⓄⓅⓆⓇⓈⓉⓊⓋⓌⓍⓎⓏⓐⓑⓒⓓⓔⓕⓖⓗⓘⓙⓚⓛⓜⓝⓞⓟⓠⓡⓢⓣⓤⓥⓦⓧⓨⓩ⓪①②③④⑤⑥⑦⑧⑨"}, // Circles
+  {m:"🅐🅑🅒🅓🅔🅕🅖🅗🅘🅙🅚🅛🅜🅝🅞🅟🅠🅡🅢🅣🅤🅥🅦🅧🅨🅩🅐🅑🅒🅓🅔🅕🅖🅗🅘🅙🅚🅛🅜🅝🅞🅟🅠🅡🅢🅣🅤🅥🅦🅧🅨🅩⓿➊➋➌➍➎➏➐➑➒"}, // Dark Circles
+  {m:"🄐🄑🄒🄓🄔🄕🄖🄗🄘🄙🄚🄛🄜🄝🄞🄟🄠🄡🄢🄣🄤🄥🄦🄧🄨🄩🄐🄑🄒🄓🄔🄕🄖🄗🄘🄙🄚🄛🄜🄝🄞🄟🄠🄡🄢🄣🄤🄥🄦🄧🄨🄩0123456789"}, // Parenthesized
+  {m:"ＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚ０１２３４５６７８９"}, // Fullwidth
+  {m:"ᴀʙᴄᴅᴇғɢʜɪᴊᴋʟᴍɴᴏᴘǫʀsᴛᴜᴠᴡxʏᴢᴀʙᴄᴅᴇғɢʜɪᴊᴋʟᴍɴᴏᴘǫʀsᴛᴜᴠᴡxʏᴢ0123456789"}, // Small Caps
+  {m:"🄰🄱🄲🄳🄴🄵🄶🄷🄸🄹🄺🄻🄼🄽🄾🄿🅀🅁🅂🅃🅄🅅🅆🅇🅈🅉🄰🄱🄲🄳🄴🄵🄶🄷🄸🄹🄺🄻🄼🄽🄾🄿🅀🅁🅂🅃🅄🅅🅆🅇🅈🅉0123456789"}, // Squares
+  {m:"🅰🅱🅲🅳🅴🅵🅶🅷🅸🅹🅺🅻🅼🅽🅾🅿🆀🆁🆂🆃🆄🆅🆆🆇🆈🆉🅰🅱🅲🅳🅴🅵🅶🅷🅸🅹🅺🅻🅼🅽🅾🅿🆀🆁🆂🆃🆄🆅🆆🆇🆈🆉0123456789"}  // Dark Squares
 ];
-const decorators = ["★|★","꧁|꧂","『|』","【|】","˗|˗","⁅|⁆","☾|☽","●|●","⚡|⚡","♛|♛","❤|❤","☠|☠","✈|✈"];
+
+// DECORATORS & MIXER
+const decorators = [
+  " ", "★|★", "『|』", "【|】", "꧁|꧂", "˗ˏ|ˎ˗", "⦗|⦘", "⁅|⁆", "☾|☽", "×|×", "☆|☆", "●|●", "■|■", "→|←", "⚡|⚡", "☠|☠", "☮|☮", 
+  "✈|✈", "❤|❤", "♛|♛", "∞|∞", "§|§", "₪|₪", "↺|↻", "❄|❄", "☁|☁", "☂|☂", "✂|✂", "✎|✎", "⚔|⚔", "⚓|⚓", "⚙|⚙", 
+  "⚛|⚛", "⚜|⚜", "⚠|⚠", "⚡️|⚡️", "✧|✧", "✩|✩", "✪|✪", "✫|✫", "✬|✬", "✭|✭", "✮|✮", "✯|✯", "✰|✰", "✱|✱", "✲|✲", "✳|✳"
+];
 
 function genFonts() {
   const val = document.getElementById('font-input').value, resBox = document.getElementById('font-results');
   resBox.innerHTML = ""; if(!val) return;
   let count = 0;
-  bases.forEach(b => { addF(mapText(val, b.m), resBox); count++; });
-  bases.forEach(b => { decorators.forEach(d => { let [p,s]=d.split("|"); addF(p+mapText(val, b.m)+s, resBox); count++; }); });
   
-  // ALGORITHMIC EXTRAS
+  // 1. BASES
+  bases.forEach(b => { addF(mapText(val, b.m), resBox); count++; });
+  
+  // 2. MIXER (Combinations) - ONLY readable fonts mixed
+  bases.forEach((b, idx) => {
+    if([0, 1, 4, 6, 8, 9, 12, 16].includes(idx)) { 
+      let baseTxt = mapText(val, b.m);
+      decorators.forEach(dec => {
+        let [p,s] = dec.split("|");
+        addF(p + baseTxt + s, resBox);
+        count++;
+      });
+    }
+  });
+
+  // 3. TRANSFORMS
   addF(val.split('').map(c=>c+'\u0336').join(''), resBox); // Strikethrough
   addF(val.split('').map(c=>c+'\u0332').join(''), resBox); // Underline
+  addF(val.split('').map(c=>c+'\u0338').join(''), resBox); // Slash
+  addF(val.split('').map(c=>c+'\u20DE').join(''), resBox); // Boxed
+  addF("░▒▓ "+val.toUpperCase()+" ▓▒░", resBox); // Vaporwave
   addF(val.split('').join(' '), resBox); // Spaced
+  count += 6;
   
   document.getElementById('font-count').innerText = count + " STYLES";
 }
@@ -258,7 +267,7 @@ function addF(t, b) { let d=document.createElement('div'); d.className="font-ite
 
 // --- AUDIO TRIGGER ---
 function initAudio() { if(!audioStarted) { audioCtx.resume(); if(player && musicOn) player.playVideo(); audioStarted=true; } }
-window.addEventListener('mousedown', initAudio); window.addEventListener('touchstart', initAudio);
+window.addEventListener('mousedown', initAudio); window.addEventListener('touchstart', initAudio); window.addEventListener('scroll', initAudio);
 
 window.onclick = e => { if (panel.classList.contains('open') && !panel.contains(e.target) && !e.target.classList.contains('menu-toggle')) { panel.classList.remove('open'); playClick(); } swMenu.style.display = 'none'; }
 function onYouTubeIframeAPIReady() { player = new YT.Player('yt-player', { height: '0', width: '0', videoId: 'jfKfPfyJRdk', playerVars: { 'autoplay': 1, 'loop': 1, 'playlist': 'jfKfPfyJRdk', 'mute':0 }, events: { 'onReady': e => { e.target.setVolume(25); } } }); }
@@ -271,7 +280,7 @@ function updateSliderColor(el) { el.style.setProperty('--v', ((el.value-el.min)/
 
 // --- CANVAS ---
 function d(){ x.clearRect(0,0,800,800); x.save(); x.beginPath(); x.arc(400,400,cfg.m,0,6.28); x.clip(); if(i.src){ let w=i.width*cfg.s, h=i.height*cfg.s; x.save(); x.translate(cfg.x, cfg.y); x.rotate(cfg.r * Math.PI/180); x.drawImage(i, -w/2, -h/2, w, h); x.restore(); } x.restore(); if(f.src) x.drawImage(f, 0, 0, 800, 800); if (i.src || f.src) sBtn.classList.add('active'); }
-function handleFile(e) { if(!e.target.files[0]) return; let r=new FileReader(); r.onload=v=>{ let n=new Image(); n.onload=()=>{ i=n; cfg.s=Math.max(800/i.width,800/i.height); cfg.x=400; cfg.y=400; cfg.r=0; zSl.value=cfg.s; updateSliderColor(zSl); d(); playClick(); }; n.src=v.target.result; }; r.readAsDataURL(e.target.files[0]); }
+function handleFile(e) { if(!e.target.files[0]) return; let r=new FileReader(); r.onload=v=>{ let n=new Image(); n.onload=()=>{ i=n; cfg.s=Math.max(800/i.width,800/i.height); cfg.x=400; cfg.y=400; cfg.r=0; zSl.value=cfg.s; document.getElementById('r').value=0; rVal.innerText="0°"; updateSliderColor(zSl); d(); playClick(); }; n.src=v.target.result; }; r.readAsDataURL(e.target.files[0]); }
 function handleFrame(e) { let r=new FileReader(); r.onload=v=>{ let n=new Image(); n.onload=()=>{ f=n; d(); playClick(); }; n.src=v.target.result; }; r.readAsDataURL(e.target.files[0]); }
 function updateZ(v) { cfg.s=parseFloat(v); zVal.innerText=Math.round(v*100)+"%"; d(); }
 function updateR(v) { cfg.r=parseInt(v); rVal.innerText=v+"°"; d(); }
