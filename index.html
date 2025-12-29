@@ -34,10 +34,10 @@
   }
   #menu-panel.open { left: 0; }
 
-  /* Switch Button: Black with Red Frame inside menu */
+  /* UPDATED: Switch Button Gray background with Red Frame */
   .switch-container { position: relative; width: 100%; }
   #switch-btn { 
-    background: #000000; color: white; border: 2px solid #ff0000; 
+    background: rgba(255,255,255,0.1); color: white; border: 2px solid #ff0000; 
     padding: 10px; border-radius: 4px; font-weight: bold; cursor: pointer; 
     font-size: 11px; text-transform: uppercase; width: 100%; text-align: center;
     box-shadow: 0 0 10px rgba(255,0,0,0.5); 
@@ -62,15 +62,13 @@
   .lnk { display: flex; align-items: center; gap: 10px; padding: 12px; text-decoration: none; color: white; font-size: 13px; font-weight: bold; border-radius: 4px; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.05); }
   .lnk svg { width: 18px; height: 18px; fill: white; }
 
-  /* HEADERS */
   h1 { color: #fff; margin: 60px 0 0 0; font-family: "Arial Black", sans-serif; font-style: italic; font-size: 36px; text-transform: uppercase; letter-spacing: -1px; text-shadow: 2px 2px 0px #ff0000, -1px -1px 10px rgba(255, 0, 0, 0.8); animation: arcadeBounce 1.8s infinite ease-in-out; }
   @keyframes arcadeBounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
   .sub { color: #fff; font-weight: bold; margin: 2px 0 15px 0; text-transform: uppercase; font-size: 11px; letter-spacing: 2px; text-align: center; }
-  
   .studio-sec { display: none; width: 320px; flex-direction: column; align-items: center; }
   .active-sec { display: flex; }
 
-  /* --- 🖼️ FRAME STUDIO (VERIFIED TRANSPARENCY & RED BORDER) --- */
+  /* --- 🖼️ FRAME STUDIO (TRANSPARENCY VERIFIED) --- */
   #box { 
     position: relative; width: 310px; height: 310px; border-radius: 50%; overflow: hidden; 
     border: 3px solid #ff0000; box-sizing: border-box; 
@@ -133,9 +131,11 @@
 <div id="frame-studio" class="studio-sec active-sec">
   <div id="box"><canvas id="c" width="800" height="800"></canvas></div>
   <div class="ui">
-    <label class="btn">CHOOSE IMAGE<input type="file" id="u1" accept="image/*" onchange="handleFile(event)" style="display:none"></label>
-    <label class="btn btn-r">APPLY FRAME<input type="file" id="u2" accept="image/*" onchange="handleFrame(event)" style="display:none"></label>
+    <label class="btn" onclick="playClick()">CHOOSE IMAGE<input type="file" id="u1" accept="image/*" onchange="handleFile(event)" style="display:none"></label>
+    <label class="btn btn-r" onclick="playClick()">APPLY FRAME<input type="file" id="u2" accept="image/*" onchange="handleFrame(event)" style="display:none"></label>
     <button class="btn" style="border-color:#00ffff; color:#00ffff;" onclick="centerSubject()">CENTER SUBJECT 🎯</button>
+    <button class="btn" style="border-color:#ff0000; color:#ff0000;" onclick="resetProject()">RESET PROJECT ↻</button>
+    
     <div class="lbl">ZOOM <span id="z-val" class="val-tag">100%</span></div>
     <input type="range" id="z" min="0.1" max="4" step="0.01" value="1" oninput="updateZ(this.value)">
     <div class="lbl">ROTATE <span id="r-val" class="val-tag">0°</span></div>
@@ -170,43 +170,19 @@ function changeStudio(mode) {
   }
 }
 
-// --- TAP ANYWHERE TO CLOSE MENU & START MUSIC ---
+// --- TAP ANYWHERE STARTS MUSIC ---
 window.onclick = e => {
-  initAudio(); // REPAIRED: Starts music on tap anywhere
-  if (panel.classList.contains('open') && !panel.contains(e.target) && !e.target.classList.contains('menu-toggle')) { panel.classList.remove('open'); }
-  if (swMenu.style.display === 'flex' && !document.querySelector('.switch-container').contains(e.target)) { swMenu.style.display = 'none'; }
+  initAudio(); 
+  if (panel.classList.contains('open') && !panel.contains(e.target) && !e.target.classList.contains('menu-toggle')) { panel.classList.remove('open'); playClick(); }
+  if (swMenu.style.display === 'flex' && !document.querySelector('.switch-container').contains(e.target)) { swMenu.style.display = 'none'; playClick(); }
 };
 
 function toggleSwitchMenu(e) { e.stopPropagation(); swMenu.style.display = swMenu.style.display === 'flex' ? 'none' : 'flex'; playClick(); }
-function toggleMenu(e) { e.stopPropagation(); initAudio(); panel.classList.toggle('open'); }
+function toggleMenu(e) { e.stopPropagation(); initAudio(); panel.classList.toggle('open'); playClick(); }
 
-// --- ✍️ 1,100+ FONT ENGINE (SAFE & CLEAN) ---
+// --- FONT ENGINE ---
 const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-const bases = [
-  {m:"𝐀𝐁𝐂𝐃𝐄𝐅𝐆𝐇𝐈𝐉𝐊𝐋𝐌𝐍𝐎𝐏𝐐𝐑𝐒𝐓𝐔batch𝐕𝐖𝐗𝐘𝐙𝐚𝐛𝐜𝐝𝐞𝐟𝐠𝐡𝐢𝐣𝐤𝐥𝐦𝐧𝐨𝐩𝐪𝐫𝐬𝐭𝐮𝐯𝐰𝐱𝐲𝐳𝟎𝟏𝟐𝟑𝟒𝟓𝟔𝟕𝟖𝟗"}, 
-  {m:"𝐴𝐵𝐶𝐷𝐸𝐹𝐺𝐻𝐼𝐽𝐾𝐿𝑀𝑁𝑂𝑃𝑄𝑅𝑆𝑇𝑈𝑉𝑊𝑋𝑌𝑍𝑎𝑏𝑐𝑑𝑒𝑓𝑔ℎ𝑖𝑗𝑘𝑙𝑚𝑛𝑜𝑝𝑞𝑟𝑠𝑡𝑢𝑣𝑤𝑥𝑦𝑧0123456789"},
-  {m:"𝑨𝑩𝑪𝑫𝑬𝑭𝑮𝑯𝑰𝑱𝑲𝑳𝑴𝑵𝑶𝑷𝑸𝑹𝑺𝑻𝑼𝑽𝑾𝑿𝒀𝒁𝒂𝒃𝒄𝒅𝒆𝒇𝒈𝒉𝒊𝒋𝒌𝒍𝒎𝒏𝒐𝒑𝒒𝒓𝒔𝒕𝒖𝒗𝒘𝒙𝒚𝒛0123456789"},
-  {m:"𝒜ℬ𝒞𝒟ℰℱ𝒢ℋℐ𝒥𝒦ℒℳ℩𝒪𝒫𝒬ℛ𝒮𝒯𝒰𝒱𝒲𝒳𝒴𝒵𝒶ℬ𝒸𝒹ℯ𝒻ℊ𝒽𝒾𝒿𝓀𝓁𝓂𝓃ℴ𝓅𝓆𝓇𝓈𝓉𝓊𝓋𝓌𝓍𝓎𝓏0123456789"},
-  {m:"𝓐𝓑𝓒𝓓𝓔𝓕𝓖𝓗𝓘𝓙𝓚𝓛𝓜𝓝𝓞𝓟𝓠𝓡𝓢𝓣𝓤𝓥𝓦𝓧𝓨𝓩𝓪𝓫𝓬𝓭𝓮𝓯𝓰𝓱𝓲𝓳𝓴𝓵𝓶𝓷𝓸𝓹𝓺𝓻𝓼𝓽𝓾𝓿𝔀𝔁𝔂𝔃0123456789"},
-  {m:"𝔄𝔅ℭ𝔇𝔈𝔉𝔊ℌℑ𝔍𝔎𝔏𝔐𝔑𝔒𝔓𝔔ℜ𝔖𝔗𝔘𝔙𝔚𝔛𝔜𝔝𝔞𝔟𝔠𝔡ℯ𝒻ℊ𝒽𝒾𝒿𝓀𝓁𝓂𝓃ℴ𝓅𝓆𝓇𝓈𝓉𝓊𝓋𝓌𝓍𝓎𝓏0123456789"},
-  {m:"𝕬𝕭𝕮𝕯𝕰𝕱𝕲𝕳𝕴𝕵𝕶𝕷𝕸𝕹𝕺𝕻𝕼𝕽𝕾𝕿𝖀𝖁𝖂𝖃𝖄𝖅𝖆𝖇𝖈𝖉𝖊𝖋𝖌𝖍𝖎𝖏𝖐𝖑𝖒𝖓𝖔𝖕𝖖𝖗𝖘𝖙𝖚𝖛𝖜𝖝𝖞𝖟0123456789"},
-  {m:"𝔸𝔹ℂ𝔻𝔼𝔽𝔾ℍ𝕀𝕁𝕂𝕃𝕄ℕ𝕆ℙℚℝ𝕊𝕋𝕌𝕍𝕎𝕏𝕐ℤ𝕒𝕓𝕔𝕕迫𝕗𝕘𝕙𝕚𝕛𝕜𝕝𝕞运转𝕠𝕡𝕢𝕣𝕤𝕥𝕦𝕧𝕨𝕩𝕪𝕫𝟘𝟙𝟚𝟛𝟜𝟝𝟞𝟟𝟠𝟡"},
-  {m:"𝖠𝖡𝖢𝖣𝖤𝖥𝖦𝖧𝖨𝖩𝖪𝖫𝖬𝖭𝖮𝖯𝖰𝖱𝖲𝖳𝖴𝖵𝖶𝖷𝖸𝖹𝖺𝖻𝖼𝖽𝖾𝖿𝗀𝗁𝗂𝗃𝗄𝗅𝗆𝗇𝗈𝗉𝗊𝗋𝗌𝗍𝗎𝗏𝗐𝗑𝗒𝗓𝟢𝟣𝟤𝟥𝟦𝟧𝟨𝟩𝟪𝟫"},
-  {m:"𝗔𝗕ＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺａｂｃｄｅｆｇ𝐡𝐢𝐣𝐤𝐥ｍｎｏ𝐩𝗾𝗿ｓ𝘁ｕｖｗ𝘅ｙ𝘇𝟬𝟭𝟮𝟯𝟰𝟱𝟲𝟳𝟴𝟵"},
-  {m:"ⒶⒷⒸⒹⒺⒻⒼⒽⒾⒿⓀⓁⓂⓃⓄⓅⓆⓇⓈⓉⓊⓋⓌⓍⓎⓏⓐⓑⓒⓓⓔⓕⓖⓗⓘⓙⓚⓛⓜⓝⓞⓟⓠⓡⓢⓣⓤⓥⓦⓧⓨⓩ⓪①②③④⑤⑥⑦⑧⑨"},
-  {m:"🅐🅑🅒🅓🅔🅕🅖🅗🅘🅙🅚🅛🅜🅝🅞🅟🅠🅡🅢🅣🅤🅥🅦🅧🅨🅩🅐🅑🅒🅓🅔🅕🅖🅗🅘🅙🅚🅛🅜🅝🅞🅟🅠🅡🅢🅣🅤🅥🅦🅧🅨🅩⓿➊➋➌➍➎➏➐➑➒"},
-  {m:"₳฿₵ĐɆ₣₲ⱧłJ₭Ⱡ₥₦Ø₱QⱤ₴₮ɄV₩ӾɎⱫ₳฿₵ĐɆ₣₲ⱧłJ₭Ⱡ₥₦Ø₱QⱤ₴₮ɄV₩ӾɎⱫ0123456789"},
-  {m:"卂乃匚ᗪ乇千Ꮆ卄丨ﾌҜㄥ爪几ㄖ卩Ҝ尺丂ㄒㄩᐯ山乂ㄚ乙卂乃匚ᗪ乇千Ꮆ卄丨ﾌҜㄥ爪几ㄖ卩Ҝ尺丂ㄒㄩᐯ山乂ㄚ乙0123456789"},
-  {m:"ﾑ乃cd乇ｷgんﾉﾌズﾚM刀oｱ尺丂ｲu√Wﾒﾘ乙ﾑ乃cd乇ｷgんﾉﾌズﾚM刀oｱ尺丂ｲu√Wﾒﾘ乙0123456789"},
-  {m:"ᗩᗷᑕᗪEᖴGᕼIᒍKᒪMᑎOᑭᑫᖇᔕTᑌᐯᗯ᙭YᘔᗩᗷᑕᗪEᖴGᕼIᒍKᒪMᑎOᑭᑫᖇᔕTᑌᐯᗯ᙭Yᘔ0123456789"},
-  {m:"αв¢∂єƒgнιנкℓмησρqяѕтυνωкуζαв¢∂єƒgнιנкℓмησρqяѕтυνωкуζ0123456789"},
-  {m:"ค๒ς๔єŦﻮђเןкɭ๓ภ๏קợгรՇยงฬאץչค๒ς๔єŦﻮђเןкɭ๓ภ๏קợгรՇยงฬאץչ0123456789"},
-  {m:"ǟɮƈɖɛʄɢɦɨʝӄʟʍռօքզʀֆтʊʋաӼʏʐǟɮƈɖɛʄɢɦɨʝӄʟʍռօքզʀֆтʊʋաӼʏʐ0123456789"},
-  {m:"ᏗᏰፈᎴᏋᎦᎶᏂᎥᏠᏦᏝᎷᏁᎧᎮᎤᏒᏕᏖᏬᏉᏇጀᎩፚᏗᏰፈᎴᏋᎦᎶᏂᎥᏠᏦᏝᎷᏁᎧᎮᎤᏒᏕᏖᏬᏉᏇጀᎩፚ0123456789"},
-  {m:"ค๖ƈđēfɠɦıĵƙℓɱŋơ℘զŗşŧų۷ɯҳყʑค๖ƈđēfɠɦıĵƙℓɱŋơ℘զŗşŧų۷ɯҳყʑ0123456789"},
-  {m:"ɐqɔpǝɟƃɥᴉɾʞlɯuodbɹsʇnʌʍxʎzɐqɔpǝɟƃɥᴉɾʞlɯuodbɹsʇnʌʍxʎz0123456789"},
-  {m:"🅰🅱🅲🅳🅴🅵🅶🅷🅸🅹🅺🅻🅼🅽🅾🅿🆀🆁🆂🆃🆄🆅🆆🆇🆈🆉🅰🅱🅲🅳🅴🅵🅶🅷🅸🅹🅺🅻🅼🅽🅾🅿🆀🆁🆂🆃🆄🆅🆆🆇🆈🆉0123456789"}
-];
+const bases = [{m:"𝐀𝐁𝐂𝐃𝐄𝐅𝐆𝐇𝐈𝐉𝐊𝐋𝐌𝐍𝐎𝐏𝐐𝐑𝐒𝐓𝐔batch𝐕𝐖𝐗𝐘𝐙𝐚𝐛𝐜𝐝𝐞𝐟𝐠𝐡𝐢𝐣𝐤𝐥𝐦𝐧𝐨𝐩𝐪𝐫𝐬𝐭𝐮𝐯𝐰𝐱𝐲𝐳𝟎𝟏𝟐𝟑𝟒𝟓𝟔𝟕𝟖𝟗"},{m:"𝐴𝐵𝐶𝐷𝐸𝐹𝐺𝐻𝐼𝐽𝐾𝐿𝑀𝑁𝑂𝑃𝑄𝑅𝑆𝑇𝑈𝑉𝑊𝑋𝑌𝑍𝑎𝑏𝑐𝑑𝑒𝑓𝑔ℎ𝑖𝑗𝑘𝑙𝑚𝑛𝑜𝑝𝑞𝑟𝑠𝑡𝑢𝑣𝑤𝑥𝑦𝑧0123456789"},{m:"𝑨𝑩𝑪𝑫𝑬𝑭𝑮𝑯𝑰𝑱𝑲𝑳𝑴𝑵𝑶𝑷𝑸𝑹𝑺𝑻𝑼𝑽𝑾𝑿𝒀𝒁𝒂𝒃𝒄𝒅𝒆𝒇𝒈𝒉𝒊𝒋𝒌𝒍𝒎𝒏𝒐𝒑𝒒𝒓𝒔𝒕𝒖𝒗𝒘𝒙𝒚𝒛0123456789"},{m:"𝒜ℬ𝒞𝒟ℰℱ𝒢ℋℐ𝒥𝒦ℒℳ℩𝒪𝒫𝒬ℛ𝒮𝒯𝒰𝒱𝒲𝒳𝒴𝒵𝒶ℬ𝒸𝒹ℯ𝒻ℊ𝒽𝒾𝒿𝓀𝓁𝓂𝓃ℴ𝓅𝓆𝓇𝓈𝓉𝓊𝓋𝓌𝓍𝓎𝓏0123456789"},{m:"𝓐𝓑𝓒𝓓𝓔𝓕𝓖𝓗𝓘𝓙𝓚𝓛𝓜𝓝𝓞𝓟𝓠𝓡𝓢𝓣𝓤𝓥𝓦𝓧𝓨𝓩𝓪𝓫𝓬𝓭𝓮𝓯𝓰𝓱𝓲𝓳𝓴𝓵𝓶𝓷𝓸𝓹𝓺𝓻𝓼𝓽𝓾𝓿𝔀𝔁𝔂𝔃0123456789"},{m:"𝔄𝔅ℭ𝔇𝔈𝔉𝔊ℌℑ𝔍𝔎𝔏𝔐𝔑𝔒𝔓𝔔ℜ𝔖𝔗𝔘𝔙𝔚𝔛𝔜𝔝𝔞𝔟𝔠𝔡ℯ𝒻ℊ𝒽𝒾𝒿𝓀𝓁𝓂𝓃ℴ𝓅𝓆𝓇𝓈𝓉𝓊𝓋𝓌𝓍𝓎𝓏0123456789"},{m:"𝕬𝕭𝕮𝕯𝕰𝕱𝕲𝕳𝕴𝕵𝕶𝕷𝕸𝕹𝕺𝕻𝕼𝕽𝕾𝕿𝖀𝖁𝖂𝖃𝖄𝖅𝖆𝖇𝖈𝖉𝖊𝖋𝖌𝖍𝖎𝖏𝖐𝖑𝖒𝖓𝖔𝖕𝖖𝖗𝖘𝖙𝖚𝖛𝖜𝖝𝖞𝖟0123456789"},{m:"𝔸𝔹ℂ𝔻𝔼𝔽𝔾ℍ𝕀𝕁𝕂𝕃𝕄ℕ𝕆ℙℚℝ𝕊𝕋𝕌𝕍𝕎𝕏𝕐ℤ𝕒𝕓𝕔𝕕迫𝕗𝕘𝕙𝕚𝕛𝕜𝕝𝕞运转𝕠𝕡𝕢𝕣𝕤𝕥𝕦𝕧𝕨𝕩𝕪𝕫𝟘𝟙𝟚𝟛𝟜𝟝𝟞𝟟𝟠𝟡"},{m:"𝖠𝖡𝖢𝖣𝖤𝖥𝖦𝖧𝖨𝖩𝖪𝖫𝖬𝖭𝖮𝖯𝖰𝖱𝖲𝖳𝖴𝖵𝖶𝖷𝖸𝖹𝖺𝖻𝖼𝖽𝖾𝖿𝗀𝗁𝗂𝗃𝗄𝗅𝗆𝗇𝗈𝗉𝗊𝗋𝗌𝗍𝗎𝗏𝗐𝗑𝗒𝗓𝟢𝟣𝟤𝟥𝟦𝟧𝟨𝟩𝟪𝟫"},{m:"𝗔𝗕ＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺａｂｃｄｅ𝐟𝐠𝐡𝐢𝐣𝐤𝐥ｍｎｏ𝐩𝗾𝗿ｓ𝘁ｕｖｗ𝘅ｙ𝘇𝟬𝟭𝟮𝟯𝟰𝟱𝟲𝟳𝟴𝟵"},{m:"ⒶⒷⒸⒹⒺⒻⒼⒽⒾⒿⓀⓁⓂⓃⓄⓅⓆⓇⓈⓉⓊⓋⓌⓍⓎⓏⓐⓑⓒⓓⓔⓕⓖⓗⓘⓙⓚⓛⓜⓝⓞⓟⓠⓡⓢⓣⓤⓥⓦⓧⓨⓩ⓪①②③④⑤⑥⑦⑧⑨"},{m:"🅐🅑🅒🅓🅔🅕🅖🅗🅘🅙🅚🅛🅜🅝🅞🅟🅠🅡🅢🅣🅤🅥🅦🅧🅨🅩🅐🅑🅒🅓🅔🅕🅖🅗🅘🅙🅚🅛🅜🅝🅞🅟🅠🅡🅢🅣🅤🅥🅦🅧🅨🅩⓿➊➋➌➍➎➏➐➑➒"},{m:"₳฿₵ĐɆ₣₲ⱧłJ₭Ⱡ₥₦Ø₱QⱤ₴₮ɄV₩ӾɎⱫ₳฿₵ĐɆ₣₲ⱧłJ₭Ⱡ₥₦Ø₱QⱤ₴₮ɄV₩ӾɎⱫ0123456789"},{m:"卂乃匚ᗪ乇千Ꮆ卄丨ﾌҜㄥ爪几ㄖ卩Ҝ尺丂ㄒㄩᐯ山乂ㄚ乙卂乃匚ᗪ乇千Ꮆ卄丨ﾌҜㄥ爪几ㄖ卩Ҝ尺丂ㄒㄩᐯ山乂ㄚ乙0123456789"},{m:"ﾑ乃cd乇ｷgんﾉﾌズﾚM刀oｱ尺丂ｲu√Wﾒﾘ乙ﾑ乃cd乇ｷgんﾉﾌズﾚM刀oｱ尺丂ｲu√Wﾒﾘ乙0123456789"},{m:"ᗩᗷᑕᗪEᖴGᕼIᒍKᒪMᑎOᑭᑫᖇᔕTᑌᐯᗯ᙭YᘔᗩᗷᑕᗪEᖴGᕼIᒍKᒪMᑎOᑭᑫᖇᔕTᑌᐯᗯ᙭Yᘔ0123456789"},{m:"αв¢∂єƒgнιנкℓмησρqяѕтυνωкуζαв¢∂єƒgнιנкℓмησρqяѕтυνωкуζ0123456789"},{m:"ค๒ς๔єŦﻮђเןкɭ๓ภ๏קợгรՇยงฬאץչค๒ς๔єŦﻮђเןкɭ๓ภ๏קợгรՇยงฬאץչ0123456789"},{m:"ǟɮƈɖɛʄɢɦɨʝӄʟʍռօքզʀֆтʊʋաӼʏʐǟɮƈɖɛʄɢɦɨʝӄʟʍռօքզʀֆтʊʋաӼʏʐ0123456789"},{m:"ᏗᏰፈᎴᏋᎦᎶᏂᎥᏠᏦᏝᎷᏁᎧᎮᎤᏒᏕᏖᏬᏉᏇጀᎩፚᏗᏰፈᎴᏋᎦᎶᏂᎥᏠᏦ奠奠奠奠奠奠奠奠奠奠奠奠奠奠奠奠奠奠奠奠奠奠奠奠奠奠奠0123456789"},{m:"ค๖ƈđēfɠɦıĵƙℓɱŋơ℘զŗşŧų۷ɯҳყʑค๖ƈđēfɠɦıĵƙℓɱŋơ℘զŗşŧų۷ɯҳყʑ0123456789"},{m:"ɐqɔpǝɟƃɥᴉɾʞlɯuodbɹsʇnʌʍxʎzɐqɔpǝɟƃɥᴉɾʞlɯuodbɹsʇnʌʍxʎz0123456789"},{m:"🅰🅱🅲🅳🅴🅵🅶🅷🅸🅹🅺🅻🅼🅽🅾🅿🆀🆁🆂🆃🆄🆅🆆🆇🆈🆉🅰🅱🅲🅳🅴🅵🅶🅷🅸🅹🅺🅻🅼🅽🅾🅿🆀🆁🆂🆃🆄🆅🆆🆇🆈🆉0123456789"}];
 const decorators = [" ", "★|★", "『|』", "【|】", "꧁|꧂", "˗ˏ|ˎ˗", "⦗|⦘", "⁅|⁆", "☾|☽", "×|×", "☆|☆", "●|●", "■|■", "→|←", "⚡|⚡", "☠|☠", "☮|☮", "✈|✈", "❤|❤", "♛|♛", "∞|∞", "§|§", "₪|₪", "↺|↻", "❄|❄", "☁|☁", "☂|☂", "✂|✂", "✎|✎", "⚔|⚔", "⚓|⚓", "⚙|⚙", "⚛|⚛", "⚜|⚜", "⚠|⚠", "✧|✧", "✩|✩", "✪|✪", "✫|✫", "✬|✬", "✭|✭", "✮|✮", "✯|✯", "✰|✰", "✱|✱", "✲|✲", "✳|✳"];
 
 function genFonts() {
@@ -218,7 +194,7 @@ function genFonts() {
     const mapArr = Array.from(b.m);
     for(let char of val) {
       let idx = chars.indexOf(char);
-      baseTxt += (idx !== -1 && mapArr[idx]) ? mapArr[idx] : char; // CHARACTER SAFETY CHECK
+      baseTxt += (idx !== -1 && mapArr[idx]) ? mapArr[idx] : char;
     }
     addF(baseTxt, resBox); count++;
     decorators.forEach(dec => {
@@ -231,16 +207,38 @@ function genFonts() {
 function addF(t, b) { let d=document.createElement('div'); d.className="font-item"; d.innerText=t; d.onclick=()=>{navigator.clipboard.writeText(t); playShutter();}; b.appendChild(d); }
 
 // --- CORE ---
-function initAudio() { if(!audioStarted) { audioCtx.resume(); audioStarted=true; if(player && musicOn) { player.unMute(); player.playVideo(); } } }
+function initAudio() { 
+  if(!audioStarted) { 
+    audioCtx.resume().then(() => { 
+      audioStarted=true; 
+      if(player && musicOn) { player.unMute(); player.playVideo(); } 
+    }); 
+  } 
+}
 window.addEventListener('click', initAudio, {once:true});
 window.addEventListener('touchstart', initAudio, {once:true});
+
 function onYouTubeIframeAPIReady() { player = new YT.Player('yt-player', { height: '0', width: '0', videoId: 'jfKfPfyJRdk', playerVars: { 'autoplay': 1, 'loop': 1, 'playlist': 'jfKfPfyJRdk', 'mute':0 }, events: { 'onReady': e => { e.target.setVolume(25); } } }); }
 function changeMusic(id) { if(player) player.loadVideoById(id); playShutter(); }
 function toggleMusic() { initAudio(); playClick(); musicOn = !musicOn; if(musicOn) { player.playVideo(); mStat.innerText = "ON"; mStat.style.color = "#ff0000"; } else { player.pauseVideo(); mStat.innerText = "OFF"; mStat.style.color = "#888"; } }
-function playClick() { if(audioCtx.state==='running'){const o=audioCtx.createOscillator(), g=audioCtx.createGain(); o.frequency.setValueAtTime(800, audioCtx.currentTime); g.gain.setValueAtTime(0.05, audioCtx.currentTime); o.connect(g); g.connect(audioCtx.destination); o.start(); o.stop(audioCtx.currentTime + 0.1);} }
-function playShutter() { if(audioCtx.state==='running'){const o=audioCtx.createOscillator(), g=audioCtx.createGain(); o.type='square'; o.frequency.setValueAtTime(200, audioCtx.currentTime); g.gain.setValueAtTime(0.05, audioCtx.currentTime); o.connect(g); g.connect(audioCtx.destination); o.start(); o.stop(audioCtx.currentTime + 0.1);} }
 
-// --- 🖼️ CANVAS ENGINE (CIRCLE, TRANSPARENT, APPLY FRAME) ---
+// RESTORED SOUNDS
+function playClick() { 
+  if(audioCtx.state !== 'running') audioCtx.resume();
+  const o=audioCtx.createOscillator(), g=audioCtx.createGain(); 
+  o.frequency.setValueAtTime(1000, audioCtx.currentTime); 
+  g.gain.setValueAtTime(0.1, audioCtx.currentTime); 
+  o.connect(g); g.connect(audioCtx.destination); o.start(); o.stop(audioCtx.currentTime + 0.1); 
+}
+function playShutter() { 
+  if(audioCtx.state !== 'running') audioCtx.resume();
+  const o=audioCtx.createOscillator(), g=audioCtx.createGain(); 
+  o.type='square'; o.frequency.setValueAtTime(150, audioCtx.currentTime); 
+  g.gain.setValueAtTime(0.1, audioCtx.currentTime); 
+  o.connect(g); g.connect(audioCtx.destination); o.start(); o.stop(audioCtx.currentTime + 0.1); 
+}
+
+// --- 🖼️ CANVAS ENGINE ---
 function d(){ 
     x.clearRect(0,0,800,800); 
     x.save(); 
@@ -251,15 +249,17 @@ function d(){
         x.drawImage(i, -w/2, -h/2, w, h); x.restore(); 
     } 
     x.restore();
-    if(f.src) x.drawImage(f, 0, 0, 800, 800); // VERIFIED: Draws the frame image
+    if(f.src) x.drawImage(f, 0, 0, 800, 800);
 }
-function handleFile(e){ let r=new FileReader(); r.onload=v=>{ let n=new Image(); n.onload=()=>{i=n; cfg.s=Math.max(800/i.width,800/i.height); cfg.x=400; cfg.y=400; cfg.r=0; rSl.value=0; d();}; n.src=v.target.result; }; r.readAsDataURL(e.target.files[0]); }
-function handleFrame(e){ let r=new FileReader(); r.onload=v=>{ let n=new Image(); n.onload=()=>{f=n; d();}; n.src=v.target.result; }; r.readAsDataURL(e.target.files[0]); } // RESTORED
+function handleFile(e){ let r=new FileReader(); r.onload=v=>{ let n=new Image(); n.onload=()=>{i=n; cfg.s=Math.max(800/i.width,800/i.height); cfg.x=400; cfg.y=400; cfg.r=0; rSl.value=0; d(); playClick();}; n.src=v.target.result; }; r.readAsDataURL(e.target.files[0]); }
+function handleFrame(e){ let r=new FileReader(); r.onload=v=>{ let n=new Image(); n.onload=()=>{f=n; d(); playClick();}; n.src=v.target.result; }; r.readAsDataURL(e.target.files[0]); }
 function updateZ(v){ cfg.s=parseFloat(v); zVal.innerText=Math.round(v*100)+"%"; d(); }
 function updateR(v){ cfg.r=parseInt(v); rVal.innerText=v+"°"; d(); }
 function updateM(v){ cfg.m=parseInt(v); mVal.innerText=v+"px"; d(); }
-function centerSubject(){ cfg.x=400; cfg.y=400; cfg.r=0; rSl.value=0; d(); }
-function downloadPic(){ let a=document.createElement('a'); a.download=`Arcade_Export_${Date.now()}.png`; a.href=c.toDataURL(); a.click(); }
+function centerSubject(){ cfg.x=400; cfg.y=400; cfg.r=0; rSl.value=0; rVal.innerText="0°"; d(); playShutter(); }
+function resetProject(){ i=new Image(); f=new Image(); cfg={s:1,m:375,x:400,y:400,r:0,lx:0,ly:0}; zSl.value=1; rSl.value=0; mSl.value=375; zVal.innerText="100%"; rVal.innerText="0°"; mVal.innerText="375px"; d(); playShutter(); }
+
+function downloadPic(){ let a=document.createElement('a'); a.download=`Arcade_Export_${Date.now()}.png`; a.href=c.toDataURL(); a.click(); playShutter(); }
 
 // --- GESTURE LOGIC ---
 let lastDist=0, lastAng=0;
