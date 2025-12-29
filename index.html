@@ -17,7 +17,6 @@
   }
   
   /* --- NAVIGATION --- */
-  /* FIXED: Menu Button stays in place when scrolling */
   .menu-toggle { 
     position: fixed; top: 15px; left: 15px; 
     background: #1a1a1c; color: #fff; border: 1px solid rgba(255,255,255,0.1); 
@@ -35,16 +34,16 @@
   }
   #menu-panel.open { left: 0; }
 
-  /* MOVED: Switch Container is now inside the Menu Panel */
+  /* Switch Button: Black with Red Frame inside menu */
   .switch-container { position: relative; width: 100%; }
   #switch-btn { 
-    background: #ff0000; color: white; border: 2px solid #ffffff; 
+    background: #000000; color: white; border: 2px solid #ff0000; 
     padding: 10px; border-radius: 4px; font-weight: bold; cursor: pointer; 
     font-size: 11px; text-transform: uppercase; width: 100%; text-align: center;
     box-shadow: 0 0 10px rgba(255,0,0,0.5); 
   }
   #switch-menu { 
-    position: absolute; top: 45px; left: 0; background: #1a1a1c; 
+    position: absolute; top: 45px; right: 0; background: #1a1a1c; 
     border: 1px solid #ff0000; border-radius: 8px; width: 210px; 
     display: none; flex-direction: column; overflow: hidden; 
     box-shadow: 0 10px 20px rgba(0,0,0,0.8); z-index: 100001;
@@ -71,9 +70,10 @@
   .studio-sec { display: none; width: 320px; flex-direction: column; align-items: center; }
   .active-sec { display: flex; }
 
-  /* --- 🖼️ FRAME STUDIO (VERIFIED TRANSPARENCY) --- */
+  /* --- 🖼️ FRAME STUDIO (VERIFIED TRANSPARENCY & RED BORDER) --- */
   #box { 
     position: relative; width: 310px; height: 310px; border-radius: 50%; overflow: hidden; 
+    border: 3px solid #ff0000; box-sizing: border-box; 
     background-image: linear-gradient(45deg, #1a1a1c 25%, transparent 25%), linear-gradient(-45deg, #1a1a1c 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #1a1a1c 75%), linear-gradient(-45deg, transparent 75%, #1a1a1c 75%);
     background-color: transparent; background-size: 20px 20px;
     box-shadow: 0 0 20px rgba(0,0,0,0.5); z-index: 10; 
@@ -84,11 +84,11 @@
   .font-input { width: 100%; background: #111; border: 2px solid #00ffff; color: #fff; padding: 15px; border-radius: 8px; font-weight: bold; text-align: center; margin-bottom: 15px; font-size: 16px; outline: none; box-sizing: border-box; }
   .font-scroll { width: 100%; max-height: 500px; overflow-y: auto; display: flex; flex-direction: column; border-radius: 8px; overflow-x: hidden; border: 1px solid rgba(255,255,255,0.1); box-sizing: border-box; touch-action: pan-y; }
   .font-item { background: #1a1a1c; border-bottom: 1px solid rgba(255,255,255,0.1); padding: 16px; width: 100%; text-align: center; cursor: pointer; color: #eee; font-size: 16px; white-space: pre-wrap; }
-  .font-item:active { background: #00ffff; color: #000; }
 
   /* UI SHARED */
   .ui { margin-top: 20px; width: 310px; display: flex; flex-direction: column; gap: 6px; }
   .btn { background: #111; border: 2px solid #ffffff; color: white; padding: 10px; text-align: center; border-radius: 8px; font-weight: bold; display: block; font-size: 12px; cursor: pointer; text-transform: uppercase; }
+  .btn-r { border-color: #ff0000; }
   .lbl { font-size: 9px; color: #888; text-transform: uppercase; margin-top: 2px; display: flex; justify-content: space-between; align-items: center; width: 100%; }
   .val-tag { color: #ff0000; font-weight: bold; font-family: monospace; font-size: 10px; }
   input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; margin: 10px 0; cursor: pointer; }
@@ -134,6 +134,7 @@
   <div id="box"><canvas id="c" width="800" height="800"></canvas></div>
   <div class="ui">
     <label class="btn">CHOOSE IMAGE<input type="file" id="u1" accept="image/*" onchange="handleFile(event)" style="display:none"></label>
+    <label class="btn btn-r">APPLY FRAME<input type="file" id="u2" accept="image/*" onchange="handleFrame(event)" style="display:none"></label>
     <button class="btn" style="border-color:#00ffff; color:#00ffff;" onclick="centerSubject()">CENTER SUBJECT 🎯</button>
     <div class="lbl">ZOOM <span id="z-val" class="val-tag">100%</span></div>
     <input type="range" id="z" min="0.1" max="4" step="0.01" value="1" oninput="updateZ(this.value)">
@@ -155,7 +156,7 @@
 <script>
 const c=document.getElementById('c'),x=c.getContext('2d'),zSl=document.getElementById('z'),rSl=document.getElementById('r'),mSl=document.getElementById('m'),panel=document.getElementById('menu-panel'),mStat=document.getElementById('m-status'), sName=document.getElementById('studio-name'), sSub=document.getElementById('studio-sub'), swMenu=document.getElementById('switch-menu');
 const zVal=document.getElementById('z-val'),rVal=document.getElementById('r-val'),mVal=document.getElementById('m-val');
-let i=new Image(),cfg={s:1,m:375,x:400,y:400,r:0,lx:0,ly:0},player,musicOn=true,audioStarted=false;
+let i=new Image(),f=new Image(),cfg={s:1,m:375,x:400,y:400,r:0,lx:0,ly:0},player,musicOn=true,audioStarted=false;
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
 function changeStudio(mode) {
@@ -171,7 +172,7 @@ function changeStudio(mode) {
 
 // --- TAP ANYWHERE TO CLOSE MENU & START MUSIC ---
 window.onclick = e => {
-  initAudio(); 
+  initAudio(); // REPAIRED: Starts music on tap anywhere
   if (panel.classList.contains('open') && !panel.contains(e.target) && !e.target.classList.contains('menu-toggle')) { panel.classList.remove('open'); }
   if (swMenu.style.display === 'flex' && !document.querySelector('.switch-container').contains(e.target)) { swMenu.style.display = 'none'; }
 };
@@ -191,7 +192,7 @@ const bases = [
   {m:"𝕬𝕭𝕮𝕯𝕰𝕱𝕲𝕳𝕴𝕵𝕶𝕷𝕸𝕹𝕺𝕻𝕼𝕽𝕾𝕿𝖀𝖁𝖂𝖃𝖄𝖅𝖆𝖇𝖈𝖉𝖊𝖋𝖌𝖍𝖎𝖏𝖐𝖑𝖒𝖓𝖔𝖕𝖖𝖗𝖘𝖙𝖚𝖛𝖜𝖝𝖞𝖟0123456789"},
   {m:"𝔸𝔹ℂ𝔻𝔼𝔽𝔾ℍ𝕀𝕁𝕂𝕃𝕄ℕ𝕆ℙℚℝ𝕊𝕋𝕌𝕍𝕎𝕏𝕐ℤ𝕒𝕓𝕔𝕕迫𝕗𝕘𝕙𝕚𝕛𝕜𝕝𝕞运转𝕠𝕡𝕢𝕣𝕤𝕥𝕦𝕧𝕨𝕩𝕪𝕫𝟘𝟙𝟚𝟛𝟜𝟝𝟞𝟟𝟠𝟡"},
   {m:"𝖠𝖡𝖢𝖣𝖤𝖥𝖦𝖧𝖨𝖩𝖪𝖫𝖬𝖭𝖮𝖯𝖰𝖱𝖲𝖳𝖴𝖵𝖶𝖷𝖸𝖹𝖺𝖻𝖼𝖽𝖾𝖿𝗀𝗁𝗂𝗃𝗄𝗅𝗆𝗇𝗈𝗉𝗊𝗋𝗌𝗍𝗎𝗏𝗐𝗑𝗒𝗓𝟢𝟣𝟤𝟥𝟦𝟧𝟨𝟩𝟪𝟫"},
-  {m:"𝗔𝗕ＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐ𝗾𝗿ｓ𝘁ｕｖｗ𝘅ｙ𝘇𝟬𝟭𝟮𝟯𝟰𝟱𝟲𝟳𝟴𝟵"},
+  {m:"𝗔𝗕ＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺａｂｃｄｅｆｇ𝐡𝐢𝐣𝐤𝐥ｍｎｏ𝐩𝗾𝗿ｓ𝘁ｕｖｗ𝘅ｙ𝘇𝟬𝟭𝟮𝟯𝟰𝟱𝟲𝟳𝟴𝟵"},
   {m:"ⒶⒷⒸⒹⒺⒻⒼⒽⒾⒿⓀⓁⓂⓃⓄⓅⓆⓇⓈⓉⓊⓋⓌⓍⓎⓏⓐⓑⓒⓓⓔⓕⓖⓗⓘⓙⓚⓛⓜⓝⓞⓟⓠⓡⓢⓣⓤⓥⓦⓧⓨⓩ⓪①②③④⑤⑥⑦⑧⑨"},
   {m:"🅐🅑🅒🅓🅔🅕🅖🅗🅘🅙🅚🅛🅜🅝🅞🅟🅠🅡🅢🅣🅤🅥🅦🅧🅨🅩🅐🅑🅒🅓🅔🅕🅖🅗🅘🅙🅚🅛🅜🅝🅞🅟🅠🅡🅢🅣🅤🅥🅦🅧🅨🅩⓿➊➋➌➍➎➏➐➑➒"},
   {m:"₳฿₵ĐɆ₣₲ⱧłJ₭Ⱡ₥₦Ø₱QⱤ₴₮ɄV₩ӾɎⱫ₳฿₵ĐɆ₣₲ⱧłJ₭Ⱡ₥₦Ø₱QⱤ₴₮ɄV₩ӾɎⱫ0123456789"},
@@ -217,7 +218,7 @@ function genFonts() {
     const mapArr = Array.from(b.m);
     for(let char of val) {
       let idx = chars.indexOf(char);
-      baseTxt += (idx !== -1 && mapArr[idx]) ? mapArr[idx] : char;
+      baseTxt += (idx !== -1 && mapArr[idx]) ? mapArr[idx] : char; // CHARACTER SAFETY CHECK
     }
     addF(baseTxt, resBox); count++;
     decorators.forEach(dec => {
@@ -236,10 +237,10 @@ window.addEventListener('touchstart', initAudio, {once:true});
 function onYouTubeIframeAPIReady() { player = new YT.Player('yt-player', { height: '0', width: '0', videoId: 'jfKfPfyJRdk', playerVars: { 'autoplay': 1, 'loop': 1, 'playlist': 'jfKfPfyJRdk', 'mute':0 }, events: { 'onReady': e => { e.target.setVolume(25); } } }); }
 function changeMusic(id) { if(player) player.loadVideoById(id); playShutter(); }
 function toggleMusic() { initAudio(); playClick(); musicOn = !musicOn; if(musicOn) { player.playVideo(); mStat.innerText = "ON"; mStat.style.color = "#ff0000"; } else { player.pauseVideo(); mStat.innerText = "OFF"; mStat.style.color = "#888"; } }
-function playClick() { if(audioCtx.state==='running'){const o=audioCtx.createOscillator(), g=audioCtx.createGain(); o.frequency.setValueAtTime(800, audioCtx.currentTime); g.gain.setValueAtTime(0.05, audioCtx.currentTime); o.connect(g); g.connect(audioCtx.destination); o.start(); o.stop(audioCtx.currentTime+0.1);}}
-function playShutter() { if(audioCtx.state==='running'){const o=audioCtx.createOscillator(), g=audioCtx.createGain(); o.type='square'; o.frequency.setValueAtTime(200, audioCtx.currentTime); g.gain.setValueAtTime(0.05, audioCtx.currentTime); o.connect(g); g.connect(audioCtx.destination); o.start(); o.stop(audioCtx.currentTime+0.1);}}
+function playClick() { if(audioCtx.state==='running'){const o=audioCtx.createOscillator(), g=audioCtx.createGain(); o.frequency.setValueAtTime(800, audioCtx.currentTime); g.gain.setValueAtTime(0.05, audioCtx.currentTime); o.connect(g); g.connect(audioCtx.destination); o.start(); o.stop(audioCtx.currentTime + 0.1);} }
+function playShutter() { if(audioCtx.state==='running'){const o=audioCtx.createOscillator(), g=audioCtx.createGain(); o.type='square'; o.frequency.setValueAtTime(200, audioCtx.currentTime); g.gain.setValueAtTime(0.05, audioCtx.currentTime); o.connect(g); g.connect(audioCtx.destination); o.start(); o.stop(audioCtx.currentTime + 0.1);} }
 
-// --- 🖼️ CANVAS ENGINE ---
+// --- 🖼️ CANVAS ENGINE (CIRCLE, TRANSPARENT, APPLY FRAME) ---
 function d(){ 
     x.clearRect(0,0,800,800); 
     x.save(); 
@@ -248,9 +249,12 @@ function d(){
         let w=i.width*cfg.s, h=i.height*cfg.s; 
         x.save(); x.translate(cfg.x, cfg.y); x.rotate(cfg.r * Math.PI/180); 
         x.drawImage(i, -w/2, -h/2, w, h); x.restore(); 
-    } x.restore();
+    } 
+    x.restore();
+    if(f.src) x.drawImage(f, 0, 0, 800, 800); // VERIFIED: Draws the frame image
 }
 function handleFile(e){ let r=new FileReader(); r.onload=v=>{ let n=new Image(); n.onload=()=>{i=n; cfg.s=Math.max(800/i.width,800/i.height); cfg.x=400; cfg.y=400; cfg.r=0; rSl.value=0; d();}; n.src=v.target.result; }; r.readAsDataURL(e.target.files[0]); }
+function handleFrame(e){ let r=new FileReader(); r.onload=v=>{ let n=new Image(); n.onload=()=>{f=n; d();}; n.src=v.target.result; }; r.readAsDataURL(e.target.files[0]); } // RESTORED
 function updateZ(v){ cfg.s=parseFloat(v); zVal.innerText=Math.round(v*100)+"%"; d(); }
 function updateR(v){ cfg.r=parseInt(v); rVal.innerText=v+"°"; d(); }
 function updateM(v){ cfg.m=parseInt(v); mVal.innerText=v+"px"; d(); }
