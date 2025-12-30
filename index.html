@@ -100,17 +100,21 @@
   .font-item { background: #1a1a1c; border-bottom: 1px solid rgba(255,255,255,0.1); padding: 16px; width: 100%; text-align: center; cursor: pointer; color: #eee; font-size: 16px; white-space: pre-wrap; }
   
   /* --- ✨ SYMBOLS STUDIO CSS --- */
+  .sym-box-container { width: 100%; display: flex; gap: 5px; margin-bottom: 15px; }
+  .sym-input { flex: 1; background: #000; border: 1px solid #00ffff; color: #00ffff; padding: 12px; font-size: 18px; border-radius: 6px; text-align: center; }
+  .sym-copy-btn { background: #00ffff; color: #000; border: none; font-weight: bold; padding: 0 15px; border-radius: 6px; cursor: pointer; font-size: 18px; }
+
   .sym-grid { display: flex; flex-wrap: wrap; gap: 5px; width: 100%; padding: 5px; box-sizing: border-box; }
   .sym-btn { background: #1a1a1c; border: 1px solid #333; color: white; padding: 15px 0; font-size: 20px; border-radius: 6px; cursor: pointer; text-align: center; flex: 1 0 18%; min-width: 50px; }
   .sym-btn:active { background: #00ffff; color: #000; }
-  .cat-title { width: 100%; color: #00ffff; font-size: 12px; font-weight: bold; margin: 15px 0 5px 0; text-transform: uppercase; padding-left: 5px; border-bottom: 1px solid rgba(0,255,255,0.2); padding-bottom: 5px; }
+  .cat-title { width: 100%; color: #00ffff; font-size: 12px; font-weight: bold; margin: 20px 0 5px 0; text-transform: uppercase; padding-left: 5px; border-bottom: 1px solid rgba(0,255,255,0.2); padding-bottom: 5px; }
 
-  /* --- ⚡ GIF STUDIO CSS (RGB ANIMATION RESTORED) --- */
+  /* --- ⚡ GIF STUDIO CSS (ROTATING RAINBOW RESTORED) --- */
   @keyframes rotate { 100% { transform: rotate(360deg); } }
   
   .stage { position: relative; width: 320px; height: 320px; display: flex; align-items: center; justify-content: center; margin-bottom: 30px; touch-action: none; }
   
-  /* The Animated Neon Ring */
+  /* The Moving RGB Ring */
   .led-ring { 
     position: absolute; inset: -15px; border-radius: 50%; 
     background: conic-gradient(from 0deg, #00f3ff, #bc13fe, #ff0055, #00f3ff); 
@@ -138,8 +142,10 @@
       display: flex; flex-direction: column; align-items: center;
   }
   
-  .btn-upload { background: linear-gradient(90deg, var(--neon), var(--purple)); color: #000; border: none; padding: 15px; border-radius: 50px; font-weight: 800; cursor: pointer; width: 100%; margin-bottom: 25px; font-size: 14px; letter-spacing: 0.5px; box-shadow: 0 0 25px rgba(0, 243, 255, 0.2); }
+  /* Fixed Upload Button - Bright Gradient */
+  .btn-upload { background: linear-gradient(90deg, #00f3ff, #bc13fe); color: #000; border: none; padding: 15px; border-radius: 50px; font-weight: 800; cursor: pointer; width: 100%; margin-bottom: 25px; font-size: 14px; letter-spacing: 0.5px; box-shadow: 0 0 25px rgba(0, 243, 255, 0.2); transition: 0.2s; }
   .btn-upload:disabled { opacity: 0.3; cursor: not-allowed; filter: grayscale(1); }
+  .btn-upload:active { transform: scale(0.98); }
 
   .label-row { display: flex; justify-content: space-between; font-size: 11px; color: #888; margin-bottom: 8px; font-weight: 600; width: 100%; }
   
@@ -271,7 +277,11 @@
 </div>
 
 <div id="sym-studio" class="studio-sec">
-    <div class="lbl">TAP SYMBOL TO COPY</div>
+    <div class="lbl">TAP SYMBOLS TO COLLECT</div>
+    <div class="sym-box-container">
+        <input type="text" id="sym-box" class="sym-input" placeholder="Tap symbols to add here..." readonly>
+        <button class="sym-copy-btn" onclick="copySymBox()">📋</button>
+    </div>
     <div id="sym-container" class="font-scroll"></div>
 </div>
 
@@ -302,8 +312,6 @@ function toggleMenu(e) { e.stopPropagation(); initAudio(); panel.classList.toggl
 
 // --- ✍️ CLEAN FONT ENGINE (SAFE ALPHABETS ONLY) ---
 const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-
-// 1. VERIFIED ALPHABETS (Diamond-Proof & No Decorators)
 const alphas = [
   {m:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"}, // Normal
   {m:"𝐀𝐁𝐂𝐃𝐄𝐅𝐆𝐇𝐈𝐉𝐊𝐋𝐌𝐍𝐎𝐏𝐐𝐑𝐒𝐓𝐔𝐕𝐖𝐗𝐘𝐙𝐚𝐛𝐜𝐝𝐞𝐟𝐠𝐡𝐢𝐣𝐤𝐥𝐦𝐧𝐨𝐩𝐪𝐫𝐬𝐭𝐮𝐯𝐰𝐱𝐲𝐳𝟎𝟏𝟐𝟑𝟒𝟓𝟔𝟕𝟖𝟗"}, // Bold
@@ -324,8 +332,6 @@ function genFonts(){
   resBox.innerHTML="";
   if(!val) return;
   let count=0;
-  
-  // 1. ADD PURE FONTS ONLY
   alphas.forEach(alph => {
     let txt = "";
     const mapArr = Array.from(alph.m);
@@ -336,21 +342,24 @@ function genFonts(){
     addF(txt, resBox);
     count++;
   });
-  
   document.getElementById('font-count').innerText=count+" STYLES";
 }
 function addF(t,b){let d=document.createElement('div');d.className="font-item";d.innerText=t;d.onclick=()=>{navigator.clipboard.writeText(t);playShutter();};b.appendChild(d);}
 
-// --- ✨ SYMBOLS STUDIO DATA (VERIFIED UNICODE) ---
+// --- ✨ SYMBOLS STUDIO DATA ---
 const symData = {
+    "Collection": [" "],
+    "Hearts": ["❤","❥","♡","♥","❦","❧","❣","💞","💗","💕","💘","💝","💟","💌","💋"],
+    "Sparkles & Stars": ["✨","★","☆","✡","✦","✧","✩","✪","✫","✬","✭","✮","✯","✰","⁂","⁎","⁑","✢","✣","✤","✥","✱","✲","✳","✴","✵","✶","✷","✸","✹","✺","✻","✼","✽","✾","✿","❀","❁","❂","❃","❄","❅","❆","❇","❈","❉","❊","❋"],
+    "Hanging Stars": ["*̣̥☆·͙̥","‧͙⁺˚*･༓☾","☽༓･*˚⁺‧͙","★*","*★","☆.","¸.·","·.¸","*","**","***"],
+    "Dividers": ["〰","﹏","—","─","━","│","┃","┄","┅","┆","┇","┈","┉","┊","┋","╌","╍","╎","╏","═","║","╒","╓","╔","╕","╖","╗","╘","╙","╚","╛","╜","╝","╞","╟","╠","╡","╢","╣","╤","╥","╦","╧","╨","╩","╪","╫","╬"],
+    "Borders": ["╔","╗","╚","╝","╠","╣","═","║","╬","╭","╮","╯","╰","╱","╲","╳","▏","▕","▖","▗","▘","▙","▚","▛","▜","▝","▞","▟"],
+    "Triangles": ["▲","△","▴","▵","▶","▷","▸","▹","►","▻","▼","▽","▾","▿","◀","◁","◂","◃","◄","◅","◢","◣","◤","◥","◬","◭","◮"],
+    "Circles & Dots": ["•","○","◌","◍","◎","●","◐","◑","◒","◓","◔","◕","◖","◗","◘","◙","◚","◛","◜","◝","◞","◟","◠","◡","◦","◧","◨","◩","◪","◫","◯","◰","◱","◲","◳","◴","◵","◶","◷"],
+    "Dice": ["⚀","⚁","⚂","⚃","⚄","⚅"],
+    "Dominos": ["🀰","🀱","🀲","🀳","🀴","🀵","🀶","🀷","🀸","🀹","🀺","🀻","🀼","🀽","🀾","🀿","🁀","🁁","🁂","🁃","🁄","🁅","🁆","🁇","🁈","🁉","🁊","🁋","🁌","🁍","🁎","🁏","🁐","🁑","🁒","🁓","🁔","🁕","🁖","🁗","🁘","🁙","🁚","🁛","🁜","🁝","🁞","🁟","🁠","🁡","🁢","🁣","🁤","🁥","🁦","🁧","🁨","🁩","🁪","🁫","🁬","🁭","🁮","🁯","🁰","🁱","🁲","🁳"],
     "Arrows": ["←","↑","→","↓","↔","↕","↖","↗","↘","↙","↩","↪","↫","↬","↭","↮","↯","↰","↱","↲","↳","↴","↵","↶","↷","↸","↹","↺","↻","⇄","⇅","⇆","⇇","⇈","⇉","⇊","⇋","⇌","⇍","⇎","⇏","⇐","⇑","⇒","⇓","⇔","⇕","⇖","⇗","⇘","⇙","⇚","⇛"],
-    "Stars & Sparkles": ["★","☆","✡","✦","✧","✩","✪","✫","✬","✭","✮","✯","✰","⁂","⁎","⁑","✢","✣","✤","✥","✱","✲","✳","✴","✵","✶","✷","✸","✹","✺","✻","✼","✽","✾","✿","❀","❁","❂","❃","❄","❅","❆","❇","❈","❉","❊","❋"],
-    "Hands": ["☚","☛","☜","☝","☞","☟","✌","✍","✑","✒"],
-    "Chess & Cards": ["♔","♕","♖","♗","♘","♙","♚","♛","♜","♝","♞","♟","♠","♡","♢","♣","♤","♥","♦","♧"],
-    "Music": ["♩","♪","♫","♬","♭","♮","♯"],
-    "Weather & Astro": ["☀","☁","☂","☃","☄","☾","☽","☉","☊","☋","☌","☍","☎","☏","☐","☑","☒","☓","☔","☕","☖","☗","☘","☙","☠","☡","☢","☣","☤","☥","☦","☧","☨","☩","☪","☫","☬","☭","☮","☯","☸","☹","☺","☻","☼","☽","☾","☿","♀","♁","♂","♃","♄","♅","♆","♇","♈","♉","♊","♋","♌","♍","♎","♏","♐","♑","♒","♓"],
-    "Shapes": ["■","□","▢","▣","▤","▥","▦","▧","▨","▩","▪","▫","▬","▭","▮","▯","▰","▱","▲","△","▴","▵","▶","▷","▸","▹","►","▻","▼","▽","▾","▿","◀","◁","◂","◃","◄","◅","◆","◇","◈","◉","◊","○","◌","◍","◎","●","◐","◑","◒","◓","◔","◕","◖","◗","◘","◙","◚","◛","◜","◝","◞","◟","◠","◡","◢","◣","◤","◥","◦","◧","◨","◩","◪","◫","◬","◭","◮","◯","◰","◱","◲","◳","◴","◵","◶","◷","◸","◹","◺","◻","◼","◽","◾","◿"],
-    "Math": ["∀","∁","∂","∃","∄","∅","∆","∇","∈","∉","∊","∋","∌","∍","∎","∏","∐","∑","−","∓","∔","∕","∖","∗","∘","∙","√","∛","∜","∝","∞","∟","∠","∡","∢","∣","∤","∥","∦","∧","∨","∩","∪","∫","∬","∭","∮","∯","∰","∱","∲","∳","∴","∵","∶","∷","∸","∹","∺","∻","∼","∽","∾","∿","≀","≁","≂","≃","≄","≅","≆","≇","≈","≉","≊","≋","≌","≍","≎","≏","≐","≑","≒","≓","≔","≕","≖","≗","≘","≙","≚","≛","≜","≝","≞","≟","≠","≡","≢","≣","≤","≥","≦","≧","≨","≩","≪","≫"]
+    "Chess & Cards": ["♔","♕","♖","♗","♘","♙","♚","♛","♜","♝","♞","♟","♠","♡","♢","♣","♤","♥","♦","♧"]
 };
 
 function renderSymbols(){
@@ -370,12 +379,23 @@ function renderSymbols(){
             let btn = document.createElement('div');
             btn.className = "sym-btn";
             btn.innerText = s;
-            btn.onclick = () => { navigator.clipboard.writeText(s); playShutter(); };
+            // Add to Box instead of Copy immediately
+            btn.onclick = () => { 
+                const b = document.getElementById('sym-box');
+                b.value += s;
+                playShutter(); 
+            };
             grid.appendChild(btn);
         });
         
         box.appendChild(grid);
     }
+}
+function copySymBox(){
+    const b = document.getElementById('sym-box');
+    navigator.clipboard.writeText(b.value);
+    playShutter();
+    // Optional: clear after copy or keep it? Keeping it is safer.
 }
 renderSymbols();
 
@@ -414,7 +434,7 @@ zoom.oninput = function() {
 
 speed.oninput=()=>{ sv.innerText=speed.value+'x'; if(v.src)v.playbackRate=parseFloat(speed.value); };
 
-// GIF PROCESSING (CENTER CROP LOGIC)
+// GIF PROCESSING
 go.onclick=()=>{
     if(!v.src)return;
     go.disabled = true; upBtn.disabled = true; zoom.disabled = true; speed.disabled = true;
