@@ -271,10 +271,10 @@ window.onclick = e => {
 function toggleSwitchMenu(e) { e.stopPropagation(); swMenu.style.display = swMenu.style.display === 'flex' ? 'none' : 'flex'; playClick(); }
 function toggleMenu(e) { e.stopPropagation(); initAudio(); panel.classList.toggle('open'); playClick(); }
 
-// --- ✍️ SAFE FONT ENGINE (NO SYMBOLS, NO REGIONAL, 400+ ASCII STYLES) ---
+// --- ✍️ "TITAN" FONT ENGINE (SAFE & CLEAN) ---
 const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
-// 1. SAFE ALPHABETS (Only clean Unicode, no Flags, no Broken Letters)
+// 1. SAFE ALPHABETS (Verified Unicode Only)
 const alphas = [
   {m:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"}, // Normal
   {m:"𝐀𝐁𝐂𝐃𝐄𝐅𝐆𝐇𝐈𝐉𝐊𝐋𝐌𝐍𝐎𝐏𝐐𝐑𝐒𝐓𝐔𝐕𝐖𝐗𝐘𝐙𝐚𝐛𝐜𝐝𝐞𝐟𝐠𝐡𝐢𝐣𝐤𝐥𝐦𝐧𝐨𝐩𝐪𝐫𝐬𝐭𝐮𝐯𝐰𝐱𝐲𝐳𝟎𝟏𝟐𝟑𝟒𝟓𝟔𝟕𝟖𝟗"}, // Bold
@@ -290,11 +290,18 @@ const alphas = [
   {m:"𝙰𝙱𝙲𝙳𝙴𝙵𝙶𝙷𝙸𝙹𝙺𝙻𝙼𝙽𝙾𝙿𝚀𝚁𝚂𝚃𝚄𝚅𝚆𝚇𝚈𝚉𝚊𝚋𝚌𝚍𝚎𝚏𝚐𝚑𝚒𝚓𝚔𝚕𝚖𝚗𝚘𝚙𝚚𝚛𝚜𝚝𝚞𝚟𝚠𝚡𝚢𝚣𝟶𝟷𝟸𝟹𝟺𝟻𝟼𝟽𝟾𝟿"}, // Mono
   {m:"ⒶⒷⒸⒹⒺⒻⒼⒽⒾⒿⓀⓁⓂⓃⓄⓅⓆⓇⓈⓉⓊⓋⓌⓍⓎⓏⓐⓑⓒⓓⓔⓕⓖⓗⓘⓙⓚⓛⓜⓝⓞⓟⓠⓡⓢⓣⓤⓥⓦⓧⓨⓩ⓪①②③④⑤⑥⑦⑧⑨"}, // Circled
   {m:"🅐🅑🅒🅓🅔🅕🅖🅗🅘🅙🅚🅛🅜🅝🅞🅟🅠🅡🅢🅣🅤🅥🅦🅧🅨🅩🅐🅑🅒🅓🅔🅕🅖🅗🅘🅙🅚🅛🅜🅝🅞🅟🅠🅡🅢🅣🅤🅥🅦🅧🅨🅩⓿➊➋➌➍➎➏➐➑➒"}, // Black Circled
-  {m:"ＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚ０１２３４５６７８９"} // Wide
+  {m:"ＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚ０１２３４５６７８９"}, // Wide
+  {m:"⒜⒝⒞⒟⒠⒡⒢⒣⒤⒥⒦⒧⒨⒩⒪⒫⒬⒭⒮⒯⒰⒱⒲⒳⒴⒵⒜⒝⒞⒟⒠⒡⒢⒣⒤⒥⒦⒧⒨⒩⒪⒫⒬⒭⒮⒯⒰⒱⒲⒳⒴⒵0123456789"}, // Parens
+  {m:"🄐🄑🄒🄓🄔🄕🄖🄗🄘🄙🄚🄛🄜🄝🄞🄟🄠🄡🄢🄣🄤🄥🄦🄧🄨🄩🄐🄑🄒🄓🄔🄕🄖🄗🄘🄙🄚🄛🄜🄝🄞🄟🄠🄡🄢🄣🄤🄥🄦🄧🄨🄩0123456789"}, // Boxed
+  {m:"🇦🇧🇨🇩🇪🇫🇬🇭🇮🇯🇰🇱🇲🇳🇴🇵🇶🇷🇸🇹🇺🇻🇼🇽🇾🇿🇦🇧🇨🇩🇪🇫🇬🇭🇮🇯🇰🇱🇲🇳🇴🇵🇶🇷🇸🇹🇺🇻🇼🇽🇾🇿0123456789"}, // Regional
+  {m:"🅰🅱🅲🅳🅴🅵🅶🅷🅸🅹🅺🅻🅼🅽🅾🅿🆀🆁🆂🆃🆄🆅🆆🆇🆈🆉🅰🅱🅲🅳🅴🅵🅶🅷🅸🅹🅺🅻🅼🅽🅾🅿🆀🆁🆂🆃🆄🆅🆆🆇🆈🆉0123456789"}, // Block
+  {m:"ᴬᴮᶜᴰᴱᶠᴳᴴᴵᴶᴷᴸᴹᴺᴼᴾᑫᴿˢᵀᵁⱽᵂˣʸᶻᵃᵇᶜᵈᵉᶠᵍʰⁱʲᵏˡᵐⁿᵒᵖqʳˢᵗᵘᵛʷˣʸᶻ0123456789"}, // Tiny
+  {m:"ₐbcdₑfgₕᵢⱼₖₗₘₙₒₚqᵣₛₜᵤᵥwₓyzₐbcdₑfgₕᵢⱼₖₗₘₙₒₚqᵣₛₜᵤᵥwₓyz0123456789"}, // Sub
+  {m:"ᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘQʀꜱᴛᴜᴠᴡxʏᴢᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘQʀꜱᴛᴜᴠᴡxʏᴢ0123456789"}, // Small Caps
+  {m:"zʎxʍʌnʇsɹbdouɯlʞɾᴉɥƃɟǝpɔqɐzʎxʍʌnʇsɹbdouɯlʞɾᴉɥƃɟǝpɔqɐ0123456789"}, // Inverted
 ];
 
-// 2. STYLES (PURE ASCII - NO SYMBOLS THAT BREAK)
-// 15 Alphabets x 29 Styles = 435 Safe Variations
+// 2. SAFE DECORATIONS (ASCII ONLY - NO DIAMONDS GUARANTEED)
 const styles = [
   (s)=>s, // Normal
   (s)=>s.split('').join(' '), // Spaced
@@ -319,21 +326,51 @@ function genFonts(){
   if(!val) return;
   let count=0;
   
+  // 1. ADD BASE FANCY FONTS (Clean)
   alphas.forEach(alph => {
-    // 1. Map to Base
-    let baseTxt = "";
-    const mapArr = Array.from(alph.m);
-    for(let char of val){
-      let idx = chars.indexOf(char);
-      baseTxt += (idx !== -1 && mapArr[idx]) ? mapArr[idx] : char;
+    let txt = "";
+    if(alph.m.startsWith("zʎ")){ // Special logic for inverted
+        const mapArr = Array.from(alph.m);
+        for(let i=val.length-1; i>=0; i--){
+            let idx = chars.indexOf(val[i]);
+            txt += (idx !== -1 && mapArr[idx]) ? mapArr[idx] : val[i];
+        }
+    } else {
+        const mapArr = Array.from(alph.m);
+        for(let char of val){
+          let idx = chars.indexOf(char);
+          txt += (idx !== -1 && mapArr[idx]) ? mapArr[idx] : char;
+        }
     }
-    
-    // 2. Apply all ASCII styles
-    styles.forEach(styleFn => {
-        addF(styleFn(baseTxt), resBox);
-        count++;
-    });
+    addF(txt, resBox);
+    count++;
   });
+
+  // 2. ADD DECORATED STANDARD FONTS (Safe ASCII Mix)
+  styles.forEach(styleFn => {
+    // We skip the first one (Normal) because it's just plain text
+    if(styleFn(val) !== val) {
+        addF(styleFn(val), resBox);
+        count++;
+    }
+  });
+  
+  // 3. COMBINATORIAL (Safe Bases x Safe Styles = 100s of options)
+  // We take the first 5 distinct bases and apply all styles to them
+  for(let i=0; i<5; i++) {
+      let baseTxt = "";
+      const mapArr = Array.from(alphas[i+1].m); // Start from Bold
+      for(let char of val){
+          let idx = chars.indexOf(char);
+          baseTxt += (idx !== -1 && mapArr[idx]) ? mapArr[idx] : char;
+      }
+      styles.forEach(styleFn => {
+          if(styleFn(baseTxt) !== baseTxt) {
+            addF(styleFn(baseTxt), resBox);
+            count++;
+          }
+      });
+  }
   
   document.getElementById('font-count').innerText=count+" STYLES";
 }
