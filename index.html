@@ -19,16 +19,6 @@
     background-size: 100% 4px; touch-action: pan-y; 
   }
 
-  /* --- ANIMATIONS (RESTORED) --- */
-  @keyframes rotate { 
-    from { transform: rotate(0deg); } 
-    to { transform: rotate(360deg); } 
-  }
-  @keyframes arcadeBounce { 
-    0%, 100% { transform: translateY(0); } 
-    50% { transform: translateY(-10px); } 
-  }
-
   /* --- NAVIGATION --- */
   .menu-toggle { 
     position: fixed; top: 15px; left: 15px; 
@@ -75,6 +65,7 @@
 
   /* HEADERS */
   h1 { color: #fff; margin: 60px 0 0 0; font-family: "Arial Black", sans-serif; font-style: italic; font-size: 36px; text-transform: uppercase; letter-spacing: -1px; text-shadow: 2px 2px 0px #ff0000, -1px -1px 10px rgba(255, 0, 0, 0.8); animation: arcadeBounce 1.8s infinite ease-in-out; }
+  @keyframes arcadeBounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
   .sub { color: #fff; font-weight: bold; margin: 2px 0 15px 0; text-transform: uppercase; font-size: 11px; letter-spacing: 2px; text-align: center; }
   
   .studio-sec { display: none; width: 320px; flex-direction: column; align-items: center; }
@@ -90,56 +81,24 @@
   }
   canvas#c { position: absolute; top: 0; left: 0; width: 310px; height: 310px; z-index: 15; touch-action: none; }
   .ui { margin-top: 20px; width: 310px; display: flex; flex-direction: column; gap: 6px; }
-  .btn { background: #111; border: 2px solid #ffffff; color: white; padding: 10px; text-align: center; border-radius: 8px; font-weight: bold; display: block; font-size: 12px; cursor: pointer; text-transform: uppercase; }
+  .btn { background: #111; border: 2px solid #ffffff; color: white; padding: 10px; text-align: center; border-radius: 8px; font-weight: bold; display: block; font-size: 12px; cursor: pointer; text-transform: uppercase; width: 100%; box-sizing: border-box; }
   .btn-r { border-color: #ff0000; }
   .lbl { font-size: 9px; color: #888; text-transform: uppercase; margin-top: 2px; display: flex; justify-content: space-between; align-items: center; width: 100%; }
   .val-tag { color: #ff0000; font-weight: bold; font-family: monospace; font-size: 10px; }
   
-  /* FIXED DOWNLOAD BUTTON (BLUE + BLOCKED) */
-  #save {
-      background: #007bff; /* RESTORED BLUE */
-      border: none;
-      color: white;
-      padding: 12px;
-      text-align: center;
-      border-radius: 8px;
-      font-weight: bold;
-      display: block;
-      font-size: 14px;
-      cursor: pointer;
-      text-transform: uppercase;
-      margin-top: 10px;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.2);
-      transition: all 0.3s ease;
-  }
-  #save:hover { background: #0056b3; }
-  #save:disabled {
-      background: #333333;
-      color: #666666;
-      cursor: not-allowed;
-      box-shadow: none;
-      opacity: 0.7;
-  }
-
   /* --- ✍️ FONT STUDIO CSS --- */
   .font-input { width: 100%; background: #111; border: 2px solid #00ffff; color: #fff; padding: 15px; border-radius: 8px; font-weight: bold; text-align: center; margin-bottom: 15px; font-size: 16px; outline: none; box-sizing: border-box; }
   .font-scroll { width: 100%; max-height: 500px; overflow-y: auto; display: flex; flex-direction: column; border-radius: 8px; overflow-x: hidden; border: 1px solid rgba(255,255,255,0.1); box-sizing: border-box; touch-action: pan-y; }
   .font-item { background: #1a1a1c; border-bottom: 1px solid rgba(255,255,255,0.1); padding: 16px; width: 100%; text-align: center; cursor: pointer; color: #eee; font-size: 16px; white-space: pre-wrap; }
 
-  /* --- ⚡ GIF STUDIO CSS (FIXED) --- */
+  /* --- ⚡ GIF STUDIO CSS --- */
   :root { --neon: #00f3ff; --purple: #bc13fe; --red: #ff0055; }
   .stage { position: relative; width: 320px; height: 320px; display: flex; align-items: center; justify-content: center; margin-bottom: 30px; touch-action: none; }
-  
-  /* NEON RING ANIMATION */
-  .led-ring { 
-      position: absolute; inset: -15px; border-radius: 50%; 
-      background: conic-gradient(from 0deg, transparent, var(--neon), var(--purple), transparent); 
-      animation: rotate 2s linear infinite; /* SPINNING IS BACK */
-      filter: blur(20px); z-index: 1; pointer-events: none; 
-  }
+  .led-ring { position: absolute; inset: -15px; border-radius: 50%; background: conic-gradient(from 0deg, transparent, var(--neon), var(--purple), transparent); animation: rotate 2s linear infinite; filter: blur(20px); z-index: 1; pointer-events: none; }
   
   .viewport { position: relative; z-index: 5; width: 100%; height: 100%; border-radius: 50%; overflow: hidden; background-color: #000; box-shadow: inset 0 0 20px #000; touch-action: none; cursor: move; }
   
+  /* GPU ACCELERATION ENABLED ON VIDEO */
   #v { 
     position: absolute; top: 0; left: 0; 
     min-width: 100%; min-height: 100%; 
@@ -166,6 +125,7 @@
   input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 8px; background: linear-gradient(to right, #ff0000 var(--v, 0%), #00ffff var(--v, 0%)); border-radius: 4px; }
   input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 20px; width: 20px; border-radius: 50%; background: #ff0000; margin-top: -6px; border: 2px solid #ffffff; box-shadow: 0 0 10px #ff0000; }
   
+  /* GIF Studio Specific Sliders */
   .ui-gif input[type="range"] { margin-bottom: 25px; accent-color: var(--neon); }
   .ui-gif input[type="range"]::-webkit-slider-runnable-track { background: #333; height: 6px; }
   .ui-gif input[type="range"]::-webkit-slider-thumb { background: var(--neon); box-shadow: 0 0 10px var(--neon); border: none; }
@@ -180,6 +140,7 @@
   .neon-wrap { position: relative; display: none; margin-top: 20px; padding: 3px; border-radius: 50px; overflow: hidden; width: fit-content; }
   .neon-wrap.blue::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: conic-gradient(transparent, transparent, var(--neon), var(--purple), transparent, transparent); animation: rotate 2s linear infinite; z-index: 0; }
   
+  /* Reset Button Style */
   .neon-wrap.red { margin-top: 20px; }
   .neon-wrap.red::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: conic-gradient(transparent, transparent, var(--red), #ff5500, transparent, transparent); animation: rotate 2s linear infinite; z-index: 0; }
   
@@ -242,8 +203,7 @@
     <input type="range" id="r" min="0" max="360" step="1" value="0" oninput="updateR(this.value)">
     <div class="lbl">CIRCLE SIZE <span id="m-val" class="val-tag">375px</span></div>
     <input type="range" id="m" min="300" max="400" step="1" value="375" oninput="updateM(this.value)">
-    
-    <button id="save" onclick="downloadPic()" disabled>DOWNLOAD PICTURE</button>
+    <button id="save" class="btn" onclick="downloadPic()">DOWNLOAD PICTURE</button>
   </div>
 </div>
 
@@ -292,7 +252,6 @@ const c=document.getElementById('c'),x=c.getContext('2d'),zSl=document.getElemen
 const zVal=document.getElementById('z-val'),rVal=document.getElementById('r-val'),mVal=document.getElementById('m-val');
 let i=new Image(),f=new Image(),cfg={s:1,m:375,x:400,y:400,r:0,lx:0,ly:0},player,musicOn=true,audioStarted=false;
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-const saveBtn = document.getElementById('save');
 
 function changeStudio(mode) {
   playClick(); document.querySelectorAll('.studio-sec').forEach(s => s.classList.remove('active-sec')); 
@@ -311,14 +270,30 @@ window.onclick = e => {
 function toggleSwitchMenu(e) { e.stopPropagation(); swMenu.style.display = swMenu.style.display === 'flex' ? 'none' : 'flex'; playClick(); }
 function toggleMenu(e) { e.stopPropagation(); initAudio(); panel.classList.toggle('open'); playClick(); }
 
-// --- ✍️ FONT ENGINE ---
+// --- ✍️ FONT ENGINE (CURATED & CLEANED) ---
 const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-const bases = [{m:"𝐀𝐁𝐂𝐃𝐄𝐅𝐆𝐇𝐈𝐉𝐊𝐋𝐌𝐍𝐎𝐏𝐐𝐑𝐒𝐓𝐔𝐕𝐖𝐗𝐘𝐙𝐚𝐛𝐜𝐝𝐞𝐟𝐠𝐡𝐢𝐣𝐤𝐥𝐦𝐧𝐨𝐩𝐪𝐫𝐬𝐭𝐮𝐯𝐰𝐱𝐲𝐳𝟎𝟏𝟐𝟑𝟒𝟓𝟔𝟕𝟖𝟗"},{m:"𝐴𝐵𝐶𝐷𝐸𝐹𝐺𝐻𝐼𝐽ＫＬ𝑀𝑁𝑂𝑃𝑄𝑅𝑆𝑇𝑈𝑉𝑊𝑋𝑌𝑍𝑎𝑏𝑐𝑑𝑒𝑓𝑔ℎ𝑖𝑗𝑘𝑙𝑚𝑛𝑜𝑝𝑞𝑟𝑠𝑡𝑢𝑣𝑤𝑥𝑦𝑧0123456789"},{m:"𝑨𝑩𝑪𝑫𝑬𝑭𝑮𝑯𝑰𝑱𝑲𝑳𝑴𝑵𝑶𝑷𝑸𝑹𝑺𝑻𝑼𝑽𝑾𝑿𝒀𝒁𝒂𝒃𝒄𝒅𝒆𝒇𝒈𝒉𝒊𝒋𝒌𝒍𝑚𝑛𝑜𝑝𝒒𝒓𝒔𝒕𝒖𝒗𝒘𝒙𝒚𝒛0123456789"},{m:"𝒜ℬ𝒞𝒟ℰℱ𝒢ℋℐ𝒥𝒦ℒℳ𝒩𝒪𝒫𝒬ℛ𝒮𝒯𝒰𝒱𝒲𝒳𝒴𝒵𝒶𝒷𝒸𝒹ℯ𝒻ℊ𝒽𝒾𝒿𝓀𝓁𝓂𝓃ℴ𝓅𝓆𝓇𝓈𝓉𝓊𝓋𝓌𝓍𝓎𝓏0123456789"},{m:"𝓐𝓑𝓒𝓓𝓔𝓕𝓖𝓗𝓘𝓙𝓚𝓛𝓜𝓝𝓞𝓟𝓠𝓡𝓢𝓣𝓤𝓥𝓦𝓧𝓨𝓩𝓪𝓫𝓬𝓭𝓮𝓯𝓰𝓱𝓲𝓳𝓴𝓵𝓶𝓷𝓸𝓹𝓺𝓻𝓼𝓽𝓾𝓿𝔀𝔁𝔂𝔃0123456789"},{m:"𝔄𝔅ℭ𝔇𝔈𝔉𝔊ℌℑ𝔍𝔎𝔏𝔐𝔑𝔒𝔓𝔔ℜ𝔖𝔗𝔘𝔙𝔚𝔛𝔜𝔝𝔞𝔟𝔠𝔡™𝔣𝔤𝔥𝔦𝔧𝔨𝔩𝔪𝔫𝔬𝔭𝔮𝔯𝔰𝔱𝔲𝔳𝔴𝔵𝔶𝔷0123456789"},{m:"𝕬𝕭𝕮𝕯𝕰𝕱𝕲𝕳𝕴𝕵𝕶𝕷𝕸𝕹𝕺𝕻𝕼𝕽𝕾𝕿𝖀𝖁𝖂𝖃𝖄𝖅𝖆𝖇𝖈𝖉𝖊𝖋𝖌𝖍𝖎𝖏𝖐𝖑𝖒𝖓𝖔𝖕𝖖𝖗𝖘𝖙𝖚𝖛𝖜𝖝𝖞𝖟0123456789"},{m:"𝔸𝔹ℂ𝔻𝔼𝔽𝔾ℍ𝕀𝕁𝕂𝕃𝕄ℕ𝕆ℙℚℝ𝕊𝕋𝕌𝕍𝕎𝕏𝕐ℤ𝕒𝕓𝕔𝕕𝕖𝕗𝕘𝕙🇮🇳𝕛𝕜𝕝𝕞𝕟𝕠𝐩𝕢𝕣𝕤𝕥𝕦𝕧𝕨𝕩𝕪𝕫𝟘𝟙𝟚𝟛𝟜𝟝𝟞𝟟𝟠𝟡"},{m:"𝖠𝖡𝖢𝖣𝖤𝖥𝖦𝖧𝖨𝖩𝖪𝖫𝖬𝖭𝖮𝖯𝖰𝖱𝖲𝖳𝖴𝖵𝖶𝖷𝖸𝖹𝖺𝖻𝖼𝖽𝖾𝖿𝗀𝗁𝗂𝗃𝗄𝗅𝗆 n 𝗈𝗉𝗊𝗋 s 𝗍𝗎𝗏𝗐𝗑𝗒𝗓𝟢𝟣𝟤𝟥𝟦𝟧𝟨𝟩𝟪𝟫"},{m:"𝗔𝗕𝗖𝗗𝗘𝗙𝗚𝗛𝗜ＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺａｂｃｄｅ𝐟𝐠𝐡𝐢𝐣𝐤𝐥ｍ nｏ𝐩𝗾𝗿𝘀𝘁ｕｖｗ𝘅ｙ𝘇𝟬𝟭𝟮𝟯𝟰𝟱𝟲𝟳𝟴𝟵"},{m:"ⒶⒷⒸⒹⒺⒻⒼⒽⒾⒿⓀⓁⓂⓃⓄⓅⓆⓇⓈⓉⓊⓋⓌⓍⓎⓏⓐⓑⓒⓓⓔⓕⓖⓗⓘⓙⓚⓛⓜ n ⓞⓟⓠⓡⓢⓣⓤⓥⓦⓧⓨⓩ⓪①②③④⑤⑥⑦⑧⑨"},{m:"🅐🅑🅒🅓🅔🅕🅖🅗🅘🅙🅚🅛🅜🅝🅞🅟🅠🅡🅢🅣🅤🅥🅦🅧🅨🅩🅐🅑🅒🅓🅔🅕🅖🅗🅘🅙🅚🅛🅜🅝🅞🅟🅠🅡🅢🅣🅤🅥🅦🅧🅨🅩⓿➊➋➌➍➎➏➐➑➒"},{m:"₳฿₵ĐɆ₣₲ⱧłJ₭Ⱡ₥₦Ø₱QⱤ₴₮ɄV₩ӾɎⱫ₳฿₵ĐɆ₣₲ⱧłJ₭Ⱡ₥₦Ø₱QⱤ₴₮ɄV₩ӾɎⱫ0123456789"},{m:"卂乃匚ᗪ乇千Ꮆ卄丨ﾌҜㄥ爪几ㄖ卩Ҝ尺丂ㄒㄩᐯ山乂ㄚ乙卂乃匚ᗪ乇千Ꮆ卄丨ﾌҜㄥ爪几ㄖ卩Ҝ尺丂ㄒㄩᐯ山乂ㄚ乙0123456789"},{m:"ﾑ乃cd乇ｷgんﾉﾌズﾚM刀oｱ尺丂ｲu√Wﾒﾘ乙ﾑ乃cd乇ｷgんﾉﾌズﾚM刀oｱ尺丂ｲu√Wﾒﾘ乙0123456789"},{m:"ᗩᗷᑕᗪEᖴGᕼIᒍKᒪMᑎOᑭᑫᖇᔕTᑌᐯᗯ᙭YᘔᗩᗷᑕᗪEᖴGᕼIᒍKᒪMᑎOᑭᑫᖇᔕTᑌᐯᗯ᙭Yᘔ0123456789"},{m:"αв¢∂єƒgнιנкℓмησρqяѕтυνωкуζαв¢∂єƒgнιנкℓмησρqяѕтυνωкуζ0123456789"},{m:"ค๒ς๔єŦﻮђเןкɭ๓ภ๏קợгรՇยงฬאץչค๒ς๔єŦﻮђเןкɭ๓ภ๏קợгรՇยงฬאץչ0123456789"},{m:"ǟɮƈɖɛʄɢɦɨʝӄʟʍռօքզʀֆтʊʋաӼʏʐǟɮƈɖɛʄɢɦɨʝӄʟʍռօքզʀֆтʊʋաӼʏʐ0123456789"},{m:"ᏗᏰፈᎴᏋᎦᎶᏂᎥᏠᏦᏝᎷ n ᎧᎮᎤᏒᏕᏖᏬᏉᏇጀᎩፚᏗᏰፈᎴᏋᎦᎶᏂᎥᏠᏦ奠奠奠奠奠奠奠奠奠奠奠奠奠奠奠0123456789"},{m:"ค๖ƈđēfɠɦıĵƙℓɱŋơ℘զŗşŧų۷ɯҳყʑค๖ƈđēfɠɦıĵƙℓɱŋơ℘զŗşŧų۷ɯҳყʑ0123456789"},{m:"ɐqɔpǝɟƃɥᴉɾʞlɯuodbɹsʇnʌʍxʎzɐqɔpǝɟƃɥᴉɾʞlɯuodbɹsʇnʌʍxʎz0123456789"},{m:"🅰🅱🅲🅳🅴🅵🅶🅷🅸🅹🅺 n 🅻🅼 n 🅾🅿🆀🆁🆂🆃🆄🆅🆆🆇🆈🆉🅰🅱🅲🅳🅴🅵🅶🅷🅸🅹🅺 n 🅻🅼 n 🅾🅿🆀🆁🆂🆃🆄🆅🆆🆇🆈🆉0123456789"}];
+// Cleaned list: No duplicates, no glitches, no "Chinese-style" garble.
+const bases = [
+  {m:"𝐀𝐁𝐂𝐃𝐄𝐅𝐆𝐇𝐈𝐉𝐊𝐋𝐌𝐍𝐎𝐏𝐐𝐑𝐒𝐓𝐔𝐕𝐖𝐗𝐘𝐙𝐚𝐛𝐜𝐝𝐞𝐟𝐠𝐡𝐢𝐣𝐤𝐥𝐦𝐧𝐨𝐩𝐪𝐫𝐬𝐭𝐮𝐯𝐰𝐱𝐲𝐳𝟎𝟏𝟐𝟑𝟒𝟓𝟔𝟕𝟖𝟗"}, // Bold Serif
+  {m:"𝐴𝐵𝐶𝐷𝐸𝐹𝐺𝐻𝐼𝐽ＫＬ𝑀𝑁𝑂𝑃𝑄𝑅𝑆𝑇𝑈𝑉𝑊𝑋𝑌𝑍𝑎𝑏𝑐𝑑𝑒𝑓𝑔ℎ𝑖𝑗𝑘𝑙𝑚𝑛𝑜𝑝𝑞𝑟𝑠𝑡𝑢𝑣𝑤𝑥𝑦𝑧0123456789"}, // Italic Serif
+  {m:"𝑨𝑩𝑪𝑫𝑬𝑭𝑮𝑯𝑰𝑱𝑲𝑳𝑴𝑵𝑶𝑷𝑸𝑹𝑺𝑻𝑼𝑽𝑾𝑿𝒀𝒁𝒂𝒃𝒄𝒅𝒆𝒇𝒈𝒉𝒊𝒋𝒌𝒍𝒎𝒏𝒐𝒑𝒒𝒓𝒔𝒕𝒖𝒗𝒘𝒙𝒚𝒛0123456789"}, // Bold Italic
+  {m:"𝒜ℬ𝒞𝒟ℰℱ𝒢ℋℐ𝒥𝒦ℒℳ𝒩𝒪𝒫𝒬ℛ𝒮𝒯𝒰𝒱𝒲𝒳𝒴𝒵𝒶𝒷𝒸𝒹ℯ𝒻ℊ𝒽𝒾𝒿𝓀𝓁𝓂𝓃ℴ𝓅𝓆𝓇𝓈𝓉𝓊𝓋𝓌𝓍𝓎𝓏0123456789"}, // Script
+  {m:"𝓐𝓑𝓒𝓓𝓔𝓕𝓖𝓗𝓘𝓙𝓚𝓛𝓜𝓝𝓞𝓟𝓠𝓡𝓢𝓣𝓤𝓥𝓦𝓧𝓨𝓩𝓪𝓫𝓬𝓭𝓮𝓯𝓰𝓱𝓲𝓳𝓴𝓵𝓶𝓷𝓸𝓹𝓺𝓻𝓼𝓽𝓾𝓿𝔀𝔁𝔂𝔃0123456789"}, // Bold Script
+  {m:"𝔄𝔅ℭ𝔇𝔈𝔉𝔊ℌℑ𝔍𝔎𝔏𝔐𝔑𝔒𝔓𝔔ℜ𝔖𝔗𝔘𝔙𝔚𝔛𝔜𝔝𝔞𝔟𝔠𝔡𝔢𝔣𝔤𝔥𝔦𝔧𝔨𝔩𝔪𝔫𝔬𝔭𝔮𝔯𝔰𝔱𝔲𝔳𝔴𝔵𝔶𝔷0123456789"}, // Fraktur
+  {m:"𝕬𝕭𝕮𝕯𝕰𝕱𝕲𝕳𝕴𝕵𝕶𝕷𝕸𝕹𝕺𝕻𝕼𝕽𝕾𝕿𝖀𝖁𝖂𝖃𝖄𝖅𝖆𝖇𝖈𝖉𝖊𝖋𝖌𝖍𝖎𝖏𝖐𝖑𝖒𝖓𝖔𝖕𝖖𝖗𝖘𝖙𝖚𝖛𝖜𝖝𝖞𝖟0123456789"}, // Bold Fraktur
+  {m:"𝔸𝔹ℂ𝔻𝔼𝔽𝔾ℍ𝕀𝕁𝕂𝕃𝕄ℕ𝕆ℙℚℝ𝕊𝕋𝕌𝕍𝕎𝕏𝕐ℤ𝕒𝕓𝕔𝕕𝕖𝕗𝕘𝕙𝕚𝕛𝕜𝕝𝕞𝕟𝕠𝕡𝕢𝕣𝕤𝕥𝕦𝕧𝕨𝕩𝕪𝕫𝟘𝟙𝟚𝟛𝟜𝟝𝟞𝟟𝟠𝟡"}, // Double Struck
+  {m:"𝖠𝖡𝖢𝖣𝖤𝖥𝖦𝖧𝖨𝖩𝖪𝖫𝖬𝖭𝖮𝖯𝖰𝖱𝖲𝖳𝖴𝖵𝖶𝖷𝖸𝖹𝖺𝖻𝖼𝖽𝖾𝖿𝗀𝗁𝗂𝗃𝗄𝗅𝗆𝗇𝗈𝗉𝗊𝗋𝗌𝗍𝗎𝗏𝗐𝗑𝗒𝗓𝟢𝟣𝟤𝟥𝟦𝟧𝟨𝟩𝟪𝟫"}, // Sans Serif
+  {m:"𝗔𝗕𝗖𝗗𝗘𝗙𝗚𝗛𝗜𝗝𝗞𝗟𝗠𝗡𝗢𝗣𝗤𝗥𝗦𝗧𝗨𝗩𝗪𝗫𝗬𝗭𝗮𝗯𝗰𝗱𝗲𝗳𝗴𝗵𝗶𝗷𝗸𝗹𝗺𝗻𝗼𝗽𝗾𝗿𝘀𝘁𝘂𝘃𝘄𝘅𝘆𝘇𝟬𝟭𝟮𝟯𝟰𝟱𝟲𝟳𝟴𝟵"}, // Bold Sans
+  {m:"𝘈𝘉𝘊𝘋𝘌𝘍𝘎𝘏𝘐𝘑𝘒𝘓𝘔𝘕𝘖𝘗𝘘𝘙𝘚𝘛𝘜𝘝𝘞𝘟𝘠𝘡𝘢𝘣𝘤𝘥𝘦𝘧𝘨𝘩𝘪𝘫𝘬𝘭𝘮𝘯𝘰𝘱𝘲𝘳𝘴𝘵𝘶𝘷𝘸𝘹𝘺𝘻0123456789"}, // Italic Sans
+  {m:"𝙰𝙱𝙲𝙳𝙴𝙵𝙶𝙷𝙸𝙹𝙺𝙻𝙼𝙽𝙾𝙿𝚀𝚁𝚂𝚃𝚄𝚅𝚆𝚇𝚈𝚉𝚊𝚋𝚌𝚍𝚎𝚏𝚐𝚑𝚒𝚓𝚔𝚕𝚖𝚗𝚘𝚙𝚚𝚛𝚜𝚝𝚞𝚟𝚠𝚡𝚢𝚣𝟶𝟷𝟸𝟹𝟺𝟻𝟼𝟽𝟾𝟿"}, // Monospace
+  {m:"ⒶⒷⒸⒹⒺⒻⒼⒽⒾⒿⓀⓁⓂⓃⓄⓅⓆⓇⓈⓉⓊⓋⓌⓍⓎⓏⓐⓑⓒⓓⓔⓕⓖⓗⓘⓙⓚⓛⓜⓝⓞⓟⓠⓡⓢⓣⓤⓥⓦⓧⓨⓩ⓪①②③④⑤⑥⑦⑧⑨"}, // Circled
+  {m:"🅐🅑🅒🅓🅔🅕🅖🅗🅘🅙🅚🅛🅜🅝🅞🅟🅠🅡🅢🅣🅤🅥🅦🅧🅨🅩🅐🅑🅒🅓🅔🅕🅖🅗🅘🅙🅚🅛🅜🅝🅞🅟🅠🅡🅢🅣🅤🅥🅦🅧🅨🅩⓿➊➋➌➍➎➏➐➑➒"}  // Black Circled
+];
 const decorators = [" ","★|★","『|』","【|】","꧁|꧂","˗ˏ|ˎ˗","⦗|⦘","⁅|⁆","☾|☽","×|×","☆|☆","●|●","■|■","→|←","⚡|⚡","☠|☠","☮|☮","✈|✈","❤|❤","♛|♛","∞|∞","§|§","₪|₪","↺|↻","❄|❄","☁|☁","☂|☂","✂|✂","✎|✎","⚔|⚔","⚓|⚓","⚙|⚙","⚛|⚛","⚜|⚜","⚠|⚠","✧|✧","✩|✩","✪|✪","✫|✫","✬|✬","✭|✭","✮|✮","✯|✯","✰|✰","✱|✱","✲|✲","✳|✳"];
 function genFonts(){const val=document.getElementById('font-input').value,resBox=document.getElementById('font-results');resBox.innerHTML="";if(!val)return;let count=0;bases.forEach(b=>{let baseTxt="";const mapArr=Array.from(b.m);for(let char of val){let idx=chars.indexOf(char);baseTxt+=(idx!==-1&&mapArr[idx])?mapArr[idx]:char;}addF(baseTxt,resBox);count++;decorators.forEach(dec=>{let [p,s]=dec.split("|");addF(p+baseTxt+(s||p),resBox);count++;});});document.getElementById('font-count').innerText=count+" STYLES";}
 function addF(t,b){let d=document.createElement('div');d.className="font-item";d.innerText=t;d.onclick=()=>{navigator.clipboard.writeText(t);playShutter();};b.appendChild(d);}
 
-// --- ⚡ NEON GIF ENGINE (FIXED & ROBUST) ---
+// --- ⚡ NEON GIF ENGINE (PIXEL/DEVICE AGNOSTIC) ---
 const workerBlob = new Blob([`importScripts('https://cdnjs.cloudflare.com/ajax/libs/gif.js/0.2.0/gif.worker.js');`], { type: 'application/javascript' });
 const workerUrl = URL.createObjectURL(workerBlob);
 
@@ -334,61 +309,44 @@ function resetGifProject() {
   v.src=''; o.style.display='none'; v.style.display='none';
   dlBox.style.display='none'; resetBox.style.display='none';
   go.style.display='block'; go.disabled=false; 
-  upBtn.disabled=false; speed.disabled=false; zoom.disabled=false;
+  upBtn.disabled=false; zoom.disabled=false; speed.disabled=false;
   msg.classList.remove('active');
-  gfInput.value = '';
   zoom.value=100; zv.innerText="100%";
+  gfInput.value = '';
   gifX = 0; gifY = 0; v.style.transform = `translate3d(0px, 0px, 0)`;
 }
 
-// 1. Upload & Aspect Ratio Handling (FIXED for Non-1:1)
+// 1. Upload
 gfInput.onchange=(e)=>{ 
     const file=e.target.files[0]; if(!file)return;
     v.style.display='block'; o.style.display='none'; dlBox.style.display='none'; resetBox.style.display='none';
     v.src=URL.createObjectURL(file); v.playbackRate=parseFloat(speed.value);
     v.onloadedmetadata=()=>{
-        const nw=v.videoWidth; const nh=v.videoHeight;
-        const aspect=nw/nh; 
-        gifX = 0; gifY = 0;
-        
-        // CSS Sizing Logic: "Cover" the 320x320 box
-        if(aspect > 1){ 
-            v.style.height='320px'; v.style.width='auto';
-            const scaledWidth = 320 * aspect;
-            gifX = (320 - scaledWidth) / 2;
-        } else { 
-            v.style.width='320px'; v.style.height='auto';
-            const scaledHeight = 320 / aspect;
-            gifY = (320 - scaledHeight) / 2;
-        }
-        zoom.value=100; zv.innerText="100%";
-        v.style.transform = `translate3d(${gifX}px, ${gifY}px, 0)`;
+        const aspect=v.videoWidth/v.videoHeight; 
+        gifX = 0; gifY = 0; v.style.transform = `translate3d(0px, 0px, 0)`;
+        if(aspect>1){ v.style.height='320px'; v.style.width=(320*aspect)+'px'; } 
+        else { v.style.width='320px'; v.style.height=(320/aspect)+'px'; }
         v.play();
     };
 };
 
-// 2. ZOOM LOGIC (RESTORED & FIXED)
+// 2. Fixed Zoom
 zoom.oninput = function() {
     if(!v.src) return;
     zv.innerText = this.value + '%';
     const z = parseInt(this.value) / 100;
+    const aspect = v.videoWidth / v.videoHeight;
+    let bW, bH;
+    if(aspect > 1) { bH = 320; bW = 320 * aspect; } 
+    else { bW = 320; bH = 320 / aspect; }
     
-    // Original "Cover" Dimensions
-    const nw = v.videoWidth;
-    const nh = v.videoHeight;
-    const aspect = nw / nh;
-    
-    let baseW, baseH;
-    if(aspect > 1) { baseH = 320; baseW = 320 * aspect; }
-    else { baseW = 320; baseH = 320 / aspect; }
-    
-    // Apply Zoom
-    const newW = baseW * z;
-    const newH = baseH * z;
+    // Apply Size
+    const newW = bW * z;
+    const newH = bH * z;
     v.style.width = newW + 'px';
     v.style.height = newH + 'px';
-    
-    // Re-clamp coordinates if zooming out creates empty space
+
+    // Clamp Coordinates
     if (gifX > 0) gifX = 0;
     if (gifX < -(newW - 320)) gifX = -(newW - 320);
     if (gifY > 0) gifY = 0;
@@ -397,21 +355,16 @@ zoom.oninput = function() {
     v.style.transform = `translate3d(${gifX}px, ${gifY}px, 0)`;
 };
 
-// 3. Dragging Logic
+// 3. GPU Dragging
 const sD=(x,y)=>{ if(!v.src)return; isDragging=true; startX=x; startY=y; vp.style.cursor='grabbing'; };
 const dD=(x,y)=>{ 
   if(!isDragging)return; 
   const dx=x-startX, dy=y-startY; 
   startX = x; startY = y; 
   gifX += dx; gifY += dy;
-  
-  // Dynamic Clamping based on current (zoomed) size
-  const rect = v.getBoundingClientRect();
-  const vw = rect.width; const vh = rect.height;
-  
+  const vw=parseFloat(v.style.width), vh=parseFloat(v.style.height); 
   if(gifX>0) gifX=0; if(gifX<-(vw-320)) gifX=-(vw-320); 
-  if(gifY>0) gifY=0; if(gifY<-(vh-320)) gifY=-(vh-320);
-
+  if(gifY>0) gifY=0; if(gifY<-(vh-320)) gifY=-(vh-320); 
   v.style.transform = `translate3d(${gifX}px, ${gifY}px, 0)`;
 };
 vp.onmousedown=e=>sD(e.pageX,e.pageY); window.onmousemove=e=>dD(e.pageX,e.pageY); window.onmouseup=()=>{ isDragging=false; vp.style.cursor='move'; };
@@ -419,10 +372,10 @@ vp.ontouchstart=e=>sD(e.touches[0].pageX, e.touches[0].pageY); window.ontouchmov
 
 speed.oninput=()=>{ sv.innerText=speed.value+'x'; if(v.src)v.playbackRate=parseFloat(speed.value); };
 
-// 4. Processing (FIXED COORDINATE MAPPING)
+// 4. Processing (PIXEL-PERFECT BOUNDING RECT METHOD)
 go.onclick=()=>{
     if(!v.src)return;
-    go.disabled = true; upBtn.disabled = true; speed.disabled = true; zoom.disabled = true;
+    go.disabled = true; upBtn.disabled = true; zoom.disabled = true; speed.disabled = true;
     msg.innerText="Processing..."; msg.classList.add('active');
     
     const gif=new GIF({workers:2, quality:10, width:480, height:480, workerScript:workerUrl});
@@ -430,25 +383,28 @@ go.onclick=()=>{
     const fps=15, duration=v.duration, playbackSpeed=parseFloat(speed.value), capVid=document.createElement('video');
     
     capVid.src=v.src; capVid.muted=true; capVid.playsInline=true;
+    
+    // --- THIS IS THE PIXEL FIX ---
+    // Instead of tracking touches, we check exactly where the browser drew the video.
+    // This handles any scale, zoom, pixel density, or device quirk.
+    const rectV = v.getBoundingClientRect();
+    const rectVP = vp.getBoundingClientRect();
+    
+    // Math: Where is the viewport relative to the video?
+    const offsetLeft = rectVP.left - rectV.left;
+    const offsetTop = rectVP.top - rectV.top;
+    
+    // Scale: How big is the video actually vs how it looks on screen?
+    const scaleX = v.videoWidth / rectV.width;
+    const scaleY = v.videoHeight / rectV.height;
+    
+    // Calculate Source Coords
+    const sx = offsetLeft * scaleX;
+    const sy = offsetTop * scaleY;
+    const sw = 320 * scaleX; // 320 is viewport fixed size
+    const sh = 320 * scaleY;
+
     capVid.onloadeddata=()=>{
-        // KEY FIX: Calculate ratio between Natural Video Size and Rendered CSS Size
-        const rect = v.getBoundingClientRect(); // What user sees (includes zoom)
-        const renderedW = rect.width;
-        
-        // Ratio: How many video pixels equal 1 screen pixel
-        const ratio = v.videoWidth / renderedW;
-        
-        // Relative Position mapping
-        const parentRect = vp.getBoundingClientRect(); // The 320x320 box
-        const offsetX = parentRect.left - rect.left; 
-        const offsetY = parentRect.top - rect.top;
-        
-        // Map to source coordinates
-        const sx = offsetX * ratio;
-        const sy = offsetY * ratio;
-        const sw = 320 * ratio; 
-        const sh = 320 * ratio; 
-        
         let cTime=0;
         const captureFrame=()=>{
             if(cTime>=duration){ msg.innerText="Encoding..."; gif.render(); return; }
@@ -457,6 +413,7 @@ go.onclick=()=>{
         capVid.onseeked=()=>{
             ctx.fillStyle = '#000000'; 
             ctx.fillRect(0, 0, 480, 480);
+            // Draw exact visible area
             ctx.drawImage(capVid, sx, sy, sw, sh, 0, 0, 480, 480);
             
             gif.addFrame(ctx,{copy:true, delay:(1000/fps)/playbackSpeed});
@@ -485,31 +442,14 @@ function playShutter(){ if(audioCtx.state!=='running')audioCtx.resume(); const o
 
 // --- 🖼️ FRAME ENGINE ---
 function d(){ x.clearRect(0,0,800,800); x.save(); x.beginPath(); x.arc(400,400,cfg.m,0,6.28); x.clip(); if(i.src){ let w=i.width*cfg.s, h=i.height*cfg.s; x.save(); x.translate(cfg.x,cfg.y); x.rotate(cfg.r*Math.PI/180); x.drawImage(i,-w/2,-h/2,w,h); x.restore(); } x.restore(); if(f.src) x.drawImage(f,0,0,800,800); }
-function handleFile(e){ 
-    let r=new FileReader(); 
-    r.onload=v=>{ 
-        let n=new Image(); 
-        n.onload=()=>{
-            i=n; cfg.s=Math.max(800/i.width,800/i.height); cfg.x=400; cfg.y=400; cfg.r=0; d(); playClick();
-            saveBtn.disabled = false;
-        }; 
-        n.src=v.target.result; 
-    }; 
-    r.readAsDataURL(e.target.files[0]); 
-}
+function handleFile(e){ let r=new FileReader(); r.onload=v=>{ let n=new Image(); n.onload=()=>{i=n; cfg.s=Math.max(800/i.width,800/i.height); cfg.x=400; cfg.y=400; cfg.r=0; d(); playClick();}; n.src=v.target.result; }; r.readAsDataURL(e.target.files[0]); }
 function handleFrame(e){ let r=new FileReader(); r.onload=v=>{ let n=new Image(); n.onload=()=>{f=n; d(); playClick();}; n.src=v.target.result; }; r.readAsDataURL(e.target.files[0]); }
 function updateZ(v){ cfg.s=parseFloat(v); zVal.innerText=Math.round(v*100)+"%"; d(); }
 function updateR(v){ cfg.r=parseInt(v); rVal.innerText=v+"°"; d(); }
 function updateM(v){ cfg.m=parseInt(v); mVal.innerText=v+"px"; d(); }
 function centerSubject(){ cfg.x=400; cfg.y=400; cfg.r=0; rSl.value=0; d(); playShutter(); }
-function resetProject(){ 
-    i=new Image(); f=new Image(); cfg={s:1,m:375,x:400,y:400,r:0}; zSl.value=1; rSl.value=0; mSl.value=375; d(); playShutter(); 
-    saveBtn.disabled = true;
-}
-function downloadPic(){ 
-    if(saveBtn.disabled) return;
-    let a=document.createElement('a'); a.download=`Arcade_${Date.now()}.png`; a.href=c.toDataURL(); a.click(); playShutter(); 
-}
+function resetProject(){ i=new Image(); f=new Image(); cfg={s:1,m:375,x:400,y:400,r:0}; zSl.value=1; rSl.value=0; mSl.value=375; d(); playShutter(); }
+function downloadPic(){ d(); let a=document.createElement('a'); a.download=`Arcade_${Date.now()}.png`; a.href=c.toDataURL(); a.click(); playShutter(); }
 function updS(el){ if(el.parentElement.classList.contains('ui-gif')) return; el.style.setProperty('--v', ((el.value-el.min)/(el.max-el.min)*100)+'%'); }
 document.querySelectorAll('input[type=range]').forEach(el => { el.addEventListener('input', () => updS(el)); updS(el); });
 
