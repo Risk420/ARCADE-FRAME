@@ -6,6 +6,7 @@
 <title>Arcade Studio</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gif.js/0.2.0/gif.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
 <style>
   /* --- GLOBAL SETTINGS --- */
@@ -72,12 +73,20 @@
   .active-sec { display: flex; }
 
   /* --- 🖼️ FRAME STUDIO CSS --- */
+  /* NEON PULSE ANIMATION RESTORED */
+  @keyframes neonPulse {
+    0% { box-shadow: 0 0 20px #ff0000, inset 0 0 10px #ff0000; border-color: #ff0000; }
+    50% { box-shadow: 0 0 35px #ff0000, inset 0 0 20px #ff0000; border-color: #ff3333; }
+    100% { box-shadow: 0 0 20px #ff0000, inset 0 0 10px #ff0000; border-color: #ff0000; }
+  }
+
   #box { 
     position: relative; width: 310px; height: 310px; border-radius: 50%; overflow: hidden; 
     border: 3px solid #ff0000; box-sizing: border-box; 
     background-image: linear-gradient(45deg, #1a1a1c 25%, transparent 25%), linear-gradient(-45deg, #1a1a1c 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #1a1a1c 75%), linear-gradient(-45deg, transparent 75%, #1a1a1c 75%);
     background-color: transparent; background-size: 20px 20px;
-    box-shadow: 0 0 20px rgba(0,0,0,0.5); z-index: 10; 
+    animation: neonPulse 2s infinite ease-in-out; /* PULSE ADDED */
+    z-index: 10; 
   }
   canvas#c { position: absolute; top: 0; left: 0; width: 310px; height: 310px; z-index: 15; touch-action: none; }
   .ui { margin-top: 20px; width: 310px; display: flex; flex-direction: column; gap: 6px; }
@@ -97,14 +106,15 @@
   .stage { position: relative; width: 320px; height: 320px; display: flex; align-items: center; justify-content: center; margin-bottom: 30px; touch-action: none; }
   .led-ring { position: absolute; inset: -15px; border-radius: 50%; background: conic-gradient(from 0deg, transparent, var(--neon), var(--purple), transparent); animation: rotate 2s linear infinite; filter: blur(20px); z-index: 1; pointer-events: none; }
   
-  .viewport { position: relative; z-index: 5; width: 100%; height: 100%; border-radius: 50%; overflow: hidden; background-color: #000; box-shadow: inset 0 0 20px #000; touch-action: none; cursor: move; }
+  .viewport { position: relative; z-index: 5; width: 100%; height: 100%; border-radius: 50%; overflow: hidden; background-color: #000; box-shadow: inset 0 0 20px #000; touch-action: none; display: flex; justify-content: center; align-items: center; } /* CENTERED */
   
   /* GPU ACCELERATION ENABLED ON VIDEO */
   #v { 
-    position: absolute; top: 0; left: 0; 
-    min-width: 100%; min-height: 100%; 
+    /* Removed absolute positioning for stability */
+    max-width: 100%; max-height: 100%; 
+    width: 320px; height: 320px; /* Default sizing */
     pointer-events: none; 
-    transform-origin: top left; 
+    object-fit: cover;
     will-change: transform; 
   }
   #o { width: 100%; height: 100%; object-fit: cover; display: none; }
@@ -147,6 +157,11 @@
   
   .btn-inner { position: relative; display: block; text-decoration: none; text-align: center; color: white; background: #000; padding: 12px 30px; border-radius: 48px; font-weight: 900; font-size: 14px; z-index: 1; cursor: pointer; border: none; width: 100%; box-sizing: border-box; }
   input[type=file], #yt-player { display: none; }
+
+  /* --- 📱 NEON QR CSS --- */
+  #qr-result { margin-top: 20px; padding: 15px; background: white; border-radius: 10px; display: none; }
+  .color-opts { display: flex; gap: 10px; margin-bottom: 20px; width: 100%; justify-content: center; }
+  .c-btn { width: 30px; height: 30px; border-radius: 50%; border: 2px solid #fff; cursor: pointer; }
 </style>
 </head>
 <body onclick="startAudio()">
@@ -160,6 +175,7 @@
       <button id="nav-frame" class="active-link" onclick="changeStudio('frame')">🖼️ Frame Studio</button>
       <button id="nav-font" onclick="changeStudio('font')">✍️ Font Generator</button>
       <button id="nav-gif" onclick="changeStudio('gif')">⚡ GIF Maker</button>
+      <button id="nav-qr" onclick="changeStudio('qr')">📱 Neon QR Studio</button>
     </div>
   </div>
 
@@ -247,6 +263,21 @@
     </div>
 </div>
 
+<div id="qr-studio" class="studio-sec">
+    <input type="text" id="qr-input" class="font-input" placeholder="Enter URL or Text" style="border-color:#00ff00;">
+    
+    <div class="label-row" style="justify-content:center;">NEON COLOR</div>
+    <div class="color-opts">
+        <div class="c-btn" style="background:#00ffff;" onclick="setQrColor('#00ffff')"></div>
+        <div class="c-btn" style="background:#ff00ff;" onclick="setQrColor('#ff00ff')"></div>
+        <div class="c-btn" style="background:#00ff00;" onclick="setQrColor('#00ff00')"></div>
+        <div class="c-btn" style="background:#ffff00;" onclick="setQrColor('#ffff00')"></div>
+    </div>
+
+    <button class="btn-go" style="border-color:#00ff00; color:#00ff00;" onclick="genQR()">GENERATE QR CODE</button>
+    <div id="qr-result"></div>
+</div>
+
 <script src="https://www.youtube.com/iframe_api"></script>
 <script>
 const c=document.getElementById('c'),x=c.getContext('2d'),zSl=document.getElementById('z'),rSl=document.getElementById('r'),mSl=document.getElementById('m'),panel=document.getElementById('menu-panel'),mStat=document.getElementById('m-status'), sName=document.getElementById('studio-name'), sSub=document.getElementById('studio-sub'), swMenu=document.getElementById('switch-menu');
@@ -259,7 +290,8 @@ function changeStudio(mode) {
   swMenu.style.display = 'none'; panel.classList.remove('open');
   if(mode === 'frame') { document.getElementById('frame-studio').classList.add('active-sec'); sName.innerText = "ARCADE"; sSub.innerText = "FRAME STUDIO"; }
   else if(mode === 'font') { document.getElementById('font-studio').classList.add('active-sec'); sName.innerText = "FONTS"; sSub.innerText = "GENERATOR STUDIO"; }
-  else { document.getElementById('gif-studio').classList.add('active-sec'); sName.innerText = "NEON"; sSub.innerText = "GIF STUDIO"; }
+  else if(mode === 'gif') { document.getElementById('gif-studio').classList.add('active-sec'); sName.innerText = "NEON"; sSub.innerText = "GIF STUDIO"; }
+  else if(mode === 'qr') { document.getElementById('qr-studio').classList.add('active-sec'); sName.innerText = "NEON"; sSub.innerText = "QR STUDIO"; }
 }
 
 window.onclick = e => {
@@ -292,8 +324,7 @@ const alphas = [
   {m:"🅐🅑🅒🅓🅔🅕🅖🅗🅘🅙🅚🅛🅜🅝🅞🅟🅠🅡🅢🅣🅤🅥🅦🅧🅨🅩🅐🅑🅒🅓🅔🅕🅖🅗🅘🅙🅚🅛🅜🅝🅞🅟🅠🅡🅢🅣🅤🅥🅦🅧🅨🅩⓿➊➋➌➍➎➏➐➑➒"}, // Black Circled
   {m:"ＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚ０１２３４５６７８９"}, // Wide
   {m:"⒜⒝⒞⒟⒠⒡⒢⒣⒤⒥⒦⒧⒨⒩⒪⒫⒬⒭⒮⒯⒰⒱⒲⒳⒴⒵⒜⒝⒞⒟⒠⒡⒢⒣⒤⒥⒦⒧⒨⒩⒪⒫⒬⒭⒮⒯⒰⒱⒲⒳⒴⒵0123456789"}, // Parens
-  {m:"🄐🄑🄒🄓🄔🄕🄖🄗🄘🄙🄚🄛🄜🄝🄞🄟🄠🄡🄢🄣🄤🄥🄦🄧🄨🄩🄐🄑🄒🄓🄔🄕🄖🄗🄘🄙🄚🄛🄜🄝🄞🄟🄠🄡🄢🄣🄤🄥🄦🄧🄨🄩0123456789"}, // Boxed
-  {m:"🇦🇧🇨🇩🇪🇫🇬🇭🇮🇯🇰🇱🇲🇳🇴🇵🇶🇷🇸🇹🇺🇻🇼🇽🇾🇿🇦🇧🇨🇩🇪🇫🇬🇭🇮🇯🇰🇱🇲🇳🇴🇵🇶🇷🇸🇹🇺🇻🇼🇽🇾🇿0123456789"}, // Regional
+  {m:"𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃0123456789"}, // Barcode
   {m:"🅰🅱🅲🅳🅴🅵🅶🅷🅸🅹🅺🅻🅼🅽🅾🅿🆀🆁🆂🆃🆄🆅🆆🆇🆈🆉🅰🅱🅲🅳🅴🅵🅶🅷🅸🅹🅺🅻🅼🅽🅾🅿🆀🆁🆂🆃🆄🆅🆆🆇🆈🆉0123456789"}, // Block
   {m:"ᴬᴮᶜᴰᴱᶠᴳᴴᴵᴶᴷᴸᴹᴺᴼᴾᑫᴿˢᵀᵁⱽᵂˣʸᶻᵃᵇᶜᵈᵉᶠᵍʰⁱʲᵏˡᵐⁿᵒᵖqʳˢᵗᵘᵛʷˣʸᶻ0123456789"}, // Tiny
   {m:"ₐbcdₑfgₕᵢⱼₖₗₘₙₒₚqᵣₛₜᵤᵥwₓyzₐbcdₑfgₕᵢⱼₖₗₘₙₒₚqᵣₛₜᵤᵥwₓyz0123456789"}, // Sub
@@ -302,7 +333,7 @@ const alphas = [
 ];
 
 // 2. SAFE DECORATIONS (ASCII ONLY - NO DIAMONDS GUARANTEED)
-// 45+ Styles x 15 Bases = 600+ Styles
+// 45+ Styles x 22 Bases = 900+ Styles
 const styles = [
   (s)=>s, // Normal
   (s)=>s.split('').join(' '), // Spaced
@@ -383,7 +414,7 @@ function genFonts(){
 }
 function addF(t,b){let d=document.createElement('div');d.className="font-item";d.innerText=t;d.onclick=()=>{navigator.clipboard.writeText(t);playShutter();};b.appendChild(d);}
 
-// --- ⚡ NEON GIF ENGINE (PIXEL/DEVICE AGNOSTIC) ---
+// --- ⚡ NEON GIF ENGINE (CENTERED & STABLE) ---
 const workerBlob = new Blob([`importScripts('https://cdnjs.cloudflare.com/ajax/libs/gif.js/0.2.0/gif.worker.js');`], { type: 'application/javascript' });
 const workerUrl = URL.createObjectURL(workerBlob);
 
@@ -391,10 +422,6 @@ const gfInput=document.getElementById('gfInput'), upBtn=document.getElementById(
 const speed=document.getElementById('speed'), sv=document.getElementById('sv'), zoom=document.getElementById('zoom'), zv=document.getElementById('zv'), go=document.getElementById('go'), msg=document.getElementById('msg');
 const dlBox=document.getElementById('dlBox'), dl=document.getElementById('dl'), resetBox=document.getElementById('resetBox');
 
-let isDragging=false, startX, startY;
-let gifX = 0, gifY = 0; // GPU Coordinates
-
-// Reset Project Logic
 function resetGifProject() {
   v.src=''; o.style.display='none'; v.style.display='none';
   dlBox.style.display='none'; resetBox.style.display='none';
@@ -403,66 +430,26 @@ function resetGifProject() {
   msg.classList.remove('active');
   zoom.value=100; zv.innerText="100%";
   gfInput.value = '';
-  gifX = 0; gifY = 0; v.style.transform = `translate3d(0px, 0px, 0)`;
+  v.style.transform = `scale(1)`;
 }
 
-// 1. Upload
 gfInput.onchange=(e)=>{ 
     const file=e.target.files[0]; if(!file)return;
     v.style.display='block'; o.style.display='none'; dlBox.style.display='none'; resetBox.style.display='none';
     v.src=URL.createObjectURL(file); v.playbackRate=parseFloat(speed.value);
-    v.onloadedmetadata=()=>{
-        const aspect=v.videoWidth/v.videoHeight; 
-        gifX = 0; gifY = 0; v.style.transform = `translate3d(0px, 0px, 0)`;
-        if(aspect>1){ v.style.height='320px'; v.style.width=(320*aspect)+'px'; } 
-        else { v.style.width='320px'; v.style.height=(320/aspect)+'px'; }
-        v.play();
-    };
+    v.onloadedmetadata=()=>{ v.play(); };
 };
 
-// 2. Fixed Zoom
 zoom.oninput = function() {
     if(!v.src) return;
     zv.innerText = this.value + '%';
     const z = parseInt(this.value) / 100;
-    const aspect = v.videoWidth / v.videoHeight;
-    let bW, bH;
-    if(aspect > 1) { bH = 320; bW = 320 * aspect; } 
-    else { bW = 320; bH = 320 / aspect; }
-    
-    // Apply Size
-    const newW = bW * z;
-    const newH = bH * z;
-    v.style.width = newW + 'px';
-    v.style.height = newH + 'px';
-
-    // Clamp Coordinates
-    if (gifX > 0) gifX = 0;
-    if (gifX < -(newW - 320)) gifX = -(newW - 320);
-    if (gifY > 0) gifY = 0;
-    if (gifY < -(newH - 320)) gifY = -(newH - 320);
-    
-    v.style.transform = `translate3d(${gifX}px, ${gifY}px, 0)`;
+    v.style.transform = `scale(${z})`;
 };
-
-// 3. GPU Dragging
-const sD=(x,y)=>{ if(!v.src)return; isDragging=true; startX=x; startY=y; vp.style.cursor='grabbing'; };
-const dD=(x,y)=>{ 
-  if(!isDragging)return; 
-  const dx=x-startX, dy=y-startY; 
-  startX = x; startY = y; 
-  gifX += dx; gifY += dy;
-  const vw=parseFloat(v.style.width), vh=parseFloat(v.style.height); 
-  if(gifX>0) gifX=0; if(gifX<-(vw-320)) gifX=-(vw-320); 
-  if(gifY>0) gifY=0; if(gifY<-(vh-320)) gifY=-(vh-320); 
-  v.style.transform = `translate3d(${gifX}px, ${gifY}px, 0)`;
-};
-vp.onmousedown=e=>sD(e.pageX,e.pageY); window.onmousemove=e=>dD(e.pageX,e.pageY); window.onmouseup=()=>{ isDragging=false; vp.style.cursor='move'; };
-vp.ontouchstart=e=>sD(e.touches[0].pageX, e.touches[0].pageY); window.ontouchmove=e=>{if(isDragging)dD(e.touches[0].pageX,e.touches[0].pageY);}; window.ontouchend=()=>{ isDragging=false; };
 
 speed.oninput=()=>{ sv.innerText=speed.value+'x'; if(v.src)v.playbackRate=parseFloat(speed.value); };
 
-// 4. Processing (PIXEL-PERFECT BOUNDING RECT METHOD)
+// GIF PROCESSING (CENTER CROP LOGIC)
 go.onclick=()=>{
     if(!v.src)return;
     go.disabled = true; upBtn.disabled = true; zoom.disabled = true; speed.disabled = true;
@@ -474,19 +461,25 @@ go.onclick=()=>{
     
     capVid.src=v.src; capVid.muted=true; capVid.playsInline=true;
     
-    const rectV = v.getBoundingClientRect();
-    const rectVP = vp.getBoundingClientRect();
-    const offsetLeft = rectVP.left - rectV.left;
-    const offsetTop = rectVP.top - rectV.top;
-    const scaleX = v.videoWidth / rectV.width;
-    const scaleY = v.videoHeight / rectV.height;
-    const sx = offsetLeft * scaleX;
-    const sy = offsetTop * scaleY;
-    const sw = 320 * scaleX; 
-    const sh = 320 * scaleY;
-
     capVid.onloadeddata=()=>{
         let cTime=0;
+        const scale = parseInt(zoom.value) / 100;
+        
+        // Calculate Draw Dimensions for Center Crop
+        const vw = capVid.videoWidth;
+        const vh = capVid.videoHeight;
+        const aspect = vw / vh;
+        let drawW, drawH;
+        
+        if (aspect > 1) { drawH = 480; drawW = 480 * aspect; }
+        else { drawW = 480; drawH = 480 / aspect; }
+        
+        drawW *= scale;
+        drawH *= scale;
+        
+        const dx = (480 - drawW) / 2;
+        const dy = (480 - drawH) / 2;
+
         const captureFrame=()=>{
             if(cTime>=duration){ msg.innerText="Encoding..."; gif.render(); return; }
             capVid.currentTime=cTime;
@@ -494,7 +487,7 @@ go.onclick=()=>{
         capVid.onseeked=()=>{
             ctx.fillStyle = '#000000'; 
             ctx.fillRect(0, 0, 480, 480);
-            ctx.drawImage(capVid, sx, sy, sw, sh, 0, 0, 480, 480);
+            ctx.drawImage(capVid, dx, dy, drawW, drawH);
             gif.addFrame(ctx,{copy:true, delay:(1000/fps)/playbackSpeed});
             cTime+=(1/fps);
             setTimeout(captureFrame, 10);
@@ -510,6 +503,26 @@ go.onclick=()=>{
         msg.classList.remove('active'); go.style.display='none';
     });
 };
+
+// --- QR LOGIC ---
+let qrColor = "#00ffff";
+function setQrColor(c){ qrColor=c; document.getElementById('qr-input').style.borderColor=c; }
+function genQR(){
+    const val = document.getElementById('qr-input').value;
+    const box = document.getElementById('qr-result');
+    box.innerHTML = "";
+    if(!val) return;
+    box.style.display="block";
+    new QRCode(box, {
+        text: val,
+        width: 200,
+        height: 200,
+        colorDark : qrColor,
+        colorLight : "#ffffff",
+        correctLevel : QRCode.CorrectLevel.H
+    });
+    playShutter();
+}
 
 // --- AUDIO & CORE ---
 function initAudio(){ if(!audioStarted){ audioCtx.resume().then(()=>{ audioStarted=true; if(player&&musicOn){ player.unMute(); player.playVideo(); }});}}
