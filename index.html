@@ -271,10 +271,10 @@ window.onclick = e => {
 function toggleSwitchMenu(e) { e.stopPropagation(); swMenu.style.display = swMenu.style.display === 'flex' ? 'none' : 'flex'; playClick(); }
 function toggleMenu(e) { e.stopPropagation(); initAudio(); panel.classList.toggle('open'); playClick(); }
 
-// --- ✍️ 800+ FONT ENGINE (SAFE MIX & MATCH) ---
+// --- ✍️ SAFE FONT ENGINE (NO SYMBOLS, NO REGIONAL, 400+ ASCII STYLES) ---
 const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
-// 1. SAFE ALPHABETS (Added Small Caps & Inverted)
+// 1. SAFE ALPHABETS (Only clean Unicode, no Flags, no Broken Letters)
 const alphas = [
   {m:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"}, // Normal
   {m:"𝐀𝐁𝐂𝐃𝐄𝐅𝐆𝐇𝐈𝐉𝐊𝐋𝐌𝐍𝐎𝐏𝐐𝐑𝐒𝐓𝐔𝐕𝐖𝐗𝐘𝐙𝐚𝐛𝐜𝐝𝐞𝐟𝐠𝐡𝐢𝐣𝐤𝐥𝐦𝐧𝐨𝐩𝐪𝐫𝐬𝐭𝐮𝐯𝐰𝐱𝐲𝐳𝟎𝟏𝟐𝟑𝟒𝟓𝟔𝟕𝟖𝟗"}, // Bold
@@ -290,33 +290,27 @@ const alphas = [
   {m:"𝙰𝙱𝙲𝙳𝙴𝙵𝙶𝙷𝙸𝙹𝙺𝙻𝙼𝙽𝙾𝙿𝚀𝚁𝚂𝚃𝚄𝚅𝚆𝚇𝚈𝚉𝚊𝚋𝚌𝚍𝚎𝚏𝚐𝚑𝚒𝚓𝚔𝚕𝚖𝚗𝚘𝚙𝚚𝚛𝚜𝚝𝚞𝚟𝚠𝚡𝚢𝚣𝟶𝟷𝟸𝟹𝟺𝟻𝟼𝟽𝟾𝟿"}, // Mono
   {m:"ⒶⒷⒸⒹⒺⒻⒼⒽⒾⒿⓀⓁⓂⓃⓄⓅⓆⓇⓈⓉⓊⓋⓌⓍⓎⓏⓐⓑⓒⓓⓔⓕⓖⓗⓘⓙⓚⓛⓜⓝⓞⓟⓠⓡⓢⓣⓤⓥⓦⓧⓨⓩ⓪①②③④⑤⑥⑦⑧⑨"}, // Circled
   {m:"🅐🅑🅒🅓🅔🅕🅖🅗🅘🅙🅚🅛🅜🅝🅞🅟🅠🅡🅢🅣🅤🅥🅦🅧🅨🅩🅐🅑🅒🅓🅔🅕🅖🅗🅘🅙🅚🅛🅜🅝🅞🅟🅠🅡🅢🅣🅤🅥🅦🅧🅨🅩⓿➊➋➌➍➎➏➐➑➒"}, // Black Circled
-  {m:"ＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚ０１２３４５６７８９"}, // Wide
-  {m:"ᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘQʀꜱᴛᴜᴠᴡxʏᴢᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘQʀꜱᴛᴜᴠᴡxʏᴢ0123456789"}, // Small Caps
-  {m:"zʎxʍʌnʇsɹbdouɯlʞɾᴉɥƃɟǝpɔqɐzʎxʍʌnʇsɹbdouɯlʞɾᴉɥƃɟǝpɔqɐ0123456789"}, // Inverted
+  {m:"ＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚ０１２３４５６７８９"} // Wide
 ];
 
-// 2. STYLES (Mixes with all 17 alphabets above -> 17 x 45 = 765 styles)
+// 2. STYLES (PURE ASCII - NO SYMBOLS THAT BREAK)
+// 15 Alphabets x 29 Styles = 435 Safe Variations
 const styles = [
   (s)=>s, // Normal
   (s)=>s.split('').join(' '), // Spaced
   (s)=>s.split('').join('  '), // Wide Spaced
-  (s)=>s.split('').join('.'), // Dot spaced
-  (s)=>s.split('').join('-'), // Dash spaced
-  (s)=>s.split('').join('~'), // Wavy spaced
+  (s)=>s.split('').join('.'), // Dot Spaced
+  (s)=>s.split('').join('-'), // Dash Spaced
+  (s)=>s.split('').join('='), // Equal Spaced
+  (s)=>s.split('').join('+'), // Plus Spaced
+  (s)=>s.split('').join('/'), // Slash Spaced
   (s)=>`[${s}]`, (s)=>`(${s})`, (s)=>`{${s}}`, (s)=>`<${s}>`,
   (s)=>`[[ ${s} ]]`, (s)=>`(( ${s} ))`, (s)=>`{{ ${s} }}`, (s)=>`<< ${s} >>`,
-  (s)=>`| ${s} |`, (s)=>`|| ${s} ||`,
-  (s)=>`★ ${s} ★`, (s)=>`☆ ${s} ☆`, (s)=>`✦ ${s} ✦`, (s)=>`✧ ${s} ✧`,
-  (s)=>`♥ ${s} ♥`, (s)=>`♡ ${s} ♡`, (s)=>`✿ ${s} ✿`, (s)=>`❀ ${s} ❀`,
-  (s)=>`x ${s} x`, (s)=>`X ${s} X`, (s)=>`+ ${s} +`, (s)=>`* ${s} *`,
-  (s)=>`-> ${s} <-`, (s)=>`=> ${s} <=`, (s)=>`~> ${s} <~`,
-  (s)=>`- ${s} -`, (s)=>`-- ${s} --`, (s)=>`~ ${s} ~`, (s)=>`~~ ${s} ~~`,
-  (s)=>`_ ${s} _`, (s)=>`= ${s} =`, (s)=>`== ${s} ==`,
-  (s)=>`t͜e͜x͜t`.replace('text', s), // Ligature Bottom
-  (s)=>`t͡e͡x͡t`.replace('text', s), // Ligature Top
-  (s)=>`t﹏e﹏x﹏t`.replace('text', s), // Wavy Line
-  (s)=>`t͎e͎x͎t`.replace('text', s), // Arrows Below
-  (s)=>`꧁ ${s} ꧂`, (s)=>`༺ ${s} ༻`, // Flourishes
+  (s)=>`| ${s} |`, (s)=>`|| ${s} ||`, (s)=>`// ${s} //`, (s)=>`\\\\ ${s} \\\\`,
+  (s)=>`- ${s} -`, (s)=>`-- ${s} --`, (s)=>`= ${s} =`, (s)=>`== ${s} ==`,
+  (s)=>`~ ${s} ~`, (s)=>`~~ ${s} ~~`, (s)=>`_ ${s} _`, (s)=>`__ ${s} __`,
+  (s)=>`.: ${s} :.`, (s)=>`x ${s} x`, (s)=>`+ ${s} +`, (s)=>`* ${s} *`,
+  (s)=>`> ${s} <`, (s)=>`>> ${s} <<`, (s)=>`-> ${s} <-`, (s)=>`=> ${s} <=`
 ];
 
 function genFonts(){
@@ -328,36 +322,15 @@ function genFonts(){
   alphas.forEach(alph => {
     // 1. Map to Base
     let baseTxt = "";
-    if (alph.m.startsWith("zʎ")) { // Handle inverted
-        const mapArr = Array.from(alph.m);
-        for(let i=val.length-1; i>=0; i--){
-            let idx = chars.indexOf(val[i]);
-            baseTxt += (idx !== -1 && mapArr[idx]) ? mapArr[idx] : val[i];
-        }
-    } else {
-        const mapArr = Array.from(alph.m);
-        for(let char of val){
-          let idx = chars.indexOf(char);
-          baseTxt += (idx !== -1 && mapArr[idx]) ? mapArr[idx] : char;
-        }
+    const mapArr = Array.from(alph.m);
+    for(let char of val){
+      let idx = chars.indexOf(char);
+      baseTxt += (idx !== -1 && mapArr[idx]) ? mapArr[idx] : char;
     }
     
-    // 2. Apply all styles
+    // 2. Apply all ASCII styles
     styles.forEach(styleFn => {
-        // Special handling for the "connected" styles which need char-by-char join
-        let final = "";
-        if (styleFn.toString().includes("split")) {
-             final = styleFn(baseTxt);
-        } else if (styleFn.toString().includes("replace")) {
-             // For the ligature hacks, we re-apply the join logic safely
-             if(styleFn.toString().includes("͜")) final = baseTxt.split('').join('͜');
-             else if(styleFn.toString().includes("͡")) final = baseTxt.split('').join('͡');
-             else if(styleFn.toString().includes("﹏")) final = baseTxt.split('').join('﹏');
-             else if(styleFn.toString().includes("͎")) final = baseTxt.split('').join('͎');
-        } else {
-             final = styleFn(baseTxt);
-        }
-        addF(final, resBox);
+        addF(styleFn(baseTxt), resBox);
         count++;
     });
   });
