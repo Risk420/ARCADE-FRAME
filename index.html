@@ -89,50 +89,30 @@
   /* --- PC MODE STYLES --- */
   body.pc-mode { justify-content: flex-start; padding-top: 40px; }
   
-  /* Widen Containers */
   body.pc-mode .studio-sec { 
-    width: 90%; 
-    max-width: 1100px; 
-    flex-direction: row; 
-    align-items: flex-start; 
-    justify-content: center; 
-    gap: 60px; 
+    width: 90%; max-width: 1100px; 
+    flex-direction: row; align-items: flex-start; 
+    justify-content: center; gap: 60px; 
   }
 
-  /* Frame & GIF Studio: Split View */
-  body.pc-mode #frame-studio, body.pc-mode #gif-studio {
-    align-items: center; 
-  }
-  body.pc-mode .ui, body.pc-mode .ui-gif {
-    width: 350px; 
-    margin-top: 0;
-  }
+  body.pc-mode #frame-studio, body.pc-mode #gif-studio { align-items: center; }
+  body.pc-mode .ui, body.pc-mode .ui-gif { width: 350px; margin-top: 0; }
 
-  /* Font Studio: Grid View with Forced Scrollbar */
   body.pc-mode #font-studio { flex-direction: column; align-items: center; }
   body.pc-mode #font-results { 
-    display: grid; 
-    grid-template-columns: repeat(3, 1fr); 
-    gap: 15px; 
-    max-height: 70vh; 
-    overflow-y: scroll; /* FORCE SCROLLBAR */
-    padding-right: 10px;
+    display: grid; grid-template-columns: repeat(3, 1fr); 
+    gap: 15px; max-height: 70vh; 
+    overflow-y: scroll; padding-right: 10px;
   }
   body.pc-mode .font-input { width: 50%; }
 
-  /* Symbols Studio: Wide Grid with Forced Scrollbar */
   body.pc-mode #sym-studio { flex-direction: column; align-items: center; }
   body.pc-mode .sym-box-container { width: 50%; }
-  
   body.pc-mode #sym-container {
-    max-height: 70vh; 
-    overflow-y: scroll; /* FORCE SCROLLBAR */
-    padding-right: 10px;
-    width: 100%;
+    max-height: 70vh; overflow-y: scroll; 
+    padding-right: 10px; width: 100%;
   }
-  body.pc-mode .sym-btn {
-    flex: 1 0 50px; 
-  }
+  body.pc-mode .sym-btn { flex: 1 0 50px; }
 
   /* --- 🖼️ FRAME STUDIO CSS --- */
   @keyframes neonPulse {
@@ -175,9 +155,7 @@
   .sym-input { width: 100%; background: #000; border: 1px solid #00ffff; color: #00ffff; padding: 12px; font-size: 18px; border-radius: 6px; text-align: center; box-sizing: border-box; outline: none; }
   .sym-input:focus { border-color: #ff00ff; box-shadow: 0 0 10px rgba(255,0,255,0.5); }
 
-  /* RED CATEGORY TITLES */
   .cat-title { width: 100%; color: #ff0000; font-size: 12px; font-weight: bold; margin: 20px 0 5px 0; text-transform: uppercase; padding-left: 5px; border-bottom: 1px solid rgba(255,0,0,0.2); padding-bottom: 5px; }
-  
   .sym-grid { display: flex; flex-wrap: wrap; gap: 5px; width: 100%; padding: 5px; box-sizing: border-box; }
   .sym-btn { background: #1a1a1c; border: 1px solid #333; color: white; padding: 15px 0; font-size: 20px; border-radius: 6px; cursor: pointer; text-align: center; flex: 1 0 18%; min-width: 50px; }
   .sym-btn:active { background: #ff0000; color: #000; }
@@ -198,12 +176,10 @@
     box-shadow: inset 0 0 20px #000; 
   }
   
-  /* UPDATED: CONTAIN Video (Show Whole) instead of Cover */
+  /* FIXED: CONTAIN to prevent auto-crop */
   #v { 
     max-width: 100%; max-height: 100%; width: 100%; height: 100%; 
-    pointer-events: none; 
-    object-fit: contain; /* FIXED: Shows entire video, no crop */
-    will-change: transform; 
+    pointer-events: none; object-fit: contain; will-change: transform; 
   }
   #o { width: 100%; height: 100%; object-fit: contain; display: none; }
 
@@ -214,46 +190,35 @@
       display: flex; flex-direction: column; align-items: center;
   }
   
-  /* Fixed Upload Button - Bright Gradient */
   .btn-upload { background: linear-gradient(90deg, #00f3ff, #bc13fe); color: #000; border: none; padding: 15px; border-radius: 50px; font-weight: 800; cursor: pointer; width: 100%; margin-bottom: 25px; font-size: 14px; letter-spacing: 0.5px; box-shadow: 0 0 25px rgba(0, 243, 255, 0.2); transition: 0.2s; }
   .btn-upload:disabled { opacity: 0.3; cursor: not-allowed; filter: grayscale(1); }
   .btn-upload:active { transform: scale(0.98); }
 
   .label-row { display: flex; justify-content: space-between; font-size: 11px; color: #888; margin-bottom: 8px; font-weight: 600; width: 100%; }
   
-  /* Shared Range Slider Styles */
   input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; margin: 10px 0; cursor: pointer; }
   input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 8px; background: linear-gradient(to right, #ff0000 var(--v, 0%), #00ffff var(--v, 0%)); border-radius: 4px; }
   input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 20px; width: 20px; border-radius: 50%; background: #ff0000; margin-top: -6px; border: 2px solid #ffffff; box-shadow: 0 0 10px #ff0000; }
   
-  /* GIF Studio Specific Sliders */
   .ui-gif input[type="range"] { margin-bottom: 25px; -webkit-appearance: none; }
   .ui-gif input[type="range"]::-webkit-slider-runnable-track { background: #333; height: 6px; border-radius: 3px; }
   .ui-gif input[type="range"]::-webkit-slider-thumb { 
       -webkit-appearance: none; height: 20px; width: 20px; border-radius: 50%; 
-      background: #00f3ff; box-shadow: 0 0 10px #00f3ff; border: 2px solid #fff; 
-      margin-top: -7px; 
+      background: #00f3ff; box-shadow: 0 0 10px #00f3ff; border: 2px solid #fff; margin-top: -7px; 
   }
   .ui-gif input[type="range"]:disabled { opacity: 0.3; cursor: not-allowed; }
 
-  /* Status Text */
   .status { margin-top: 20px; font-size: 14px; text-align: center; color: var(--neon); font-weight: 600; opacity: 0; transition: 0.3s; height: 20px; }
   .status.active { opacity: 1; }
   
-  /* NEON BUTTON WRAPPERS */
   .neon-wrap { position: relative; display: block; margin-top: 15px; padding: 3px; border-radius: 50px; overflow: hidden; width: 100%; }
-  
-  /* Slower Rainbow Animation for Buttons (4.0s) */
   .neon-wrap.blue::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: conic-gradient(transparent, transparent, #00f3ff, #bc13fe, #ff0055, #00f3ff, transparent, transparent); animation: rotate 4.0s linear infinite; z-index: 0; }
-  
-  /* Reset Button Style */
   .neon-wrap.red { margin-top: 20px; }
   .neon-wrap.red::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: conic-gradient(transparent, transparent, var(--red), #ff5500, transparent, transparent); animation: rotate 4.0s linear infinite; z-index: 0; }
   
   .btn-inner { position: relative; display: block; text-decoration: none; text-align: center; color: white; background: #000; padding: 12px 30px; border-radius: 48px; font-weight: 900; font-size: 14px; z-index: 1; cursor: pointer; border: none; width: 100%; box-sizing: border-box; }
   .btn-inner:disabled { opacity: 0.3; color: #555; }
   
-  /* Create HD GIF Button - Solid Gradient */
   .btn-go { background: linear-gradient(90deg, #00f3ff, #bc13fe); color: #000; border: none; padding: 15px; width: 100%; border-radius: 15px; cursor: pointer; font-weight: bold; font-size: 14px; transition: 0.2s; box-shadow: 0 0 15px rgba(0, 243, 255, 0.2); }
   .btn-go:disabled { opacity: 0.4; cursor: not-allowed; background: #1a1a1a; color: #666; box-shadow: none; }
   .btn-go:active { transform: scale(0.98); }
@@ -620,7 +585,7 @@ go.onclick=()=>{
         const vh = capVid.videoHeight;
         
         // Calculate dimensions proportional to 480x480 container
-        // CONTAIN Logic (Fit Whole Video)
+        // FIT WHOLE LOGIC (Contain)
         const aspect = vw / vh;
         let drawW, drawH;
         
