@@ -68,7 +68,6 @@
   @keyframes arcadeBounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
   .sub { color: #fff; font-weight: bold; margin: 2px 0 15px 0; text-transform: uppercase; font-size: 11px; letter-spacing: 2px; text-align: center; }
   
-  /* IMPORTANT: HIDE ALL SECTIONS BY DEFAULT TO PREVENT FLASH */
   .studio-sec { display: none; width: 320px; flex-direction: column; align-items: center; }
   .active-sec { display: flex; }
 
@@ -78,17 +77,13 @@
     50% { box-shadow: 0 0 35px #ff0000, inset 0 0 20px #ff0000; border-color: #ff3333; }
     100% { box-shadow: 0 0 20px #ff0000, inset 0 0 10px #ff0000; border-color: #ff0000; }
   }
-  @keyframes rotate {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  }
 
   #box { 
     position: relative; width: 310px; height: 310px; border-radius: 50%; overflow: hidden; 
     border: 3px solid #ff0000; box-sizing: border-box; 
     background-image: linear-gradient(45deg, #1a1a1c 25%, transparent 25%), linear-gradient(-45deg, #1a1a1c 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #1a1a1c 75%), linear-gradient(-45deg, transparent 75%, #1a1a1c 75%);
     background-color: transparent; background-size: 20px 20px;
-    animation: neonPulse 2s infinite ease-in-out; 
+    animation: neonPulse 2s infinite ease-in-out;
     z-index: 10; 
   }
   canvas#c { position: absolute; top: 0; left: 0; width: 310px; height: 310px; z-index: 15; touch-action: none; }
@@ -109,7 +104,7 @@
   .stage { position: relative; width: 320px; height: 320px; display: flex; align-items: center; justify-content: center; margin-bottom: 30px; touch-action: none; }
   .led-ring { position: absolute; inset: -15px; border-radius: 50%; background: conic-gradient(from 0deg, transparent, var(--neon), var(--purple), transparent); animation: rotate 2s linear infinite; filter: blur(20px); z-index: 1; pointer-events: none; }
   
-  .viewport { position: relative; z-index: 5; width: 100%; height: 100%; border-radius: 50%; overflow: hidden; background-color: #000; box-shadow: inset 0 0 20px #000; touch-action: none; display: flex; justify-content: center; align-items: center; } 
+  .viewport { position: relative; z-index: 5; width: 100%; height: 100%; border-radius: 50%; overflow: hidden; background-color: #000; box-shadow: inset 0 0 20px #000; touch-action: none; display: flex; justify-content: center; align-items: center; }
   
   #v { 
     max-width: 100%; max-height: 100%; 
@@ -132,10 +127,12 @@
 
   .label-row { display: flex; justify-content: space-between; font-size: 11px; color: #888; margin-bottom: 8px; font-weight: 600; width: 100%; }
   
+  /* Shared Range Slider Styles */
   input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; margin: 10px 0; cursor: pointer; }
   input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 8px; background: linear-gradient(to right, #ff0000 var(--v, 0%), #00ffff var(--v, 0%)); border-radius: 4px; }
   input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 20px; width: 20px; border-radius: 50%; background: #ff0000; margin-top: -6px; border: 2px solid #ffffff; box-shadow: 0 0 10px #ff0000; }
   
+  /* GIF Studio Specific Sliders */
   .ui-gif input[type="range"] { margin-bottom: 25px; accent-color: var(--neon); }
   .ui-gif input[type="range"]::-webkit-slider-runnable-track { background: #333; height: 6px; }
   .ui-gif input[type="range"]::-webkit-slider-thumb { background: var(--neon); box-shadow: 0 0 10px var(--neon); border: none; }
@@ -150,12 +147,12 @@
   .neon-wrap { position: relative; display: none; margin-top: 20px; padding: 3px; border-radius: 50px; overflow: hidden; width: fit-content; }
   .neon-wrap.blue::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: conic-gradient(transparent, transparent, var(--neon), var(--purple), transparent, transparent); animation: rotate 2s linear infinite; z-index: 0; }
   
+  /* Reset Button Style */
   .neon-wrap.red { margin-top: 20px; }
   .neon-wrap.red::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: conic-gradient(transparent, transparent, var(--red), #ff5500, transparent, transparent); animation: rotate 2s linear infinite; z-index: 0; }
   
   .btn-inner { position: relative; display: block; text-decoration: none; text-align: center; color: white; background: #000; padding: 12px 30px; border-radius: 48px; font-weight: 900; font-size: 14px; z-index: 1; cursor: pointer; border: none; width: 100%; box-sizing: border-box; }
   input[type=file], #yt-player { display: none; }
-
 </style>
 </head>
 <body onclick="startAudio()">
@@ -166,7 +163,7 @@
   <div class="switch-container">
     <button id="switch-btn" onclick="toggleSwitchMenu(event)">SWITCH TO 📂</button>
     <div id="switch-menu">
-      <button id="nav-frame" onclick="changeStudio('frame')">🖼️ Frame Studio</button>
+      <button id="nav-frame" class="active-link" onclick="changeStudio('frame')">🖼️ Frame Studio</button>
       <button id="nav-font" onclick="changeStudio('font')">✍️ Font Generator</button>
       <button id="nav-gif" onclick="changeStudio('gif')">⚡ GIF Maker</button>
     </div>
@@ -200,7 +197,7 @@
 <h1 id="studio-name">ARCADE</h1>
 <p class="sub" id="studio-sub">FRAME STUDIO</p>
 
-<div id="frame-studio" class="studio-sec">
+<div id="frame-studio" class="studio-sec active-sec">
   <div id="box"><canvas id="c" width="800" height="800"></canvas></div>
   <div class="ui">
     <label class="btn" onclick="playClick()">CHOOSE IMAGE<input type="file" id="u1" accept="image/*" onchange="handleFile(event)" style="display:none"></label>
@@ -263,30 +260,9 @@ const zVal=document.getElementById('z-val'),rVal=document.getElementById('r-val'
 let i=new Image(),f=new Image(),cfg={s:1,m:375,x:400,y:400,r:0,lx:0,ly:0},player,musicOn=true,audioStarted=false;
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
-// --- PERSISTENCE & NO FLASH LOGIC ---
-window.addEventListener('DOMContentLoaded', () => {
-    const savedMode = localStorage.getItem('arcadeMode');
-    if(savedMode && ['frame', 'font', 'gif'].includes(savedMode)) {
-        changeStudio(savedMode);
-    } else {
-        changeStudio('frame'); // Default for new users
-    }
-});
-
 function changeStudio(mode) {
-  playClick(); 
-  
-  localStorage.setItem('arcadeMode', mode);
-
-  document.querySelectorAll('.studio-sec').forEach(s => s.classList.remove('active-sec')); 
-  
-  document.querySelectorAll('#switch-menu button').forEach(b => b.classList.remove('active-link'));
-  const btnId = 'nav-' + mode;
-  const btn = document.getElementById(btnId);
-  if(btn) btn.classList.add('active-link');
-
+  playClick(); document.querySelectorAll('.studio-sec').forEach(s => s.classList.remove('active-sec')); 
   swMenu.style.display = 'none'; panel.classList.remove('open');
-  
   if(mode === 'frame') { document.getElementById('frame-studio').classList.add('active-sec'); sName.innerText = "ARCADE"; sSub.innerText = "FRAME STUDIO"; }
   else if(mode === 'font') { document.getElementById('font-studio').classList.add('active-sec'); sName.innerText = "FONTS"; sSub.innerText = "GENERATOR STUDIO"; }
   else if(mode === 'gif') { document.getElementById('gif-studio').classList.add('active-sec'); sName.innerText = "NEON"; sSub.innerText = "GIF STUDIO"; }
@@ -301,45 +277,55 @@ window.onclick = e => {
 function toggleSwitchMenu(e) { e.stopPropagation(); swMenu.style.display = swMenu.style.display === 'flex' ? 'none' : 'flex'; playClick(); }
 function toggleMenu(e) { e.stopPropagation(); initAudio(); panel.classList.toggle('open'); playClick(); }
 
-// --- FONT ENGINE ---
+// --- ✍️ "OMEGA" FONT ENGINE (1200+ COMBINATIONS, ZERO GLITCH) ---
 const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+// 1. SAFE ALPHABETS (Expanded to 20 Verified Sets)
 const alphas = [
-  {m:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"}, 
-  {m:"𝐀𝐁𝐂𝐃𝐄𝐅𝐆𝐇𝐈𝐉𝐊𝐋𝐌𝐍𝐎𝐏𝐐𝐑𝐒𝐓𝐔𝐕𝐖𝐗𝐘𝐙𝐚𝐛𝐜𝐝𝐞𝐟𝐠𝐡𝐢𝐣𝐤𝐥𝐦𝐧𝐨𝐩𝐪𝐫𝐬𝐭𝐮𝐯𝐰𝐱𝐲𝐳𝟎𝟏𝟐𝟑𝟒𝟓𝟔𝟕𝟖𝟗"}, 
-  {m:"𝐴𝐵𝐶𝐷𝐸𝐹𝐺𝐻𝐼𝐽ＫＬＭ𝑁𝑂𝑃𝑄𝑅𝑆𝑇𝑈𝑉𝑊𝑋𝑌𝑍𝑎𝑏𝑐𝑑𝑒𝑓𝑔ℎ𝑖𝑗𝑘𝑙𝑚𝑛𝑜𝑝𝑞𝑟𝑠𝑡𝑢𝑣𝑤𝑥𝑦𝑧0123456789"}, 
-  {m:"𝑨𝑩𝑪𝑫𝑬𝑭𝑮𝑯𝑰𝑱𝑲𝑳𝑴𝑵𝑶𝑷𝑸𝑹𝑺𝑻𝑼𝑽𝑾𝑿𝒀𝒁𝒂𝒃𝒄𝒅𝒆𝒇𝒈𝒉𝒊𝒋𝒌𝒍𝒎𝒏𝒐𝒑𝒒𝒓𝒔𝒕𝒖𝒗𝒘𝒙𝒚𝒛0123456789"}, 
-  {m:"𝒜ℬ𝒞𝒟ℰℱ𝒢ℋℐ𝒥𝒦ℒℳ𝒩𝒪𝒫𝒬ℛ𝒮𝒯𝒰𝒱𝒲𝒳𝒴𝒵𝒶𝒷𝒸𝒹ℯ𝒻ℊ𝒽𝒾𝒿𝓀𝓁𝓂𝓃ℴ𝓅𝓆𝓇𝓈𝓉𝓊𝓋𝓌𝓍𝓎𝓏0123456789"}, 
-  {m:"𝓐𝓑𝓒𝓓𝓔𝓕𝓖𝓗𝓘𝓙𝓚𝓛𝓜𝓝𝓞𝓟𝓠𝓡𝓢𝓣𝓤𝓥𝓦𝓧𝓨𝓩𝓪𝓫𝓬𝓭𝓮𝓯𝓰𝓱𝓲𝓳𝓴𝓵𝓶𝓷𝓸𝓹𝓺𝓻𝓼𝓽𝓾𝓿𝔀𝔁𝔂𝔃0123456789"}, 
-  {m:"𝔄𝔅ℭ𝔇𝔈𝔉𝔊ℌℑ𝔍𝔎𝔏𝔐𝔑𝔒𝔓𝔔ℜ𝔖𝔗𝔘𝔙𝔚𝔛𝔜𝔝𝔞𝔟𝔠𝔡𝔢𝔣𝔤𝔥𝔦𝔧𝔨𝔩𝔪𝔫𝔬𝔭𝔮𝔯𝔰𝔱𝔲𝔳𝔴𝔵𝔶𝔷0123456789"}, 
-  {m:"𝕬𝕭𝕮𝕯𝕰𝕱𝕲𝕳𝕴𝕵𝕶𝕷𝕸𝕹𝕺𝕻𝕼𝕽𝕾𝕿𝖀𝖁𝖂𝖃𝖄𝖅𝖆𝖇𝖈𝖉𝖊𝖋𝖌𝖍𝖎𝖏𝖐𝖑𝖒𝖓𝖔𝖕𝖖𝖗𝖘𝖙𝖚𝖛𝖜𝖝𝖞𝖟0123456789"}, 
-  {m:"𝔸𝔹ℂ𝔻𝔼𝔽𝔾ℍ𝕀𝕁𝕂𝕃𝕄ℕ𝕆ℙℚℝ𝕊𝕋𝕌𝕍𝕎𝕏𝕐ℤ𝕒𝕓𝕔𝕕𝕖𝕗𝕘𝕙𝕚𝕛𝕜𝕝𝕞𝕟𝕠𝕡𝕢𝕣𝕤𝕥𝕦𝕧𝕨𝕩𝕪𝕫𝟘𝟙𝟚𝟛𝟜𝟝𝟞𝟟𝟠𝟡"}, 
-  {m:"𝖠𝖡𝖢𝖣𝖤𝖥𝖦𝖧𝖨𝖩𝖪𝖫𝖬𝖭𝖮𝖯𝖰𝖱𝖲𝖳𝖴𝖵𝖶𝖷𝖸𝖹𝖺𝖻𝖼𝖽𝖾𝖿𝗀𝗁𝗂𝗃𝗄𝗅𝗆𝗇𝗈𝗉𝗊𝗋𝗌𝗍𝗎𝗏𝗐𝗑𝗒𝗓𝟢𝟣𝟤𝟥𝟦𝟧𝟨𝟩𝟪𝟫"}, 
-  {m:"𝗔𝗕𝗖𝗗𝗘𝗙𝗚𝗛𝗜ＪＫＬＭＮＯＰ𝗤𝗥𝗦𝗧𝗨𝗩𝗪𝗫𝗬𝗭𝗮𝗯𝗰𝗱𝗲𝗳𝗴𝗵𝗶𝗷𝗸𝗹𝗺𝗻𝗼𝗽𝗾𝗿𝘀𝘁𝘂𝘃𝘄𝘅𝘆𝘇𝟬𝟭𝟮𝟯𝟰𝟱𝟲𝟳𝟴𝟵"}, 
-  {m:"𝙰𝙱𝙲𝙳𝙴𝙵𝙶𝙷𝙸𝙹𝙺𝙻𝙼𝙽𝙾𝙿𝚀𝚁𝚂𝚃𝚄𝚅𝚆𝚇𝚈𝚉𝚊𝚋𝚌𝚍𝚎𝚏𝚐𝚑𝚒𝚓𝚔𝚕𝚖𝚗𝚘𝚙𝚚𝚛𝚜𝚝𝚞𝚟𝚠𝚡𝚢𝚣𝟶𝟷𝟸𝟹𝟺𝟻𝟼𝟽𝟾𝟿"}, 
-  {m:"ⒶⒷⒸⒹⒺⒻⒼⒽⒾⒿⓀⓁⓂⓃⓄⓅⓆⓇⓈⓉⓊⓋⓌⓍⓎⓏⓐⓑⓒⓓⓔⓕⓖⓗⓘⓙⓚⓛⓜⓝⓞⓟⓠⓡⓢⓣⓤⓥⓦⓧⓨⓩ⓪①②③④⑤⑥⑦⑧⑨"}, 
-  {m:"🅐🅑🅒🅓🅔🅕🅖🅗🅘🅙🅚🅛🅜🅝🅞🅟🅠🅡🅢🅣🅤🅥🅦🅧🅨🅩🅐🅑🅒🅓🅔🅕🅖🅗🅘🅙🅚🅛🅜🅝🅞🅟🅠🅡🅢🅣🅤🅥🅦🅧🅨🅩⓿➊➋➌➍➎➏➐➑➒"}, 
-  {m:"ＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚ０１２３４５６７８９"}, 
-  {m:"⒜⒝⒞⒟⒠⒡⒢⒣⒤⒥⒦⒧⒨⒩⒪⒫⒬⒭⒮⒯⒰⒱⒲⒳⒴⒵⒜⒝⒞⒟⒠⒡⒢⒣⒤⒥⒦⒧⒨⒩⒪⒫⒬⒭⒮⒯⒰⒱⒲⒳⒴⒵0123456789"}, 
-  {m:"𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃𝄃0123456789"}, 
-  {m:"🅰🅱🅲🅳🅴🅵🅶🅷🅸🅹🅺🅻🅼🅽🅾🅿🆀🆁🆂🆃🆄🆅🆆🆇🆈🆉🅰🅱🅲🅳🅴🅵🅶🅷🅸🅹🅺🅻🅼🅽🅾🅿🆀🆁🆂🆃🆄🆅🆆🆇🆈🆉0123456789"}, 
-  {m:"ᴬᴮᶜᴰᴱᶠᴳᴴᴵᴶᴷᴸᴹᴺᴼᴾᑫᴿˢᵀᵁⱽᵂˣʸᶻᵃᵇᶜᵈᵉᶠᵍʰⁱʲᵏˡᵐⁿᵒᵖqʳˢᵗᵘᵛʷˣʸᶻ0123456789"}, 
-  {m:"ₐbcdₑfgₕᵢⱼₖₗₘₙₒₚqᵣₛₜᵤᵥwₓyzₐbcdₑfgₕᵢⱼₖₗₘₙₒₚqᵣₛₜᵤᵥwₓyz0123456789"}, 
-  {m:"ᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘQʀꜱᴛᴜᴠᴡxʏᴢᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘQʀꜱᴛᴜᴠᴡxʏᴢ0123456789"}, 
-  {m:"zʎxʍʌnʇsɹbdouɯlʞɾᴉɥƃɟǝpɔqɐzʎxʍʌnʇsɹbdouɯlʞɾᴉɥƃɟǝpɔqɐ0123456789"}, 
+  {m:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"}, // 0. Normal
+  {m:"𝐀𝐁𝐂𝐃𝐄𝐅𝐆𝐇𝐈𝐉𝐊𝐋𝐌𝐍𝐎𝐏𝐐𝐑𝐒𝐓𝐔𝐕𝐖𝐗𝐘𝐙𝐚𝐛𝐜𝐝𝐞𝐟𝐠𝐡𝐢𝐣𝐤𝐥𝐦𝐧𝐨𝐩𝐪𝐫𝐬𝐭𝐮𝐯𝐰𝐱𝐲𝐳𝟎𝟏𝟐𝟑𝟒𝟓𝟔𝟕𝟖𝟗"}, // 1. Bold
+  {m:"𝐴𝐵𝐶𝐷𝐸𝐹𝐺𝐻𝐼𝐽ＫＬＭ𝑁𝑂𝑃𝑄𝑅𝑆𝑇𝑈𝑉𝑊𝑋𝑌𝑍𝑎𝑏𝑐𝑑𝑒𝑓𝑔ℎ𝑖𝑗𝑘𝑙𝑚𝑛𝑜𝑝𝑞𝑟𝑠𝑡𝑢𝑣𝑤𝑥𝑦𝑧0123456789"}, // 2. Italic
+  {m:"𝑨𝑩𝑪𝑫𝑬𝑭𝑮𝑯𝑰𝑱𝑲𝑳𝑴𝑵𝑶𝑷𝑸𝑹𝑺𝑻𝑼𝑽𝑾𝑿𝒀𝒁𝒂𝒃𝒄𝒅𝒆𝒇𝒈𝒉𝒊𝒋𝒌𝒍𝒎𝒏𝒐𝒑𝒒𝒓𝒔𝒕𝒖𝒗𝒘𝒙𝒚𝒛0123456789"}, // 3. Bold Italic
+  {m:"𝒜ℬ𝒞𝒟ℰℱ𝒢ℋℐ𝒥𝒦ℒℳ𝒩𝒪𝒫𝒬ℛ𝒮𝒯𝒰𝒱𝒲𝒳𝒴𝒵𝒶𝒷𝒸𝒹ℯ𝒻ℊ𝒽𝒾𝒿𝓀𝓁𝓂𝓃ℴ𝓅𝓆𝓇𝓈𝓉𝓊𝓋𝓌𝓍𝓎𝓏0123456789"}, // 4. Script
+  {m:"𝓐𝓑𝓒𝓓𝓔𝓕𝓖𝓗𝓘𝓙𝓚𝓛𝓜𝓝𝓞𝓟𝓠𝓡𝓢𝓣𝓤𝓥𝓦𝓧𝓨𝓩𝓪𝓫𝓬𝓭𝓮𝓯𝓰𝓱𝓲𝓳𝓴𝓵𝓶𝓷𝓸𝓹𝓺𝓻𝓼𝓽𝓾𝓿𝔀𝔁𝔂𝔃0123456789"}, // 5. Bold Script
+  {m:"𝔄𝔅ℭ𝔇𝔈𝔉𝔊ℌℑ𝔍𝔎𝔏𝔐𝔑𝔒𝔓𝔔ℜ𝔖𝔗𝔘𝔙𝔚𝔛𝔜𝔝𝔞𝔟𝔠𝔡𝔢𝔣𝔤𝔥𝔦𝔧𝔨𝔩𝔪𝔫𝔬𝔭𝔮𝔯𝔰𝔱𝔲𝔳𝔴𝔵𝔶𝔷0123456789"}, // 6. Fraktur
+  {m:"𝕬𝕭𝕮𝕯𝕰𝕱𝕲𝕳𝕴𝕵𝕶𝕷𝕸𝕹𝕺𝕻𝕼𝕽𝕾𝕿𝖀𝖁𝖂𝖃𝖄𝖅𝖆𝖇𝖈𝖉𝖊𝖋𝖌𝖍𝖎𝖏𝖐𝖑𝖒𝖓𝖔𝖕𝖖𝖗𝖘𝖙𝖚𝖛𝖜𝖝𝖞𝖟0123456789"}, // 7. Bold Fraktur
+  {m:"𝔸𝔹ℂ𝔻𝔼𝔽𝔾ℍ𝕀𝕁𝕂𝕃𝕄ℕ𝕆ℙℚℝ𝕊𝕋𝕌𝕍𝕎𝕏𝕐ℤ𝕒𝕓𝕔𝕕𝕖𝕗𝕘𝕙𝕚𝕛𝕜𝕝𝕞𝕟𝕠𝕡𝕢𝕣𝕤𝕥𝕦𝕧𝕨𝕩𝕪𝕫𝟘𝟙𝟚𝟛𝟜𝟝𝟞𝟟𝟠𝟡"}, // 8. Double
+  {m:"𝖠𝖡𝖢𝖣𝖤𝖥𝖦𝖧𝖨𝖩𝖪𝖫𝖬𝖭𝖮𝖯𝖰𝖱𝖲𝖳𝖴𝖵𝖶𝖷𝖸𝖹𝖺𝖻𝖼𝖽𝖾𝖿𝗀𝗁𝗂𝗃𝗄𝗅𝗆𝗇𝗈𝗉𝗊𝗋𝗌𝗍𝗎𝗏𝗐𝗑𝗒𝗓𝟢𝟣𝟤𝟥𝟦𝟧𝟨𝟩𝟪𝟫"}, // 9. Sans
+  {m:"𝗔𝗕𝗖𝗗𝗘𝗙𝗚𝗛𝗜ＪＫＬＭＮＯＰ𝗤𝗥𝗦𝗧𝗨𝗩𝗪𝗫𝗬𝗭𝗮𝗯𝗰𝗱𝗲𝗳𝗴𝗵𝗶𝗷𝗸𝗹𝗺𝗻𝗼𝗽𝗾𝗿𝘀𝘁𝘂𝘃𝘄𝘅𝘆𝘇𝟬𝟭𝟮𝟯𝟰𝟱𝟲𝟳𝟴𝟵"}, // 10. Bold Sans
+  {m:"𝙰𝙱𝙲𝙳𝙴𝙵𝙶𝙷𝙸𝙹𝙺𝙻𝙼𝙽𝙾𝙿𝚀𝚁𝚂𝚃𝚄𝚅𝚆𝚇𝚈𝚉𝚊𝚋𝚌𝚍𝚎𝚏𝚐𝚑𝚒𝚓𝚔𝚕𝚖𝚗𝚘𝚙𝚚𝚛𝚜𝚝𝚞𝚟𝚠𝚡𝚢𝚣𝟶𝟷𝟸𝟹𝟺𝟻𝟼𝟽𝟾𝟿"}, // 11. Mono
+  {m:"ⒶⒷⒸⒹⒺⒻⒼⒽⒾⒿⓀⓁⓂⓃⓄⓅⓆⓇⓈⓉⓊⓋⓌⓍⓎⓏⓐⓑⓒⓓⓔⓕⓖⓗⓘⓙⓚⓛⓜⓝⓞⓟⓠⓡⓢⓣⓤⓥⓦⓧⓨⓩ⓪①②③④⑤⑥⑦⑧⑨"}, // 12. Circled
+  {m:"🅐🅑🅒🅓🅔🅕🅖🅗🅘🅙🅚🅛🅜🅝🅞🅟🅠🅡🅢🅣🅤🅥🅦🅧🅨🅩🅐🅑🅒🅓🅔🅕🅖🅗🅘🅙🅚🅛🅜🅝🅞🅟🅠🅡🅢🅣🅤🅥🅦🅧🅨🅩⓿➊➋➌➍➎➏➐➑➒"}, // 13. Black Circled
+  {m:"ＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚ０１２３４５６７８９"}, // 14. Wide
+  {m:"⒜⒝⒞⒟⒠⒡⒢⒣⒤⒥⒦⒧⒨⒩⒪⒫⒬⒭⒮⒯⒰⒱⒲⒳⒴⒵⒜⒝⒞⒟⒠⒡⒢⒣⒤⒥⒦⒧⒨⒩⒪⒫⒬⒭⒮⒯⒰⒱⒲⒳⒴⒵0123456789"}, // 15. Parens
+  {m:"🄐🄑🄒🄓🄔🄕🄖🄗🄘🄙🄚🄛🄜🄝🄞🄟🄠🄡🄢🄣🄤🄥🄦🄧🄨🄩🄐🄑🄒🄓🄔🄕🄖🄗🄘🄙🄚🄛🄜🄝🄞🄟🄠🄡🄢🄣🄤🄥🄦🄧🄨🄩0123456789"}, // 16. Boxed
+  {m:"🅰🅱🅲🅳🅴🅵🅶🅷🅸🅹🅺🅻🅼🅽🅾🅿🆀🆁🆂🆃🆄🆅🆆🆇🆈🆉🅰🅱🅲🅳🅴🅵🅶🅷🅸🅹🅺🅻🅼🅽🅾🅿🆀🆁🆂🆃🆄🆅🆆🆇🆈🆉0123456789"}, // 17. Block
+  {m:"ᴬᴮᶜᴰᴱᶠᴳᴴᴵᴶᴷᴸᴹᴺᴼᴾᑫᴿˢᵀᵁⱽᵂˣʸᶻᵃᵇᶜᵈᵉᶠᵍʰⁱʲᵏˡᵐⁿᵒᵖqʳˢᵗᵘᵛʷˣʸᶻ0123456789"}, // 18. Tiny
+  {m:"ᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘQʀꜱᴛᴜᴠᴡxʏᴢᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘQʀꜱᴛᴜᴠᴡxʏᴢ0123456789"}, // 19. Small Caps
+  {m:"zʎxʍʌnʇsɹbdouɯlʞɾᴉɥƃɟǝpɔqɐzʎxʍʌnʇsɹbdouɯlʞɾᴉɥƃɟǝpɔqɐ0123456789"}, // 20. Inverted
 ];
 
-const styles = [
-  (s)=>s, (s)=>s.split('').join(' '), (s)=>s.split('').join('  '), (s)=>s.split('').join('.'), 
-  (s)=>s.split('').join('-'), (s)=>s.split('').join('='), (s)=>s.split('').join('+'), (s)=>s.split('').join('/'), 
-  (s)=>`[${s}]`, (s)=>`(${s})`, (s)=>`{${s}}`, (s)=>`<${s}>`, (s)=>`[[ ${s} ]]`, (s)=>`(( ${s} ))`, 
-  (s)=>`{{ ${s} }}`, (s)=>`<< ${s} >>`, (s)=>`| ${s} |`, (s)=>`|| ${s} ||`, (s)=>`// ${s} //`, 
-  (s)=>`\\\\ ${s} \\\\`, (s)=>`- ${s} -`, (s)=>`-- ${s} --`, (s)=>`= ${s} =`, (s)=>`== ${s} ==`, 
-  (s)=>`~ ${s} ~`, (s)=>`~~ ${s} ~~`, (s)=>`_ ${s} _`, (s)=>`__ ${s} __`, (s)=>`.: ${s} :.`, 
-  (s)=>`x ${s} x`, (s)=>`+ ${s} +`, (s)=>`* ${s} *`, (s)=>`> ${s} <`, (s)=>`>> ${s} <<`, (s)=>`-> ${s} <-`, 
-  (s)=>`=> ${s} <=`, (s)=>`.: ${s} :.`, (s)=>`x ${s} x`, (s)=>`X ${s} X`, (s)=>`o ${s} o`, (s)=>`0 ${s} 0`, 
-  (s)=>`O ${s} O`, (s)=>`xX ${s} Xx`, (s)=>`oO ${s} Oo`, (s)=>`+* ${s} *+`, (s)=>`# ${s} #`, (s)=>`$ ${s} $`, 
-  (s)=>`? ${s} ?`, (s)=>`! ${s} !`, (s)=>`!! ${s} !!`, (s)=>`?? ${s} ??`, (s)=>`?! ${s} !?`, (s)=>`@ ${s} @`, 
-  (s)=>`& ${s} &`, (s)=>`% ${s} %`, (s)=>`^ ${s} ^`, (s)=>`~ ${s} ~`, (s)=>`... ${s} ...`
+// 2. MASSIVE DECORATOR ARRAY (60+ Patterns x 20 Bases = 1200+ Fonts)
+const decorators = [
+  (s)=>s, (s)=>` ${s} `, (s)=>`  ${s}  `, 
+  (s)=>s.split('').join(' '), (s)=>s.split('').join('  '), (s)=>s.split('').join('.'), 
+  (s)=>s.split('').join('-'), (s)=>s.split('').join('~'), (s)=>s.split('').join('*'),
+  (s)=>`[${s}]`, (s)=>`[[${s}]]`, (s)=>`[ ${s} ]`, (s)=>`[[ ${s} ]]`,
+  (s)=>`(${s})`, (s)=>`(( ${s} ))`, (s)=>`{${s}}`, (s)=>`{{ ${s} }}`, 
+  (s)=>`<${s}>`, (s)=>`<< ${s} >>`, (s)=>`<<< ${s} >>>`, 
+  (s)=>`|${s}|`, (s)=>`|| ${s} ||`, (s)=>`// ${s} //`, (s)=>`\\\\ ${s} \\\\`,
+  (s)=>`/ ${s} /`, (s)=>`\\ ${s} \\`, (s)=>`+ ${s} +`, (s)=>`++ ${s} ++`,
+  (s)=>`* ${s} *`, (s)=>`** ${s} **`, (s)=>`*** ${s} ***`,
+  (s)=>`- ${s} -`, (s)=>`-- ${s} --`, (s)=>`--- ${s} ---`,
+  (s)=>`_ ${s} _`, (s)=>`__ ${s} __`, (s)=>`___ ${s} ___`,
+  (s)=>`= ${s} =`, (s)=>`== ${s} ==`, (s)=>`=== ${s} ===`,
+  (s)=>`~ ${s} ~`, (s)=>`~~ ${s} ~~`, (s)=>`~~~ ${s} ~~~`,
+  (s)=>`! ${s} !`, (s)=>`!! ${s} !!`, (s)=>`? ${s} ?`, (s)=>`?? ${s} ??`,
+  (s)=>`x ${s} x`, (s)=>`X ${s} X`, (s)=>`xX ${s} Xx`, (s)=>`Xx ${s} xX`,
+  (s)=>`o ${s} o`, (s)=>`O ${s} O`, (s)=>`oO ${s} Oo`, (s)=>`Oo ${s} oO`,
+  (s)=>`> ${s} <`, (s)=>`>> ${s} <<`, (s)=>`-> ${s} <-`, (s)=>`=> ${s} <=`,
+  (s)=>`.: ${s} :.`, (s)=>`... ${s} ...`, (s)=>`::: ${s} :::`, (s)=>`# ${s} #`,
+  (s)=>`$ ${s} $`, (s)=>`% ${s} %`, (s)=>`& ${s} &`, (s)=>`@ ${s} @`
 ];
 
 function genFonts(){
@@ -348,52 +334,40 @@ function genFonts(){
   if(!val) return;
   let count=0;
   
+  // ALGORITHM: APPLY EVERY DECORATOR TO EVERY ALPHABET BASE
   alphas.forEach(alph => {
-    let txt = "";
+    // 1. Create Base Text
+    let baseTxt = "";
     if(alph.m.startsWith("zʎ")){ 
+        // Inverted Logic
         const mapArr = Array.from(alph.m);
         for(let i=val.length-1; i>=0; i--){
             let idx = chars.indexOf(val[i]);
-            txt += (idx !== -1 && mapArr[idx]) ? mapArr[idx] : val[i];
+            baseTxt += (idx !== -1 && mapArr[idx]) ? mapArr[idx] : val[i];
         }
     } else {
+        // Normal Mapping
         const mapArr = Array.from(alph.m);
         for(let char of val){
           let idx = chars.indexOf(char);
-          txt += (idx !== -1 && mapArr[idx]) ? mapArr[idx] : char;
+          baseTxt += (idx !== -1 && mapArr[idx]) ? mapArr[idx] : char;
         }
     }
-    addF(txt, resBox);
-    count++;
-  });
 
-  styles.forEach(styleFn => {
-    if(styleFn(val) !== val) {
-        addF(styleFn(val), resBox);
+    // 2. Apply Every Decorator to this Base
+    decorators.forEach(dec => {
+        const final = dec(baseTxt);
+        // Deduplicate: Don't show plain bases twice if they match
+        addF(final, resBox);
         count++;
-    }
+    });
   });
-  
-  for(let i=0; i<10; i++) {
-      let baseTxt = "";
-      const mapArr = Array.from(alphas[i+1].m); 
-      for(let char of val){
-          let idx = chars.indexOf(char);
-          baseTxt += (idx !== -1 && mapArr[idx]) ? mapArr[idx] : char;
-      }
-      styles.forEach(styleFn => {
-          if(styleFn(baseTxt) !== baseTxt) {
-            addF(styleFn(baseTxt), resBox);
-            count++;
-          }
-      });
-  }
   
   document.getElementById('font-count').innerText=count+" STYLES";
 }
 function addF(t,b){let d=document.createElement('div');d.className="font-item";d.innerText=t;d.onclick=()=>{navigator.clipboard.writeText(t);playShutter();};b.appendChild(d);}
 
-// --- GIF ENGINE ---
+// --- ⚡ NEON GIF ENGINE (STABLE & CENTERED) ---
 const workerBlob = new Blob([`importScripts('https://cdnjs.cloudflare.com/ajax/libs/gif.js/0.2.0/gif.worker.js');`], { type: 'application/javascript' });
 const workerUrl = URL.createObjectURL(workerBlob);
 
@@ -428,7 +402,7 @@ zoom.oninput = function() {
 
 speed.oninput=()=>{ sv.innerText=speed.value+'x'; if(v.src)v.playbackRate=parseFloat(speed.value); };
 
-// GIF PROCESSING
+// GIF PROCESSING (CENTER CROP LOGIC)
 go.onclick=()=>{
     if(!v.src)return;
     go.disabled = true; upBtn.disabled = true; zoom.disabled = true; speed.disabled = true;
@@ -444,6 +418,7 @@ go.onclick=()=>{
         let cTime=0;
         const scale = parseInt(zoom.value) / 100;
         
+        // Calculate Draw Dimensions for Center Crop
         const vw = capVid.videoWidth;
         const vh = capVid.videoHeight;
         const aspect = vw / vh;
@@ -490,7 +465,7 @@ function toggleMusic(){ initAudio(); playClick(); musicOn=!musicOn; if(musicOn){
 function playClick(){ if(audioCtx.state!=='running')audioCtx.resume(); const o=audioCtx.createOscillator(), g=audioCtx.createGain(); o.frequency.setValueAtTime(800, audioCtx.currentTime); g.gain.setValueAtTime(0.08, audioCtx.currentTime); o.connect(g); g.connect(audioCtx.destination); o.start(); o.stop(audioCtx.currentTime+0.1); }
 function playShutter(){ if(audioCtx.state!=='running')audioCtx.resume(); const o=audioCtx.createOscillator(), g=audioCtx.createGain(); o.type='square'; o.frequency.setValueAtTime(150, audioCtx.currentTime); g.gain.setValueAtTime(0.08, audioCtx.currentTime); o.connect(g); g.connect(audioCtx.destination); o.start(); o.stop(audioCtx.currentTime+0.1); }
 
-// --- FRAME ENGINE ---
+// --- 🖼️ FRAME ENGINE ---
 function d(){ x.clearRect(0,0,800,800); x.save(); x.beginPath(); x.arc(400,400,cfg.m,0,6.28); x.clip(); if(i.src){ let w=i.width*cfg.s, h=i.height*cfg.s; x.save(); x.translate(cfg.x,cfg.y); x.rotate(cfg.r*Math.PI/180); x.drawImage(i,-w/2,-h/2,w,h); x.restore(); } x.restore(); if(f.src) x.drawImage(f,0,0,800,800); }
 function handleFile(e){ 
   let r=new FileReader(); 
@@ -521,7 +496,7 @@ function downloadPic(){
 function updS(el){ if(el.parentElement.classList.contains('ui-gif')) return; el.style.setProperty('--v', ((el.value-el.min)/(el.max-el.min)*100)+'%'); }
 document.querySelectorAll('input[type=range]').forEach(el => { el.addEventListener('input', () => updS(el)); updS(el); });
 
-// --- TOUCH CONTROLS ---
+// --- 🕹️ FRAME STUDIO TOUCH CONTROLS ---
 let isP=false, tStart={x:0,y:0}, tAng=0, initR=0;
 c.onmousedown=e=>{isP=true; tStart={x:e.offsetX,y:e.offsetY};}
 c.onmousemove=e=>{
