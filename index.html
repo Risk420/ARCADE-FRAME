@@ -176,7 +176,7 @@
     box-shadow: inset 0 0 20px #000; 
   }
   
-  /* FIXED: Custom positioning logic instead of object-fit */
+  /* FIXED: Custom positioning logic + no object-fit so constraint logic works */
   #v { 
     position: absolute; 
     top: 50%; left: 50%;
@@ -502,6 +502,7 @@ function resetGifProject() {
   gfInput.value = '';
   gifX = 0; gifY = 0;
   v.style.transform = `translate(-50%, -50%) scale(1)`;
+  vp.style.pointerEvents = 'auto'; // UNLOCK
 }
 
 gfInput.onchange=(e)=>{ 
@@ -612,6 +613,7 @@ window.addEventListener('touchend', () => isGifDrag = false);
 go.onclick=()=>{
     if(!v.src)return;
     go.disabled = true; upBtn.disabled = true; zoom.disabled = true; speed.disabled = true;
+    vp.style.pointerEvents = 'none'; // LOCK
     msg.innerText="Processing..."; msg.classList.add('active');
     
     const gif=new GIF({workers:2, quality:10, width:480, height:480, workerScript:workerUrl});
@@ -673,6 +675,7 @@ go.onclick=()=>{
         msg.classList.remove('active'); go.style.display='none';
         // Hide upload button during result view for cleanliness
         upBtn.parentElement.querySelector('.btn-upload').style.display='none';
+        vp.style.pointerEvents = 'auto'; // UNLOCK
     });
 };
 
