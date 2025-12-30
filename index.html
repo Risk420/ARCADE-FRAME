@@ -19,6 +19,16 @@
     background-size: 100% 4px; touch-action: pan-y; 
   }
 
+  /* --- ANIMATIONS (RESTORED) --- */
+  @keyframes rotate { 
+    from { transform: rotate(0deg); } 
+    to { transform: rotate(360deg); } 
+  }
+  @keyframes arcadeBounce { 
+    0%, 100% { transform: translateY(0); } 
+    50% { transform: translateY(-10px); } 
+  }
+
   /* --- NAVIGATION --- */
   .menu-toggle { 
     position: fixed; top: 15px; left: 15px; 
@@ -65,7 +75,6 @@
 
   /* HEADERS */
   h1 { color: #fff; margin: 60px 0 0 0; font-family: "Arial Black", sans-serif; font-style: italic; font-size: 36px; text-transform: uppercase; letter-spacing: -1px; text-shadow: 2px 2px 0px #ff0000, -1px -1px 10px rgba(255, 0, 0, 0.8); animation: arcadeBounce 1.8s infinite ease-in-out; }
-  @keyframes arcadeBounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
   .sub { color: #fff; font-weight: bold; margin: 2px 0 15px 0; text-transform: uppercase; font-size: 11px; letter-spacing: 2px; text-align: center; }
   
   .studio-sec { display: none; width: 320px; flex-direction: column; align-items: center; }
@@ -86,7 +95,7 @@
   .lbl { font-size: 9px; color: #888; text-transform: uppercase; margin-top: 2px; display: flex; justify-content: space-between; align-items: center; width: 100%; }
   .val-tag { color: #ff0000; font-weight: bold; font-family: monospace; font-size: 10px; }
   
-  /* --- ⬇️ FIXED DOWNLOAD BUTTON STYLE --- */
+  /* FIXED DOWNLOAD BUTTON (BLUE + BLOCKED) */
   #save {
       background: #007bff; /* RESTORED BLUE */
       border: none;
@@ -104,7 +113,6 @@
       transition: all 0.3s ease;
   }
   #save:hover { background: #0056b3; }
-  /* BLOCKED STATE */
   #save:disabled {
       background: #333333;
       color: #666666;
@@ -118,14 +126,20 @@
   .font-scroll { width: 100%; max-height: 500px; overflow-y: auto; display: flex; flex-direction: column; border-radius: 8px; overflow-x: hidden; border: 1px solid rgba(255,255,255,0.1); box-sizing: border-box; touch-action: pan-y; }
   .font-item { background: #1a1a1c; border-bottom: 1px solid rgba(255,255,255,0.1); padding: 16px; width: 100%; text-align: center; cursor: pointer; color: #eee; font-size: 16px; white-space: pre-wrap; }
 
-  /* --- ⚡ GIF STUDIO CSS --- */
+  /* --- ⚡ GIF STUDIO CSS (FIXED) --- */
   :root { --neon: #00f3ff; --purple: #bc13fe; --red: #ff0055; }
   .stage { position: relative; width: 320px; height: 320px; display: flex; align-items: center; justify-content: center; margin-bottom: 30px; touch-action: none; }
-  .led-ring { position: absolute; inset: -15px; border-radius: 50%; background: conic-gradient(from 0deg, transparent, var(--neon), var(--purple), transparent); animation: rotate 2s linear infinite; filter: blur(20px); z-index: 1; pointer-events: none; }
+  
+  /* NEON RING ANIMATION */
+  .led-ring { 
+      position: absolute; inset: -15px; border-radius: 50%; 
+      background: conic-gradient(from 0deg, transparent, var(--neon), var(--purple), transparent); 
+      animation: rotate 2s linear infinite; /* SPINNING IS BACK */
+      filter: blur(20px); z-index: 1; pointer-events: none; 
+  }
   
   .viewport { position: relative; z-index: 5; width: 100%; height: 100%; border-radius: 50%; overflow: hidden; background-color: #000; box-shadow: inset 0 0 20px #000; touch-action: none; cursor: move; }
   
-  /* GPU ACCELERATION ENABLED ON VIDEO */
   #v { 
     position: absolute; top: 0; left: 0; 
     min-width: 100%; min-height: 100%; 
@@ -152,7 +166,6 @@
   input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 8px; background: linear-gradient(to right, #ff0000 var(--v, 0%), #00ffff var(--v, 0%)); border-radius: 4px; }
   input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 20px; width: 20px; border-radius: 50%; background: #ff0000; margin-top: -6px; border: 2px solid #ffffff; box-shadow: 0 0 10px #ff0000; }
   
-  /* GIF Studio Specific Sliders */
   .ui-gif input[type="range"] { margin-bottom: 25px; accent-color: var(--neon); }
   .ui-gif input[type="range"]::-webkit-slider-runnable-track { background: #333; height: 6px; }
   .ui-gif input[type="range"]::-webkit-slider-thumb { background: var(--neon); box-shadow: 0 0 10px var(--neon); border: none; }
@@ -167,7 +180,6 @@
   .neon-wrap { position: relative; display: none; margin-top: 20px; padding: 3px; border-radius: 50px; overflow: hidden; width: fit-content; }
   .neon-wrap.blue::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: conic-gradient(transparent, transparent, var(--neon), var(--purple), transparent, transparent); animation: rotate 2s linear infinite; z-index: 0; }
   
-  /* Reset Button Style */
   .neon-wrap.red { margin-top: 20px; }
   .neon-wrap.red::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: conic-gradient(transparent, transparent, var(--red), #ff5500, transparent, transparent); animation: rotate 2s linear infinite; z-index: 0; }
   
@@ -306,7 +318,7 @@ const decorators = [" ","★|★","『|』","【|】","꧁|꧂","˗ˏ|ˎ˗","⦗
 function genFonts(){const val=document.getElementById('font-input').value,resBox=document.getElementById('font-results');resBox.innerHTML="";if(!val)return;let count=0;bases.forEach(b=>{let baseTxt="";const mapArr=Array.from(b.m);for(let char of val){let idx=chars.indexOf(char);baseTxt+=(idx!==-1&&mapArr[idx])?mapArr[idx]:char;}addF(baseTxt,resBox);count++;decorators.forEach(dec=>{let [p,s]=dec.split("|");addF(p+baseTxt+(s||p),resBox);count++;});});document.getElementById('font-count').innerText=count+" STYLES";}
 function addF(t,b){let d=document.createElement('div');d.className="font-item";d.innerText=t;d.onclick=()=>{navigator.clipboard.writeText(t);playShutter();};b.appendChild(d);}
 
-// --- ⚡ NEON GIF ENGINE (GPU ACCELERATED) ---
+// --- ⚡ NEON GIF ENGINE (FIXED & ROBUST) ---
 const workerBlob = new Blob([`importScripts('https://cdnjs.cloudflare.com/ajax/libs/gif.js/0.2.0/gif.worker.js');`], { type: 'application/javascript' });
 const workerUrl = URL.createObjectURL(workerBlob);
 
@@ -314,7 +326,7 @@ const gfInput=document.getElementById('gfInput'), upBtn=document.getElementById(
 const speed=document.getElementById('speed'), sv=document.getElementById('sv'), zoom=document.getElementById('zoom'), zv=document.getElementById('zv'), go=document.getElementById('go'), msg=document.getElementById('msg');
 const dlBox=document.getElementById('dlBox'), dl=document.getElementById('dl'), resetBox=document.getElementById('resetBox');
 
-let isDragging=false, startX, startY, naturalW=0, naturalH=0;
+let isDragging=false, startX, startY;
 let gifX = 0, gifY = 0; // GPU Coordinates
 
 // Reset Project Logic
@@ -322,50 +334,61 @@ function resetGifProject() {
   v.src=''; o.style.display='none'; v.style.display='none';
   dlBox.style.display='none'; resetBox.style.display='none';
   go.style.display='block'; go.disabled=false; 
-  upBtn.disabled=false; zoom.disabled=false; speed.disabled=false;
+  upBtn.disabled=false; speed.disabled=false; zoom.disabled=false;
   msg.classList.remove('active');
-  zoom.value=100; zv.innerText="100%";
   gfInput.value = '';
+  zoom.value=100; zv.innerText="100%";
   gifX = 0; gifY = 0; v.style.transform = `translate3d(0px, 0px, 0)`;
 }
 
-// 1. Upload
+// 1. Upload & Aspect Ratio Handling (FIXED for Non-1:1)
 gfInput.onchange=(e)=>{ 
     const file=e.target.files[0]; if(!file)return;
     v.style.display='block'; o.style.display='none'; dlBox.style.display='none'; resetBox.style.display='none';
     v.src=URL.createObjectURL(file); v.playbackRate=parseFloat(speed.value);
     v.onloadedmetadata=()=>{
-        naturalW=v.videoWidth; naturalH=v.videoHeight;
-        const aspect=naturalW/naturalH; 
-        gifX = 0; gifY = 0; v.style.transform = `translate3d(0px, 0px, 0)`;
-        if(aspect>1){ 
-            v.style.height='320px'; 
-            v.style.width=(320*aspect)+'px'; 
+        const nw=v.videoWidth; const nh=v.videoHeight;
+        const aspect=nw/nh; 
+        gifX = 0; gifY = 0;
+        
+        // CSS Sizing Logic: "Cover" the 320x320 box
+        if(aspect > 1){ 
+            v.style.height='320px'; v.style.width='auto';
+            const scaledWidth = 320 * aspect;
+            gifX = (320 - scaledWidth) / 2;
         } else { 
-            v.style.width='320px'; 
-            v.style.height=(320/aspect)+'px'; 
+            v.style.width='320px'; v.style.height='auto';
+            const scaledHeight = 320 / aspect;
+            gifY = (320 - scaledHeight) / 2;
         }
+        zoom.value=100; zv.innerText="100%";
+        v.style.transform = `translate3d(${gifX}px, ${gifY}px, 0)`;
         v.play();
     };
 };
 
-// 2. Fixed Zoom with Boundary Checks
+// 2. ZOOM LOGIC (RESTORED & FIXED)
 zoom.oninput = function() {
     if(!v.src) return;
     zv.innerText = this.value + '%';
     const z = parseInt(this.value) / 100;
-    const aspect = naturalW / naturalH;
-    let bW, bH;
-    if(aspect > 1) { bH = 320; bW = 320 * aspect; } 
-    else { bW = 320; bH = 320 / aspect; }
     
-    // Apply Size
-    const newW = bW * z;
-    const newH = bH * z;
+    // Original "Cover" Dimensions
+    const nw = v.videoWidth;
+    const nh = v.videoHeight;
+    const aspect = nw / nh;
+    
+    let baseW, baseH;
+    if(aspect > 1) { baseH = 320; baseW = 320 * aspect; }
+    else { baseW = 320; baseH = 320 / aspect; }
+    
+    // Apply Zoom
+    const newW = baseW * z;
+    const newH = baseH * z;
     v.style.width = newW + 'px';
     v.style.height = newH + 'px';
-
-    // Clamp Coordinates (Prevent gaps when zooming out)
+    
+    // Re-clamp coordinates if zooming out creates empty space
     if (gifX > 0) gifX = 0;
     if (gifX < -(newW - 320)) gifX = -(newW - 320);
     if (gifY > 0) gifY = 0;
@@ -374,24 +397,21 @@ zoom.oninput = function() {
     v.style.transform = `translate3d(${gifX}px, ${gifY}px, 0)`;
 };
 
-// 3. GPU Dragging (No Lag)
+// 3. Dragging Logic
 const sD=(x,y)=>{ if(!v.src)return; isDragging=true; startX=x; startY=y; vp.style.cursor='grabbing'; };
 const dD=(x,y)=>{ 
   if(!isDragging)return; 
   const dx=x-startX, dy=y-startY; 
   startX = x; startY = y; 
+  gifX += dx; gifY += dy;
   
-  gifX += dx;
-  gifY += dy;
-
-  // Use getBoundingClientRect for accurate current dimensions
+  // Dynamic Clamping based on current (zoomed) size
   const rect = v.getBoundingClientRect();
-  const vw = rect.width; 
-  const vh = rect.height;
-
-  if(gifX>0) gifX=0; if(gifX<-(vw-320)) gifX=-(vw-320); 
-  if(gifY>0) gifY=0; if(gifY<-(vh-320)) gifY=-(vh-320); 
+  const vw = rect.width; const vh = rect.height;
   
+  if(gifX>0) gifX=0; if(gifX<-(vw-320)) gifX=-(vw-320); 
+  if(gifY>0) gifY=0; if(gifY<-(vh-320)) gifY=-(vh-320);
+
   v.style.transform = `translate3d(${gifX}px, ${gifY}px, 0)`;
 };
 vp.onmousedown=e=>sD(e.pageX,e.pageY); window.onmousemove=e=>dD(e.pageX,e.pageY); window.onmouseup=()=>{ isDragging=false; vp.style.cursor='move'; };
@@ -399,10 +419,10 @@ vp.ontouchstart=e=>sD(e.touches[0].pageX, e.touches[0].pageY); window.ontouchmov
 
 speed.oninput=()=>{ sv.innerText=speed.value+'x'; if(v.src)v.playbackRate=parseFloat(speed.value); };
 
-// 4. Processing (Coordinate Locked)
+// 4. Processing (FIXED COORDINATE MAPPING)
 go.onclick=()=>{
     if(!v.src)return;
-    go.disabled = true; upBtn.disabled = true; zoom.disabled = true; speed.disabled = true;
+    go.disabled = true; upBtn.disabled = true; speed.disabled = true; zoom.disabled = true;
     msg.innerText="Processing..."; msg.classList.add('active');
     
     const gif=new GIF({workers:2, quality:10, width:480, height:480, workerScript:workerUrl});
@@ -411,16 +431,24 @@ go.onclick=()=>{
     
     capVid.src=v.src; capVid.muted=true; capVid.playsInline=true;
     capVid.onloadeddata=()=>{
-        // FIXED LOGIC: Get Dimensions directly from the DOM Element to avoid NaN/0 issues
-        const rect = v.getBoundingClientRect();
-        const cW = rect.width;
-        const cH = rect.height;
+        // KEY FIX: Calculate ratio between Natural Video Size and Rendered CSS Size
+        const rect = v.getBoundingClientRect(); // What user sees (includes zoom)
+        const renderedW = rect.width;
         
-        // USE TRACKED COORDINATES (Lock Position)
-        const cL = Math.abs(gifX);
-        const cT = Math.abs(gifY);
+        // Ratio: How many video pixels equal 1 screen pixel
+        const ratio = v.videoWidth / renderedW;
         
-        const rW=naturalW/cW, rH=naturalH/cH, sx=cL*rW, sy=cT*rH, sw=320*rW, sh=320*rH;
+        // Relative Position mapping
+        const parentRect = vp.getBoundingClientRect(); // The 320x320 box
+        const offsetX = parentRect.left - rect.left; 
+        const offsetY = parentRect.top - rect.top;
+        
+        // Map to source coordinates
+        const sx = offsetX * ratio;
+        const sy = offsetY * ratio;
+        const sw = 320 * ratio; 
+        const sh = 320 * ratio; 
+        
         let cTime=0;
         const captureFrame=()=>{
             if(cTime>=duration){ msg.innerText="Encoding..."; gif.render(); return; }
@@ -429,7 +457,8 @@ go.onclick=()=>{
         capVid.onseeked=()=>{
             ctx.fillStyle = '#000000'; 
             ctx.fillRect(0, 0, 480, 480);
-            ctx.drawImage(capVid,sx,sy,sw,sh,0,0,480,480);
+            ctx.drawImage(capVid, sx, sy, sw, sh, 0, 0, 480, 480);
+            
             gif.addFrame(ctx,{copy:true, delay:(1000/fps)/playbackSpeed});
             cTime+=(1/fps);
             setTimeout(captureFrame, 10);
@@ -462,7 +491,6 @@ function handleFile(e){
         let n=new Image(); 
         n.onload=()=>{
             i=n; cfg.s=Math.max(800/i.width,800/i.height); cfg.x=400; cfg.y=400; cfg.r=0; d(); playClick();
-            // UNBLOCK BUTTON WHEN IMAGE LOADED
             saveBtn.disabled = false;
         }; 
         n.src=v.target.result; 
@@ -476,7 +504,6 @@ function updateM(v){ cfg.m=parseInt(v); mVal.innerText=v+"px"; d(); }
 function centerSubject(){ cfg.x=400; cfg.y=400; cfg.r=0; rSl.value=0; d(); playShutter(); }
 function resetProject(){ 
     i=new Image(); f=new Image(); cfg={s:1,m:375,x:400,y:400,r:0}; zSl.value=1; rSl.value=0; mSl.value=375; d(); playShutter(); 
-    // BLOCK BUTTON ON RESET
     saveBtn.disabled = true;
 }
 function downloadPic(){ 
@@ -486,7 +513,7 @@ function downloadPic(){
 function updS(el){ if(el.parentElement.classList.contains('ui-gif')) return; el.style.setProperty('--v', ((el.value-el.min)/(el.max-el.min)*100)+'%'); }
 document.querySelectorAll('input[type=range]').forEach(el => { el.addEventListener('input', () => updS(el)); updS(el); });
 
-// --- 🕹️ FRAME STUDIO TOUCH CONTROLS (RESTORED) ---
+// --- 🕹️ FRAME STUDIO TOUCH CONTROLS ---
 let isP=false, tStart={x:0,y:0}, tAng=0, initR=0;
 c.onmousedown=e=>{isP=true; tStart={x:e.offsetX,y:e.offsetY};}
 c.onmousemove=e=>{
