@@ -100,9 +100,9 @@
   .font-item { background: #1a1a1c; border-bottom: 1px solid rgba(255,255,255,0.1); padding: 16px; width: 100%; text-align: center; cursor: pointer; color: #eee; font-size: 16px; white-space: pre-wrap; }
   
   /* --- ✨ SYMBOLS STUDIO CSS --- */
-  .sym-box-container { width: 100%; display: flex; gap: 5px; margin-bottom: 15px; }
-  .sym-input { flex: 1; background: #000; border: 1px solid #00ffff; color: #00ffff; padding: 12px; font-size: 18px; border-radius: 6px; text-align: center; }
-  .sym-copy-btn { background: #00ffff; color: #000; border: none; font-weight: bold; padding: 0 15px; border-radius: 6px; cursor: pointer; font-size: 18px; }
+  .sym-box-container { width: 100%; margin-bottom: 15px; }
+  .sym-input { width: 100%; background: #000; border: 1px solid #00ffff; color: #00ffff; padding: 12px; font-size: 18px; border-radius: 6px; text-align: center; box-sizing: border-box; outline: none; }
+  .sym-input:focus { border-color: #ff00ff; box-shadow: 0 0 10px rgba(255,0,255,0.5); }
 
   .sym-grid { display: flex; flex-wrap: wrap; gap: 5px; width: 100%; padding: 5px; box-sizing: border-box; }
   .sym-btn { background: #1a1a1c; border: 1px solid #333; color: white; padding: 15px 0; font-size: 20px; border-radius: 6px; cursor: pointer; text-align: center; flex: 1 0 18%; min-width: 50px; }
@@ -160,8 +160,10 @@
   .ui-gif input[type="range"]::-webkit-slider-thumb { background: var(--neon); box-shadow: 0 0 10px var(--neon); border: none; }
   .ui-gif input[type="range"]:disabled { opacity: 0.3; cursor: not-allowed; }
 
-  .btn-go { background: transparent; color: white; border: 1px solid var(--neon); padding: 15px; width: 100%; border-radius: 15px; cursor: pointer; font-weight: bold; font-size: 14px; transition: 0.2s; }
-  .btn-go:disabled { opacity: 0.4; cursor: not-allowed; background: #1a1a1a; border-color: #333; color: #666; }
+  /* Fixed Create GIF Button - Solid Gradient */
+  .btn-go { background: linear-gradient(90deg, #00f3ff, #bc13fe); color: #000; border: none; padding: 15px; width: 100%; border-radius: 15px; cursor: pointer; font-weight: bold; font-size: 14px; transition: 0.2s; box-shadow: 0 0 15px rgba(0, 243, 255, 0.2); }
+  .btn-go:disabled { opacity: 0.4; cursor: not-allowed; background: #1a1a1a; color: #666; box-shadow: none; }
+  .btn-go:active { transform: scale(0.98); }
 
   .status { margin-top: 20px; font-size: 14px; text-align: center; color: var(--neon); font-weight: 600; opacity: 0; transition: 0.3s; height: 20px; }
   .status.active { opacity: 1; }
@@ -277,10 +279,9 @@
 </div>
 
 <div id="sym-studio" class="studio-sec">
-    <div class="lbl">TAP SYMBOLS TO COLLECT</div>
+    <div class="lbl">TAP SYMBOLS TO BUILD BIO</div>
     <div class="sym-box-container">
-        <input type="text" id="sym-box" class="sym-input" placeholder="Tap symbols to add here..." readonly>
-        <button class="sym-copy-btn" onclick="copySymBox()">📋</button>
+        <input type="text" id="sym-box" class="sym-input" placeholder="Type or tap symbols here...">
     </div>
     <div id="sym-container" class="font-scroll"></div>
 </div>
@@ -310,7 +311,7 @@ window.onclick = e => {
 function toggleSwitchMenu(e) { e.stopPropagation(); swMenu.style.display = swMenu.style.display === 'flex' ? 'none' : 'flex'; playClick(); }
 function toggleMenu(e) { e.stopPropagation(); initAudio(); panel.classList.toggle('open'); playClick(); }
 
-// --- ✍️ CLEAN FONT ENGINE (SAFE ALPHABETS ONLY) ---
+// --- ✍️ CLEAN FONT ENGINE ---
 const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 const alphas = [
   {m:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"}, // Normal
@@ -379,7 +380,7 @@ function renderSymbols(){
             let btn = document.createElement('div');
             btn.className = "sym-btn";
             btn.innerText = s;
-            // Add to Box instead of Copy immediately
+            // Add to Box
             btn.onclick = () => { 
                 const b = document.getElementById('sym-box');
                 b.value += s;
@@ -390,12 +391,6 @@ function renderSymbols(){
         
         box.appendChild(grid);
     }
-}
-function copySymBox(){
-    const b = document.getElementById('sym-box');
-    navigator.clipboard.writeText(b.value);
-    playShutter();
-    // Optional: clear after copy or keep it? Keeping it is safer.
 }
 renderSymbols();
 
