@@ -17,6 +17,7 @@
     -webkit-overflow-scrolling: touch; 
     background-image: linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px);
     background-size: 100% 4px; touch-action: pan-y; 
+    transition: 0.3s;
   }
 
   /* --- NAVIGATION --- */
@@ -25,6 +26,14 @@
     background: #1a1a1c; color: #fff; border: 1px solid rgba(255,255,255,0.1); 
     padding: 8px 12px; border-radius: 4px; font-weight: bold; cursor: pointer; 
     z-index: 100000; font-size: 12px; box-shadow: 0 2px 5px rgba(0,0,0,0.5); 
+  }
+
+  /* PC TOGGLE BUTTON */
+  #view-toggle {
+    position: fixed; top: 15px; right: 15px; 
+    background: #1a1a1c; color: #fff; border: 1px solid #00ffff; 
+    padding: 8px 12px; border-radius: 4px; font-weight: bold; cursor: pointer; 
+    z-index: 100000; font-size: 16px; box-shadow: 0 0 10px rgba(0,255,255,0.2);
   }
 
   #menu-panel { 
@@ -68,8 +77,51 @@
   @keyframes arcadeBounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
   .sub { color: #fff; font-weight: bold; margin: 2px 0 15px 0; text-transform: uppercase; font-size: 11px; letter-spacing: 2px; text-align: center; }
   
+  /* --- LAYOUT LOGIC --- */
   .studio-sec { display: none; width: 320px; flex-direction: column; align-items: center; }
   .active-sec { display: flex; }
+
+  /* --- PC MODE STYLES (Professional Suite) --- */
+  body.pc-mode { justify-content: flex-start; padding-top: 40px; }
+  
+  /* Widen Containers */
+  body.pc-mode .studio-sec { 
+    width: 90%; 
+    max-width: 1100px; /* Constrain width to look professional */
+    flex-direction: row; 
+    align-items: flex-start; 
+    justify-content: center; 
+    gap: 60px; /* Space between canvas and tools */
+  }
+
+  /* Frame & GIF Studio: Split View */
+  body.pc-mode #frame-studio, body.pc-mode #gif-studio {
+    align-items: center; /* Vertically center in row */
+  }
+  body.pc-mode .ui, body.pc-mode .ui-gif {
+    width: 350px; /* Fixed width for controls */
+    margin-top: 0;
+  }
+
+  /* Font Studio: Grid View */
+  body.pc-mode #font-studio { flex-direction: column; align-items: center; }
+  body.pc-mode #font-results { 
+    display: grid; 
+    grid-template-columns: repeat(3, 1fr); /* 3 Columns */
+    gap: 15px; 
+    max-height: 70vh; /* Taller scroll area */
+  }
+  body.pc-mode .font-input { width: 50%; }
+
+  /* Symbols Studio: Wide Grid */
+  body.pc-mode #sym-studio { flex-direction: column; align-items: center; }
+  body.pc-mode .sym-box-container { width: 50%; }
+  body.pc-mode #sym-container {
+    max-height: 70vh;
+  }
+  body.pc-mode .sym-btn {
+    flex: 1 0 50px; /* Smaller, tighter buttons for mouse */
+  }
 
   /* --- 🖼️ FRAME STUDIO CSS --- */
   @keyframes neonPulse {
@@ -85,6 +137,7 @@
     background-color: transparent; background-size: 20px 20px;
     animation: neonPulse 2s infinite ease-in-out;
     z-index: 10; 
+    flex-shrink: 0; /* Prevent shrinking in PC mode */
   }
   canvas#c { position: absolute; top: 0; left: 0; width: 310px; height: 310px; z-index: 15; touch-action: none; }
   .ui { margin-top: 20px; width: 310px; display: flex; flex-direction: column; gap: 6px; }
@@ -114,13 +167,13 @@
   /* --- ⚡ GIF STUDIO CSS --- */
   @keyframes rotate { 100% { transform: rotate(360deg); } }
   
-  .stage { position: relative; width: 320px; height: 320px; display: flex; align-items: center; justify-content: center; margin-bottom: 30px; touch-action: none; }
+  .stage { position: relative; width: 320px; height: 320px; display: flex; align-items: center; justify-content: center; margin-bottom: 30px; touch-action: none; flex-shrink: 0; }
   
-  /* The Moving RGB Ring - Fast (1.5s) */
+  /* The Moving RGB Ring - Fast (1.0s) */
   .led-ring { 
     position: absolute; inset: -15px; border-radius: 50%; 
     background: conic-gradient(from 0deg, #00f3ff, #bc13fe, #ff0055, #00f3ff); 
-    animation: rotate 1.5s linear infinite; filter: blur(20px); z-index: 1; pointer-events: none; 
+    animation: rotate 1.0s linear infinite; filter: blur(20px); z-index: 1; pointer-events: none; 
   }
   
   .viewport { 
@@ -131,7 +184,7 @@
   #v { 
     max-width: 100%; max-height: 100%; 
     width: 320px; height: 320px; 
-    pointer-events: none; /* Pointer events handled by JS on container */
+    pointer-events: none; 
     object-fit: cover;
     will-change: transform; 
   }
@@ -193,6 +246,7 @@
 <body onclick="startAudio()">
 
 <button class="menu-toggle" onclick="toggleMenu(event)">MENU ☰</button>
+<button id="view-toggle" onclick="toggleViewMode()">🖥️</button>
 
 <div id="menu-panel">
   <div class="switch-container">
@@ -305,6 +359,36 @@ const c=document.getElementById('c'),x=c.getContext('2d'),zSl=document.getElemen
 const zVal=document.getElementById('z-val'),rVal=document.getElementById('r-val'),mVal=document.getElementById('m-val');
 let i=new Image(),f=new Image(),cfg={s:1,m:375,x:400,y:400,r:0,lx:0,ly:0},player,musicOn=true,audioStarted=false;
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+// --- PC VIEW LOGIC ---
+const viewBtn = document.getElementById('view-toggle');
+let isPC = false;
+
+function detectDevice() {
+    if(window.innerWidth > 1024) {
+        setPCMode(true);
+    } else {
+        setPCMode(false);
+    }
+}
+
+function toggleViewMode() {
+    setPCMode(!isPC);
+}
+
+function setPCMode(enable) {
+    isPC = enable;
+    if(isPC) {
+        document.body.classList.add('pc-mode');
+        viewBtn.innerText = "📱"; // Click to go Mobile
+    } else {
+        document.body.classList.remove('pc-mode');
+        viewBtn.innerText = "🖥️"; // Click to go PC
+    }
+}
+
+// Run detection on load
+detectDevice();
 
 function changeStudio(mode) {
   playClick(); document.querySelectorAll('.studio-sec').forEach(s => s.classList.remove('active-sec')); 
