@@ -674,18 +674,22 @@ function playShutter(){ if(audioCtx.state!=='running')audioCtx.resume(); const o
 function d(){ 
   x.clearRect(0,0,800,800); 
   
-  // CONSTRAINT LOGIC: Ensure image stays full inside the 800x800 area
+  // CONSTRAINT LOGIC: Clamp the image to the frame edges
   if(i.src) {
      let w = i.width * cfg.s;
      let h = i.height * cfg.s;
      
      // Calculate max deviation from center (400)
-     // If image is larger than 800, clamp so edge doesn't cross canvas boundary.
+     // If image is smaller than canvas (800), lock to center.
+     // If image is larger, clamp so edge doesn't cross canvas boundary.
      let maxDx = (w > 800) ? (w - 800) / 2 : 0;
      let maxDy = (h > 800) ? (h - 800) / 2 : 0;
      
+     // Clamp X
      if(cfg.x < 400 - maxDx) cfg.x = 400 - maxDx;
      if(cfg.x > 400 + maxDx) cfg.x = 400 + maxDx;
+     
+     // Clamp Y
      if(cfg.y < 400 - maxDy) cfg.y = 400 - maxDy;
      if(cfg.y > 400 + maxDy) cfg.y = 400 + maxDy;
   }
