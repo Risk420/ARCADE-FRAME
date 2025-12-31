@@ -392,7 +392,7 @@ const alphas = [
   {m:"𝗔𝗕𝗖𝗗𝗘𝗙𝗚𝗛𝗜ＪＫＬＭＮＯＰ𝗤𝗥𝗦𝗧𝗨𝗩𝗪𝗫𝗬𝗭𝗮𝗯𝗰𝗱𝗲𝗳𝗴𝗵𝗶𝗷𝗸𝗹𝗺𝗻𝗼𝗽𝗾𝗿𝘀𝘁𝘂𝘃𝘄𝘅𝘆𝘇𝟬𝟭𝟮𝟯𝟰𝟱𝟲𝟳𝟴𝟵"},
   {m:"𝘈𝘉𝘊𝘋𝘌𝘍𝘎𝘏𝘐𝘑𝘒𝘓𝘔𝘕𝘖𝘗𝘘𝘙𝘚𝘛𝘜𝘝𝘞𝘟𝘠𝘡𝘢𝘣𝘤𝘥𝘦𝘧𝘨𝘩𝘪𝘫𝘬𝘭𝘮𝘯𝘰𝘱𝘲𝘳𝘴𝘵𝘶𝘷𝘸𝘹𝘺𝘻0123456789"},
   {m:"𝘼𝘽𝘾𝘿𝙀𝙁𝙂𝙃𝙄𝙅𝙆𝙇𝙈𝙉𝙊𝙋𝙌𝙍𝙎𝙏𝙐𝙑𝙒𝙓𝙔𝙕𝙖𝙗𝙘𝙙𝙚𝙛𝙜𝙝𝙞𝙟𝙠𝙡𝙢𝙣𝙤𝙥𝙦𝙧𝙨𝙩𝙪𝙫𝙬𝙭𝙮𝙯0123456789"},
-  {m:"𝙰𝙱𝙲𝙳𝙴𝙵𝙶𝙷𝙸𝙹𝙺𝙻𝙼𝙽𝙾𝙿𝚀𝚁𝚂𝚃𝚄𝚅𝚆𝚇𝚈𝚉𝚊𝚋𝚌𝚍𝚎𝚏𝚐𝚑𝚒𝚓𝚔𝚕𝚖𝚗𝚘𝚙𝚚𝚛𝚜𝚝𝚞𝚟𝚠𝚡𝚢𝚣𝟶𝟷𝟸𝟹𝟺𝟻𝟼𝟽𝟾𝟿"},
+  {m:"𝙰𝙱ＣＤ𝙴𝙵𝙶𝙷𝙸𝙹𝙺𝙻𝙼𝙽𝙾𝙿𝚀𝚁𝚂𝚃𝚄𝚅𝚆𝚇𝚈𝚉𝚊𝚋𝚌𝚍𝚎𝚏𝚐𝚑𝚒𝚓𝚔𝚕𝚖𝚗𝚘𝚙𝚚𝚛𝚜𝚝𝚞𝚟𝚠𝚡𝚢𝚣𝟶𝟷𝟸𝟹𝟺𝟻𝟼𝟽𝟾𝟿"},
   {m:"ＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚ０１２３４５６７８９"},
   {m:"ⒶⒷⒸⒹⒺⒻⒼⒽⒾⒿⓀⓁⓂⓃⓄⓅⓆⓇⓈⓉⓊⓋⓌⓍⓎⓏⓐⓑⓒⓓⓔⓕⓖⓗⓘⓙⓚⓛⓜⓝⓞⓟⓠⓡⓢⓣⓤⓥⓦⓧⓨⓩ⓪①②③④⑤⑥⑦⑧⑨"},
   {m:"🅐🅑🅒🅓🅔🅕🅖🅗🅘🅙🅚🅛🅜🅝🅞🅟🅠🅡🅢🅣🅤🅥🅦🅧🅨🅩🅐🅑🅒🅓🅔🅕🅖🅗🅘🅙🅚🅛🅜🅝🅞🅟🅠🅡🅢🅣🅤🅥🅦🅧🅨🅩⓿➊➋➌➍➎➏➐➑➒"},
@@ -670,26 +670,25 @@ function toggleMusic(){ initAudio(); playClick(); musicOn=!musicOn; if(musicOn){
 function playClick(){ if(audioCtx.state!=='running')audioCtx.resume(); const o=audioCtx.createOscillator(), g=audioCtx.createGain(); o.frequency.setValueAtTime(800, audioCtx.currentTime); g.gain.setValueAtTime(0.08, audioCtx.currentTime); o.connect(g); g.connect(audioCtx.destination); o.start(); o.stop(audioCtx.currentTime+0.1); }
 function playShutter(){ if(audioCtx.state!=='running')audioCtx.resume(); const o=audioCtx.createOscillator(), g=audioCtx.createGain(); o.type='square'; o.frequency.setValueAtTime(150, audioCtx.currentTime); g.gain.setValueAtTime(0.08, audioCtx.currentTime); o.connect(g); g.connect(audioCtx.destination); o.start(); o.stop(audioCtx.currentTime+0.1); }
 
-// --- 🖼️ FRAME ENGINE ---
+// --- 🖼️ FRAME ENGINE WITH CONSTRAINT LOGIC ---
 function d(){ 
   x.clearRect(0,0,800,800); 
   
-  // CONSTRAINT LOGIC: Clamp the image to the frame edges
   if(i.src) {
      let w = i.width * cfg.s;
      let h = i.height * cfg.s;
      
-     // Calculate max deviation from center (400)
-     // If image is smaller than canvas (800), lock to center.
-     // If image is larger, clamp so edge doesn't cross canvas boundary.
+     // Constraint Logic: Clamp position to ensure image fills 800x800 area
+     // Center of canvas is 400, 400
+     // We calculate the maximum allowable deviation from center
+     // If image is larger than 800, clamp so edge doesn't cross canvas boundary.
+     // If image is smaller (shouldn't happen due to minScale), it locks to center.
+     
      let maxDx = (w > 800) ? (w - 800) / 2 : 0;
      let maxDy = (h > 800) ? (h - 800) / 2 : 0;
      
-     // Clamp X
      if(cfg.x < 400 - maxDx) cfg.x = 400 - maxDx;
      if(cfg.x > 400 + maxDx) cfg.x = 400 + maxDx;
-     
-     // Clamp Y
      if(cfg.y < 400 - maxDy) cfg.y = 400 - maxDy;
      if(cfg.y > 400 + maxDy) cfg.y = 400 + maxDy;
   }
@@ -703,7 +702,6 @@ function d(){
     x.save(); 
     x.translate(cfg.x,cfg.y); 
     x.rotate(cfg.r*Math.PI/180); 
-    // Fix: Draw centered like the GIF maker
     x.drawImage(i,-w/2,-h/2,w,h); 
     x.restore(); 
   } 
@@ -717,9 +715,19 @@ function handleFile(e){
     let n=new Image(); 
     n.onload=()=>{
       i=n; 
-      // Set initial scale to cover the 800x800 box exactly
-      cfg.s=Math.max(800/i.width,800/i.height); 
-      cfg.x=400; cfg.y=400; cfg.r=0; 
+      // Calculate minimum scale to cover 800x800
+      // This prevents zooming out too far
+      let minScale = Math.max(800/i.width, 800/i.height);
+      
+      cfg.s = minScale; 
+      cfg.x = 400; cfg.y = 400; cfg.r = 0; 
+      
+      // Update Zoom Slider Constraints
+      zSl.min = minScale;
+      zSl.max = minScale * 5; // Allow 5x zoom relative to fit
+      zSl.value = minScale;
+      zVal.innerText = "100%"; // Reset display
+      
       d(); playClick();
       document.getElementById('save').disabled = false;
     }; 
@@ -728,7 +736,12 @@ function handleFile(e){
   r.readAsDataURL(e.target.files[0]); 
 }
 function handleFrame(e){ let r=new FileReader(); r.onload=v=>{ let n=new Image(); n.onload=()=>{f=n; d(); playClick();}; n.src=v.target.result; }; r.readAsDataURL(e.target.files[0]); }
-function updateZ(v){ cfg.s=parseFloat(v); zVal.innerText=Math.round(v*100)+"%"; d(); }
+function updateZ(v){ 
+    cfg.s=parseFloat(v); 
+    // Display approx percentage based on original scale
+    zVal.innerText=Math.round(v*100)+"%"; 
+    d(); 
+}
 function updateR(v){ cfg.r=parseInt(v); rVal.innerText=v+"°"; d(); }
 function updateM(v){ cfg.m=parseInt(v); mVal.innerText=v+"px"; d(); }
 function centerSubject(){ cfg.x=400; cfg.y=400; cfg.r=0; rSl.value=0; d(); playShutter(); }
