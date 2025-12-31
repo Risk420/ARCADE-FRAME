@@ -268,6 +268,16 @@
       <option value="nv_2rz5BFDA">🕹️ Retro Wave</option>
     </select>
   </div>
+
+  <div class="music-section">
+    <div class="menu-lbl">Button SFX</div>
+    <select id="sfx-select" style="width:100%; background:#222; color:white; border:1px solid #444;">
+      <option value="bit">👾 8-Bit Tone</option>
+      <option value="arcade" selected>🕹️ Arcade Click</option>
+      <option value="bubble">🫧 Soft Pop</option>
+      <option value="switch">⌨️ Quiet Switch</option>
+    </select>
+  </div>
   
   <a href="https://discord.gg/ardc" target="_blank" class="lnk" style="border-color:#5865F2;">
     <svg viewBox="0 0 127.14 96.36"><path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36,77.11,77.11,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1A105.25,105.25,0,0,0,126.6,80.22c2.36-24.44-5.42-48.18-18.9-72.15ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54,46,53.89,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.25,60,73.25,53s5-12.74,11.44-12.74S96.23,46,96.12,53,91.08,65.69,84.69,65.69Z"/></svg>
@@ -363,8 +373,10 @@ const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 const viewBtn = document.getElementById('view-toggle');
 let isPC = false;
 
-// --- CLOCK FUNCTION (LOCAL TIME) ---
-function updateClock(){ document.getElementById('arcade-clock').innerText = new Date().toTimeString().split(' ')[0]; }
+// --- 12H LIVE ARCADE CLOCK ---
+function updateClock(){ 
+    document.getElementById('arcade-clock').innerText = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', second:'2-digit', hour12: true}); 
+}
 setInterval(updateClock, 1000); updateClock();
 
 function detectDevice() {
@@ -403,7 +415,7 @@ const alphas = [
   // --- ORIGINAL 19 FONTS ---
   {m:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"},
   {m:"𝐀𝐁𝐂𝐃𝐄𝐅𝐆𝐇𝐈𝐉𝐊𝐋𝐌𝐍𝐎𝐏𝐐𝐑𝐒𝐓𝐔𝐕𝐖𝐗𝐘𝐙𝐚𝐛𝐜𝐝𝐞𝐟𝐠𝐡𝐢𝐣𝐤𝐥𝐦𝐧𝐨𝐩𝐪𝐫𝐬𝐭𝐮𝐯𝐰𝐱𝐲𝐳𝟎𝟏𝟐𝟑𝟒𝟓𝟔𝟕𝟖𝟗"},
-  {m:"𝐴𝐵𝐶𝐷𝐸𝐹𝐺𝐻𝐼𝐽ＫＬＭ𝑁𝑂𝑃𝑄𝑅𝑆𝑇𝑈𝑉𝑊𝑋𝑌𝑍𝑎𝑏ｃｄｅｆｇℎｉ𝑗𝑘ｌｍｎｏｐ𝑞𝑟𝑠𝑡𝑢𝑣𝑤𝑥ｙｚ0123456789"},
+  {m:"𝐴𝐵𝐶𝐷𝐸𝐹𝐺𝐻𝐼𝐽ＫＬＭ𝑁𝑂𝑃𝑄𝑅𝑆𝑇𝑈𝑉𝑊𝑋𝑌𝑍𝑎𝑏ｃｄｅ𝑓ｇℎｉ𝑗𝑘ｌｍｎｏｐ𝑞𝑟𝑠𝑡𝑢𝑣𝑤𝑥ｙｚ0123456789"},
   {m:"𝑨𝑩𝑪𝑫𝑬𝑭𝑮𝑯𝑰𝑱𝑲𝑳𝑴𝑵𝑶𝑷𝑸𝑹𝑺𝑻𝑼𝑽𝑾𝑿𝒀𝒁𝒂𝒃𝒄𝒅𝒆𝒇𝒈𝒉𝒊𝒋𝒌𝒍𝒎𝒏𝒐𝒑𝒒𝒓𝒔𝒕𝒖𝒗𝒘𝒙𝒚𝒛0123456789"},
   {m:"𝒜ℬ𝒞𝒟ℰℱ𝒢ℋℐ𝒥𝒦ℒℳ⒩⒪⒫⒬ℛ𝒮𝒯𝒰⒱𝒲𝒳𝒴𝒵𝒶𝒷𝒸𝒹ℯ𝒻ℊ𝒽𝒾𝒿𝓀𝓁𝓂𝓃ℴ𝓅𝓆𝓇𝓈𝓉𝓊𝓋𝓌𝓍𝓎𝓏0123456789"},
   {m:"𝓐𝓑𝓒𝓓𝓔𝓕𝓖𝓗𝓘𝓙𝓚𝓛𝓜𝓝𝓞𝓟𝓠𝓡𝓢𝓣𝓤𝓥𝓦𝓧𝓨𝓩𝓪𝓫𝓬𝓭𝓮𝓯𝓰𝓱𝓲𝓳𝓴𝓵𝓶𝓷𝓸𝓹𝓺𝓻𝓼𝓽𝓾𝓿𝔀𝔁𝔂𝔃0123456789"},
@@ -690,8 +702,33 @@ function initAudio(){ if(!audioStarted){ audioCtx.resume().then(()=>{ audioStart
 function onYouTubeIframeAPIReady(){ player=new YT.Player('yt-player',{height:'0',width:'0',videoId:'jfKfPfyJRdk',playerVars:{'autoplay':1,'loop':1,'playlist':'jfKfPfyJRdk','mute':0},events:{'onReady':e=>{e.target.setVolume(25);}}});}
 function changeMusic(id){ if(player)player.loadVideoById(id); playShutter(); }
 function toggleMusic(){ initAudio(); playClick(); musicOn=!musicOn; if(musicOn){ player.playVideo(); mStat.innerText="ON"; mStat.style.color="#ff0000"; }else{ player.pauseVideo(); mStat.innerText="OFF"; mStat.style.color="#888"; }}
-function playClick(){ if(audioCtx.state!=='running')audioCtx.resume(); const o=audioCtx.createOscillator(), g=audioCtx.createGain(); o.frequency.setValueAtTime(800, audioCtx.currentTime); g.gain.setValueAtTime(0.08, audioCtx.currentTime); o.connect(g); g.connect(audioCtx.destination); o.start(); o.stop(audioCtx.currentTime+0.1); }
-function playShutter(){ if(audioCtx.state!=='running')audioCtx.resume(); const o=audioCtx.createOscillator(), g=audioCtx.createGain(); o.type='square'; o.frequency.setValueAtTime(150, audioCtx.currentTime); g.gain.setValueAtTime(0.08, audioCtx.currentTime); o.connect(g); g.connect(audioCtx.destination); o.start(); o.stop(audioCtx.currentTime+0.1); }
+
+// --- LOW VOLUME SFX ENGINE (NO ANIMATION) ---
+function playClick(){ 
+    if(audioCtx.state!=='running')audioCtx.resume(); 
+    const type = document.getElementById('sfx-select').value;
+    const o=audioCtx.createOscillator(), g=audioCtx.createGain(); 
+    o.connect(g); g.connect(audioCtx.destination);
+    
+    // SFX Logic
+    if(type==='bit'){ o.type='sawtooth'; o.frequency.setValueAtTime(150, audioCtx.currentTime); }
+    else if(type==='arcade'){ o.type='sine'; o.frequency.setValueAtTime(800, audioCtx.currentTime); }
+    else if(type==='bubble'){ o.type='sine'; o.frequency.setValueAtTime(400, audioCtx.currentTime); }
+    else { o.type='square'; o.frequency.setValueAtTime(200, audioCtx.currentTime); }
+
+    // Gain 0.02 (Very Quiet)
+    g.gain.setValueAtTime(0.02, audioCtx.currentTime); 
+    o.start(); o.stop(audioCtx.currentTime+0.1); 
+}
+
+function playShutter(){ 
+    if(audioCtx.state!=='running')audioCtx.resume(); 
+    const o=audioCtx.createOscillator(), g=audioCtx.createGain(); 
+    o.type='square'; o.frequency.setValueAtTime(150, audioCtx.currentTime); 
+    g.gain.setValueAtTime(0.02, audioCtx.currentTime); 
+    o.connect(g); g.connect(audioCtx.destination); 
+    o.start(); o.stop(audioCtx.currentTime+0.1); 
+}
 
 // --- 🖼️ FRAME ENGINE ---
 function d(){ 
