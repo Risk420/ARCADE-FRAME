@@ -716,7 +716,7 @@ function playShutter() { if (audioCtx.state !== 'running') audioCtx.resume(); co
 function d() {
   x.clearRect(0, 0, 800, 800);
   x.save();
-  
+
   // Create circular clipping window
   x.beginPath();
   x.arc(400, 400, cfg.m, 0, Math.PI * 2);
@@ -726,18 +726,18 @@ function d() {
     // Calculate full dimensions
     let w = i.width * cfg.s;
     let h = i.height * cfg.s;
-    
+
     x.save();
     x.translate(cfg.x, cfg.y);
     x.rotate(cfg.r * Math.PI / 180);
-    
+
     // Draw image centered like the GIF maker fix
     x.drawImage(i, -w / 2, -h / 2, w, h);
     x.restore();
   }
-  
+
   x.restore();
-  
+
   // Draw frame on top
   if (f.src) {
     x.drawImage(f, 0, 0, 800, 800);
