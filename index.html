@@ -766,7 +766,18 @@ function updateZ(v){ cfg.s=parseFloat(v); zVal.innerText=Math.round(v*100)+"%"; 
 function updateR(v){ cfg.r=parseInt(v); rVal.innerText=v+"°"; d(); }
 function updateM(v){ cfg.m=parseInt(v); mVal.innerText=v+"px"; d(); }
 function centerSubject(){ cfg.x=400; cfg.y=400; cfg.r=0; rSl.value=0; d(); playShutter(); }
-function resetProject(){ i=new Image(); f=new Image(); cfg={s:1,m:375,x:400,y:400,r:0}; zSl.value=1; rSl.value=0; mSl.value=375; d(); playShutter(); document.getElementById('save').disabled = true;}
+function resetProject() {
+  i = new Image();
+  f = new Image();
+  cfg = { s: 1, m: 375, x: 400, y: 400, r: 0 };
+  zSl.value = 1;
+  rSl.value = 0;
+  mSl.value = 375;
+  d();
+  playShutter();
+  document.getElementById('save').disabled = true;
+}
+
 function downloadPic(){ 
   if(!i.src) return; 
   d(); 
