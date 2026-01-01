@@ -643,9 +643,9 @@ go.onclick=()=>{
     msg.innerText="Processing..."; msg.classList.add('active');
     
     // --- ⚡ SPEED OPTIMIZATION: 5 WORKERS, QUALITY 20 (Faster) ---
-    const gif=new GIF({workers:5, quality:20, width:480, height:480, workerScript:workerUrl});
-    const canvas=document.createElement('canvas'); canvas.width=480; canvas.height=480; const ctx=canvas.getContext('2d');
-    const fps=15, duration=v.duration, playbackSpeed=parseFloat(speed.value), capVid=document.createElement('video');
+    const gif=new GIF({workers:5, quality:20, width:360, height:360, workerScript:workerUrl});
+    const canvas=document.createElement('canvas'); canvas.width=360; canvas.height=360; const ctx=canvas.getContext('2d');
+    const fps=12, duration=v.duration, playbackSpeed=parseFloat(speed.value), capVid=document.createElement('video');
     capVid.src=v.src; capVid.muted=true; capVid.playsInline=true;
     
     capVid.onloadeddata=()=>{
@@ -654,19 +654,19 @@ go.onclick=()=>{
         const aspect = capVid.videoWidth / capVid.videoHeight;
         let drawW, drawH;
         if (aspect > 1) { 
-            drawH = 480; 
-            drawW = 480 * aspect; 
+            drawH = 360; 
+            drawW = 360 * aspect; 
         } else { 
-            drawW = 480; 
-            drawH = 480 / aspect; 
+            drawW = 360; 
+            drawH = 360 / aspect; 
         }
         drawW *= scale;
         drawH *= scale;
-        const dragScale = 480 / 320;
+        const dragScale = 360 / 320;
         const finalX = gifX * dragScale;
         const finalY = gifY * dragScale;
-        let dx = (480 - drawW) / 2 + finalX;
-        let dy = (480 - drawH) / 2 + finalY;
+        let dx = (360 - drawW) / 2 + finalX;
+        let dy = (360 - drawH) / 2 + finalY;
 
         const captureFrame=()=>{
             if(cTime>=duration){ msg.innerText="Encoding..."; gif.render(); return; }
@@ -676,7 +676,7 @@ go.onclick=()=>{
         // --- ⚡ ANTI-BLACK SCREEN / LAG FIX (Wait for Seek) ---
         capVid.onseeked=()=>{
             ctx.fillStyle = '#000000'; 
-            ctx.fillRect(0, 0, 480, 480);
+            ctx.fillRect(0, 0, 360, 360);
             ctx.drawImage(capVid, dx, dy, drawW, drawH);
             gif.addFrame(ctx,{copy:true, delay:(1000/fps)/playbackSpeed});
             cTime+=(1/fps);
