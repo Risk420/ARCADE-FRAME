@@ -176,13 +176,7 @@
     box-shadow: inset 0 0 20px #000; 
   }
   
-  #v { 
-    position: absolute; 
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%); 
-    pointer-events: none; 
-    will-change: transform; 
-  }
+  #v { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); pointer-events: none; will-change: transform; }
   #o { width: 100%; height: 100%; object-fit: contain; display: none; }
 
   .ui-gif { 
@@ -213,10 +207,11 @@
   .status { margin-top: 20px; font-size: 14px; text-align: center; color: var(--neon); font-weight: 600; opacity: 0; transition: 0.3s; height: 20px; }
   .status.active { opacity: 1; }
   
-  .neon-wrap { position: relative; display: block; margin-top: 15px; padding: 3px; border-radius: 50px; overflow: hidden; width: 100%; }
-  .neon-wrap.blue::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: conic-gradient(transparent, transparent, #00f3ff, #bc13fe, #ff0055, #00f3ff, transparent, transparent); animation: rotate 4.0s linear infinite; z-index: 0; }
+  /* NEON BORDER BUTTONS */
+  .neon-wrap { position: relative; display: block; margin-top: 15px; padding: 3px; border-radius: 50px; overflow: hidden; width: 100%; box-shadow: 0 0 15px rgba(0,0,0,0.5); }
+  .neon-wrap.blue::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: conic-gradient(transparent, transparent, #00f3ff, #bc13fe, #ff0055, #00f3ff, transparent, transparent); animation: rotate 3s linear infinite; z-index: 0; }
   .neon-wrap.red { margin-top: 20px; }
-  .neon-wrap.red::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: conic-gradient(transparent, transparent, var(--red), #ff5500, transparent, transparent); animation: rotate 4.0s linear infinite; z-index: 0; }
+  .neon-wrap.red::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: conic-gradient(transparent, transparent, #ff0000, #ff5500, transparent, transparent); animation: rotate 3s linear infinite; z-index: 0; }
   
   .btn-inner { position: relative; display: block; text-decoration: none; text-align: center; color: white; background: #000; padding: 12px 30px; border-radius: 48px; font-weight: 900; font-size: 14px; z-index: 1; cursor: pointer; border: none; width: 100%; box-sizing: border-box; }
   .btn-inner:disabled { opacity: 0.3; color: #555; }
@@ -315,7 +310,7 @@
         <input type="range" id="speed" min="0.5" max="3.0" step="0.1" value="1.0">
 
         <div class="neon-wrap blue">
-            <button id="go" class="btn-inner">⚡ CREATE HD GIF</button>
+            <button id="go" class="btn-inner" disabled>⚡ CREATE HD GIF</button>
         </div>
         
         <div id="msg" class="status">Processing...</div>
@@ -380,7 +375,7 @@ window.onclick = e => {
 function toggleSwitchMenu(e) { e.stopPropagation(); swMenu.style.display = swMenu.style.display === 'flex' ? 'none' : 'flex'; playClick(); }
 function toggleMenu(e) { e.stopPropagation(); initAudio(); panel.classList.toggle('open'); playClick(); }
 
-// --- ✍️ FONTS ---
+// --- ✍️ SAFE FONT ENGINE (DIAMOND & GLITCH FREE) ---
 const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 const alphas = [
   {m:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"},
@@ -411,7 +406,7 @@ const alphas = [
   {m:"ΛBᄃDΣFGΉIJKLMПӨPQЯƧƬЦVЩXYZΛBᄃDΣFGΉIJKLMПӨPQЯƧƬЦVЩXYZ0123456789"},
   {m:"ДБCDΞFGHłJҜLMИФPǪЯSΓЦVЩXYZдъcdξfgнιjκlмnøpqяsтцvωxчz0123456789"},
   {m:"ﾑ乃cd乇fGんﾉjズlm刀oｱq尺sｲu√wﾒﾘzﾑ乃cd乇fGんﾉjズlm刀oｱq尺sｲu√wﾒﾘz0123456789"},
-  {m: "𝙰𝙱𝙲𝙳𝙴𝙵𝙶𝙷𝙸𝙹𝙺𝙻𝙼𝙽𝙾𝙿𝚀𝚁𝚂𝚃𝚄𝚅𝚆𝚇𝚈𝚉𝚊𝚋𝚌𝚍𝚎𝚏𝚐𝚑𝚒𝚓𝚔𝚕𝚖𝚗𝚘𝚙𝚚𝚛𝚜𝚝𝚞𝚟𝚠𝚡𝚢𝚣𝟶𝟷𝟸𝟹𝟺𝟻𝟼𝟽𝟾𝟿"},
+  {m: "𝙰𝙱𝙲𝙳𝙴𝙵𝙶𝙷𝙸𝙹𝙺𝙻𝙼𝙽𝙾𝙿𝚀𝚁𝚂𝚃𝚄𝚅𝚆𝚇𝚈𝚉𝚊𝚋𝚌𝚍𝚎𝚏𝚐𝚑𝚒𝚓𝚔𝚕𝚖𝚗𝚘𝚙𝚚𝚛𝚜𝚝𝚞𝑣𝚠𝚡𝚢𝚣𝟶𝟷𝟸𝟹𝟺𝟻𝟼𝟽𝟾𝟿"},
 
 ];
 
@@ -435,7 +430,7 @@ function genFonts(){
 }
 function addF(t,b){let d=document.createElement('div');d.className="font-item";d.innerText=t;d.onclick=()=>{navigator.clipboard.writeText(t);playShutter();};b.appendChild(d);}
 
-// --- ✨ SYMBOLS STUDIO DATA (CURSOR FIX) ---
+// --- ✨ SYMBOLS STUDIO DATA ---
 const symData = {
     "Hearts": ["ֶָ֢","ᵕ̈","❣︎","-'♡'-","ᥫ᭡","。♡","̆̈","♡︎","ᢉ𐭩","ᥫ᭡.","˗ˋˏ ♡ ˎˊ˗","˚₊· ͟͟͞͞➳❥","𖨆♡𖨆","ـــــــــــــــﮩ٨ـ❤️️","♡ ᪲᪲᪲","🖤⃝🦋","𐀶"],
     "Sparkles & Stars": ["✨","★","☆","✡","✦","✧","✩","✪","✫","✬","✭","✮","✯","✰","⁂","⁎","⁑","✢","✣","✤","✥","✱","✲","✳","✴","✵","✶","✷","✸","✹","✺","✻","✼","✽","✾","✿","❀","❁","❂","❃","❄","❅","❆","❇","❈","❉","❊","❋"],
@@ -482,7 +477,8 @@ function renderSymbols(){
             let btn = document.createElement('div');
             btn.className = "sym-btn";
             btn.innerText = s;
-            // FIX 3: Cursor Insertion Logic
+            
+            // FIX: INSERT AT CURSOR
             btn.onclick = () => { 
                 const tb = document.getElementById('sym-box');
                 const start = tb.selectionStart;
@@ -503,7 +499,7 @@ function renderSymbols(){
 }
 renderSymbols();
 
-// --- ⚡ NEON GIF ENGINE (UNTOUCHED CONFIG) ---
+// --- ⚡ NEON GIF ENGINE (TURBO FAST) ---
 const workerBlob = new Blob([`importScripts('https://cdnjs.cloudflare.com/ajax/libs/gif.js/0.2.0/gif.worker.js');`], { type: 'application/javascript' });
 const workerUrl = URL.createObjectURL(workerBlob);
 
@@ -638,8 +634,8 @@ go.onclick=()=>{
     vp.style.pointerEvents = 'none'; // LOCK
     msg.innerText="Processing..."; msg.classList.add('active');
     
-    // UNTOUCHED: Original logic you sent
-    const gif=new GIF({workers:2, quality:10, width:480, height:480, workerScript:workerUrl});
+    // TURBO CONFIG: 30 Workers + No Dither
+    const gif=new GIF({workers:30, quality:10, width:480, height:480, workerScript:workerUrl, dither: false});
     const canvas=document.createElement('canvas'); canvas.width=480; canvas.height=480; const ctx=canvas.getContext('2d');
     const fps=15, duration=v.duration, playbackSpeed=parseFloat(speed.value), capVid=document.createElement('video');
     
