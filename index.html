@@ -122,7 +122,7 @@
     z-index: 10; flex-shrink: 0; 
   }
   
-  /* FIX 1: Allow pan-y (vertical scrolling) on the Frame canvas */
+  /* FIX: Allow pan-y (vertical scrolling) on the canvas */
   canvas#c { 
     position: absolute; top: 50%; left: 50%; 
     width: 310px; height: 310px; 
@@ -161,7 +161,15 @@
 
   /* --- ⚡ GIF STUDIO CSS --- */
   @keyframes rotate { 100% { transform: rotate(360deg); } }
-  .stage { position: relative; width: 320px; height: 320px; display: flex; align-items: center; justify-content: center; margin-bottom: 30px; touch-action: none; flex-shrink: 0; }
+  
+  /* FIX 3: Removed touch-action: none from .stage to allow scrolling */
+  .stage { 
+    position: relative; width: 320px; height: 320px; 
+    display: flex; align-items: center; justify-content: center; 
+    margin-bottom: 30px; touch-action: pan-y; /* CHANGED FROM NONE TO PAN-Y */
+    flex-shrink: 0; 
+  }
+  
   .led-ring { position: absolute; inset: -15px; border-radius: 50%; background: conic-gradient(from 0deg, #00f3ff, #bc13fe, #ff0055, #00f3ff); animation: rotate 1.0s linear infinite; filter: blur(20px); z-index: 1; pointer-events: none; }
   
   /* FIX 2: Allow scrolling (pan-y) on the GIF Viewport when empty */
@@ -170,7 +178,7 @@
       border-radius: 50%; overflow: hidden; background-color: #000; 
       display: flex; justify-content: center; align-items: center; 
       box-shadow: inset 0 0 20px #000; 
-      touch-action: pan-y; /* THIS IS THE CRITICAL FIX */
+      touch-action: pan-y; /* KEY FIX HERE FOR GIF MAKER */
   }
   
   #v { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); pointer-events: none; will-change: transform; }
@@ -413,7 +421,7 @@ function genFonts(){
 }
 function addF(t,b){let d=document.createElement('div');d.className="font-item";d.innerText=t;d.onclick=()=>{navigator.clipboard.writeText(t);playShutter();};b.appendChild(d);}
 
-// --- ✨ SYMBOLS STUDIO DATA ---
+// --- ✨ SYMBOLS STUDIO DATA (CURSOR FIX) ---
 const symData = {
     "Hearts": ["ֶָ֢","ᵕ̈","❣︎","-'♡'-","ᥫ᭡","。♡","̆̈","♡︎","ᢉ𐭩","ᥫ᭡.","˗ˋˏ ♡ ˎˊ˗","˚₊· ͟͟͞͞➳❥","𖨆♡𖨆","ـــــــــــــــﮩ٨ـ❤️️","♡ ᪲᪲᪲","🖤⃝🦋","𐀶"],
     "Sparkles & Stars": ["✨","★","☆","✡","✦","✧","✩","✪","✫","✬","✭","✮","✯","✰","⁂","⁎","⁑","✢","✣","✤","✥","✱","✲","✳","✴","✵","✶","✷","✸","✹","✺","✻","✼","✽","✾","✿","❀","❁","❂","❃","❄","❅","❆","❇","❈","❉","❊","❋"],
