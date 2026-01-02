@@ -903,6 +903,7 @@ c.onmousemove=e=>{
 window.onmouseup=()=>{isP=false;}
 
 c.ontouchstart=e=>{
+  if(!i.src) return; // FIX: ALLOW SCROLLING IF CANVAS IS EMPTY
   e.preventDefault();
   if(e.touches.length===1){
     isP=true;
@@ -919,6 +920,7 @@ c.ontouchstart=e=>{
   }
 }
 c.ontouchmove=e=>{
+  if(!i.src) return; // FIX: ALLOW SCROLLING IF CANVAS IS EMPTY
   e.preventDefault();
   if(e.touches.length===1 && isP){
     let scale = 800 / c.offsetWidth;
