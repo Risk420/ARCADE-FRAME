@@ -115,14 +115,21 @@
   body.pc-mode .sym-btn { flex: 1 0 50px; }
 
   /* --- 🖼️ FRAME STUDIO CSS --- */
-  /* FIXED: No animation, no black background, solid border */
   #box { 
     position: relative; width: 310px; height: 310px; border-radius: 50%; overflow: hidden; 
     border: 3px solid #ff0000; box-sizing: border-box; 
     background: transparent;
     z-index: 10; flex-shrink: 0; 
   }
-  canvas#c { position: absolute; top: 50%; left: 50%; width: 310px; height: 310px; transform: translate(-50%, -50%); z-index: 15; touch-action: none; }
+  
+  /* FIX: Allow pan-y (vertical scrolling) on the canvas */
+  canvas#c { 
+    position: absolute; top: 50%; left: 50%; 
+    width: 310px; height: 310px; 
+    transform: translate(-50%, -50%); 
+    z-index: 15; 
+    touch-action: pan-y; /* KEY FIX HERE */
+  }
   
   /* FIXED: UI Background Transparent (No Black Board) */
   .ui { margin-top: 20px; width: 310px; display: flex; flex-direction: column; gap: 6px; background: transparent; }
@@ -319,7 +326,6 @@
     </div>
     <div id="sym-container" class="font-scroll"></div>
 </div>
-
 <script src="https://www.youtube.com/iframe_api"></script>
 <script>
 const c=document.getElementById('c'),x=c.getContext('2d'),zSl=document.getElementById('z'),rSl=document.getElementById('r'),mSl=document.getElementById('m'),panel=document.getElementById('menu-panel'),mStat=document.getElementById('m-status'), sName=document.getElementById('studio-name'), sSub=document.getElementById('studio-sub'), swMenu=document.getElementById('switch-menu');
