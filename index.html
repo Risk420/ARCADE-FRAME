@@ -284,7 +284,7 @@
     </div>
 
     <div class="ui-gif" id="uiPanel">
-        <div class="neon-wrap blue">
+        <div id="upWrapper" class="neon-wrap blue">
             <button class="btn-inner" id="upBtn" onclick="document.getElementById('gfInput').click()">UPLOAD YOUR VIDEO</button>
         </div>
         <input type="file" id="gfInput" accept="video/*" style="display:none">
@@ -361,7 +361,6 @@ window.onclick = e => {
 function toggleSwitchMenu(e) { e.stopPropagation(); swMenu.style.display = swMenu.style.display === 'flex' ? 'none' : 'flex'; playClick(); }
 function toggleMenu(e) { e.stopPropagation(); initAudio(); panel.classList.toggle('open'); playClick(); }
 
-// --- ✍️ FONTS ---
 const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 const alphas = [
   {m:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"},
@@ -500,7 +499,7 @@ function resetGifProject() {
   v.src=''; o.style.display='none'; v.style.display='none';
   dlBox.style.display='none'; resetBox.style.display='none';
   // FIX: SHOW THE WRAPPER, NOT JUST THE BUTTON
-  document.getElementById('goBox').style.display='block';
+  document.getElementById('goBox').style.display='inline-block';
   go.disabled=false; 
   upBtn.disabled=false; zoom.disabled=false; speed.disabled=false;
   msg.classList.remove('active');
@@ -509,6 +508,7 @@ function resetGifProject() {
   gifX = 0; gifY = 0;
   v.style.transform = `translate(-50%, -50%) scale(1)`;
   vp.style.pointerEvents = 'auto'; // UNLOCK
+  restoreGifUI();
 }
 
 gfInput.onchange=(e)=>{ 
@@ -633,6 +633,9 @@ go.onclick=()=>{
     
     capVid.src=v.src; capVid.muted=true; capVid.playsInline=true;
     
+    // ADDED CROSSORIGIN TO ALLOW EXTERNAL VIDEO LOADING IF POSSIBLE
+    capVid.crossOrigin = "anonymous";
+    
     capVid.onloadeddata=()=>{
         let cTime=0;
         
@@ -686,24 +689,18 @@ go.onclick=()=>{
         dlBox.style.display='inline-block'; resetBox.style.display='inline-block';
         msg.classList.remove('active'); 
         
-        // FIX: HIDE THE WRAPPER CONTAINER, NOT JUST THE BUTTON
+        // FIX: HIDE THE WRAPPER CONTAINER
         document.getElementById('goBox').style.display='none';
         
         // Hide upload button during result view for cleanliness
-        upBtn.parentElement.parentElement.style.display='none'; // Hides the Upload Wrapper
+        upBtn.parentElement.style.display='none'; 
         vp.style.pointerEvents = 'auto'; // UNLOCK
     });
 };
 
 function restoreGifUI() {
-    // Restore Upload Button
-    upBtn.parentElement.parentElement.style.display='inline-block';
-}
-// Hook reset to restore UI
-const originalReset = resetGifProject;
-resetGifProject = function() {
-    originalReset();
-    restoreGifUI();
+    // Restore Upload Button Wrapper
+    document.getElementById('upWrapper').style.display='inline-block';
 }
 
 // --- AUDIO & CORE ---
@@ -849,6 +846,22 @@ c.addEventListener('drop', (e) => {
                 n.src = v.target.result;
             };
             reader.readAsDataURL(file);
+       } else if (item.kind === 'string' && item.type === 'text/uri-list') {
+           // Handle dragged URL
+           item.getAsString((url) => {
+                let n = new Image();
+                n.crossOrigin = "Anonymous"; // Try to load cross-origin
+                n.onload = () => {
+                    i = n;
+                    let minScale = Math.max(800 / i.width, 800 / i.height);
+                    cfg.s = minScale;
+                    cfg.x = 400; cfg.y = 400; cfg.r = 0;
+                    zSl.min = minScale; zSl.max = minScale * 2.5; zSl.value = minScale;
+                    d(); playClick(); updS(zSl);
+                    document.getElementById('save').disabled = false;
+                };
+                n.src = url;
+           });
        }
     }
 });
