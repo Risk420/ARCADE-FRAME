@@ -25,16 +25,19 @@
   ::-webkit-scrollbar-thumb { background: #333; border-radius: 6px; border: 2px solid #0a0a0c; }
   ::-webkit-scrollbar-thumb:hover { background: #00ffff; }
 
-  /* --- NAVIGATION BUTTONS (SCROLL WITH PAGE) --- */
+  /* --- NAVIGATION BUTTONS (FIXED ALIGNMENT) --- */
   .menu-toggle { 
-    position: absolute; /* CHANGED TO ABSOLUTE SO IT SCROLLS AWAY */
-    top: 15px; left: 15px; 
+    position: absolute; /* Scrolls with page */
+    top: 15px; left: 15px;
+    height: 38px; /* Fixed height for perfect alignment */
+    box-sizing: border-box;
+    display: flex; align-items: center; justify-content: center;
     /* Retro Transparent Glass Style */
     background: rgba(20, 20, 20, 0.6); 
     color: rgba(255, 255, 255, 0.9); 
     border: 1px solid rgba(255, 255, 255, 0.15); 
     backdrop-filter: blur(4px);
-    padding: 8px 12px; border-radius: 4px; font-weight: bold; cursor: pointer; 
+    padding: 0 12px; border-radius: 4px; font-weight: bold; cursor: pointer; 
     z-index: 100000; font-size: 12px; 
     box-shadow: 0 4px 6px rgba(0,0,0,0.3); 
     transition: 0.2s;
@@ -43,10 +46,13 @@
   .menu-toggle:active { background: rgba(255, 255, 255, 0.1); border-color: #fff; }
 
   #view-toggle {
-    position: absolute; /* CHANGED TO ABSOLUTE SO IT SCROLLS AWAY */
-    top: 15px; right: 15px; 
+    position: absolute; /* Scrolls with page */
+    top: 15px; right: 15px;
+    height: 38px; /* Fixed height for perfect alignment */
+    box-sizing: border-box;
+    display: flex; align-items: center; justify-content: center;
     background: #1a1a1c; color: #fff; border: 1px solid #00ffff; 
-    padding: 8px 12px; border-radius: 4px; font-weight: bold; cursor: pointer; 
+    padding: 0 12px; border-radius: 4px; font-weight: bold; cursor: pointer; 
     z-index: 100000; font-size: 16px; 
     box-shadow: 0 0 10px rgba(0,255,255,0.2);
   }
@@ -144,6 +150,21 @@
     touch-action: pan-y; 
   }
   
+  /* BUTTON GROUP SPACING FIX */
+  #frame-btn-group {
+    display: block; /* Default block */
+    width: 100%;
+    /* Flex column with gap to restore spacing between buttons */
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  
+  /* Margin for the toggle button to separate it from the group */
+  #ui-toggle-btn {
+    margin-bottom: 6px;
+  }
+
   .ui { margin-top: 20px; width: 310px; display: flex; flex-direction: column; gap: 6px; background: transparent; }
   
   .btn { 
@@ -415,8 +436,11 @@ function toggleFrameUI() {
     const grp = document.getElementById('frame-btn-group');
     const btn = document.getElementById('ui-toggle-btn');
     
-    if (grp.style.display === 'none') {
-        grp.style.display = 'block';
+    // Check computed style to handle the initial state correctly
+    const currentDisplay = window.getComputedStyle(grp).display;
+
+    if (currentDisplay === 'none') {
+        grp.style.display = 'flex'; // Restore as flex to keep the gap
         btn.innerHTML = "👁️ HIDE MENU BUTTONS";
         btn.style.color = "#ffcc00";
         btn.style.borderColor = "#ffcc00";
@@ -709,55 +733,30 @@ function toggleMusic(){ initAudio(); playClick(); musicOn=!musicOn; if(musicOn){
 function playClick(){ if(audioCtx.state!=='running')audioCtx.resume(); const o=audioCtx.createOscillator(), g=audioCtx.createGain(); o.frequency.setValueAtTime(800, audioCtx.currentTime); g.gain.setValueAtTime(0.08, audioCtx.currentTime); o.connect(g); g.connect(audioCtx.destination); o.start(); o.stop(audioCtx.currentTime+0.1); }
 function playShutter(){ if(audioCtx.state!=='running')audioCtx.resume(); const o=audioCtx.createOscillator(), g=audioCtx.createGain(); o.type='square'; o.frequency.setValueAtTime(150, audioCtx.currentTime); g.gain.setValueAtTime(0.08, audioCtx.currentTime); o.connect(g); g.connect(audioCtx.destination); o.start(); o.stop(audioCtx.currentTime+0.1); }
 
-// --- 🖼️ FRAME ENGINE ("HAPPY DAY" BOUNDARY LOCK) ---
+// --- 🖼️ FRAME ENGINE ---
 let isBoundaryLocked = true;
-
 function toggleBoundaryLock() {
     isBoundaryLocked = !isBoundaryLocked;
     const btn = document.getElementById('lock-btn');
-    if (isBoundaryLocked) {
-        btn.innerHTML = "BOUNDARY LOCK: ON 🔒";
-        btn.style.borderColor = "#00ff00";
-        btn.style.color = "#00ff00";
-    } else {
-        btn.innerHTML = "BOUNDARY LOCK: OFF 🔓";
-        btn.style.borderColor = "#ff0000";
-        btn.style.color = "#ff0000";
-    }
-    d();
-    playClick();
+    if (isBoundaryLocked) { btn.innerHTML = "BOUNDARY LOCK: ON 🔒"; btn.style.borderColor = "#00ff00"; btn.style.color = "#00ff00"; } 
+    else { btn.innerHTML = "BOUNDARY LOCK: OFF 🔓"; btn.style.borderColor = "#ff0000"; btn.style.color = "#ff0000"; }
+    d(); playClick();
 }
 
 function d(){ 
   x.clearRect(0,0,800,800); 
   if(i.src){
       if (isBoundaryLocked) {
-          // --- LOCKED MODE (CONSTRAINED) ---
-          // Calculate rotated bounding box dimensions
           const rad = cfg.r * Math.PI / 180;
-          const cos = Math.abs(Math.cos(rad));
-          const sin = Math.abs(Math.sin(rad));
-          
-          const reqW = (cfg.m * 2 * cos + cfg.m * 2 * sin);
-          const reqH = (cfg.m * 2 * sin + cfg.m * 2 * cos);
-          
-          // FIX: Auto-Scale & Clamp to prevent background leaks
+          const cos = Math.abs(Math.cos(rad)); const sin = Math.abs(Math.sin(rad));
+          const reqW = (cfg.m * 2 * cos + cfg.m * 2 * sin); const reqH = (cfg.m * 2 * sin + cfg.m * 2 * cos);
           const minS = Math.max(reqW/i.width, reqH/i.height);
-          if(cfg.s < minS) { 
-              cfg.s = minS; 
-              zSl.value = minS; 
-              zVal.innerText=Math.round((minS/zSl.min)*100)+"%";
-          }
-
-          const rangeX = (i.width * cfg.s - reqW) / 2;
-          const rangeY = (i.height * cfg.s - reqH) / 2;
-          
+          if(cfg.s < minS) { cfg.s = minS; zSl.value = minS; zVal.innerText=Math.round((minS/zSl.min)*100)+"%"; }
+          const rangeX = (i.width * cfg.s - reqW) / 2; const rangeY = (i.height * cfg.s - reqH) / 2;
           cfg.x = Math.max(400 - rangeX, Math.min(400 + rangeX, cfg.x));
           cfg.y = Math.max(400 - rangeY, Math.min(400 + rangeY, cfg.y));
       } 
-      // ELSE: UNLOCKED MODE (Do nothing, let x/y/scale be free)
   }
-  
   x.save(); x.beginPath(); x.arc(400,400,cfg.m,0,6.28); x.clip(); 
   if(i.src){ let w=i.width*cfg.s, h=i.height*cfg.s; x.save(); x.translate(cfg.x,cfg.y); x.rotate(cfg.r*Math.PI/180); x.drawImage(i,-w/2,-h/2,w,h); x.restore(); } 
   x.restore(); if(f.src) x.drawImage(f,0,0,800,800); 
@@ -769,21 +768,11 @@ function handleFile(e){
     let n=new Image(); 
     n.onload=()=>{
       i=n; 
-      // Calculate minimum scale
       let minScale = Math.max(800/i.width,800/i.height);
-      cfg.s = minScale; 
-      cfg.x=400; cfg.y=400; cfg.r=0; 
-      
-      // FIX: Set Max Zoom to 2.5x the base scale
-      zSl.min = 0.1; // Allow going small if unlocked
-      if (isBoundaryLocked) zSl.min = minScale; // But enforce min if locked
-      
-      zSl.max = minScale * 2.5; 
-      zSl.value = cfg.s; 
-      
-      d(); playClick();
-      updS(zSl);
-      document.getElementById('save').disabled = false;
+      cfg.s = minScale; cfg.x=400; cfg.y=400; cfg.r=0; 
+      zSl.min = 0.1; if (isBoundaryLocked) zSl.min = minScale; 
+      zSl.max = minScale * 2.5; zSl.value = cfg.s; 
+      d(); playClick(); updS(zSl); document.getElementById('save').disabled = false;
     }; 
     n.src=v.target.result; 
   }; 
@@ -795,32 +784,18 @@ function updateR(v){ cfg.r=parseInt(v); rVal.innerText=v+"°"; d(); }
 function updateM(v){ cfg.m=parseInt(v); mVal.innerText=v+"px"; d(); }
 function centerSubject(){ cfg.x=400; cfg.y=400; cfg.r=0; rSl.value=0; d(); playShutter(); }
 function resetProject(){ i=new Image(); f=new Image(); cfg={s:1,m:375,x:400,y:400,r:0}; zSl.value=1; rSl.value=0; mSl.value=375; d(); playShutter(); document.getElementById('save').disabled = true;}
-function downloadPic(){ 
-  if(!i.src) return; 
-  d(); 
-  let a=document.createElement('a'); a.download=`Arcade_${Date.now()}.png`; a.href=c.toDataURL(); a.click(); playShutter(); 
-}
+function downloadPic(){ if(!i.src) return; d(); let a=document.createElement('a'); a.download=`Arcade_${Date.now()}.png`; a.href=c.toDataURL(); a.click(); playShutter(); }
 function updS(el){ if(el.parentElement.classList.contains('ui-gif')) return; el.style.setProperty('--v', ((el.value-el.min)/(el.max-el.min)*100)+'%'); }
 document.querySelectorAll('input[type=range]').forEach(el => { el.addEventListener('input', () => updS(el)); updS(el); });
 
 // --- 🕹️ FRAME STUDIO DRAG LOGIC (DRAG FROM ANYWHERE) ---
-// This handles dragging images from external sources AND dragging the canvas content
 let isP=false, tStart={x:0,y:0};
-// Variables for pinch/rotate
 let initialDist = 0, initialScale = 1, initialAngle = 0, initialRot = 0;
 
-// DRAG AND DROP HANDLER FOR THE CANVAS
-c.addEventListener('dragover', (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-});
-
+c.addEventListener('dragover', (e) => { e.preventDefault(); e.stopPropagation(); });
 c.addEventListener('drop', (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    
+    e.preventDefault(); e.stopPropagation();
     if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-        // Handle file drop (like from desktop)
         const file = e.dataTransfer.files[0];
         if (file.type.startsWith('image/')) {
             const reader = new FileReader();
@@ -828,27 +803,16 @@ c.addEventListener('drop', (e) => {
                 let n = new Image();
                 n.onload = () => {
                     i = n;
-                    // Calculate minimum scale
-                    let minScale = Math.max(800 / i.width,800 / i.height);
-                    cfg.s = minScale;
-                    cfg.x = 400; cfg.y = 400; cfg.r = 0;
-                    
-                    zSl.min = minScale;
-                    zSl.max = minScale * 2.5;
-                    zSl.value = minScale;
-                    
-                    d(); playClick();
-                    updS(zSl);
-                    document.getElementById('save').disabled = false;
+                    let minScale = Math.max(800 / i.width, 800 / i.height);
+                    cfg.s = minScale; cfg.x = 400; cfg.y = 400; cfg.r = 0;
+                    zSl.min = minScale; zSl.max = minScale * 2.5; zSl.value = minScale;
+                    d(); playClick(); updS(zSl); document.getElementById('save').disabled = false;
                 };
                 n.src = v.target.result;
             };
             reader.readAsDataURL(file);
         }
     } else if (e.dataTransfer.items) {
-       // Handle dragging image from browser (e.g. Google Images)
-       // Note: Direct drag from some sites is blocked by CORS. This works for same-origin or CORS-allowed images.
-       // For a truly universal "drag from internet", we'd need a proxy, but this handles local file drops perfectly.
        const item = e.dataTransfer.items[0];
        if (item.kind === 'file') {
            const file = item.getAsFile();
@@ -858,35 +822,28 @@ c.addEventListener('drop', (e) => {
                 n.onload = () => {
                     i = n;
                     let minScale = Math.max(800 / i.width, 800 / i.height);
-                    cfg.s = minScale;
-                    cfg.x = 400; cfg.y = 400; cfg.r = 0;
+                    cfg.s = minScale; cfg.x = 400; cfg.y = 400; cfg.r = 0;
                     zSl.min = minScale; zSl.max = minScale * 2.5; zSl.value = minScale;
-                    d(); playClick(); updS(zSl);
-                    document.getElementById('save').disabled = false;
+                    d(); playClick(); updS(zSl); document.getElementById('save').disabled = false;
                 };
                 n.src = v.target.result;
             };
             reader.readAsDataURL(file);
        } else if (item.kind === 'string' && item.type === 'text/uri-list') {
-           // Handle dragged URL
            item.getAsString((url) => {
-                let n = new Image();
-                n.crossOrigin = "Anonymous"; // Try to load cross-origin
+                let n = new Image(); n.crossOrigin = "Anonymous"; 
                 n.onload = () => {
                     i = n;
                     let minScale = Math.max(800 / i.width, 800 / i.height);
-                    cfg.s = minScale;
-                    cfg.x = 400; cfg.y = 400; cfg.r = 0;
+                    cfg.s = minScale; cfg.x = 400; cfg.y = 400; cfg.r = 0;
                     zSl.min = minScale; zSl.max = minScale * 2.5; zSl.value = minScale;
-                    d(); playClick(); updS(zSl);
-                    document.getElementById('save').disabled = false;
+                    d(); playClick(); updS(zSl); document.getElementById('save').disabled = false;
                 };
                 n.src = url;
            });
        }
     }
 });
-
 
 c.onmousedown=e=>{isP=true; tStart={x:e.offsetX,y:e.offsetY};}
 c.onmousemove=e=>{
@@ -900,17 +857,10 @@ c.onmousemove=e=>{
 window.onmouseup=()=>{isP=false;}
 
 c.ontouchstart=e=>{
-  // FIX: ONLY PREVENT DEFAULT IF IMAGE IS LOADED
-  if(i.src) {
-      e.preventDefault();
-  }
-  
-  if(e.touches.length===1){
-    isP=true;
-    tStart={x:e.touches[0].clientX, y:e.touches[0].clientY};
-  } else if(e.touches.length===2){
+  if(i.src) { e.preventDefault(); }
+  if(e.touches.length===1){ isP=true; tStart={x:e.touches[0].clientX, y:e.touches[0].clientY}; } 
+  else if(e.touches.length===2){
     isP=false; 
-    // FIX 4: Multi-touch Logic
     const dx = e.touches[0].clientX - e.touches[1].clientX;
     const dy = e.touches[0].clientY - e.touches[1].clientY;
     initialDist = Math.sqrt(dx*dx + dy*dy);
@@ -920,11 +870,7 @@ c.ontouchstart=e=>{
   }
 }
 c.ontouchmove=e=>{
-  // FIX: ONLY PREVENT DEFAULT IF IMAGE IS LOADED
-  if(i.src) {
-      e.preventDefault();
-  }
-  
+  if(i.src) { e.preventDefault(); }
   if(e.touches.length===1 && isP){
     let scale = 800 / c.offsetWidth;
     let dx = e.touches[0].clientX - tStart.x;
@@ -935,29 +881,16 @@ c.ontouchmove=e=>{
     d();
   }
   else if(e.touches.length===2){
-    // FIX 4: Pinch to Zoom & Twist to Rotate
     const dx = e.touches[0].clientX - e.touches[1].clientX;
     const dy = e.touches[0].clientY - e.touches[1].clientY;
-    
-    // Zoom Logic
     const dist = Math.sqrt(dx*dx + dy*dy);
     const scaleFactor = dist / initialDist;
     let newScale = initialScale * scaleFactor;
-    // Apply constraints
     newScale = Math.max(zSl.min, Math.min(zSl.max, newScale));
-    cfg.s = newScale;
-    zSl.value = newScale; 
-    zVal.innerText=Math.round((newScale/zSl.min)*100)+"%";
-    updS(zSl);
-
-    // Rotate Logic
+    cfg.s = newScale; zSl.value = newScale; zVal.innerText=Math.round((newScale/zSl.min)*100)+"%"; updS(zSl);
     const angle = Math.atan2(dy, dx);
     let rotationDiff = (angle - initialAngle) * (180/Math.PI);
-    cfg.r = (initialRot + rotationDiff) % 360;
-    rSl.value = (cfg.r % 360 + 360) % 360;
-    rVal.innerText = Math.round(cfg.r) + "°";
-    updS(rSl);
-    
+    cfg.r = (initialRot + rotationDiff) % 360; rSl.value = (cfg.r % 360 + 360) % 360; rVal.innerText = Math.round(cfg.r) + "°"; updS(rSl);
     d();
   }
 }
