@@ -25,7 +25,7 @@
   ::-webkit-scrollbar-thumb { background: #333; border-radius: 6px; border: 2px solid #0a0a0c; }
   ::-webkit-scrollbar-thumb:hover { background: #00ffff; }
 
-  /* --- MENU BUTTON (Absolute Top Left) --- */
+  /* --- NAVIGATION BUTTONS --- */
   .menu-toggle { 
     position: absolute; 
     top: 15px; left: 15px;
@@ -38,10 +38,10 @@
     padding: 0 12px; border-radius: 4px; font-weight: bold; cursor: pointer; 
     z-index: 100000; font-size: 12px; 
     box-shadow: 0 4px 6px rgba(0,0,0,0.3); 
-    transition: 0.2s;
+    transition: transform 0.1s ease, background 0.2s; /* CLICK ANIMATION */
     text-shadow: 0 0 5px rgba(255,255,255,0.2);
   }
-  .menu-toggle:active { background: rgba(255, 255, 255, 0.1); border-color: #fff; }
+  .menu-toggle:active { transform: scale(0.90); background: rgba(255, 255, 255, 0.1); border-color: #fff; }
 
   /* --- SIDEBAR MENU --- */
   #menu-panel { 
@@ -61,7 +61,10 @@
     padding: 10px; border-radius: 4px; font-weight: bold; cursor: pointer; 
     font-size: 11px; text-transform: uppercase; width: 100%; text-align: center;
     box-shadow: 0 0 10px rgba(255,0,0,0.5); 
+    transition: transform 0.1s ease; /* CLICK ANIMATION */
   }
+  #switch-btn:active { transform: scale(0.95); background: rgba(255,0,0,0.2); }
+
   #switch-menu { 
     position: absolute; top: 45px; right: 0; background: #1a1a1c; 
     border: 1px solid #ff0000; border-radius: 8px; width: 210px; 
@@ -72,14 +75,24 @@
     background: transparent; color: #aaa; border: none; padding: 14px; 
     text-align: left; font-weight: bold; font-size: 11px; cursor: pointer; 
     border-bottom: 1px solid rgba(255,255,255,0.05); text-transform: uppercase;
+    transition: background 0.2s;
   }
+  #switch-menu button:active { background: rgba(255,255,255,0.1); }
   #switch-menu button.active-link { color: #00ffff; background: rgba(0,255,255,0.1); border-left: 3px solid #00ffff; }
 
   .designed-by { position: absolute; bottom: 0; left: 0; width: 100%; padding: 20px 0; border-top: 1px solid rgba(255,255,255,0.1); text-align: center; font-size: 11px; font-weight: 900; color: #888; background: #1a1a1c; }
   .designed-by b { color: #ff0000; text-shadow: 0 0 8px rgba(255,0,0,0.6); }
 
   .music-section { border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.03); border-radius: 6px; padding: 10px; display: flex; flex-direction: column; gap: 8px; }
-  .lnk { display: flex; align-items: center; gap: 10px; padding: 12px; text-decoration: none; color: white; font-size: 13px; font-weight: bold; border-radius: 4px; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.05); }
+  
+  .lnk { 
+    display: flex; align-items: center; gap: 10px; padding: 12px; 
+    text-decoration: none; color: white; font-size: 13px; font-weight: bold; 
+    border-radius: 4px; border: 1px solid rgba(255,255,255,0.1); 
+    background: rgba(255,255,255,0.05); 
+    transition: transform 0.1s ease; /* CLICK ANIMATION */
+  }
+  .lnk:active { transform: scale(0.96); background: rgba(255,255,255,0.1); }
   .lnk svg { width: 18px; height: 18px; fill: white; }
 
   /* HEADERS */
@@ -87,63 +100,29 @@
   @keyframes arcadeBounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
   .sub { color: #fff; font-weight: bold; margin: 2px 0 15px 0; text-transform: uppercase; font-size: 11px; letter-spacing: 2px; text-align: center; }
   
-  /* --- LAYOUT LOGIC (MOBILE FIRST) --- */
+  /* --- LAYOUT LOGIC (Auto-Detect) --- */
   .studio-sec { display: none; width: 320px; flex-direction: column; align-items: center; }
   .active-sec { display: flex; }
 
-  /* --- PC MODE AUTO-DETECT (MEDIA QUERY) --- */
   @media (min-width: 1024px) {
     body { justify-content: flex-start; padding-top: 40px; }
-    
-    .studio-sec { 
-      width: 90%; max-width: 1100px; 
-      flex-direction: row; align-items: flex-start; 
-      justify-content: center; gap: 60px; 
-    }
-
+    .studio-sec { width: 90%; max-width: 1100px; flex-direction: row; align-items: flex-start; justify-content: center; gap: 60px; }
     #frame-studio, #gif-studio { align-items: center; }
     .ui, .ui-gif { width: 350px; margin-top: 0; }
-
     #font-studio { flex-direction: column; align-items: center; }
-    #font-results { 
-      display: grid; grid-template-columns: repeat(3, 1fr); 
-      gap: 15px; max-height: 70vh; 
-      overflow-y: scroll; padding-right: 10px;
-    }
+    #font-results { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; max-height: 70vh; overflow-y: scroll; padding-right: 10px; }
     .font-input { width: 50%; }
-
     #sym-studio { flex-direction: column; align-items: center; }
     .sym-box-container { width: 50%; }
-    #sym-container {
-      max-height: 70vh; overflow-y: scroll; 
-      padding-right: 10px; width: 100%;
-    }
+    #sym-container { max-height: 70vh; overflow-y: scroll; padding-right: 10px; width: 100%; }
     .sym-btn { flex: 1 0 50px; }
   }
 
   /* --- 🖼️ FRAME STUDIO CSS --- */
-  #box { 
-    position: relative; width: 310px; height: 310px; border-radius: 50%; overflow: hidden; 
-    border: 3px solid #ff0000; box-sizing: border-box; 
-    background: transparent;
-    z-index: 10; flex-shrink: 0; 
-  }
+  #box { position: relative; width: 310px; height: 310px; border-radius: 50%; overflow: hidden; border: 3px solid #ff0000; box-sizing: border-box; background: transparent; z-index: 10; flex-shrink: 0; }
+  canvas#c { position: absolute; top: 50%; left: 50%; width: 310px; height: 310px; transform: translate(-50%, -50%); z-index: 15; touch-action: pan-y; }
   
-  canvas#c { 
-    position: absolute; top: 50%; left: 50%; 
-    width: 310px; height: 310px; 
-    transform: translate(-50%, -50%); 
-    z-index: 15; 
-    touch-action: pan-y; 
-  }
-  
-  #frame-btn-group {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    width: 100%;
-  }
-  
+  #frame-btn-group { display: flex; flex-direction: column; gap: 6px; width: 100%; }
   #ui-toggle-btn { margin-bottom: 6px; }
 
   .ui { margin-top: 20px; width: 310px; display: flex; flex-direction: column; gap: 6px; background: transparent; }
@@ -153,8 +132,12 @@
     text-align: center; border-radius: 8px; font-weight: 900; 
     display: block; font-size: 12px; cursor: pointer; 
     text-transform: uppercase; width: 100%; box-sizing: border-box; 
+    transition: transform 0.1s ease, border-color 0.2s; /* CLICK ANIMATION */
   }
-  .btn:disabled { opacity: 0.3; cursor: not-allowed; border-color: #555; color: #555; }
+  /* THE CLICK EFFECT */
+  .btn:active { transform: scale(0.95); opacity: 0.8; }
+  
+  .btn:disabled { opacity: 0.3; cursor: not-allowed; border-color: #555; color: #555; transform: none; }
   .btn-r { border-color: #ff0000; }
   
   .lbl { font-size: 9px; color: #888; text-transform: uppercase; margin-top: 2px; display: flex; justify-content: space-between; align-items: center; width: 100%; }
@@ -163,7 +146,14 @@
   /* --- ✍️ FONT STUDIO CSS --- */
   .font-input { width: 100%; background: #111; border: 2px solid #00ffff; color: #fff; padding: 15px; border-radius: 8px; font-weight: bold; text-align: center; margin-bottom: 15px; font-size: 16px; outline: none; box-sizing: border-box; }
   .font-scroll { width: 100%; max-height: 500px; overflow-y: auto; display: flex; flex-direction: column; border-radius: 8px; overflow-x: hidden; border: 1px solid rgba(255,255,255,0.1); box-sizing: border-box; touch-action: pan-y; }
-  .font-item { background: #1a1a1c; border-bottom: 1px solid rgba(255,255,255,0.1); padding: 16px; width: 100%; text-align: center; cursor: pointer; color: #eee; font-size: 16px; white-space: pre-wrap; }
+  
+  .font-item { 
+    background: #1a1a1c; border-bottom: 1px solid rgba(255,255,255,0.1); 
+    padding: 16px; width: 100%; text-align: center; cursor: pointer; 
+    color: #eee; font-size: 16px; white-space: pre-wrap; 
+    transition: transform 0.05s ease; /* CLICK ANIMATION */
+  }
+  .font-item:active { transform: scale(0.98); background: #333; color: #fff; }
   
   /* --- ✨ SYMBOLS STUDIO CSS --- */
   .sym-box-container { width: 100%; margin-bottom: 15px; }
@@ -171,35 +161,24 @@
   .sym-input:focus { border-color: #ff00ff; box-shadow: 0 0 10px rgba(255,0,255,0.5); }
   .cat-title { width: 100%; color: #ff0000; font-size: 12px; font-weight: bold; margin: 20px 0 5px 0; text-transform: uppercase; padding-left: 5px; border-bottom: 1px solid rgba(255,0,0,0.2); padding-bottom: 5px; }
   .sym-grid { display: flex; flex-wrap: wrap; gap: 5px; width: 100%; padding: 5px; box-sizing: border-box; }
-  .sym-btn { background: #1a1a1c; border: 1px solid #333; color: white; padding: 15px 0; font-size: 20px; border-radius: 6px; cursor: pointer; text-align: center; flex: 1 0 18%; min-width: 50px; }
-  .sym-btn:active { background: #ff0000; color: #000; }
+  
+  .sym-btn { 
+    background: #1a1a1c; border: 1px solid #333; color: white; 
+    padding: 15px 0; font-size: 20px; border-radius: 6px; 
+    cursor: pointer; text-align: center; flex: 1 0 18%; min-width: 50px; 
+    transition: transform 0.05s ease; /* CLICK ANIMATION */
+  }
+  .sym-btn:active { transform: scale(0.90); background: #ff0000; color: #000; }
 
   /* --- ⚡ GIF STUDIO CSS --- */
   @keyframes rotate { 100% { transform: rotate(360deg); } }
-  
-  .stage { 
-    position: relative; width: 320px; height: 320px; 
-    display: flex; align-items: center; justify-content: center; 
-    margin-bottom: 30px; 
-    touch-action: pan-y; 
-    flex-shrink: 0; 
-  }
-  
+  .stage { position: relative; width: 320px; height: 320px; display: flex; align-items: center; justify-content: center; margin-bottom: 30px; touch-action: pan-y; flex-shrink: 0; }
   .led-ring { position: absolute; inset: -15px; border-radius: 50%; background: conic-gradient(from 0deg, #00f3ff, #bc13fe, #ff0055, #00f3ff); animation: rotate 1.0s linear infinite; filter: blur(20px); z-index: 1; pointer-events: none; }
-  
-  .viewport { 
-      position: relative; z-index: 5; width: 100%; height: 100%; 
-      border-radius: 50%; overflow: hidden; background-color: #000; 
-      display: flex; justify-content: center; align-items: center; 
-      box-shadow: inset 0 0 20px #000; 
-      touch-action: pan-y; 
-  }
-  
+  .viewport { position: relative; z-index: 5; width: 100%; height: 100%; border-radius: 50%; overflow: hidden; background-color: #000; display: flex; justify-content: center; align-items: center; box-shadow: inset 0 0 20px #000; touch-action: pan-y; }
   #v { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); pointer-events: none; will-change: transform; }
   #o { width: 100%; height: 100%; object-fit: contain; display: none; }
   
   .ui-gif { z-index: 10; background: transparent; padding: 25px; border-radius: 30px; width: 340px; border: none; margin-bottom: 20px; max-width: 90%; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; }
-  
   .label-row { display: flex; justify-content: space-between; font-size: 11px; color: #888; margin-bottom: 8px; font-weight: 600; width: 100%; }
   input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; margin: 10px 0; cursor: pointer; }
   input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 8px; background: linear-gradient(to right, #ff0000 var(--v, 0%), #00ffff var(--v, 0%)); border-radius: 4px; }
@@ -220,9 +199,16 @@
   .neon-wrap.red { margin-top: 20px; }
   .neon-wrap.red::before { background: conic-gradient(transparent, transparent, #ff0000, #ff5500, transparent, transparent); }
   
-  .btn-inner { position: relative; z-index: 10; display: block; width: 100%; background: #000; color: white; padding: 15px 0; border-radius: 46px; font-weight: 900; font-size: 14px; text-align: center; text-decoration: none; border: none; cursor: pointer; box-sizing: border-box; pointer-events: auto; text-transform: uppercase; }
-  .btn-inner:disabled { opacity: 0.5; color: #555; cursor: not-allowed; }
-  .btn-inner:active { background: #1a1a1a; }
+  .btn-inner { 
+    position: relative; z-index: 10; display: block; width: 100%; 
+    background: #000; color: white; padding: 15px 0; border-radius: 46px; 
+    font-weight: 900; font-size: 14px; text-align: center; text-decoration: none; 
+    border: none; cursor: pointer; box-sizing: border-box; pointer-events: auto; 
+    text-transform: uppercase; 
+    transition: transform 0.1s ease, background 0.1s; /* CLICK ANIMATION */
+  }
+  .btn-inner:active { transform: scale(0.95); background: #111; }
+  .btn-inner:disabled { opacity: 0.5; color: #555; cursor: not-allowed; transform: none; }
 
   input[type=file], #yt-player { display: none; }
 </style>
@@ -230,6 +216,7 @@
 <body onclick="startAudio()">
 
 <button class="menu-toggle" onclick="toggleMenu(event)">MENU ☰</button>
+
 <div id="menu-panel">
   <div class="switch-container">
     <button id="switch-btn" onclick="toggleSwitchMenu(event)">SWITCH TO 📂</button>
@@ -396,7 +383,7 @@ function toggleFrameUI() {
     const grp = document.getElementById('frame-btn-group');
     const btn = document.getElementById('ui-toggle-btn');
     
-    // Check computed style to handle the initial state accurately
+    // Use getComputedStyle to check visibility accurately
     const style = window.getComputedStyle(grp);
     
     if (style.display === 'none') {
@@ -472,7 +459,7 @@ const symData = {
     "Hanging Stars": ["*̣̥☆·͙̥","‧͙⁺˚*･༓☾","☽༓･*˚⁺‧͙","★*","*★","☆.","¸.·","·.¸","*","**","***"],
     "Arrows": ["←","→","↓","↑","↖","↗","↘","↙","↔","↕","↚","↛","↜","↝","↞","↟","↠","↡","↢","↣","↤","↥","↦","↧","↨","↩","↪","↫","↬","↭","↮","↯","↰","↱","↲","↳","↴","↶","↷","↸","↹","↺","↻","↼","↽","↾","↿","⇀","⇁","⇂","⇃","⇄","⇅","⇆","⇇","⇈","⇉","⇊","⇋","⇌","⇍","⇎","⇏","⇕","⇖","⇗","⇘","⇙","⇚","⇛","⇜","⇝","⇞","⇟","⇠","⇡","⇢","⇣","⇤","⇥","⇦","⇧","⇨","⇩","⇪","⌅","⌆","⌤","⏎","▶","☇","☈","☊","☋","☌","☍","➔","➘","➙","➚","➛","➜","➝","➞","➟","➠","➡","➢","➣","➤","➥","➦","➧","➨","➩","➪","➫","➬","➭","➮","➯","➱","➲","➳","➴","➵","➶","➷","➸","➹","➺","➻","➼","➽","➾","⤴","⤵","↵","⇰","⇫","⇬","⇭","⇳","⇮","⇯","⇱","⇲","⇴","⇵","⇷","⇸","⇹","⇺","⇑","⇓","⤪","⤨","⤧","⤩","⤭","⤮","⤯","⤰","⤱","⤲","⤫","⤬","⇽","⇾","⇿","⬳","⟿","⤉","⤈","⇻","⇼","⬴","⤀","⬵","⤁","⬹","⤔","⬺","⤕","⬶","⤅","⬻","⤖","⬷","⤐","⬼","⤗","⬽","⤘","⤝","⤞","⤟","⤠","⤡","⤢","⤣","⤤","⤥","⤦","⬐","⬎","⬑","⬏","⤶","⤷","⥂","⥃","⥄","⭀","⥱","⥶","⥸","⭂","⭈","⭊","⥵","⭁","⭇","⭉","⥲","⭋","⭌","⥳","⥴","⥆","⥅","⥹","⥻","⬰","⥈","⬾","⥇","⬲","⟴","⥷","⭃","⥺","⭄","⥉","⥰","⬿","⤳","⥊","⥋","⥌","⥍","⥎","⥏","⥐","⥑","⥒","⥓","⥔","⥕","⥖","⥗","⥤","⥣","⥥","⥦","⥨","⥧","⥩","⥮","⥯","⥪","⥬","⥫","⥭","⤌","⤍","⤎","⤏","⬸","⤑","⟵","⟶","⟷","⬅","⬆","⬇","⬈","⬉","⬊","⬋","⬌","⬍","⬄","⬀","⬁","⬂","⬃","⟻","⟼","⤒","⤓","⤙","⤚","⤛","⤜","⥼","⥽","⥾","⥿","⤼","⤽","⤾","⤿","⤸","⤺","⤹","⤻","⥀","⥁","⟲","⟳","⬱","⟸","⟹","⟺","⤂","⤃","⤄","⤆","⤇","⤊","⤋","⇐","⇒","⇔","⇶","⭅","⭆","⟰","⟱"],
     "Astrological": ["☉","⊕","♁","☽","☿","♀︎","♂︎","♃","♄","♅","⛢","♆","⯓","♇","⯔","⯕","⯖","🌑︎","🌒︎","🌓︎","🌔︎","🌕︎","🌖︎","🌗︎","🌘︎","⚳","⚴","⚵","⚶","⯙","⚕","⯚","⚷","☄︎","⯰","⯘","⯗","⊗","⚸","⯞","☊","☋","☿"],
-    "Bracket": ["（","）","[","]","【","】","『","』","「","」","《","》","〈","〉","〔","〕","︹","︺","︷","︸","︵","︶","︻","︼","︽","︾","︿","﹀","﹁","﹂","﹃","﹄","〚","㛛","〘","〙","〖","〗","｛","｝","＜","＞","﹤","﹥","﹙","﹚","﹝","﹞","﹛","﹜","〈","〉","«","»","‹","›"],
+    "Bracket": ["（","）","[","]","【","】","『","』","「","」","《","》","〈","〉","〔","〕","︹","︺","︷","︸","︵","︶","︻","︼","︽","︾","︿","﹀","﹁","﹂","﹃","﹄","〚","㛛","〘","㙙","〖","〗","｛","｝","＜","＞","﹤","﹥","﹙","﹚","﹝","﹞","﹛","﹜","〈","〉","«","»","‹","›"],
     "Check Marks": ["✓","✔","✔️","✅","✘","✗","☓","∨","√","☐","☒","☑","㤤","㤥","✇","💯","❌","❎"],
     "Cross": ["ⵜ","𐤕","𐤲","𓏶","†","✝","✞","✟","☨","☦","♱","☥","♰","‡","⊹","☩","✙"],
     "Email": ["✉️","📨","📧","💌","📩","📥","📤","📫","📪","📬","📭","📮","📦"],
