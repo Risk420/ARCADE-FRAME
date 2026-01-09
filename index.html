@@ -595,7 +595,7 @@ const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 const alphas = [
     { m: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789" },
     { m: "𝐀𝐁𝐂𝐃𝐄𝐅𝐆𝐇𝐈𝐉𝐊𝐋𝐌𝐍𝐎𝐏𝐐𝐑𝐒𝐓𝐔𝐕𝐖𝐗𝐘𝐙𝐚𝐛𝐜𝐝𝐞𝐟𝐠𝐡𝐢𝐣𝐤𝐥𝐦𝐧𝐨𝐩𝐪𝐫𝐬𝐭𝐮𝐯𝐰𝐱𝐲𝐳𝟎𝟏𝟐𝟑𝟒𝟓𝟔𝟕𝟖𝟗" },
-    { m: "𝐴𝐵𝐶𝐷𝐸𝐹𝐺𝐻𝐼𝐽𝐾𝐿𝑀𝑁𝑂𝑃𝑄𝑅𝑆𝑇𝑈𝑉𝑊𝑋𝑌𝑍𝑎𝑏𝑐𝑑𝑒𝑓𝑔ℎ𝑖𝑗𝑘𝑙𝑚𝑛𝑜𝑝𝑞𝑟𝑠𝑡𝑢𝑣𝑤𝑥𝑦𝑧0123456789" },
+    { m: "𝐴𝐵𝐶𝐷𝐸𝐹𝐺𝐻𝐼𝑗𝐾𝐿𝑀𝑁𝑂𝑃𝑄𝑅𝑆𝑇𝑈𝑉𝑊𝑋𝑌𝑍𝑎𝑏𝑐𝑑𝑒𝑓𝑔ℎ𝑖𝑗𝑘𝑙𝑚𝑛𝑜𝑝𝑞𝑟𝑠𝑡𝑢𝑣𝑤𝑥𝑦𝑧0123456789" },
     { m: "ᗩᗷᑕᗪEᖴGᕼIᒍKᒪᗰᑎOᑭᑫᖇᔕTᑌᐯᗯ᙭Yᘔαᖿ𝖼𝖽𝖾𝖿𝗀𝗁𝗂𝗃𝗄𝗅𝗆𝗇𝗈𝗉𝗊𝗋𝗌𝗍𝗎𝗏𝗐𝗑𝗒𝗓0123456789" },
     { m: "𝑨𝑩𝑪𝑫𝑬𝑭𝑮𝑯𝑰𝑱𝑲𝑳𝑴𝑵𝑶𝑷𝑸𝑹𝑺𝑻𝑼𝑽𝑾𝑿𝒀𝒁𝒂𝒃𝒄𝒅𝒆𝒇𝒈𝒉𝒊𝒋𝒌𝒍𝒎𝒏𝒐𝒑𝒒𝒓𝒔𝒕𝒖𝒗𝒘𝒙𝒚𝒛0123456789" },
     { m: "𝒜ℬ𝒞𝒟ℰℱ𝒢ℋℐ𝒥𝒦ℒℳ⒩⒪⒫⒬ℛ𝒮𝒯𝒰⒱⒲⒳⒴⒵𝒶Ⓑ𝒸𝒹ℯ𝒻ℊ𝒽𝒾𝒿𝓀𝓁𝓂𝓃ℴ𝓅𝓆𝓇𝓈𝓉𝒖Ⓥ𝓌𝓍𝓎𝓏0123456789" },
@@ -928,7 +928,7 @@ c.ontouchmove = e => {
 window.ontouchend = () => { isP = false; };
 </script>
 <script>
-// --- ⚡ NEON GIF ENGINE (SEPARATED LAYERS & AUTO-LOCK) ---
+// --- ⚡ NEON GIF ENGINE (FIXED & OPTIMIZED) ---
 const workerBlob = new Blob([`importScripts('https://cdnjs.cloudflare.com/ajax/libs/gif.js/0.2.0/gif.worker.js');`], { type: 'application/javascript' });
 const workerUrl = URL.createObjectURL(workerBlob);
 
@@ -936,7 +936,7 @@ const gfInput = document.getElementById('gfInput');
 const upBtn = document.getElementById('upBtn');
 const v = document.getElementById('v'); // The Video
 const o = document.getElementById('o'); // The Result Image
-const maskC = document.getElementById('mask-container'); // The Mask (Replaces Viewport)
+const maskC = document.getElementById('mask-container'); // The Mask
 const speed = document.getElementById('speed');
 const sv = document.getElementById('sv');
 const zoom = document.getElementById('zoom');
@@ -979,7 +979,7 @@ function resetGifProject() {
     if (mGifVal) mGifVal.innerText = "320px";
     
     // Reset Mask Size
-    if (maskC) { maskC.style.width = "320px"; maskC.style.height = "320px"; }
+    if (maskC) { maskC.style.width = "320px"; maskC.style.height = "320px"; maskC.style.display = 'block'; }
 
     if (gfInput) gfInput.value = '';
     if (gfFrameInput) gfFrameInput.value = '';
@@ -1015,14 +1015,14 @@ function handleGifFrame(e) {
 
 // --- CONTROLS ---
 
-// 1. Frame Zoom (Independent)
+// 1. Frame Zoom (FIXED CENTERING)
 if (fZoomSl) fZoomSl.oninput = () => { updateFrameZoom(); };
 function updateFrameZoom() {
     if (!fZoomSl || !gifOverlay) return;
     const val = fZoomSl.value;
     if (fzVal) fzVal.innerText = val + "%";
     const scale = parseInt(val) / 100;
-    // Note: CSS for #gif-overlay already has translate(-50%, -50%)
+    // THIS LINE FIXES THE FRAME POSITION BUG
     gifOverlay.style.transform = `translate(-50%, -50%) scale(${scale})`;
 }
 
@@ -1119,7 +1119,7 @@ window.addEventListener('mouseup', () => isGifDrag = false);
 window.addEventListener('touchend', () => isGifDrag = false);
 
 
-// --- GIF GENERATION ---
+// --- GIF GENERATION (LAG FIX APPLIED) ---
 if (go) go.onclick = () => {
     if (!v.src) return;
     
@@ -1131,16 +1131,13 @@ if (go) go.onclick = () => {
     const OUT_SIZE = 480;
     const maskSize = parseInt(mGifSl.value);
     
-    // Calculate Scale Factor (Screen Mask Size -> Output Canvas Size)
-    // We want the Mask to fill the 480px canvas if Circle Size is maxed, 
-    // or be proportional if it's smaller? 
-    // Actually, usually standard behavior is the Mask BECOMES the 480px canvas.
-    // But since we have a frame overlay that might be bigger than the mask, 
-    // let's map the 320px Stage to the 480px Output.
+    // Map the 320px Stage to the 480px Output
     const STAGE_SIZE = 320;
     const outputScale = OUT_SIZE / STAGE_SIZE;
 
-    const gif = new GIF({ workers: 30, quality: 20, width: OUT_SIZE, height: OUT_SIZE, workerScript: workerUrl, dither: false });
+    // FIX: Reduced workers from 30 to 5 to prevent LAG/CRASHING
+    const gif = new GIF({ workers: 5, quality: 20, width: OUT_SIZE, height: OUT_SIZE, workerScript: workerUrl, dither: false });
+    
     const canvas = document.createElement('canvas'); canvas.width = OUT_SIZE; canvas.height = OUT_SIZE; const ctx = canvas.getContext('2d');
     const fps = 15, duration = v.duration, playbackSpeed = parseFloat(speed.value), capVid = document.createElement('video');
 
@@ -1158,30 +1155,24 @@ if (go) go.onclick = () => {
         const z = parseInt(zoom.value) / 100;
         const aspect = capVid.videoWidth / capVid.videoHeight;
         
-        // Base size (matching setCoverSize logic)
         let baseW, baseH;
         if (aspect > 1) { baseH = maskSize; baseW = maskSize * aspect; } 
         else { baseW = maskSize; baseH = maskSize / aspect; }
         
-        // Apply Zoom & Output Scale
         const drawW = baseW * z * outputScale;
         const drawH = baseH * z * outputScale;
         
-        // Apply Offsets (Scaled)
         const finalX = gifX * outputScale;
         const finalY = gifY * outputScale;
         
-        // Center the Video relative to the Canvas Center (480/2 = 240)
         let vidDx = (OUT_SIZE - drawW) / 2 + finalX;
         let vidDy = (OUT_SIZE - drawH) / 2 + finalY;
 
         // --- 2. MASK GEOMETRY ---
-        // Mask Radius scaled
         const maskRadius = (maskSize / 2) * outputScale;
 
-        // --- 3. FRAME GEOMETRY ---
+        // --- 3. FRAME GEOMETRY (CENTERED) ---
         const fScale = fZoomSl ? parseInt(fZoomSl.value) / 100 : 1;
-        // Frame fits the whole stage (320) scaled to output (480), then frame zoomed
         const fDrawW = OUT_SIZE * fScale;
         const fDrawH = OUT_SIZE * fScale;
         const fDx = (OUT_SIZE - fDrawW) / 2;
@@ -1195,7 +1186,6 @@ if (go) go.onclick = () => {
             // A. Draw Masked Video
             ctx.save();
             ctx.beginPath();
-            // Draw Circle in center of 480x480 canvas
             ctx.arc(OUT_SIZE / 2, OUT_SIZE / 2, maskRadius, 0, Math.PI * 2);
             ctx.clip();
             
@@ -1203,7 +1193,7 @@ if (go) go.onclick = () => {
             ctx.drawImage(capVid, vidDx, vidDy, drawW, drawH);
             ctx.restore();
 
-            // B. Draw Frame Overlay (Unmasked, on top)
+            // B. Draw Frame Overlay (Centered & Scaled)
             if (frameImg) { 
                 ctx.drawImage(frameImg, fDx, fDy, fDrawW, fDrawH); 
             }
@@ -1217,7 +1207,7 @@ if (go) go.onclick = () => {
     gif.on('finished', blob => {
         const url = URL.createObjectURL(blob), rNum = Math.floor(Math.random() * 90000) + 10000;
         v.style.display = 'none'; o.src = url; o.style.display = 'block';
-        maskC.style.display = 'none'; // Hide mask container while showing result
+        maskC.style.display = 'none'; 
         if (gifOverlay) gifOverlay.style.display = 'none';
         
         dl.download = `neon_focus_${rNum}.gif`; dl.href = url;
@@ -1227,6 +1217,8 @@ if (go) go.onclick = () => {
         document.getElementById('goBox').style.display = 'none';
         if (upBtn) upBtn.closest('.neon-wrap').style.display = 'none';
         if (document.getElementById('upFrameBtn')) document.getElementById('upFrameBtn').closest('.neon-wrap').style.display = 'none';
+        
+        vp.style.pointerEvents = 'auto'; 
     });
 };
 </script>
