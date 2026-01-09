@@ -247,6 +247,90 @@
       <button id="nav-sym" onclick="changeStudio('sym')">✨ Symbols Studio</button>
     </div>
   </div>
+  /* --- LAYOUT LOGIC (Auto-Detect) --- */
+  .studio-sec { display: none; width: 320px; flex-direction: column; align-items: center; }
+  .active-sec { display: flex; }
+
+  @media (min-width: 1024px) {
+    body { justify-content: flex-start; padding-top: 40px; }
+    .studio-sec { width: 90%; max-width: 1100px; flex-direction: row; align-items: flex-start; justify-content: center; gap: 60px; }
+    #frame-studio, #gif-studio { align-items: center; }
+    .ui, .ui-gif { width: 350px; margin-top: 0; }
+    #font-studio { flex-direction: column; align-items: center; }
+    #font-results { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; max-height: 70vh; overflow-y: scroll; padding-right: 10px; }
+    .font-input { width: 50%; }
+    #sym-studio { flex-direction: column; align-items: center; }
+    .sym-box-container { width: 50%; }
+    #sym-container { max-height: 70vh; overflow-y: scroll; padding-right: 10px; width: 100%; }
+    .sym-btn { flex: 1 0 50px; }
+  }
+
+  /* --- 🖼️ FRAME STUDIO CSS --- */
+  #box { position: relative; width: 310px; height: 310px; border-radius: 50%; overflow: hidden; border: 3px solid #ff0000; box-sizing: border-box; background: transparent; z-index: 10; flex-shrink: 0; }
+  canvas#c { position: absolute; top: 50%; left: 50%; width: 310px; height: 310px; transform: translate(-50%, -50%); z-index: 15; touch-action: pan-y; }
+  
+  #frame-btn-group { display: flex; flex-direction: column; gap: 6px; width: 100%; }
+  #ui-toggle-btn { margin-bottom: 6px; }
+
+  .ui { margin-top: 20px; width: 310px; display: flex; flex-direction: column; gap: 6px; background: transparent; }
+  
+  .btn { 
+    background: #000; border: 2px solid #fff; color: white; padding: 12px; 
+    text-align: center; border-radius: 8px; font-weight: 900; 
+    display: block; font-size: 12px; cursor: pointer; 
+    text-transform: uppercase; width: 100%; box-sizing: border-box; 
+    transition: transform 0.1s ease, border-color 0.2s;
+  }
+  .btn:active { transform: scale(0.95); opacity: 0.8; }
+  
+  .btn:disabled { opacity: 0.3; cursor: not-allowed; border-color: #555; color: #555; transform: none; }
+  .btn-r { border-color: #ff0000; }
+  
+  .lbl { font-size: 9px; color: #888; text-transform: uppercase; margin-top: 2px; display: flex; justify-content: space-between; align-items: center; width: 100%; }
+  .val-tag { color: #ff0000; font-weight: bold; font-family: monospace; font-size: 10px; }
+
+  /* PLAIN FRAMES SECTION */
+  #plain-frames-folder { margin-top: 10px; display: none; flex-direction: column; gap: 5px; width: 100%; }
+  #plain-frames-folder.active { display: flex; }
+  
+  .plain-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; width: 100%; }
+  .plain-color { height: 40px; border-radius: 6px; cursor: pointer; border: 2px solid #333; position: relative; }
+  .plain-color:active { transform: scale(0.9); }
+  
+  /* METALLIC GRADIENTS */
+  .p-gold { background: linear-gradient(135deg, #FFD700, #FDB931, #FFD700); border-color: #FFD700; }
+  .p-silver { background: linear-gradient(135deg, #E0E0E0, #B0B0B0, #E0E0E0); border-color: #C0C0C0; }
+  .p-bronze { background: linear-gradient(135deg, #CD7F32, #A0522D, #CD7F32); border-color: #CD7F32; }
+  
+  /* STANDARD COLORS */
+  .p-black { background: #000000; border-color: #555; } /* ADDED BLACK */
+  .p-red { background: #ff0000; border-color: #ff0000; }
+  .p-blue { background: #0000ff; border-color: #0000ff; }
+  .p-green { background: #00ff00; border-color: #00ff00; }
+  .p-cyan { background: #00ffff; border-color: #00ffff; }
+  .p-pink { background: #ff00ff; border-color: #ff00ff; }
+  .p-yellow { background: #ffff00; border-color: #ffff00; }
+  .p-white { background: #ffffff; border-color: #ffffff; }
+  .p-purple { background: #800080; border-color: #800080; }
+  .p-orange { background: #ffa500; border-color: #ffa500; }
+
+</style>
+</head>
+<body onclick="startAudio()">
+
+<button class="menu-toggle" onclick="toggleMenu(event)">MENU ☰</button>
+
+<div id="menu-panel">
+  <div class="switch-container">
+    <button id="switch-btn" onclick="toggleSwitchMenu(event)">SWITCH TO 📂</button>
+    <div id="switch-menu">
+      <button id="nav-frame" class="active-link" onclick="changeStudio('frame')">🖼️ Frame Studio</button>
+      <button id="nav-font" onclick="changeStudio('font')">✍️ Font Generator</button>
+      <button id="nav-gif" onclick="changeStudio('gif')">⚡ GIF Maker</button>
+      <button id="nav-sym" onclick="changeStudio('sym')">✨ Symbols Studio</button>
+    </div>
+  </div>
+
   <div class="music-section">
     <div class="music-btn" style="display:flex; justify-content:space-between; font-size:12px; font-weight:bold; cursor:pointer;" onclick="toggleMusic()">
       <span>MUSIC PLAYER</span> <span id="m-status" style="color:#ff0000;">ON</span>
@@ -298,15 +382,15 @@
                 <div class="plain-color p-silver" onclick="setPlainFrame('#C0C0C0', 'silver')"></div>
                 <div class="plain-color p-bronze" onclick="setPlainFrame('#CD7F32', 'bronze')"></div>
                 
+                <div class="plain-color p-black" onclick="setPlainFrame('#000000')"></div> <div class="plain-color p-white" onclick="setPlainFrame('#FFFFFF')"></div>
                 <div class="plain-color p-red" onclick="setPlainFrame('#FF0000')"></div>
+                
                 <div class="plain-color p-blue" onclick="setPlainFrame('#0000FF')"></div>
                 <div class="plain-color p-green" onclick="setPlainFrame('#00FF00')"></div>
-                
                 <div class="plain-color p-cyan" onclick="setPlainFrame('#00FFFF')"></div>
+                
                 <div class="plain-color p-pink" onclick="setPlainFrame('#FF00FF')"></div>
                 <div class="plain-color p-yellow" onclick="setPlainFrame('#FFFF00')"></div>
-                
-                <div class="plain-color p-white" onclick="setPlainFrame('#FFFFFF')"></div>
                 <div class="plain-color p-purple" onclick="setPlainFrame('#800080')"></div>
                 <div class="plain-color p-orange" onclick="setPlainFrame('#FFA500')"></div>
             </div>
