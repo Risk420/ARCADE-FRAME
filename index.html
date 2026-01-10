@@ -185,7 +185,6 @@
   .sym-grid { display: flex; flex-wrap: wrap; gap: 5px; width: 100%; padding: 5px; box-sizing: border-box; }
   .sym-btn { background: #1a1a1c; border: 1px solid #333; color: white; padding: 15px 0; font-size: 20px; border-radius: 6px; cursor: pointer; text-align: center; flex: 1 0 18%; min-width: 50px; transition: transform 0.05s ease; }
   .sym-btn:active { transform: scale(0.90); background: #ff0000; color: #000; }
-
   /* --- ⚡ GIF STUDIO CSS --- */
   @keyframes rotate { 100% { transform: rotate(360deg); } }
   .stage { position: relative; width: 320px; height: 320px; display: flex; align-items: center; justify-content: center; margin-bottom: 30px; touch-action: pan-y; flex-shrink: 0; }
@@ -304,12 +303,12 @@
     <button id="save" class="btn" onclick="downloadPic()" disabled>DOWNLOAD PICTURE</button>
   </div>
 </div>
-
 <div id="font-studio" class="studio-sec">
   <input type="text" id="font-input" class="font-input" placeholder="Type text here..." oninput="genFonts()">
   <div class="lbl">TAP TO COPY <span class="val-tag" id="font-count">0 STYLES</span></div>
   <div id="font-results" class="font-scroll"></div>
 </div>
+
 <div id="gif-studio" class="studio-sec">
     <div class="stage" id="stage">
         <div class="led-ring"></div>
@@ -397,9 +396,10 @@ function toggleFrameUI() {
     playClick();
 }
 
-// --- ✍️ FONTS & SYMBOLS ---
+// --- ✍️ FONTS LOGIC (ALL 57 STYLES FIXED) ---
 const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 const alphas = [
+  // --- ORIGINAL FULL STYLES ---
   {m:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"},
   {m:"𝐀𝐁𝐂𝐃𝐄𝐅𝐆𝐇𝐈𝐉𝐊𝐋𝐌𝐍𝐎𝐏𝐐𝐑𝐒𝐓𝐔𝐕𝐖𝐗𝐘𝐙𝐚𝐛𝐜𝐝𝐞𝐟𝐠𝐡𝐢𝐣𝐤𝐥𝐦𝐧𝐨𝐩𝐪𝐫𝐬𝐭𝐮𝐯𝐰𝐱𝐲𝐳𝟎𝟏𝟐𝟑𝟒𝟓𝟔𝟕𝟖𝟗"},
   {m:"ᗩᗷᑕᗪEᖴGᕼIᒍKᒪᗰᑎOᑭᑫᖇᔕTᑌᐯᗯ᙭Yᘔαᖿ𝖼𝖽𝖾𝖿𝗀𝗁𝗂𝗃𝗄𝗅𝗆𝗇𝗈𝗉𝗊𝗋𝗌𝗍𝗎𝗏𝗐𝗑𝗒𝗓0123456789"},
@@ -409,7 +409,7 @@ const alphas = [
   {m:"𝖠𝖡𝖢𝖣𝖤𝖥𝖦𝖧𝖨𝖩𝖪𝖫𝖬𝖭𝖮𝖯𝖰𝖱𝖲𝖳𝖴Ⓥ𝖂𝖃𝖄𝖅𝖺𝖻𝖼𝖽𝖾𝖿𝗀𝗁𝗂𝗃𝗄𝗅𝗆𝗇𝗈𝗉𝗊𝗋𝗌𝗍𝗎Ⓥ𝗐𝗑𝗒𝗓𝟢𝟣𝟤𝟥𝟦𝟧𝟨𝟩𝟪𝟫"},
   {m:"𝗔𝗕Ｃ𝗗𝗘𝗙𝗚ＨＩＪＫＬＭＮＯＰ𝗤𝗥𝗦Ｔ𝗨Ⓥ𝗪𝗫Ｙ𝗭𝗮𝗯𝗰ｄｅｆｇ𝗵ｉ𝑗ｋｌｍｎｏｐ𝗾ｒｓｔｕ𝐯ｗ𝘅ｙｚ𝟬𝟭𝟮𝟯𝟰𝟱𝟲𝟳𝟴𝟵"},
   {m:"𝘈𝘉𝘊𝘋𝘌𝘍𝘎𝘏𝘐𝘑𝘒𝘓𝘔𝘕𝘖𝘗𝘘𝘙𝘚𝘛𝘜𝘝𝘞𝘟𝘠𝘡𝘢𝘣ｃｄｅｆｇｈｉ𝑗𝑘ｌｍｎｏｐ𝘲𝘳𝘴𝘵𝑢𝑣𝑤𝑥𝑦𝘻0123456789"},
-  {m:"𝘼𝘽ＣＤＥ𝙁𝙂𝙃𝙄𝙅𝙆𝙇𝙈ＮＯＰ𝙌𝙍𝙎Ｔ𝙐𝙑𝙒𝙓𝙔𝙕𝙖𝙗𝙘ｄｅｆｇ𝙝𝙞𝙟𝙠𝙡𝙢ｎｏ𝙥𝙦𝙧𝙨𝑡𝙪𝙫𝙬𝙭𝙮𝙯0123456789"},
+  {m:"𝘼𝘽ＣＤＥ𝙁𝙂𝙃𝙄𝙅𝙆𝙇𝙈ＮＯＰ𝙌𝙍𝙎Ｔ𝙐𝙑𝙒𝙓𝙔𝙕𝙖𝙗𝙘ｄｅｆ𝙜𝙝𝙞𝙟𝙠𝙡𝙢ｎｏ𝙥𝙦𝙧𝙨𝑡𝙪𝙫𝙬𝙭𝙮𝙯0123456789"},
   {m:"𝙰𝙱ＣＤＥＦ𝙶ＨＩ𝙹𝙺𝙻ＭＮＯＰ𝚀𝚁𝚂Ｔ𝚄Ⓥ𝚆𝚇Ｙ𝚉𝚊𝚋𝚌𝚍𝚎𝚏𝚐𝚑ｉ𝑗𝚔𝚕ｍｎｏ𝚙𝚚𝚛𝚜𝘵𝚞𝑣𝚠𝚡𝚢𝚣𝟶𝟷𝟸𝟹𝟺𝟻𝟼𝟽𝟾𝟿"},
   {m:"ＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚ０１２３４５６７８９"},
   {m:"ⒶⒷⒸⒹⒺⒻⒼⒽⒾⒿⓀⓁⓂⓃⓄⓅⓆⓇⓈⓉⓊⓋⓌⓍⓎⓏⓐⓑⓒⓓⓔⓕⓖⓗⓘⓙⓚⓛⓜⓝⓞⓟⓠⓡⓢⓣⓤⓥⓦⓧⓨⓩ⓪①②③④⑤⑥⑦⑧⑨"},
@@ -427,7 +427,35 @@ const alphas = [
   {m:"αвc∂єƒgнιנкℓмиσρqяѕтυνωχуzαвc∂єƒgнιנкℓмиσρqяѕтυνωχуz0123456789"},
   {m:"ΛBᄃDΣFGΉIJKLMПӨPQЯƧƬЦVЩXYZΛBᄃDΣFGΉIJKLMПӨPQЯƧƬЦVЩXYZ0123456789"},
   {m:"ДБCDΞFGHłJҜLMИФPǪЯSΓЦVЩXYZдъcdξfgнιjκlмnøpqяsтцvωxчz0123456789"},
-  {m:"ﾑ乃cd乇fGんﾉjズlm刀oｱq尺sｲu√wﾒﾘzﾑ乃cd乇fGんﾉjズlm刀oｱq尺sｲu√wﾒﾘz0123456789"}
+  {m:"ﾑ乃cd乇fGんﾉjズlm刀oｱq尺sｲu√wﾒﾘzﾑ乃cd乇fGんﾉjズlm刀oｱq尺sｲu√wﾒﾘz0123456789"},
+  // --- NEW HYBRID STYLES ---
+  {m:"𝐀𝐁𝐂𝐃𝐄𝐅𝐆𝐇𝐈𝐉𝐊𝐋𝐌𝐍𝐎𝐏𝐐𝐑𝐒𝐓𝐔𝐕𝐖𝐗𝐘𝐙abcdefghijklmnopqrstuvwxyz0123456789"},
+  {m:"𝑨𝑩𝑪𝑫𝑬𝑭𝑮𝑯𝑰𝑱𝑲𝑳𝑴𝑵𝑶𝑷𝑸𝑹𝑺𝑻𝑼𝑽𝑾𝑿𝒀𝒁abcdefghijklmnopqrstuvwxyz0123456789"},
+  {m:"𝒜ℬ𝒞𝒟ℰℱ𝒢ℋℐ𝒥𝒦ℒℳ𝒩𝒪𝒫𝒬ℛ𝒮𝒯𝒰𝒱𝒲𝒳𝒴𝒵abcdefghijklmnopqrstuvwxyz0123456789"},
+  {m:"𝓐𝓑𝓒𝓓𝓔𝓕𝓖𝓗𝓘𝓙𝓚𝓛𝓜𝓝𝓞𝓟𝓠𝓡𝓢𝓣𝓤𝓥𝓦𝓧𝓨𝓩abcdefghijklmnopqrstuvwxyz0123456789"},
+  {m:"𝖠𝖡𝖢𝖣𝖤𝖥𝖦𝖧𝖨𝖩𝖪𝖫𝖬𝖭𝖮𝖯𝖰𝖱𝖲𝖳𝖴𝖵𝖶𝖷𝖸𝖹abcdefghijklmnopqrstuvwxyz0123456789"},
+  {m:"𝗔𝗕Ｃ𝗗𝗘𝗙𝗚ＨＩＪＫＬＭＮＯＰ𝗤𝗥𝗦Ｔ𝗨𝗩𝗪𝗫𝗬𝗭abcdefghijklmnopqrstuvwxyz0123456789"},
+  {m:"𝘈𝘉𝘊𝘋𝘌𝘍𝘎𝘏𝘐𝘑𝘒𝘓𝘔𝘕𝘖𝘗𝘘𝘙𝘚𝘛𝘜𝘝𝘞𝘟𝘠𝘡abcdefghijklmnopqrstuvwxyz0123456789"},
+  {m:"𝙰𝙱𝙲𝙳𝙴𝙵𝙶𝙷𝙸𝙹𝙺𝙻𝙼𝙽𝙾𝙿𝚀𝚁𝚂𝚃𝚄𝚅𝚆𝚇𝚈𝚉abcdefghijklmnopqrstuvwxyz0123456789"},
+  {m:"𝔄𝔅ℭ𝔇𝔈𝔉𝔊ℌℑ𝔍𝔎𝔏𝔐𝔑𝔒𝔓𝔔ℜ𝔖𝔗𝔘𝔙𝔚𝔛𝔜ℨabcdefghijklmnopqrstuvwxyz0123456789"},
+  {m:"𝕬𝕭𝕮𝕯𝕰𝕱𝕲𝕳𝕴𝕵𝕶𝕷𝕸𝕹𝕺𝕻𝕼𝕽𝕾𝕿𝖀𝖁𝖂𝖃𝖄𝖅abcdefghijklmnopqrstuvwxyz0123456789"},
+  {m:"𝔸𝔹ℂ𝔻𝔼𝔽𝔾ℍ𝕀𝕁𝕂𝕃𝕄ℕ𝕆ℙℚℝ𝕊𝕋𝕌𝕍𝕎𝕏𝕐ℤabcdefghijklmnopqrstuvwxyz0123456789"},
+  {m:"ＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺabcdefghijklmnopqrstuvwxyz0123456789"},
+  {m:"ABCDEFGHIJKLMNOPQRSTUVWXYZａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚ0123456789"},
+  {m:"ⒶⒷⒸⒹⒺⒻⒼⒽⒾⒿⓀⓁⓂⓃⓄⓅⓆⓇⓈⓉⓊⓋⓌⓍⓎⓏabcdefghijklmnopqrstuvwxyz0123456789"},
+  {m:"ⓐⓑⓒⓓⓔⓕⓖⓗⓘⓙⓚⓛⓜⓝⓞⓟⓠⓡⓢⓣⓤⓥⓦⓧⓨⓩABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"},
+  {m:"🄰🄱🄲🄳🄴🄵🄶🄷🄸🄹🄺🄻🄼🄽🄾🄿🅀🅁🅂🅃🅄🅅🅆🅇🅈🅉abcdefghijklmnopqrstuvwxyz0123456789"},
+  {m:"ᴀʙᴄᴅᴇғɢʜɪᴊᴋʟᴍɴᴏᴘʀsᴛᴜᴠᴡxʏᴢABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"},
+  {m:"ᴬᴮᶜᴰᴱᶠᴳᴴᴵᴶᴷᴸᴹᴺᴼᴾQᴿˢᵀᵁⱽᵂˣʸᶻabcdefghijklmnopqrstuvwxyz0123456789"},
+  {m:"ᵃᵇᶜᵈᵉᶠᵍʰⁱʲᵏˡᵐⁿᵒᵖᵠʳˢᵗᵘᵛʷˣʸᶻABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"},
+  {m:"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"},
+  {m:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz𝟘𝟙𝟚𝟛𝟜𝟝𝟞𝟟𝟠𝟡"},
+  {m:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz０１２３４５６７８９"},
+  {m:"ᗩᗷᑕᗪEᖴGᕼIᒍKᒪᗰᑎOᑭᑫᖇᔕTᑌᐯᗯ᙭Yᘔabcdefghijklmnopqrstuvwxyz0123456789"},
+  {m:"ΛBCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"},
+  {m:"αβcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"},
+  {m:"ȺƁƇƊɆƑƓĦɪʝҠŁⱮȠØⱣꝖɌŞŦɄVŴӾɎƵabcdefghijklmnopqrstuvwxyz0123456789"},
+  {m:"ᴬʙᴄᴅᴇғɢʜɪᴊᴋʟᴍɴᴏᴘqʀsᴛᴜᴠᴡxʏᴢabcdefghijklmnopqrstuvwxyz0123456789"}
 ];
 function genFonts(){
   const val=document.getElementById('font-input').value, resBox=document.getElementById('font-results'); resBox.innerHTML=""; if(!val)return;
@@ -595,6 +623,7 @@ function setPlainFrame(color, type=null) {
     d(); 
     playClick();
 }
+
 // --- 🖼️ FRAME ENGINE & DRAWING ---
 let isBoundaryLocked = true;
 function toggleBoundaryLock() {
@@ -669,9 +698,10 @@ function resetProject(){ i=new Image(); f=new Image(); cfg={s:1,m:375,x:400,y:40
 function downloadPic(){ if(!i.src) return; d(); let a=document.createElement('a'); a.download=`Arcade_${Date.now()}.png`; a.href=c.toDataURL(); a.click(); playShutter(); }
 function updS(el){ if(el.parentElement.classList.contains('ui-gif')) return; el.style.setProperty('--v', ((el.value-el.min)/(el.max-el.min)*100)+'%'); }
 document.querySelectorAll('input[type=range]').forEach(el => { el.addEventListener('input', () => updS(el)); updS(el); });
-
-// --- 🕹️ FRAME DRAG LOGIC ---
+// --- 🕹️ FRAME DRAG LOGIC (MOUSE & TOUCH) ---
 let isP=false, tStart={x:0,y:0}, initialDist=0, initialScale=1, initialAngle=0, initialRot=0;
+
+// Prevent default browser drag behaviors on the canvas
 c.addEventListener('dragover', (e) => { e.preventDefault(); e.stopPropagation(); });
 c.addEventListener('drop', (e) => {
     e.preventDefault(); e.stopPropagation();
@@ -692,52 +722,185 @@ c.addEventListener('drop', (e) => {
         }
     }
 });
+
+// Mouse Events
 c.onmousedown=e=>{isP=true; tStart={x:e.offsetX,y:e.offsetY};}
-c.onmousemove=e=>{ if(!isP)return; let scale = 800 / c.offsetWidth; cfg.x += (e.offsetX - tStart.x) * scale; cfg.y += (e.offsetY - tStart.y) * scale; tStart={x:e.offsetX,y:e.offsetY}; d(); }
+c.onmousemove=e=>{ 
+    if(!isP)return; 
+    let scale = 800 / c.offsetWidth; 
+    cfg.x += (e.offsetX - tStart.x) * scale; 
+    cfg.y += (e.offsetY - tStart.y) * scale; 
+    tStart={x:e.offsetX,y:e.offsetY}; 
+    d(); 
+}
 window.onmouseup=()=>{isP=false;}
-c.ontouchstart=e=>{ if(i.src) { e.preventDefault(); } if(e.touches.length===1){ isP=true; tStart={x:e.touches[0].clientX, y:e.touches[0].clientY}; } else if(e.touches.length===2){ isP=false; const dx = e.touches[0].clientX - e.touches[1].clientX; const dy = e.touches[0].clientY - e.touches[1].clientY; initialDist = Math.sqrt(dx*dx + dy*dy); initialScale = cfg.s; initialAngle = Math.atan2(dy, dx); initialRot = cfg.r; }}
-c.ontouchmove=e=>{ if(i.src) { e.preventDefault(); } if(e.touches.length===1 && isP){ let scale = 800 / c.offsetWidth; let dx = e.touches[0].clientX - tStart.x; let dy = e.touches[0].clientY - tStart.y; cfg.x += dx * scale; cfg.y += dy * scale; tStart={x:e.touches[0].clientX, y:e.touches[0].clientY}; d(); } else if(e.touches.length===2){ const dx = e.touches[0].clientX - e.touches[1].clientX; const dy = e.touches[0].clientY - e.touches[1].clientY; const dist = Math.sqrt(dx*dx + dy*dy); const scaleFactor = dist / initialDist; let newScale = initialScale * scaleFactor; newScale = Math.max(zSl.min, Math.min(zSl.max, newScale)); cfg.s = newScale; zSl.value = newScale; zVal.innerText=Math.round((newScale/zSl.min)*100)+"%"; updS(zSl); const angle = Math.atan2(dy, dx); let rotationDiff = (angle - initialAngle) * (180/Math.PI); cfg.r = (initialRot + rotationDiff) % 360; rSl.value = (cfg.r % 360 + 360) % 360; rVal.innerText = Math.round(cfg.r) + "°"; updS(rSl); d(); }}
+
+// Touch Events (Pan, Zoom, Rotate)
+c.ontouchstart=e=>{ 
+    if(i.src) { e.preventDefault(); } 
+    if(e.touches.length===1){ 
+        isP=true; tStart={x:e.touches[0].clientX, y:e.touches[0].clientY}; 
+    } else if(e.touches.length===2){ 
+        isP=false; 
+        const dx = e.touches[0].clientX - e.touches[1].clientX; 
+        const dy = e.touches[0].clientY - e.touches[1].clientY; 
+        initialDist = Math.sqrt(dx*dx + dy*dy); 
+        initialScale = cfg.s; 
+        initialAngle = Math.atan2(dy, dx); 
+        initialRot = cfg.r; 
+    }
+}
+
+c.ontouchmove=e=>{ 
+    if(i.src) { e.preventDefault(); } 
+    if(e.touches.length===1 && isP){ 
+        let scale = 800 / c.offsetWidth; 
+        let dx = e.touches[0].clientX - tStart.x; 
+        let dy = e.touches[0].clientY - tStart.y; 
+        cfg.x += dx * scale; 
+        cfg.y += dy * scale; 
+        tStart={x:e.touches[0].clientX, y:e.touches[0].clientY}; 
+        d(); 
+    } else if(e.touches.length===2){ 
+        const dx = e.touches[0].clientX - e.touches[1].clientX; 
+        const dy = e.touches[0].clientY - e.touches[1].clientY; 
+        const dist = Math.sqrt(dx*dx + dy*dy); 
+        const scaleFactor = dist / initialDist; 
+        let newScale = initialScale * scaleFactor; 
+        newScale = Math.max(zSl.min, Math.min(zSl.max, newScale)); 
+        cfg.s = newScale; zSl.value = newScale; zVal.innerText=Math.round((newScale/zSl.min)*100)+"%"; updS(zSl); 
+        
+        const angle = Math.atan2(dy, dx); 
+        let rotationDiff = (angle - initialAngle) * (180/Math.PI); 
+        cfg.r = (initialRot + rotationDiff) % 360; 
+        rSl.value = (cfg.r % 360 + 360) % 360; 
+        rVal.innerText = Math.round(cfg.r) + "°"; updS(rSl); 
+        d(); 
+    }
+}
 window.ontouchend=()=>{isP=false;}
 
 // --- ⚡ GIF ENGINE ---
 const workerBlob = new Blob([`importScripts('https://cdnjs.cloudflare.com/ajax/libs/gif.js/0.2.0/gif.worker.js');`], { type: 'application/javascript' });
 const workerUrl = URL.createObjectURL(workerBlob);
+
 const gfInput=document.getElementById('gfInput'), upBtn=document.getElementById('upBtn'), v=document.getElementById('v'), o=document.getElementById('o'), vp=document.getElementById('vp');
 const speed=document.getElementById('speed'), sv=document.getElementById('sv'), zoom=document.getElementById('zoom'), zv=document.getElementById('zv'), go=document.getElementById('go'), msg=document.getElementById('msg');
 const dlBox=document.getElementById('dlBox'), dl=document.getElementById('dl'), resetBox=document.getElementById('resetBox');
+
 let gifX=0, gifY=0, vidW=0, vidH=0, renderW, renderH;
 
-function resetGifProject() { v.src=''; o.style.display='none'; v.style.display='none'; dlBox.style.display='none'; resetBox.style.display='none'; document.getElementById('goBox').style.display='inline-block'; go.disabled=false; upBtn.disabled=false; zoom.disabled=false; speed.disabled=false; msg.classList.remove('active'); zoom.value=100; zv.innerText="100%"; gfInput.value = ''; gifX = 0; gifY = 0; v.style.transform = `translate(-50%, -50%) scale(1)`; vp.style.pointerEvents = 'auto'; document.getElementById('upWrapper').style.display='inline-block'; }
-gfInput.onchange=(e)=>{ const file=e.target.files[0]; if(!file)return; v.style.display='block'; o.style.display='none'; dlBox.style.display='none'; resetBox.style.display='none'; v.src=URL.createObjectURL(file); v.playbackRate=parseFloat(speed.value); go.disabled = false; v.onloadedmetadata=()=>{ vidW = v.videoWidth; vidH = v.videoHeight; setCoverSize(); v.play(); }; };
-function setCoverSize() { const boxSize = 320; const aspect = vidW / vidH; if(aspect > 1) { renderH = boxSize; renderW = boxSize * aspect; } else { renderW = boxSize; renderH = boxSize / aspect; } v.style.width = renderW + 'px'; v.style.height = renderH + 'px'; updateGifTransform(); }
-function updateGifTransform() { if(!v.src) return; const z = parseInt(zoom.value) / 100; const currentW = renderW * z; const currentH = renderH * z; const maxX = Math.max(0, (currentW - 320) / 2); const maxY = Math.max(0, (currentH - 320) / 2); gifX = Math.max(-maxX, Math.min(maxX, gifX)); gifY = Math.max(-maxY, Math.min(maxY, gifY)); v.style.transform = `translate(calc(-50% + ${gifX}px), calc(-50% + ${gifY}px)) scale(${z})`; }
+function resetGifProject() { 
+    v.src=''; o.style.display='none'; v.style.display='none'; 
+    dlBox.style.display='none'; resetBox.style.display='none'; 
+    document.getElementById('goBox').style.display='inline-block'; 
+    go.disabled=false; upBtn.disabled=false; zoom.disabled=false; speed.disabled=false; 
+    msg.classList.remove('active'); zoom.value=100; zv.innerText="100%"; 
+    gfInput.value = ''; gifX = 0; gifY = 0; 
+    v.style.transform = `translate(-50%, -50%) scale(1)`; 
+    vp.style.pointerEvents = 'auto'; 
+    document.getElementById('upWrapper').style.display='inline-block'; 
+}
+
+gfInput.onchange=(e)=>{ 
+    const file=e.target.files[0]; if(!file)return; 
+    v.style.display='block'; o.style.display='none'; dlBox.style.display='none'; resetBox.style.display='none'; 
+    v.src=URL.createObjectURL(file); v.playbackRate=parseFloat(speed.value); 
+    go.disabled = false; 
+    v.onloadedmetadata=()=>{ vidW = v.videoWidth; vidH = v.videoHeight; setCoverSize(); v.play(); }; 
+};
+
+function setCoverSize() { 
+    const boxSize = 320; const aspect = vidW / vidH; 
+    if(aspect > 1) { renderH = boxSize; renderW = boxSize * aspect; } else { renderW = boxSize; renderH = boxSize / aspect; } 
+    v.style.width = renderW + 'px'; v.style.height = renderH + 'px'; 
+    updateGifTransform(); 
+}
+
+function updateGifTransform() { 
+    if(!v.src) return; 
+    const z = parseInt(zoom.value) / 100; 
+    const currentW = renderW * z; const currentH = renderH * z; 
+    const maxX = Math.max(0, (currentW - 320) / 2); const maxY = Math.max(0, (currentH - 320) / 2); 
+    gifX = Math.max(-maxX, Math.min(maxX, gifX)); gifY = Math.max(-maxY, Math.min(maxY, gifY)); 
+    v.style.transform = `translate(calc(-50% + ${gifX}px), calc(-50% + ${gifY}px)) scale(${z})`; 
+}
+
 zoom.oninput = function() { zv.innerText = this.value + '%'; updateGifTransform(); };
 speed.oninput=()=>{ sv.innerText=speed.value+'x'; if(v.src)v.playbackRate=parseFloat(speed.value); };
 
+// GIF Draggable Logic
 let isGifDrag = false, startX, startY, initX, initY;
-vp.addEventListener('touchstart', e => { if(!v.src || v.style.display === 'none' || v.getAttribute('src') === '') return; isGifDrag = true; startX = e.touches[0].clientX; startY = e.touches[0].clientY; initX = gifX; initY = gifY; }, {passive: false});
-vp.addEventListener('touchmove', e => { if(!v.src || v.style.display === 'none' || v.getAttribute('src') === '') return; if(!isGifDrag) return; e.preventDefault(); const dx = e.touches[0].clientX - startX; const dy = e.touches[0].clientY - startY; gifX = initX + dx; gifY = initY + dy; updateGifTransform(); }, {passive: false});
-vp.addEventListener('mousedown', e => { if(!v.src) return; isGifDrag = true; startX = e.clientX; startY = e.clientY; initX = gifX; initY = gifY; });
-window.addEventListener('mousemove', e => { if(!isGifDrag) return; const dx = e.clientX - startX; const dy = e.clientY - startY; gifX = initX + dx; gifY = initY + dy; updateGifTransform(); });
-window.addEventListener('mouseup', () => isGifDrag = false); window.addEventListener('touchend', () => isGifDrag = false);
+vp.addEventListener('touchstart', e => { 
+    if(!v.src || v.style.display === 'none' || v.getAttribute('src') === '') return; 
+    isGifDrag = true; startX = e.touches[0].clientX; startY = e.touches[0].clientY; initX = gifX; initY = gifY; 
+}, {passive: false});
 
+vp.addEventListener('touchmove', e => { 
+    if(!v.src || v.style.display === 'none' || v.getAttribute('src') === '') return; 
+    if(!isGifDrag) return; e.preventDefault(); 
+    const dx = e.touches[0].clientX - startX; const dy = e.touches[0].clientY - startY; 
+    gifX = initX + dx; gifY = initY + dy; updateGifTransform(); 
+}, {passive: false});
+
+vp.addEventListener('mousedown', e => { 
+    if(!v.src) return; isGifDrag = true; startX = e.clientX; startY = e.clientY; initX = gifX; initY = gifY; 
+});
+window.addEventListener('mousemove', e => { 
+    if(!isGifDrag) return; 
+    const dx = e.clientX - startX; const dy = e.clientY - startY; 
+    gifX = initX + dx; gifY = initY + dy; updateGifTransform(); 
+});
+window.addEventListener('mouseup', () => isGifDrag = false); 
+window.addEventListener('touchend', () => isGifDrag = false);
+
+// Render GIF
 go.onclick=()=>{
     if(!v.src)return;
     go.disabled = true; upBtn.disabled = true; zoom.disabled = true; speed.disabled = true;
     vp.style.pointerEvents = 'none'; msg.innerText="Processing..."; msg.classList.add('active');
+    
     const gif=new GIF({workers:30, quality:20, width:480, height:480, workerScript:workerUrl, dither: false});
     const canvas=document.createElement('canvas'); canvas.width=480; canvas.height=480; const ctx=canvas.getContext('2d');
     const fps=15, duration=v.duration, playbackSpeed=parseFloat(speed.value), capVid=document.createElement('video');
+    
     capVid.src=v.src; capVid.muted=true; capVid.playsInline=true; capVid.crossOrigin = "anonymous";
+    
     capVid.onloadeddata=()=>{
-        let cTime=0; const scale = parseInt(zoom.value) / 100; const aspect = capVid.videoWidth / capVid.videoHeight; let drawW, drawH;
+        let cTime=0; 
+        const scale = parseInt(zoom.value) / 100; 
+        const aspect = capVid.videoWidth / capVid.videoHeight; 
+        let drawW, drawH;
         if (aspect > 1) { drawH = 480; drawW = 480 * aspect; } else { drawW = 480; drawH = 480 / aspect; }
-        drawW *= scale; drawH *= scale; const dragScale = 480 / 320; const finalX = gifX * dragScale; const finalY = gifY * dragScale; let dx = (480 - drawW) / 2 + finalX; let dy = (480 - drawH) / 2 + finalY;
-        const captureFrame=()=>{ if(cTime>=duration){ msg.innerText="Encoding..."; gif.render(); return; } capVid.currentTime=cTime; };
-        capVid.onseeked=()=>{ ctx.fillStyle = '#000000'; ctx.fillRect(0, 0, 480, 480); ctx.drawImage(capVid, dx, dy, drawW, drawH); gif.addFrame(ctx,{copy:true, delay:(1000/fps)/playbackSpeed}); cTime+=(1/fps); setTimeout(captureFrame, 10); };
+        drawW *= scale; drawH *= scale; 
+        const dragScale = 480 / 320; 
+        const finalX = gifX * dragScale; const finalY = gifY * dragScale; 
+        let dx = (480 - drawW) / 2 + finalX; let dy = (480 - drawH) / 2 + finalY;
+        
+        const captureFrame=()=>{ 
+            if(cTime>=duration){ msg.innerText="Encoding..."; gif.render(); return; } 
+            capVid.currentTime=cTime; 
+        };
+        
+        capVid.onseeked=()=>{ 
+            ctx.fillStyle = '#000000'; ctx.fillRect(0, 0, 480, 480); 
+            ctx.drawImage(capVid, dx, dy, drawW, drawH); 
+            gif.addFrame(ctx,{copy:true, delay:(1000/fps)/playbackSpeed}); 
+            cTime+=(1/fps); setTimeout(captureFrame, 10); 
+        };
         captureFrame();
     };
-    gif.on('finished', blob=>{ const url=URL.createObjectURL(blob), rNum=Math.floor(Math.random()*90000)+10000; v.style.display='none'; o.src=url; o.style.display='block'; dl.download=`neon_focus_${rNum}.gif`; dl.href=url; dlBox.style.display='inline-block'; resetBox.style.display='inline-block'; msg.classList.remove('active'); document.getElementById('goBox').style.display='none'; upBtn.parentElement.style.display='none'; vp.style.pointerEvents = 'auto'; });
+    
+    gif.on('finished', blob=>{ 
+        const url=URL.createObjectURL(blob), rNum=Math.floor(Math.random()*90000)+10000; 
+        v.style.display='none'; o.src=url; o.style.display='block'; 
+        dl.download=`neon_focus_${rNum}.gif`; dl.href=url; 
+        dlBox.style.display='inline-block'; resetBox.style.display='inline-block'; 
+        msg.classList.remove('active'); 
+        document.getElementById('goBox').style.display='none'; 
+        upBtn.parentElement.style.display='none'; 
+        vp.style.pointerEvents = 'auto'; 
+    });
 };
 </script>
 </body>
