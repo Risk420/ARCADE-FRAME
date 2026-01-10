@@ -138,31 +138,39 @@
   .lbl { font-size: 9px; color: #888; text-transform: uppercase; margin-top: 2px; display: flex; justify-content: space-between; align-items: center; width: 100%; }
   .val-tag { color: #ff0000; font-weight: bold; font-family: monospace; font-size: 10px; }
 
-  /* PLAIN FRAMES SECTION */
-  #plain-frames-folder { margin-top: 10px; display: none; flex-direction: column; gap: 5px; width: 100%; }
-  #plain-frames-folder.active { display: flex; }
+  /* --- 🎨 NEW ADVANCED PALETTE CSS --- */
+  /* Main Container for the Palette System */
+  #palette-wrapper { display: none; flex-direction: column; width: 100%; margin-top: 5px; background: #000; border: 1px solid #333; border-radius: 8px; padding: 8px; box-sizing: border-box; }
+  #palette-wrapper.active { display: flex; }
   
-  .plain-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; width: 100%; }
-  .plain-color { height: 40px; border-radius: 6px; cursor: pointer; border: 2px solid #333; position: relative; }
-  .plain-color:active { transform: scale(0.9); }
+  /* Category Scroll Bar (Metallics, Reds, etc.) */
+  .cat-scroll { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 8px; margin-bottom: 5px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+  .cat-scroll::-webkit-scrollbar { display: none; }
   
-  /* METALLIC GRADIENTS */
-  .p-gold { background: linear-gradient(135deg, #FFD700, #FDB931, #FFD700); border-color: #FFD700; }
-  .p-silver { background: linear-gradient(135deg, #E0E0E0, #B0B0B0, #E0E0E0); border-color: #C0C0C0; }
-  .p-bronze { background: linear-gradient(135deg, #CD7F32, #A0522D, #CD7F32); border-color: #CD7F32; }
+  /* Category Buttons */
+  .cat-btn { 
+    flex: 0 0 auto; padding: 8px 12px; background: #1a1a1c; 
+    border: 1px solid #444; border-radius: 20px; 
+    font-size: 10px; font-weight: bold; cursor: pointer; color: #aaa; 
+    transition: 0.2s ease; display: flex; align-items: center; gap: 5px;
+  }
+  .cat-btn:hover { background: #333; }
+  .cat-btn.active-cat { background: #fff; color: #000; border-color: #fff; box-shadow: 0 0 10px rgba(255,255,255,0.3); }
+
+  /* Grid Area for Small Squares */
+  .color-grid-container { display: none; grid-template-columns: repeat(auto-fill, minmax(32px, 1fr)); gap: 6px; max-height: 220px; overflow-y: auto; padding-top: 5px; }
+  .color-grid-container.show { display: grid; animation: fadeIn 0.2s ease; }
   
-  /* STANDARD COLORS */
-  .p-black { background: #000000; border-color: #555; } /* ADDED BLACK CSS */
-  .p-red { background: #ff0000; border-color: #ff0000; }
-  .p-blue { background: #0000ff; border-color: #0000ff; }
-  .p-green { background: #00ff00; border-color: #00ff00; }
-  .p-cyan { background: #00ffff; border-color: #00ffff; }
-  .p-pink { background: #ff00ff; border-color: #ff00ff; }
-  .p-yellow { background: #ffff00; border-color: #ffff00; }
-  .p-white { background: #ffffff; border-color: #ffffff; }
-  .p-purple { background: #800080; border-color: #800080; }
-  .p-orange { background: #ffa500; border-color: #ffa500; }
-  
+  /* The Small Color Squares */
+  .c-sq { 
+    height: 32px; border-radius: 6px; cursor: pointer; 
+    border: 1px solid rgba(255,255,255,0.1); position: relative; box-sizing: border-box; 
+  }
+  .c-sq:active { transform: scale(0.9); border-color: #fff; }
+  .c-sq.is-metal { border: 1px solid #fff; } /* Highlight for metallics */
+
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
+
   /* --- ✍️ FONT STUDIO CSS --- */
   .font-input { width: 100%; background: #111; border: 2px solid #00ffff; color: #fff; padding: 15px; border-radius: 8px; font-weight: bold; text-align: center; margin-bottom: 15px; font-size: 16px; outline: none; box-sizing: border-box; }
   .font-scroll { width: 100%; max-height: 500px; overflow-y: auto; display: flex; flex-direction: column; border-radius: 8px; overflow-x: hidden; border: 1px solid rgba(255,255,255,0.1); box-sizing: border-box; touch-action: pan-y; }
@@ -257,30 +265,28 @@
   <div id="box"><canvas id="c" width="800" height="800"></canvas></div>
   <div class="ui">
     <button id="ui-toggle-btn" class="btn" style="border-color:#ffcc00; color:#ffcc00; margin-bottom:10px;" onclick="toggleFrameUI()">👁️ HIDE MENU BUTTONS</button>
+    
     <div id="frame-btn-group">
         <label class="btn" onclick="playClick()">CHOOSE IMAGE<input type="file" id="u1" accept="image/*" onchange="handleFile(event)" style="display:none"></label>
         <label class="btn btn-r" onclick="playClick()">APPLY FRAME<input type="file" id="u2" accept="image/*" onchange="handleFrame(event)" style="display:none"></label>
         
-        <button class="btn" style="border-color:#ffffff; color:#ffffff;" onclick="togglePlainFrames()">PLAIN FRAMES 📂</button>
+        <button class="btn" style="border-color:#ffffff; color:#ffffff;" onclick="togglePaletteUI()">COLOR PALETTE 🎨</button>
         
-        <div id="plain-frames-folder">
-            <div class="plain-grid">
-                <div class="plain-color p-gold" onclick="setPlainFrame('#FFD700', 'gold')"></div>
-                <div class="plain-color p-silver" onclick="setPlainFrame('#C0C0C0', 'silver')"></div>
-                <div class="plain-color p-bronze" onclick="setPlainFrame('#CD7F32', 'bronze')"></div>
-                
-                <div class="plain-color p-black" onclick="setPlainFrame('#000000')"></div> <div class="plain-color p-white" onclick="setPlainFrame('#FFFFFF')"></div>
-                <div class="plain-color p-red" onclick="setPlainFrame('#FF0000')"></div>
-                
-                <div class="plain-color p-blue" onclick="setPlainFrame('#0000FF')"></div>
-                <div class="plain-color p-green" onclick="setPlainFrame('#00FF00')"></div>
-                <div class="plain-color p-cyan" onclick="setPlainFrame('#00FFFF')"></div>
-                
-                <div class="plain-color p-pink" onclick="setPlainFrame('#FF00FF')"></div>
-                <div class="plain-color p-yellow" onclick="setPlainFrame('#FFFF00')"></div>
-                <div class="plain-color p-purple" onclick="setPlainFrame('#800080')"></div>
-                <div class="plain-color p-orange" onclick="setPlainFrame('#FFA500')"></div>
+        <div id="palette-wrapper">
+            <div class="cat-scroll">
+                <button class="cat-btn" onclick="renderCat('Basic')">BASIC</button>
+                <button class="cat-btn" onclick="renderCat('Metallics')">METALLICS</button>
+                <button class="cat-btn" onclick="renderCat('Grays')">GRAYS</button>
+                <button class="cat-btn" onclick="renderCat('Reds')">REDS</button>
+                <button class="cat-btn" onclick="renderCat('Oranges')">ORANGES</button>
+                <button class="cat-btn" onclick="renderCat('Yellows')">YELLOWS</button>
+                <button class="cat-btn" onclick="renderCat('Greens')">GREENS</button>
+                <button class="cat-btn" onclick="renderCat('Cyans')">CYANS</button>
+                <button class="cat-btn" onclick="renderCat('Blues')">BLUES</button>
+                <button class="cat-btn" onclick="renderCat('Purples')">PURPLES</button>
+                <button class="cat-btn" onclick="renderCat('Pinks')">PINKS</button>
             </div>
+            <div id="color-grid" class="color-grid-container"></div>
         </div>
 
         <button id="lock-btn" class="btn" style="border-color:#00ff00; color:#00ff00;" onclick="toggleBoundaryLock()">BOUNDARY LOCK: ON 🔒</button>
@@ -298,12 +304,12 @@
     <button id="save" class="btn" onclick="downloadPic()" disabled>DOWNLOAD PICTURE</button>
   </div>
 </div>
+
 <div id="font-studio" class="studio-sec">
   <input type="text" id="font-input" class="font-input" placeholder="Type text here..." oninput="genFonts()">
   <div class="lbl">TAP TO COPY <span class="val-tag" id="font-count">0 STYLES</span></div>
   <div id="font-results" class="font-scroll"></div>
 </div>
-
 <div id="gif-studio" class="studio-sec">
     <div class="stage" id="stage">
         <div class="led-ring"></div>
@@ -403,7 +409,7 @@ const alphas = [
   {m:"𝖠𝖡𝖢𝖣𝖤𝖥𝖦𝖧𝖨𝖩𝖪𝖫𝖬𝖭𝖮𝖯𝖰𝖱𝖲𝖳𝖴Ⓥ𝖂𝖃𝖄𝖅𝖺𝖻𝖼𝖽𝖾𝖿𝗀𝗁𝗂𝗃𝗄𝗅𝗆𝗇𝗈𝗉𝗊𝗋𝗌𝗍𝗎Ⓥ𝗐𝗑𝗒𝗓𝟢𝟣𝟤𝟥𝟦𝟧𝟨𝟩𝟪𝟫"},
   {m:"𝗔𝗕Ｃ𝗗𝗘𝗙𝗚ＨＩＪＫＬＭＮＯＰ𝗤𝗥𝗦Ｔ𝗨Ⓥ𝗪𝗫Ｙ𝗭𝗮𝗯𝗰ｄｅｆｇ𝗵ｉ𝑗ｋｌｍｎｏｐ𝗾ｒｓｔｕ𝐯ｗ𝘅ｙｚ𝟬𝟭𝟮𝟯𝟰𝟱𝟲𝟳𝟴𝟵"},
   {m:"𝘈𝘉𝘊𝘋𝘌𝘍𝘎𝘏𝘐𝘑𝘒𝘓𝘔𝘕𝘖𝘗𝘘𝘙𝘚𝘛𝘜𝘝𝘞𝘟𝘠𝘡𝘢𝘣ｃｄｅｆｇｈｉ𝑗𝑘ｌｍｎｏｐ𝘲𝘳𝘴𝘵𝑢𝑣𝑤𝑥𝑦𝘻0123456789"},
-  {m:"𝘼𝘽ＣＤＥ𝙁𝙂𝙃𝙄𝙅𝙆𝙇𝙈ＮＯＰ𝙌𝙍𝙎Ｔ𝙐𝙑𝙒𝙓𝙔𝙕𝙖𝙗𝙘ｄｅｆ𝙜𝙝𝙞𝙟𝙠𝙡𝙢ｎｏ𝙥𝙦𝙧𝙨𝑡𝙪𝙫𝙬𝙭𝙮𝙯0123456789"},
+  {m:"𝘼𝘽ＣＤＥ𝙁𝙂𝙃𝙄𝙅𝙆𝙇𝙈ＮＯＰ𝙌𝙍𝙎Ｔ𝙐𝙑𝙒𝙓𝙔𝙕𝙖𝙗𝙘ｄｅｆｇ𝙝𝙞𝙟𝙠𝙡𝙢ｎｏ𝙥𝙦𝙧𝙨𝑡𝙪𝙫𝙬𝙭𝙮𝙯0123456789"},
   {m:"𝙰𝙱ＣＤＥＦ𝙶ＨＩ𝙹𝙺𝙻ＭＮＯＰ𝚀𝚁𝚂Ｔ𝚄Ⓥ𝚆𝚇Ｙ𝚉𝚊𝚋𝚌𝚍𝚎𝚏𝚐𝚑ｉ𝑗𝚔𝚕ｍｎｏ𝚙𝚚𝚛𝚜𝘵𝚞𝑣𝚠𝚡𝚢𝚣𝟶𝟷𝟸𝟹𝟺𝟻𝟼𝟽𝟾𝟿"},
   {m:"ＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚ０１２３４５６７８９"},
   {m:"ⒶⒷⒸⒹⒺⒻⒼⒽⒾⒿⓀⓁⓂⓃⓄⓅⓆⓇⓈⓉⓊⓋⓌⓍⓎⓏⓐⓑⓒⓓⓔⓕⓖⓗⓘⓙⓚⓛⓜⓝⓞⓟⓠⓡⓢⓣⓤⓥⓦⓧⓨⓩ⓪①②③④⑤⑥⑦⑧⑨"},
@@ -436,7 +442,7 @@ const symData = {
     "Hanging Stars": ["*̣̥☆·͙̥","‧͙⁺˚*･༓☾","☽༓･*˚⁺‧͙","★*","*★","☆.","¸.·","·.¸","*","**","***"],
     "Arrows": ["←","→","↓","↑","↖","↗","↘","↙","↔","↕","↚","↛","↜","↝","↞","↟","↠","↡","↢","↣","↤","↥","↦","↧","↨","↩","↪","↫","↬","↭","↮","↯","↰","↱","↲","↳","↴","↶","↷","↸","↹","↺","↻","↼","↽","↾","↿","⇀","⇁","⇂","⇃","⇄","⇅","⇆","⇇","⇈","⇉","⇊","⇋","⇌","⇍","⇎","⇏","⇕","⇖","⇗","⇘","⇙","⇚","⇛","⇜","⇝","⇞","⇟","⇠","⇡","⇢","⇣","⇤","⇥","⇦","⇧","⇨","⇩","⇪","⌅","⌆","⌤","⏎","▶","☇","☈","☊","☋","☌","☍","➔","➘","➙","➚","➛","➜","➝","➞","➟","➠","➡","➢","➣","➤","➥","➦","➧","➨","➩","➪","➫","➬","➭","➮","➯","➱","➲","➳","➴","➵","➶","➷","➸","➹","➺","➻","➼","➽","➾","⤴","⤵","↵","⇰","⇫","⇬","⇭","⇳","⇮","⇯","⇱","⇲","⇴","⇵","⇷","⇸","⇹","⇺","⇑","⇓","⤪","⤨","⤧","⤩","⤭","⤮","⤯","⤰","⤱","⤲","⤫","⤬","⇽","⇾","⇿","⬳","⟿","⤉","⤈","⇻","⇼","⬴","⤀","⬵","⤁","⬹","⤔","⬺","⤕","⬶","⤅","⬻","⤖","⬷","⤐","⬼","⤗","⬽","⤘","⤝","⤞","⤟","⤠","⤡","⤢","⤣","⤤","⤥","⤦","⬐","⬎","⬑","⬏","⤶","⤷","⥂","⥃","⥄","⭀","⥱","⥶","⥸","⭂","⭈","⭊","⥵","⭁","⭇","⭉","⥲","⭋","⭌","⥳","⥴","⥆","⥅","⥹","⥻","⬰","⥈","⬾","⥇","⬲","⟴","⥷","⭃","⥺","⭄","⥉","⥰","⬿","⤳","⥊","⥋","⥌","⥍","⥎","⥏","⥐","⥑","⥒","⥓","⥔","⥕","⥖","⥗","⥤","⥣","⥥","⥦","⥨","⥧","⥩","⥮","⥯","⥪","⥬","⥫","⥭","⤌","⤍","⤎","⤏","⬸","⤑","⟵","⟶","⟷","⬅","⬆","⬇","⬈","⬉","⬊","⬋","⬌","⬍","⬄","⬀","⬁","⬂","⬃","⟻","⟼","⤒","⤓","⤙","⤚","⤛","⤜","⥼","⥽","⥾","⥿","⤼","⤽","⤾","⤿","⤸","⤺","⤹","⤻","⥀","⥁","⟲","⟳","⬱","⟸","⟹","⟺","⤂","⤃","⤄","⤆","⤇","⤊","⤋","⇐","⇒","⇔","⇶","⭅","⭆","⟰","⟱"],
     "Astrological": ["☉","⊕","♁","☽","☿","♀︎","♂︎","♃","♄","♅","⛢","♆","⯓","♇","⯔","⯕","⯖","🌑︎","🌒︎","🌓︎","🌔︎","🌕︎","🌖︎","🌗︎","🌘︎","⚳","⚴","⚵","⚶","⯙","⚕","⯚","⚷","☄︎","⯰","⯘","⯗","⊗","⚸","⯞","☊","☋","☿"],
-    "Bracket": ["（","）","[","]","【","】","『","』","「","」","《","》","〈","〉","〔","〕","︹","︺","︷","︸","︵","︶","︻","︼","︽","︾","︿","﹀","﹁","﹂","﹃","﹄","㛛","〘","㙙","〖","〗","｛","｝","＜","＞","﹤","﹥","﹙","﹚","﹝","﹞","﹛","﹜","〈","〉","«","»","‹","›"],
+    "Bracket": ["（","）","[","]","【","】","『","』","「","」","《","》","〈","〉","〔","〕","︹","︺","︷","︸","︵","︶","︻","︼","︽","︾","︿","﹀","﹁","﹂","﹃","﹄","㛛","㙙","〖","〗","｛","｝","＜","＞","﹤","﹥","﹙","﹚","﹝","﹞","﹛","﹜","〈","〉","«","»","‹","›"],
     "Check Marks": ["✓","✔","✔️","✅","✘","✗","☓","∨","√","☐","☒","☑","㤤","㤥","✇","💯","❌","❎"],
     "Cross": ["ⵜ","𐤕","𐤲","𓏶","†","✝","✞","✟","☨","☦","♱","☥","♰","‡","⊹","☩","✙"],
     "Email": ["✉️","📨","📧","💌","📩","📥","📤","📫","📪","📬","📭","📮","📦"],
@@ -469,12 +475,127 @@ function changeMusic(id){ if(player)player.loadVideoById(id); playShutter(); }
 function toggleMusic(){ initAudio(); playClick(); musicOn=!musicOn; if(musicOn){ player.playVideo(); mStat.innerText="ON"; mStat.style.color="#ff0000"; }else{ player.pauseVideo(); mStat.innerText="OFF"; mStat.style.color="#888"; }}
 function playClick(){ if(audioCtx.state!=='running')audioCtx.resume(); const o=audioCtx.createOscillator(), g=audioCtx.createGain(); o.frequency.setValueAtTime(800, audioCtx.currentTime); g.gain.setValueAtTime(0.08, audioCtx.currentTime); o.connect(g); g.connect(audioCtx.destination); o.start(); o.stop(audioCtx.currentTime+0.1); }
 function playShutter(){ if(audioCtx.state!=='running')audioCtx.resume(); const o=audioCtx.createOscillator(), g=audioCtx.createGain(); o.type='square'; o.frequency.setValueAtTime(150, audioCtx.currentTime); g.gain.setValueAtTime(0.08, audioCtx.currentTime); o.connect(g); g.connect(audioCtx.destination); o.start(); o.stop(audioCtx.currentTime+0.1); }
+// --- 🎨 ADVANCED COLOR PALETTE DATA & LOGIC ---
+const colorData = {
+    'Basic': [
+        {c:'#000000'}, {c:'#FFFFFF'}, {c:'#FF0000'}, {c:'#00FF00'}, {c:'#0000FF'}, 
+        {c:'#FFFF00'}, {c:'#00FFFF'}, {c:'#FF00FF'}, {c:'#FFA500'}, {c:'#800080'}, 
+        {c:'#A52A2A'}, {c:'#808080'}
+    ],
+    'Metallics': [
+        {c:'#FFD700', t:'gold'}, {c:'#C0C0C0', t:'silver'}, {c:'#CD7F32', t:'bronze'},
+        {c:'#D4AF37', t:'gold'}, {c:'#B8860B', t:'gold'}, {c:'#E5E4E2', t:'silver'}
+    ],
+    'Grays': [
+        {c:'#000000'}, {c:'#1a1a1a'}, {c:'#333333'}, {c:'#4d4d4d'}, {c:'#666666'}, 
+        {c:'#808080'}, {c:'#999999'}, {c:'#b3b3b3'}, {c:'#cccccc'}, {c:'#e6e6e6'}, 
+        {c:'#ffffff'}
+    ],
+    'Reds': [
+        {c:'#5b0000'}, {c:'#800000'}, {c:'#a52a2a'}, {c:'#b22222'}, {c:'#dc143c'}, 
+        {c:'#ff0000'}, {c:'#ff4d4d'}, {c:'#ff6666'}, {c:'#fa8072'}, {c:'#e9967a'}, 
+        {c:'#ff6347'}, {c:'#cd5c5c'}
+    ],
+    'Oranges': [
+        {c:'#8b4500'}, {c:'#a0522d'}, {c:'#d2691e'}, {c:'#cd853f'}, {c:'#f4a460'}, 
+        {c:'#ff8c00'}, {c:'#ffa500'}, {c:'#ffb347'}, {c:'#ffcc80'}, {c:'#ffe5b4'}
+    ],
+    'Yellows': [
+        {c:'#ffd700'}, {c:'#daa520'}, {c:'#b8860b'}, {c:'#bdb76b'}, {c:'#f0e68c'}, 
+        {c:'#khaki'}, {c:'#ffff00'}, {c:'#ffff33'}, {c:'#ffff66'}, {c:'#ffff99'}, 
+        {c:'#lightyellow'}, {c:'#ffffe0'}
+    ],
+    'Greens': [
+        {c:'#006400'}, {c:'#008000'}, {c:'#228b22'}, {c:'#2e8b57'}, {c:'#3cb371'}, 
+        {c:'#32cd32'}, {c:'#00ff00'}, {c:'#7cfc00'}, {c:'#7fff00'}, {c:'#adff2f'}, 
+        {c:'#90ee90'}, {c:'#98fb98'}, {c:'#00fa9a'}, {c:'#00ff7f'}, {c:'#66cdaa'}
+    ],
+    'Cyans': [
+        {c:'#008080'}, {c:'#008b8b'}, {c:'#20b2aa'}, {c:'#48d1cc'}, {c:'#00ced1'}, 
+        {c:'#40e0d0'}, {c:'#00ffff'}, {c:'#00ffff'}, {c:'#7fffd4'}, {c:'#afeeee'}, 
+        {c:'#e0ffff'}
+    ],
+    'Blues': [
+        {c:'#000080'}, {c:'#00008b'}, {c:'#0000cd'}, {c:'#0000ff'}, {c:'#1e90ff'}, 
+        {c:'#4169e1'}, {c:'#6495ed'}, {c:'#87cefa'}, {c:'#87ceeb'}, {c:'#add8e6'}, 
+        {c:'#b0c4de'}, {c:'#f0f8ff'}
+    ],
+    'Purples': [
+        {c:'#4b0082'}, {c:'#483d8b'}, {c:'#6a5acd'}, {c:'#7b68ee'}, {c:'#800080'}, 
+        {c:'#8b008b'}, {c:'#9400d3'}, {c:'#9932cc'}, {c:'#ba55d3'}, {c:'#dda0dd'}, 
+        {c:'#e6e6fa'}
+    ],
+    'Pinks': [
+        {c:'#8b0000'}, {c:'#c71585'}, {c:'#db7093'}, {c:'#ff1493'}, {c:'#ff69b4'}, 
+        {c:'#ffb6c1'}, {c:'#ffc0cb'}, {c:'#fff0f5'}
+    ]
+};
 
-// --- 📂 PLAIN FRAMES ---
-function togglePlainFrames() { document.getElementById('plain-frames-folder').classList.toggle('active'); playClick(); }
-function setPlainFrame(color, type=null) { f = new Image(); document.getElementById('u2').value = ''; cfg.pColor = color; cfg.pType = type; d(); playClick(); }
+function togglePaletteUI() {
+    const el = document.getElementById('palette-wrapper');
+    const btn = document.querySelector("button[onclick='togglePaletteUI()']");
+    if(el.style.display === 'flex') {
+        el.style.display = 'none';
+        btn.innerHTML = "COLOR PALETTE 🎨";
+        btn.style.color = "#ffffff"; btn.style.borderColor = "#ffffff";
+    } else {
+        el.style.display = 'flex';
+        el.classList.add('active');
+        btn.innerHTML = "CLOSE PALETTE ✖";
+        btn.style.color = "#ffcc00"; btn.style.borderColor = "#ffcc00";
+        renderCat('Basic'); // Load Basic by default
+    }
+    playClick();
+}
 
-// --- 🖼️ FRAME ENGINE ---
+function renderCat(cat) {
+    playClick();
+    
+    // Highlight active category button
+    document.querySelectorAll('.cat-btn').forEach(b => {
+        b.classList.remove('active-cat');
+        if(b.innerText === cat.toUpperCase()) b.classList.add('active-cat');
+    });
+
+    const grid = document.getElementById('color-grid');
+    grid.innerHTML = ''; // Clear existing
+    grid.classList.remove('show');
+    
+    // Slight delay for animation effect
+    setTimeout(() => {
+        const list = colorData[cat];
+        list.forEach(item => {
+            const d = document.createElement('div');
+            d.className = 'c-sq';
+            
+            // Handle Metallics display
+            if(item.t) {
+                d.classList.add('is-metal');
+                if(item.t==='gold') d.style.background = 'linear-gradient(135deg, #FFD700, #FDB931)';
+                if(item.t==='silver') d.style.background = 'linear-gradient(135deg, #E0E0E0, #B0B0B0)';
+                if(item.t==='bronze') d.style.background = 'linear-gradient(135deg, #CD7F32, #A0522D)';
+            } else {
+                d.style.backgroundColor = item.c;
+            }
+
+            d.onclick = () => {
+                setPlainFrame(item.c, item.t || null);
+            };
+            grid.appendChild(d);
+        });
+        grid.classList.add('show');
+    }, 10);
+}
+
+function setPlainFrame(color, type=null) {
+    f = new Image(); // Clear custom frame
+    document.getElementById('u2').value = ''; 
+    cfg.pColor = color; 
+    cfg.pType = type; 
+    d(); 
+    playClick();
+}
+// --- 🖼️ FRAME ENGINE & DRAWING ---
 let isBoundaryLocked = true;
 function toggleBoundaryLock() {
     isBoundaryLocked = !isBoundaryLocked;
@@ -493,6 +614,8 @@ function toggleBoundaryLock() {
 
 function d(){ 
   x.clearRect(0,0,800,800); 
+  
+  // 1. Calculate Constraints
   if(i.src){
       if (isBoundaryLocked) {
           const rad = cfg.r*Math.PI/180, cos = Math.abs(Math.cos(rad)), sin = Math.abs(Math.sin(rad));
@@ -503,21 +626,30 @@ function d(){
           cfg.x = Math.max(400-rangeX, Math.min(400+rangeX, cfg.x)); cfg.y = Math.max(400-rangeY, Math.min(400+rangeY, cfg.y));
       } 
   }
+
+  // 2. Draw Image (Clipped)
   x.save(); x.beginPath(); x.arc(400,400,cfg.m,0,6.28); x.clip(); 
   if(i.src){ let w=i.width*cfg.s, h=i.height*cfg.s; x.save(); x.translate(cfg.x,cfg.y); x.rotate(cfg.r*Math.PI/180); x.drawImage(i,-w/2,-h/2,w,h); x.restore(); } 
   x.restore(); 
-  
+
+  // 3. Draw Plain Frame (From New Palette)
   if (cfg.pColor) {
       x.save(); x.beginPath(); x.arc(400, 400, cfg.m, 0, Math.PI * 2); x.lineWidth = 25; 
       if (cfg.pType) {
+          // Metadata for Metallics
           let g = x.createLinearGradient(0, 0, 800, 800);
           if (cfg.pType === 'gold') { g.addColorStop(0, '#FFD700'); g.addColorStop(0.25, '#FDB931'); g.addColorStop(0.5, '#FFD700'); g.addColorStop(0.75, '#FDB931'); g.addColorStop(1, '#FFD700'); }
           else if (cfg.pType === 'silver') { g.addColorStop(0, '#E0E0E0'); g.addColorStop(0.5, '#B0B0B0'); g.addColorStop(1, '#E0E0E0'); }
           else if (cfg.pType === 'bronze') { g.addColorStop(0, '#CD7F32'); g.addColorStop(0.5, '#A0522D'); g.addColorStop(1, '#CD7F32'); }
           x.strokeStyle = g;
-      } else { x.strokeStyle = cfg.pColor; }
+      } else { 
+          // Standard Colors (including Black/Gray/Red etc)
+          x.strokeStyle = cfg.pColor; 
+      }
       x.stroke(); x.restore();
   }
+
+  // 4. Draw Custom PNG Frame
   if(f.src) x.drawImage(f,0,0,800,800); 
 }
 
@@ -537,10 +669,9 @@ function resetProject(){ i=new Image(); f=new Image(); cfg={s:1,m:375,x:400,y:40
 function downloadPic(){ if(!i.src) return; d(); let a=document.createElement('a'); a.download=`Arcade_${Date.now()}.png`; a.href=c.toDataURL(); a.click(); playShutter(); }
 function updS(el){ if(el.parentElement.classList.contains('ui-gif')) return; el.style.setProperty('--v', ((el.value-el.min)/(el.max-el.min)*100)+'%'); }
 document.querySelectorAll('input[type=range]').forEach(el => { el.addEventListener('input', () => updS(el)); updS(el); });
-// --- 🕹️ FRAME STUDIO DRAG LOGIC (MOUSE & TOUCH) ---
-let isP=false, tStart={x:0,y:0};
-let initialDist = 0, initialScale = 1, initialAngle = 0, initialRot = 0;
 
+// --- 🕹️ FRAME DRAG LOGIC ---
+let isP=false, tStart={x:0,y:0}, initialDist=0, initialScale=1, initialAngle=0, initialRot=0;
 c.addEventListener('dragover', (e) => { e.preventDefault(); e.stopPropagation(); });
 c.addEventListener('drop', (e) => {
     e.preventDefault(); e.stopPropagation();
@@ -551,189 +682,62 @@ c.addEventListener('drop', (e) => {
             reader.onload = (v) => {
                 let n = new Image();
                 n.onload = () => {
-                    i = n;
-                    let minScale = Math.max(800 / i.width, 800 / i.height);
+                    i = n; let minScale = Math.max(800 / i.width, 800 / i.height);
                     cfg.s = minScale; cfg.x = 400; cfg.y = 400; cfg.r = 0;
                     if(isBoundaryLocked) zSl.min = minScale; else zSl.min = 0.1;
                     zSl.max = minScale * 2.5; zSl.value = minScale;
                     d(); playClick(); updS(zSl); document.getElementById('save').disabled = false;
-                };
-                n.src = v.target.result;
-            };
-            reader.readAsDataURL(file);
+                }; n.src = v.target.result;
+            }; reader.readAsDataURL(file);
         }
     }
 });
-
-// MOUSE EVENTS
 c.onmousedown=e=>{isP=true; tStart={x:e.offsetX,y:e.offsetY};}
-c.onmousemove=e=>{
-  if(!isP)return;
-  let scale = 800 / c.offsetWidth;
-  cfg.x += (e.offsetX - tStart.x) * scale;
-  cfg.y += (e.offsetY - tStart.y) * scale;
-  tStart={x:e.offsetX,y:e.offsetY};
-  d();
-}
+c.onmousemove=e=>{ if(!isP)return; let scale = 800 / c.offsetWidth; cfg.x += (e.offsetX - tStart.x) * scale; cfg.y += (e.offsetY - tStart.y) * scale; tStart={x:e.offsetX,y:e.offsetY}; d(); }
 window.onmouseup=()=>{isP=false;}
-
-// TOUCH EVENTS (PAN & ZOOM)
-c.ontouchstart=e=>{
-  if(i.src) { e.preventDefault(); }
-  if(e.touches.length===1){ isP=true; tStart={x:e.touches[0].clientX, y:e.touches[0].clientY}; } 
-  else if(e.touches.length===2){
-    isP=false; 
-    const dx = e.touches[0].clientX - e.touches[1].clientX;
-    const dy = e.touches[0].clientY - e.touches[1].clientY;
-    initialDist = Math.sqrt(dx*dx + dy*dy);
-    initialScale = cfg.s;
-    initialAngle = Math.atan2(dy, dx);
-    initialRot = cfg.r;
-  }
-}
-c.ontouchmove=e=>{
-  if(i.src) { e.preventDefault(); }
-  if(e.touches.length===1 && isP){
-    let scale = 800 / c.offsetWidth;
-    let dx = e.touches[0].clientX - tStart.x;
-    let dy = e.touches[0].clientY - tStart.y;
-    cfg.x += dx * scale;
-    cfg.y += dy * scale;
-    tStart={x:e.touches[0].clientX, y:e.touches[0].clientY};
-    d();
-  }
-  else if(e.touches.length===2){
-    const dx = e.touches[0].clientX - e.touches[1].clientX;
-    const dy = e.touches[0].clientY - e.touches[1].clientY;
-    const dist = Math.sqrt(dx*dx + dy*dy);
-    const scaleFactor = dist / initialDist;
-    let newScale = initialScale * scaleFactor;
-    newScale = Math.max(zSl.min, Math.min(zSl.max, newScale));
-    cfg.s = newScale; zSl.value = newScale; zVal.innerText=Math.round((newScale/zSl.min)*100)+"%"; updS(zSl);
-    
-    const angle = Math.atan2(dy, dx);
-    let rotationDiff = (angle - initialAngle) * (180/Math.PI);
-    cfg.r = (initialRot + rotationDiff) % 360; rSl.value = (cfg.r % 360 + 360) % 360; rVal.innerText = Math.round(cfg.r) + "°"; updS(rSl);
-    d();
-  }
-}
+c.ontouchstart=e=>{ if(i.src) { e.preventDefault(); } if(e.touches.length===1){ isP=true; tStart={x:e.touches[0].clientX, y:e.touches[0].clientY}; } else if(e.touches.length===2){ isP=false; const dx = e.touches[0].clientX - e.touches[1].clientX; const dy = e.touches[0].clientY - e.touches[1].clientY; initialDist = Math.sqrt(dx*dx + dy*dy); initialScale = cfg.s; initialAngle = Math.atan2(dy, dx); initialRot = cfg.r; }}
+c.ontouchmove=e=>{ if(i.src) { e.preventDefault(); } if(e.touches.length===1 && isP){ let scale = 800 / c.offsetWidth; let dx = e.touches[0].clientX - tStart.x; let dy = e.touches[0].clientY - tStart.y; cfg.x += dx * scale; cfg.y += dy * scale; tStart={x:e.touches[0].clientX, y:e.touches[0].clientY}; d(); } else if(e.touches.length===2){ const dx = e.touches[0].clientX - e.touches[1].clientX; const dy = e.touches[0].clientY - e.touches[1].clientY; const dist = Math.sqrt(dx*dx + dy*dy); const scaleFactor = dist / initialDist; let newScale = initialScale * scaleFactor; newScale = Math.max(zSl.min, Math.min(zSl.max, newScale)); cfg.s = newScale; zSl.value = newScale; zVal.innerText=Math.round((newScale/zSl.min)*100)+"%"; updS(zSl); const angle = Math.atan2(dy, dx); let rotationDiff = (angle - initialAngle) * (180/Math.PI); cfg.r = (initialRot + rotationDiff) % 360; rSl.value = (cfg.r % 360 + 360) % 360; rVal.innerText = Math.round(cfg.r) + "°"; updS(rSl); d(); }}
 window.ontouchend=()=>{isP=false;}
 
-// --- ⚡ NEON GIF ENGINE (RESTORED & OPTIMIZED) ---
+// --- ⚡ GIF ENGINE ---
 const workerBlob = new Blob([`importScripts('https://cdnjs.cloudflare.com/ajax/libs/gif.js/0.2.0/gif.worker.js');`], { type: 'application/javascript' });
 const workerUrl = URL.createObjectURL(workerBlob);
-
 const gfInput=document.getElementById('gfInput'), upBtn=document.getElementById('upBtn'), v=document.getElementById('v'), o=document.getElementById('o'), vp=document.getElementById('vp');
 const speed=document.getElementById('speed'), sv=document.getElementById('sv'), zoom=document.getElementById('zoom'), zv=document.getElementById('zv'), go=document.getElementById('go'), msg=document.getElementById('msg');
 const dlBox=document.getElementById('dlBox'), dl=document.getElementById('dl'), resetBox=document.getElementById('resetBox');
+let gifX=0, gifY=0, vidW=0, vidH=0, renderW, renderH;
 
-let gifX = 0, gifY = 0, vidW = 0, vidH = 0, renderW, renderH;
-
-function resetGifProject() {
-  v.src=''; o.style.display='none'; v.style.display='none';
-  dlBox.style.display='none'; resetBox.style.display='none';
-  document.getElementById('goBox').style.display='inline-block';
-  go.disabled=false; upBtn.disabled=false; zoom.disabled=false; speed.disabled=false;
-  msg.classList.remove('active'); zoom.value=100; zv.innerText="100%";
-  gfInput.value = ''; gifX = 0; gifY = 0;
-  v.style.transform = `translate(-50%, -50%) scale(1)`;
-  vp.style.pointerEvents = 'auto'; 
-  document.getElementById('upWrapper').style.display='inline-block';
-}
-
-gfInput.onchange=(e)=>{ 
-    const file=e.target.files[0]; if(!file)return;
-    v.style.display='block'; o.style.display='none'; dlBox.style.display='none'; resetBox.style.display='none';
-    v.src=URL.createObjectURL(file); v.playbackRate=parseFloat(speed.value);
-    go.disabled = false;
-    v.onloadedmetadata=()=>{ vidW = v.videoWidth; vidH = v.videoHeight; setCoverSize(); v.play(); };
-};
-
-function setCoverSize() {
-    const boxSize = 320; const aspect = vidW / vidH;
-    if(aspect > 1) { renderH = boxSize; renderW = boxSize * aspect; } else { renderW = boxSize; renderH = boxSize / aspect; }
-    v.style.width = renderW + 'px'; v.style.height = renderH + 'px';
-    updateGifTransform();
-}
-
-function updateGifTransform() {
-    if(!v.src) return;
-    const z = parseInt(zoom.value) / 100;
-    const currentW = renderW * z; const currentH = renderH * z;
-    const maxX = Math.max(0, (currentW - 320) / 2); const maxY = Math.max(0, (currentH - 320) / 2);
-    gifX = Math.max(-maxX, Math.min(maxX, gifX)); gifY = Math.max(-maxY, Math.min(maxY, gifY));
-    v.style.transform = `translate(calc(-50% + ${gifX}px), calc(-50% + ${gifY}px)) scale(${z})`;
-}
-
+function resetGifProject() { v.src=''; o.style.display='none'; v.style.display='none'; dlBox.style.display='none'; resetBox.style.display='none'; document.getElementById('goBox').style.display='inline-block'; go.disabled=false; upBtn.disabled=false; zoom.disabled=false; speed.disabled=false; msg.classList.remove('active'); zoom.value=100; zv.innerText="100%"; gfInput.value = ''; gifX = 0; gifY = 0; v.style.transform = `translate(-50%, -50%) scale(1)`; vp.style.pointerEvents = 'auto'; document.getElementById('upWrapper').style.display='inline-block'; }
+gfInput.onchange=(e)=>{ const file=e.target.files[0]; if(!file)return; v.style.display='block'; o.style.display='none'; dlBox.style.display='none'; resetBox.style.display='none'; v.src=URL.createObjectURL(file); v.playbackRate=parseFloat(speed.value); go.disabled = false; v.onloadedmetadata=()=>{ vidW = v.videoWidth; vidH = v.videoHeight; setCoverSize(); v.play(); }; };
+function setCoverSize() { const boxSize = 320; const aspect = vidW / vidH; if(aspect > 1) { renderH = boxSize; renderW = boxSize * aspect; } else { renderW = boxSize; renderH = boxSize / aspect; } v.style.width = renderW + 'px'; v.style.height = renderH + 'px'; updateGifTransform(); }
+function updateGifTransform() { if(!v.src) return; const z = parseInt(zoom.value) / 100; const currentW = renderW * z; const currentH = renderH * z; const maxX = Math.max(0, (currentW - 320) / 2); const maxY = Math.max(0, (currentH - 320) / 2); gifX = Math.max(-maxX, Math.min(maxX, gifX)); gifY = Math.max(-maxY, Math.min(maxY, gifY)); v.style.transform = `translate(calc(-50% + ${gifX}px), calc(-50% + ${gifY}px)) scale(${z})`; }
 zoom.oninput = function() { zv.innerText = this.value + '%'; updateGifTransform(); };
 speed.oninput=()=>{ sv.innerText=speed.value+'x'; if(v.src)v.playbackRate=parseFloat(speed.value); };
 
-// --- GIF DRAGGING LOGIC ---
 let isGifDrag = false, startX, startY, initX, initY;
-
-vp.addEventListener('touchstart', e => {
-    if(!v.src || v.style.display === 'none' || v.getAttribute('src') === '') return;
-    isGifDrag = true; startX = e.touches[0].clientX; startY = e.touches[0].clientY; initX = gifX; initY = gifY;
-}, {passive: false});
-
-vp.addEventListener('touchmove', e => {
-    if(!v.src || v.style.display === 'none' || v.getAttribute('src') === '') return;
-    if(!isGifDrag) return;
-    e.preventDefault(); 
-    const dx = e.touches[0].clientX - startX; const dy = e.touches[0].clientY - startY;
-    gifX = initX + dx; gifY = initY + dy; updateGifTransform();
-}, {passive: false});
-
+vp.addEventListener('touchstart', e => { if(!v.src || v.style.display === 'none' || v.getAttribute('src') === '') return; isGifDrag = true; startX = e.touches[0].clientX; startY = e.touches[0].clientY; initX = gifX; initY = gifY; }, {passive: false});
+vp.addEventListener('touchmove', e => { if(!v.src || v.style.display === 'none' || v.getAttribute('src') === '') return; if(!isGifDrag) return; e.preventDefault(); const dx = e.touches[0].clientX - startX; const dy = e.touches[0].clientY - startY; gifX = initX + dx; gifY = initY + dy; updateGifTransform(); }, {passive: false});
 vp.addEventListener('mousedown', e => { if(!v.src) return; isGifDrag = true; startX = e.clientX; startY = e.clientY; initX = gifX; initY = gifY; });
 window.addEventListener('mousemove', e => { if(!isGifDrag) return; const dx = e.clientX - startX; const dy = e.clientY - startY; gifX = initX + dx; gifY = initY + dy; updateGifTransform(); });
 window.addEventListener('mouseup', () => isGifDrag = false); window.addEventListener('touchend', () => isGifDrag = false);
 
-// GIF PROCESSING (30 WORKERS)
 go.onclick=()=>{
     if(!v.src)return;
     go.disabled = true; upBtn.disabled = true; zoom.disabled = true; speed.disabled = true;
     vp.style.pointerEvents = 'none'; msg.innerText="Processing..."; msg.classList.add('active');
-    
     const gif=new GIF({workers:30, quality:20, width:480, height:480, workerScript:workerUrl, dither: false});
     const canvas=document.createElement('canvas'); canvas.width=480; canvas.height=480; const ctx=canvas.getContext('2d');
     const fps=15, duration=v.duration, playbackSpeed=parseFloat(speed.value), capVid=document.createElement('video');
-    
     capVid.src=v.src; capVid.muted=true; capVid.playsInline=true; capVid.crossOrigin = "anonymous";
-    
     capVid.onloadeddata=()=>{
-        let cTime=0;
-        const scale = parseInt(zoom.value) / 100;
-        const aspect = capVid.videoWidth / capVid.videoHeight;
-        let drawW, drawH;
+        let cTime=0; const scale = parseInt(zoom.value) / 100; const aspect = capVid.videoWidth / capVid.videoHeight; let drawW, drawH;
         if (aspect > 1) { drawH = 480; drawW = 480 * aspect; } else { drawW = 480; drawH = 480 / aspect; }
-        drawW *= scale; drawH *= scale;
-        const dragScale = 480 / 320;
-        const finalX = gifX * dragScale; const finalY = gifY * dragScale;
-        let dx = (480 - drawW) / 2 + finalX; let dy = (480 - drawH) / 2 + finalY;
-
-        const captureFrame=()=>{
-            if(cTime>=duration){ msg.innerText="Encoding..."; gif.render(); return; }
-            capVid.currentTime=cTime;
-        };
-        capVid.onseeked=()=>{
-            ctx.fillStyle = '#000000'; ctx.fillRect(0, 0, 480, 480);
-            ctx.drawImage(capVid, dx, dy, drawW, drawH);
-            gif.addFrame(ctx,{copy:true, delay:(1000/fps)/playbackSpeed});
-            cTime+=(1/fps); setTimeout(captureFrame, 10);
-        };
+        drawW *= scale; drawH *= scale; const dragScale = 480 / 320; const finalX = gifX * dragScale; const finalY = gifY * dragScale; let dx = (480 - drawW) / 2 + finalX; let dy = (480 - drawH) / 2 + finalY;
+        const captureFrame=()=>{ if(cTime>=duration){ msg.innerText="Encoding..."; gif.render(); return; } capVid.currentTime=cTime; };
+        capVid.onseeked=()=>{ ctx.fillStyle = '#000000'; ctx.fillRect(0, 0, 480, 480); ctx.drawImage(capVid, dx, dy, drawW, drawH); gif.addFrame(ctx,{copy:true, delay:(1000/fps)/playbackSpeed}); cTime+=(1/fps); setTimeout(captureFrame, 10); };
         captureFrame();
     };
-    
-    gif.on('finished', blob=>{
-        const url=URL.createObjectURL(blob), rNum=Math.floor(Math.random()*90000)+10000;
-        v.style.display='none'; o.src=url; o.style.display='block';
-        dl.download=`neon_focus_${rNum}.gif`; dl.href=url;
-        dlBox.style.display='inline-block'; resetBox.style.display='inline-block';
-        msg.classList.remove('active'); 
-        document.getElementById('goBox').style.display='none';
-        upBtn.parentElement.style.display='none'; 
-        vp.style.pointerEvents = 'auto'; 
-    });
+    gif.on('finished', blob=>{ const url=URL.createObjectURL(blob), rNum=Math.floor(Math.random()*90000)+10000; v.style.display='none'; o.src=url; o.style.display='block'; dl.download=`neon_focus_${rNum}.gif`; dl.href=url; dlBox.style.display='inline-block'; resetBox.style.display='inline-block'; msg.classList.remove('active'); document.getElementById('goBox').style.display='none'; upBtn.parentElement.style.display='none'; vp.style.pointerEvents = 'auto'; });
 };
 </script>
 </body>
