@@ -276,13 +276,13 @@
     <div id="frame-btn-group">
         <div style="position:relative; width:100%; height:auto;">
             <button class="btn" style="pointer-events:none;">CHOOSE IMAGE</button>
-            <input type="file" id="u1" accept="image/*" onchange="handleFile(event)" onclick="playClick()" 
+            <input type="file" id="u1" accept="image/*" onchange="handleFile(event)" 
                    style="position:absolute; top:0; left:0; width:100%; height:100%; opacity:0; z-index:100; cursor:pointer;">
         </div>
 
         <div style="position:relative; width:100%; height:auto; margin-top:6px;">
             <button class="btn btn-r" style="pointer-events:none;">APPLY FRAME</button>
-            <input type="file" id="u2" accept="image/*" onchange="handleFrame(event)" onclick="playClick()" 
+            <input type="file" id="u2" accept="image/*" onchange="handleFrame(event)" 
                    style="position:absolute; top:0; left:0; width:100%; height:100%; opacity:0; z-index:100; cursor:pointer;">
         </div>
         
@@ -340,7 +340,7 @@
     <div class="ui-gif" id="uiPanel">
         <div id="upWrapper" class="neon-wrap blue" style="position:relative;">
             <button class="btn-inner" id="upBtn" style="pointer-events:none;">UPLOAD YOUR VIDEO</button>
-            <input type="file" id="gfInput" accept="video/*" onclick="playClick()" 
+            <input type="file" id="gfInput" accept="video/*" 
                    style="position:absolute; top:0; left:0; width:100%; height:100%; opacity:0; z-index:100; cursor:pointer;">
         </div>
 
@@ -1032,4 +1032,3 @@ go.onclick = () => {
 </script>
 </body>
 </html>
-
