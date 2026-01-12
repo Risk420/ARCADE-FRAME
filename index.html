@@ -696,42 +696,64 @@ function d(){
   if(i.src){ let w=i.width*cfg.s, h=i.height*cfg.s; x.save(); x.translate(cfg.x,cfg.y); x.rotate(cfg.r*Math.PI/180); x.drawImage(i,-w/2,-h/2,w,h); x.restore(); }
   x.restore();
 
-  // 3. Draw Plain Frame (Updated for THIN RING / HEAVY SHADOW)
+  // 3. Draw Plain Frame
   if (cfg.pColor) {
       x.save();
 
-      if (cfg.pType === 'neon') {
-          // NEON LAYER 1: The Glow/Shadow Caster
-          // We set the line width moderate (15) so it doesn't look like a thick tire,
-          // but we set the Blur extremely high (60) to throw the shadow far out.
+      // --- SPECIAL BATMAN STYLE BLACK NEON ---
+      if (cfg.pColor === '#000000' && cfg.pType === 'neon') {
+          // Layer 1: Massive Outer Shadow Glow
           x.beginPath(); x.arc(400, 400, cfg.m, 0, Math.PI * 2);
-          x.lineWidth = 15;
-          x.strokeStyle = cfg.pColor; // Black (or color)
-          x.shadowBlur = 60; // MASSIVE BLUR for heavy shadow effect
-          x.shadowColor = cfg.pColor;
+          x.lineWidth = 25;
+          x.strokeStyle = '#000000';
+          x.shadowBlur = 60; // Heavy blur
+          x.shadowColor = '#000000';
           x.stroke();
 
-          // NEON LAYER 2: The Core (Thin White Tube)
-          // We keep this THIN (6px) to match the reference style.
+          // Layer 2: The Defined Black Ring (Thicker than white core)
           x.beginPath(); x.arc(400, 400, cfg.m, 0, Math.PI * 2);
-          x.lineWidth = 6; // Thin and sharp
-          x.strokeStyle = '#FFFFFF';
+          x.lineWidth = 18; // Visible black border
+          x.strokeStyle = '#000000';
+          x.shadowBlur = 10; // Slight blur for softness
+          x.shadowColor = '#000000';
           x.stroke();
+
+          // Layer 3: The Thin White Core (Sharp)
+          x.beginPath(); x.arc(400, 400, cfg.m, 0, Math.PI * 2);
+          x.lineWidth = 6; // Thin sharp white line (same size as before)
+          x.strokeStyle = '#FFFFFF';
+          x.shadowBlur = 0;
+          x.stroke();
+
+          // Layer 4: Inner Shadow Vignette
+          x.save();
+          x.beginPath(); x.arc(400, 400, cfg.m - 3, 0, 2 * Math.PI); x.clip(); // Clip to inside
+          x.beginPath(); x.arc(400, 400, cfg.m, 0, 2 * Math.PI);
+          x.strokeStyle = 'rgba(0,0,0,0.7)'; // Semi-transparent black
+          x.lineWidth = 30;
+          x.shadowBlur = 25; x.shadowColor = '#000000';
+          x.stroke();
+          x.restore();
       }
+      // --- STANDARD COLORED NEON ---
+      else if (cfg.pType === 'neon') {
+          x.beginPath(); x.arc(400, 400, cfg.m, 0, Math.PI * 2);
+          x.lineWidth = 15; x.strokeStyle = cfg.pColor;
+          x.shadowBlur = 60; x.shadowColor = cfg.pColor;
+          x.stroke();
+          x.beginPath(); x.arc(400, 400, cfg.m, 0, Math.PI * 2);
+          x.lineWidth = 6; x.strokeStyle = '#FFFFFF'; x.stroke();
+      }
+      // --- STANDARD/METALLIC ---
       else {
-          // STANDARD OR METALLIC DRAWING
           x.beginPath(); x.arc(400, 400, cfg.m, 0, Math.PI * 2); x.lineWidth = 25;
           if (cfg.pType && cfg.pType !== 'neon') {
-              // Metadata for Metallics
               let g = x.createLinearGradient(0, 0, 800, 800);
               if (cfg.pType === 'gold') { g.addColorStop(0, '#FFD700'); g.addColorStop(0.25, '#FDB931'); g.addColorStop(0.5, '#FFD700'); g.addColorStop(0.75, '#FDB931'); g.addColorStop(1, '#FFD700'); }
               else if (cfg.pType === 'silver') { g.addColorStop(0, '#E0E0E0'); g.addColorStop(0.5, '#B0B0B0'); g.addColorStop(1, '#E0E0E0'); }
               else if (cfg.pType === 'bronze') { g.addColorStop(0, '#CD7F32'); g.addColorStop(0.5, '#A0522D'); g.addColorStop(1, '#CD7F32'); }
               x.strokeStyle = g;
-          } else {
-              // Standard Colors
-              x.strokeStyle = cfg.pColor;
-          }
+          } else { x.strokeStyle = cfg.pColor; }
           x.stroke();
       }
       x.restore();
@@ -1050,3 +1072,4 @@ go.onclick = () => {
 </script>
 </body>
 </html>
+
