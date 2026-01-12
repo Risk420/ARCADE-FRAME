@@ -270,104 +270,6 @@
 <div id="yt-player"></div>
 <h1 id="studio-name">ARCADE</h1>
 <p class="sub" id="studio-sub">FRAME STUDIO</p>
-<div id="frame-studio" class="studio-sec active-sec">
-  <div id="box"><canvas id="c" width="800" height="800"></canvas></div>
-  <div class="ui">
-    <button id="ui-toggle-btn" class="btn" style="border-color:#ffcc00; color:#ffcc00; margin-bottom:10px;" onclick="toggleFrameUI()">👁️ HIDE MENU BUTTONS</button>
-    
-    <div id="frame-btn-group">
-        <label class="btn" onclick="playClick()">CHOOSE IMAGE<input type="file" id="u1" accept="image/*" onchange="handleFile(event)" style="display:none"></label>
-        <label class="btn btn-r" onclick="playClick()">APPLY FRAME<input type="file" id="u2" accept="image/*" onchange="handleFrame(event)" style="display:none"></label>
-        
-        <button class="btn" style="border-color:#ffffff; color:#ffffff;" onclick="togglePaletteUI()">COLOR PALETTE 🎨</button>
-        
-        <div id="palette-wrapper">
-            <div class="cat-scroll">
-                <button class="cat-btn" onclick="renderCat('Neon')">NEON</button>
-                <button class="cat-btn" onclick="renderCat('Basic')">BASIC</button>
-                <button class="cat-btn" onclick="renderCat('Metallics')">METALLICS</button>
-                <button class="cat-btn" onclick="renderCat('Grays')">GRAYS</button>
-                <button class="cat-btn" onclick="renderCat('Reds')">REDS</button>
-                <button class="cat-btn" onclick="renderCat('Oranges')">ORANGES</button>
-                <button class="cat-btn" onclick="renderCat('Yellows')">YELLOWS</button>
-                <button class="cat-btn" onclick="renderCat('Greens')">GREENS</button>
-                <button class="cat-btn" onclick="renderCat('Cyans')">CYANS</button>
-                <button class="cat-btn" onclick="renderCat('Blues')">BLUES</button>
-                <button class="cat-btn" onclick="renderCat('Purples')">PURPLES</button>
-                <button class="cat-btn" onclick="renderCat('Pinks')">PINKS</button>
-            </div>
-            <div id="color-grid" class="color-grid-container"></div>
-        </div>
-
-        <button id="lock-btn" class="btn" style="border-color:#00ff00; color:#00ff00;" onclick="toggleBoundaryLock()">BOUNDARY LOCK: ON 🔒</button>
-        <button class="btn" style="border-color:#00ffff; color:#00ffff;" onclick="centerSubject()">CENTER SUBJECT 🎯</button>
-        <button class="btn" style="border-color:#ff0000; color:#ff0000;" onclick="resetProject()">RESET PROJECT ↻</button>
-    </div>
-
-    <div class="lbl">ZOOM <span id="z-val" class="val-tag">100%</span></div>
-    <input type="range" id="z" min="0.1" max="2.5" step="0.01" value="1" oninput="updateZ(this.value)">
-    <div class="lbl">ROTATE <span id="r-val" class="val-tag">0°</span></div>
-    <input type="range" id="r" min="0" max="360" step="1" value="0" oninput="updateR(this.value)">
-    <div class="lbl">CIRCLE SIZE <span id="m-val" class="val-tag">375px</span></div>
-    <input type="range" id="m" min="300" max="400" step="1" value="375" oninput="updateM(this.value)">
-    
-    <button id="save" class="btn" onclick="downloadPic()" disabled>DOWNLOAD PICTURE</button>
-  </div>
-</div>
-
-<div id="font-studio" class="studio-sec">
-  <input type="text" id="font-input" class="font-input" placeholder="Type text here..." oninput="genFonts()">
-  <div class="lbl">TAP TO COPY <span class="val-tag" id="font-count">0 STYLES</span></div>
-  <div id="font-results" class="font-scroll"></div>
-</div>
-
-<div id="gif-studio" class="studio-sec">
-    <div class="stage" id="stage">
-        <div class="led-ring"></div>
-        <div class="viewport" id="vp">
-            <video id="v" muted playsinline loop></video>
-            <img id="o">
-        </div>
-    </div>
-
-    <div class="ui-gif" id="uiPanel">
-        <div id="upWrapper" class="neon-wrap blue">
-            <button class="btn-inner" id="upBtn" onclick="document.getElementById('gfInput').click()">UPLOAD YOUR VIDEO</button>
-        </div>
-        <input type="file" id="gfInput" accept="video/*" style="display:none">
-
-        <div class="label-row" style="margin-top:20px;"><span>ZOOM / SCALE</span><span id="zv">100%</span></div>
-        <input type="range" id="zoom" min="100" max="300" step="1" value="100">
-
-        <div class="label-row"><span>PLAYBACK SPEED</span><span id="sv">1.0x</span></div>
-        <input type="range" id="speed" min="0.5" max="3.0" step="0.1" value="1.0">
-
-        <div id="goBox" class="neon-wrap blue">
-            <button id="go" class="btn-inner" disabled>⚡ CREATE HD GIF</button>
-        </div>
-        
-        <div id="msg" class="status">Processing...</div>
-        
-        <div id="dlBox" class="neon-wrap blue" style="display:none;">
-            <a id="dl" class="btn-inner">⬇️ DOWNLOAD GIF</a>
-        </div>
-
-        <div id="resetBox" class="neon-wrap red" style="display:none;">
-            <button class="btn-inner" onclick="resetGifProject()">↻ RESET PROJECT</button>
-        </div>
-    </div>
-</div>
-
-<div id="sym-studio" class="studio-sec">
-    <div class="lbl">TAP SYMBOLS TO BUILD BIO</div>
-    <div class="sym-box-container">
-        <input type="text" id="sym-box" class="sym-input" placeholder="Type or tap symbols here...">
-    </div>
-    <div id="sym-container" class="font-scroll"></div>
-</div>
-
-<script src="https://www.youtube.com/iframe_api"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gif.js/0.2.0/gif.js"></script>
 <script>
 // --- CORE VARIABLES ---
 const c=document.getElementById('c'), x=c.getContext('2d');
@@ -493,6 +395,79 @@ const symData = {
 
 function renderSymbols(){ const b=document.getElementById('sym-container'); b.innerHTML=""; for(const[c,s]of Object.entries(symData)){ let t=document.createElement('div'); t.className="cat-title"; t.innerText=c; b.appendChild(t); let g=document.createElement('div'); g.className="sym-grid"; s.forEach(sym=>{ let btn=document.createElement('div'); btn.className="sym-btn"; btn.innerText=sym; btn.onclick=()=>{ const tb=document.getElementById('sym-box'), st=tb.selectionStart, en=tb.selectionEnd; tb.value=tb.value.substring(0,st)+sym+tb.value.substring(en); tb.selectionStart=tb.selectionEnd=st+sym.length; playClick(); }; g.appendChild(btn); }); b.appendChild(g); } }
 renderSymbols();
+<div class="controls" id="goBox">
+    <button class="btn-main" id="tglBtn" onclick="toggleUI()" style="border-color:#FFA500; color:#FFA500;">👁 HIDE MENU BUTTONS</button>
+    
+    <div id="ui-box">
+        <label class="btn-main">CHOOSE IMAGE <input type="file" id="u1" accept="image/*" onchange="handleFile(event)" hidden></label>
+        <label class="btn-main" style="border-color:#ff4d4d; color:#ff4d4d;">APPLY FRAME <input type="file" id="u2" accept="image/*" onchange="handleFrame(event)" hidden></label>
+        
+        <button class="btn-main" onclick="togglePaletteUI()" style="border-color:#FFD700; color:#FFD700;">COLOR PALETTE 🎨</button>
+
+        <button class="btn-main" id="save" onclick="downloadPic()" disabled>DOWNLOAD PICTURE</button>
+
+        <button class="btn-main" id="lock-btn" onclick="toggleBoundaryLock()" style="border-color:#00ff00; color:#00ff00; font-size:12px; padding:6px;">BOUNDARY LOCK: ON 🔒</button>
+
+        <button class="btn-main" onclick="resetProject()" style="border-color:#888; color:#888; font-size:12px; padding:6px;">RESET PROJECT ↺</button>
+    </div>
+</div>
+
+<div id="palette-wrapper">
+    <div class="cats-scroll">
+        <button class="cat-btn active-cat" onclick="renderCat('Neon')">NEON</button>
+        <button class="cat-btn" onclick="renderCat('Gradients')" style="background: linear-gradient(135deg, #FF00CC, #3333FF); border:none; color:white; text-shadow: 0 1px 2px black;">GRADIENTS</button>
+        
+        <button class="cat-btn" onclick="renderCat('Basic')">BASIC</button>
+        <button class="cat-btn" onclick="renderCat('Metallics')">METALLICS</button>
+        <button class="cat-btn" onclick="renderCat('Grays')">GRAYS</button>
+        <button class="cat-btn" onclick="renderCat('Reds')">REDS</button>
+        <button class="cat-btn" onclick="renderCat('Oranges')">ORANGES</button>
+        <button class="cat-btn" onclick="renderCat('Yellows')">YELLOWS</button>
+        <button class="cat-btn" onclick="renderCat('Greens')">GREENS</button>
+        <button class="cat-btn" onclick="renderCat('Cyans')">CYANS</button>
+        <button class="cat-btn" onclick="renderCat('Blues')">BLUES</button>
+        <button class="cat-btn" onclick="renderCat('Purples')">PURPLES</button>
+        <button class="cat-btn" onclick="renderCat('Pinks')">PINKS</button>
+    </div>
+
+    <div id="color-grid"></div>
+</div>
+
+<div class="slider-box">
+    <div class="sl-row">
+        <span>ZOOM</span>
+        <input type="range" id="zSl" min="0.1" max="3" step="0.01" value="1">
+        <span class="val" id="zVal">100%</span>
+    </div>
+    <div class="sl-row">
+        <span>ROTATE</span>
+        <input type="range" id="rSl" min="-180" max="180" value="0">
+        <span class="val" id="rVal">0°</span>
+    </div>
+    <div class="sl-row">
+        <span>FRAME SIZE</span>
+        <input type="range" id="mSl" min="50" max="400" value="375">
+        <span class="val" id="mVal">375px</span>
+    </div>
+    <button class="center-btn" onclick="centerSubject()">CENTER 🎯</button>
+</div>
+
+<div class="audio-station">
+    <div class="now-playing" onclick="toggleMusic()">
+        <span class="status" id="mStat">OFF</span>
+        <div class="bars"><div></div><div></div><div></div></div>
+    </div>
+    <select class="station-select" onchange="changeMusic(this.value)">
+        <option value="jfKfPfyJRdk">Lofi Girl</option>
+        <option value="BrnDlRmW5hs">Synthwave</option>
+        <option value="tLYL_3NcJck">Vaporwave</option>
+        <option value="FKtzkolncnk">Cyberpunk</option>
+        <option value="_Ojv9Zu1IZY">Ambient</option>
+        <option value="OBoMLZTtqb8">Dreamwave</option>
+        <option value="lT8JepVwxBQ">Chillstep</option>
+    </select>
+    <div id="yt-player"></div>
+</div>
 // --- 🎵 AUDIO ---
 const playlist = ["jfKfPfyJRdk", "BrnDlRmW5hs", "tLYL_3NcJck", "FKtzkolncnk", "_Ojv9Zu1IZY", "OBoMLZTtqb8", "lT8JepVwxBQ"];
 function initAudio(){ if(!audioStarted){ audioCtx.resume().then(()=>{ audioStarted=true; if(player&&musicOn){ player.unMute(); player.playVideo(); }});}}
@@ -1127,3 +1102,4 @@ go.onclick = () => {
 </script>
 </body>
 </html>
+
