@@ -502,41 +502,92 @@ function toggleMusic(){ initAudio(); playClick(); musicOn=!musicOn; if(musicOn){
 function playClick(){ if(audioCtx.state!=='running')audioCtx.resume(); const o=audioCtx.createOscillator(), g=audioCtx.createGain(); o.frequency.setValueAtTime(800, audioCtx.currentTime); g.gain.setValueAtTime(0.08, audioCtx.currentTime); o.connect(g); g.connect(audioCtx.destination); o.start(); o.stop(audioCtx.currentTime+0.1); }
 function playShutter(){ if(audioCtx.state!=='running')audioCtx.resume(); const o=audioCtx.createOscillator(), g=audioCtx.createGain(); o.type='square'; o.frequency.setValueAtTime(150, audioCtx.currentTime); g.gain.setValueAtTime(0.08, audioCtx.currentTime); o.connect(g); g.connect(audioCtx.destination); o.start(); o.stop(audioCtx.currentTime+0.1); }
 
-// --- 🎨 ADVANCED COLOR PALETTE DATA & LOGIC ---
+// --- 🌈 GRADIENT DEFINITIONS (The Master List) ---
+const gradientDefs = {
+    'grad-ruby': ['#FF512F', '#DD2476'],
+    'grad-red': ['#FF4B4B', '#C00000'],
+    'grad-crimson': ['#DC143C', '#8B0000'],
+    'grad-rose': ['#FF80AB', '#C51162'],
+    'grad-hotpink': ['#FF69B4', '#C71585'],
+    'grad-magenta': ['#FF00FF', '#800080'],
+    'grad-purple': ['#D080FF', '#7000A0'],
+    'grad-violet': ['#E040FB', '#7B1FA2'],
+    'grad-indigo': ['#7C4DFF', '#311B92'],
+    'grad-midnight': ['#536DFE', '#1A237E'],
+    'grad-blue': ['#60C0FF', '#0050A0'],
+    'grad-azure': ['#448AFF', '#0D47A1'],
+    'grad-sky': ['#40C4FF', '#01579B'],
+    'grad-cyan': ['#18FFFF', '#006064'],
+    'grad-teal': ['#64FFDA', '#004D40'],
+    'grad-emerald': ['#69F0AE', '#1B5E20'],
+    'grad-green': ['#80E080', '#008000'],
+    'grad-lime': ['#EEFF41', '#827717'],
+    'grad-yellow': ['#FFF080', '#DDAA00'],
+    'grad-amber': ['#FFD740', '#FF6F00'],
+    'grad-orange': ['#FFC060', '#D06000'],
+    'grad-sunset': ['#FF512F', '#F09819'],
+    'grad-brown': ['#D7CCC8', '#5D4037'],
+    'grad-silver': ['#E0E0E0', '#606060'],
+    'grad-slate': ['#90A4AE', '#37474F'],
+    'grad-charcoal': ['#616161', '#212121'],
+    'grad-black': ['#434343', '#000000']
+};
+
+// --- 🎨 ADVANCED COLOR PALETTE DATA ---
 const colorData = {
     'Neon': [
-        // ✨ SPECIAL NEON COLLECTION
         {c:'#FFFFFF', t:'neon'}, // Thick White
-        {c:'#FEFEFE', t:'neon'}, // Thin White (New)
+        {c:'#FEFEFE', t:'neon'}, // Thin White
         {c:'#808080', t:'neon'}, // Gray (Batman)
         {c:'#000000', t:'neon'}, // Black (Batman)
-        // 🔴 REDS
         {c:'#FF0000', t:'neon'}, {c:'#dc143c', t:'neon'}, {c:'#ff4d4d', t:'neon'}, {c:'#ff6666', t:'neon'}, 
         {c:'#b22222', t:'neon'}, {c:'#800000', t:'neon'}, {c:'#5b0000', t:'neon'}, {c:'#fa8072', t:'neon'},
-        // 🟠 ORANGES
         {c:'#FFA500', t:'neon'}, {c:'#FF4500', t:'neon'}, {c:'#FF8C00', t:'neon'}, {c:'#f4a460', t:'neon'},
         {c:'#d2691e', t:'neon'}, {c:'#a0522d', t:'neon'}, {c:'#8b4500', t:'neon'},
-        // 🟡 YELLOWS
         {c:'#FFD700', t:'neon'}, {c:'#ffff33', t:'neon'}, {c:'#f0e68c', t:'neon'},
         {c:'#b8860b', t:'neon'}, {c:'#daa520', t:'neon'},
-        // 🟢 GREENS
         {c:'#00FF00', t:'neon'}, {c:'#32cd32', t:'neon'}, {c:'#00FA9A', t:'neon'}, {c:'#7FFF00', t:'neon'}, 
         {c:'#ADFF2F', t:'neon'}, {c:'#90ee90', t:'neon'}, {c:'#2e8b57', t:'neon'}, {c:'#008000', t:'neon'},
         {c:'#006400', t:'neon'}, {c:'#228b22', t:'neon'},
-        // 🔵 CYANS
         {c:'#00FFFF', t:'neon'}, {c:'#00CED1', t:'neon'}, {c:'#40e0d0', t:'neon'}, {c:'#7fffd4', t:'neon'},
         {c:'#afeeee', t:'neon'}, {c:'#008b8b', t:'neon'}, {c:'#008080', t:'neon'},
-        // 🔵 BLUES
         {c:'#0000FF', t:'neon'}, {c:'#1E90FF', t:'neon'}, {c:'#4169E1', t:'neon'}, {c:'#0000CD', t:'neon'},
         {c:'#00008B', t:'neon'}, {c:'#000080', t:'neon'}, {c:'#87cefa', t:'neon'}, {c:'#b0c4de', t:'neon'},
-        // 🟣 PURPLES
         {c:'#FF00FF', t:'neon'}, {c:'#800080', t:'neon'}, {c:'#9400D3', t:'neon'}, {c:'#BA55D3', t:'neon'},
         {c:'#8b008b', t:'neon'}, {c:'#4b0082', t:'neon'}, {c:'#9932cc', t:'neon'}, {c:'#dda0dd', t:'neon'},
-        // 🌸 PINKS
         {c:'#FF1493', t:'neon'}, {c:'#FF69B4', t:'neon'}, {c:'#db7093', t:'neon'}, {c:'#ffb6c1', t:'neon'},
         {c:'#c71585', t:'neon'}, {c:'#8b0000', t:'neon'},
-        // 🪨 GRAYS & METALS
         {c:'#C0C0C0', t:'neon'}, {c:'#A52A2A', t:'neon'}, {c:'#808080', t:'neon'}, {c:'#333333', t:'neon'}
+    ],
+    // 🌈 EXPANDED GRADIENTS FOLDER
+    'Gradients': [
+        {c:'#FF512F', t:'grad-ruby'},
+        {c:'#FF4B4B', t:'grad-red'},
+        {c:'#DC143C', t:'grad-crimson'},
+        {c:'#FF80AB', t:'grad-rose'},
+        {c:'#FF69B4', t:'grad-hotpink'},
+        {c:'#FF00FF', t:'grad-magenta'},
+        {c:'#D080FF', t:'grad-purple'},
+        {c:'#E040FB', t:'grad-violet'},
+        {c:'#7C4DFF', t:'grad-indigo'},
+        {c:'#536DFE', t:'grad-midnight'},
+        {c:'#60C0FF', t:'grad-blue'},
+        {c:'#448AFF', t:'grad-azure'},
+        {c:'#40C4FF', t:'grad-sky'},
+        {c:'#18FFFF', t:'grad-cyan'},
+        {c:'#64FFDA', t:'grad-teal'},
+        {c:'#69F0AE', t:'grad-emerald'},
+        {c:'#80E080', t:'grad-green'},
+        {c:'#EEFF41', t:'grad-lime'},
+        {c:'#FFF080', t:'grad-yellow'},
+        {c:'#FFD740', t:'grad-amber'},
+        {c:'#FFC060', t:'grad-orange'},
+        {c:'#FF512F', t:'grad-sunset'},
+        {c:'#D7CCC8', t:'grad-brown'},
+        {c:'#E0E0E0', t:'grad-silver'},
+        {c:'#90A4AE', t:'grad-slate'},
+        {c:'#616161', t:'grad-charcoal'},
+        {c:'#000000', t:'grad-black'}
     ],
     'Basic': [
         {c:'#000000'}, {c:'#FFFFFF'}, {c:'#FF0000'}, {c:'#00FF00'}, {c:'#0000FF'}, 
@@ -613,29 +664,33 @@ function togglePaletteUI() {
 function renderCat(cat) {
     playClick();
     
-    // Highlight active category button
     document.querySelectorAll('.cat-btn').forEach(b => {
         b.classList.remove('active-cat');
         if(b.innerText === cat.toUpperCase()) b.classList.add('active-cat');
     });
 
     const grid = document.getElementById('color-grid');
-    grid.innerHTML = ''; // Clear existing
+    grid.innerHTML = ''; 
     grid.classList.remove('show');
     
-    // Slight delay for animation effect
     setTimeout(() => {
         const list = colorData[cat];
         list.forEach(item => {
             const d = document.createElement('div');
             d.className = 'c-sq';
             
-            // Handle Special Displays
+            // --- BUTTON STYLING ---
             if(item.t === 'neon') {
                 d.style.backgroundColor = item.c;
                 d.style.boxShadow = `0 0 10px ${item.c}`;
                 d.style.border = '2px solid white';
+            } else if (item.t && gradientDefs[item.t]) {
+                // AUTO-STYLES FROM THE DEFINITIONS
+                d.classList.add('is-metal'); 
+                const cols = gradientDefs[item.t];
+                d.style.background = `linear-gradient(135deg, ${cols[0]}, ${cols[1]})`;
             } else if(item.t) {
+                // METALLICS
                 d.classList.add('is-metal');
                 if(item.t==='gold') d.style.background = 'linear-gradient(135deg, #FFD700, #FDB931)';
                 if(item.t==='silver') d.style.background = 'linear-gradient(135deg, #E0E0E0, #B0B0B0)';
@@ -654,7 +709,7 @@ function renderCat(cat) {
 }
 
 function setPlainFrame(color, type=null) {
-    f = new Image(); // Clear custom frame
+    f = new Image(); 
     document.getElementById('u2').value = ''; 
     cfg.pColor = color; 
     cfg.pType = type; 
@@ -703,8 +758,9 @@ function d(){
   if (cfg.pColor) {
       x.save(); 
       
-      // --- SPECIAL "HEAVY SHADOW" STYLE (BLACK OR GRAY NEON) ---
+      // --- NEON LOGIC ---
       if ((cfg.pColor === '#000000' || cfg.pColor === '#808080') && cfg.pType === 'neon') {
+          // HEAVY SHADOW (Batman)
           const shadowCol = cfg.pColor;
           const innerShadowCol = (cfg.pColor === '#000000') ? 'rgba(0,0,0,0.7)' : 'rgba(128,128,128,0.7)';
           x.beginPath(); x.arc(400, 400, cfg.m, 0, Math.PI * 2); 
@@ -718,28 +774,33 @@ function d(){
           x.strokeStyle = innerShadowCol; x.lineWidth = 30; x.shadowBlur = 25; x.shadowColor = shadowCol; x.stroke();
           x.restore();
       } 
-      // --- NEW: SPECIAL "THIN WHITE" NEON ---
       else if (cfg.pColor === '#FEFEFE' && cfg.pType === 'neon') {
+          // THIN WHITE
           x.beginPath(); x.arc(400, 400, cfg.m, 0, Math.PI * 2); 
-          x.lineWidth = 15; x.strokeStyle = '#FFFFFF';
-          x.shadowBlur = 60; x.shadowColor = '#FFFFFF';
-          x.stroke();
+          x.lineWidth = 15; x.strokeStyle = '#FFFFFF'; x.shadowBlur = 60; x.shadowColor = '#FFFFFF'; x.stroke();
           x.beginPath(); x.arc(400, 400, cfg.m, 0, Math.PI * 2); 
-          x.lineWidth = 6; x.strokeStyle = '#FFFFFF'; x.stroke(); // Thin Core
+          x.lineWidth = 6; x.strokeStyle = '#FFFFFF'; x.stroke();
       }
-      // --- STANDARD COLORED NEON & THICK WHITE (Original Thick Style) ---
       else if (cfg.pType === 'neon') {
+          // STANDARD NEON
           x.beginPath(); x.arc(400, 400, cfg.m, 0, Math.PI * 2); 
-          x.lineWidth = 25; x.strokeStyle = cfg.pColor;
-          x.shadowBlur = 30; x.shadowColor = cfg.pColor;
-          x.stroke();
+          x.lineWidth = 25; x.strokeStyle = cfg.pColor; x.shadowBlur = 30; x.shadowColor = cfg.pColor; x.stroke();
           x.beginPath(); x.arc(400, 400, cfg.m, 0, Math.PI * 2); 
           x.lineWidth = 8; x.strokeStyle = '#FFFFFF'; x.stroke();
       }
-      // --- STANDARD/METALLIC ---
+      // --- GRADIENTS (New!) ---
       else {
           x.beginPath(); x.arc(400, 400, cfg.m, 0, Math.PI * 2); x.lineWidth = 25; 
-          if (cfg.pType && cfg.pType !== 'neon') {
+          
+          if (cfg.pType && gradientDefs[cfg.pType]) {
+             // AUTO-GENERATED FROM DEFINITIONS
+             const cols = gradientDefs[cfg.pType];
+             let g = x.createLinearGradient(0, 0, 800, 800);
+             g.addColorStop(0, cols[0]);
+             g.addColorStop(1, cols[1]);
+             x.strokeStyle = g;
+          } 
+          else if (cfg.pType && (cfg.pType === 'gold' || cfg.pType === 'silver' || cfg.pType === 'bronze')) {
               let g = x.createLinearGradient(0, 0, 800, 800);
               if (cfg.pType === 'gold') { g.addColorStop(0, '#FFD700'); g.addColorStop(0.25, '#FDB931'); g.addColorStop(0.5, '#FFD700'); g.addColorStop(0.75, '#FDB931'); g.addColorStop(1, '#FFD700'); }
               else if (cfg.pType === 'silver') { g.addColorStop(0, '#E0E0E0'); g.addColorStop(0.5, '#B0B0B0'); g.addColorStop(1, '#E0E0E0'); }
