@@ -199,7 +199,6 @@
   .sym-grid { display: flex; flex-wrap: wrap; gap: 5px; width: 100%; padding: 5px; box-sizing: border-box; }
   .sym-btn { background: #1a1a1c; border: 1px solid #333; color: white; padding: 15px 0; font-size: 20px; border-radius: 6px; cursor: pointer; text-align: center; flex: 1 0 18%; min-width: 50px; transition: transform 0.05s ease; }
   .sym-btn:active { transform: scale(0.90); background: #ff0000; color: #000; }
-
   /* --- ⚡ GIF STUDIO CSS --- */
   @keyframes rotate { 100% { transform: rotate(360deg); } }
   .stage { position: relative; width: 320px; height: 320px; display: flex; align-items: center; justify-content: center; margin-bottom: 30px; touch-action: pan-y; flex-shrink: 0; }
@@ -319,7 +318,6 @@
   <div class="lbl">TAP TO COPY <span class="val-tag" id="font-count">0 STYLES</span></div>
   <div id="font-results" class="font-scroll"></div>
 </div>
-
 <div id="gif-studio" class="studio-sec">
     <div class="stage" id="stage">
         <div class="led-ring"></div>
@@ -376,11 +374,9 @@ const sName=document.getElementById('studio-name'), sSub=document.getElementById
 const zVal=document.getElementById('z-val'), rVal=document.getElementById('r-val'), mVal=document.getElementById('m-val');
 
 let i=new Image(), f=new Image();
-// Config includes plain frame properties (pColor, pType)
 let cfg={s:1, m:375, x:400, y:400, r:0, lx:0, ly:0, pColor: null, pType: null};
 let player, musicOn=true, audioStarted=false;
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-
 // --- SIDEBAR MENU LOGIC ---
 function toggleMenu(e) { e.stopPropagation(); initAudio(); panel.classList.toggle('open'); playClick(); }
 function toggleSwitchMenu(e) { e.stopPropagation(); swMenu.style.display = swMenu.style.display === 'flex' ? 'none' : 'flex'; playClick(); }
@@ -439,9 +435,9 @@ const alphas = [
   {m:"𝒜ℬ𝒞𝒟ℰℱ𝒢ℋℐ𝒥𝒦ℒℳ⒩⒪⒫⒬ℛ𝒮𝒯𝒰⒱⒲⒳⒴⒵abcdefghijklmnopqrstuvwxyz0123456789"},
   {m:"𝓐𝓑𝓒𝓓𝓔𝓕𝓖𝓗𝓘𝓙𝓚𝓛𝓜𝓝𝓞𝓟𝓠𝓡𝓢𝓣𝓤𝓥𝓦𝓧𝓨𝓩abcdefghijklmnopqrstuvwxyz0123456789"},
   {m:"𝖠𝖡𝖢𝖣𝖤𝖥𝖦𝖧𝖨𝖩𝖪𝖫𝖬𝖭𝖮𝖯𝖰𝖱𝖲𝖳𝖴𝖵𝖶𝖷𝖸𝖹abcdefghijklmnopqrstuvwxyz0123456789"},
-  {m:"𝗔𝗕Ｃ𝗗𝗘𝗙𝗚ＨＩＪＫＬＭＮＯＰ𝗤𝗥𝗦Ｔ𝗨𝗩𝗪𝗫𝗬𝗭abcdefghijklmnopqrstuvwxyz0123456789"},
+  {m:"𝗔𝗕Ｃ𝗗ＥＦＧＨＩＪＫＬＭＮＯＰ𝗤𝗥𝗦Ｔ𝗨𝗩𝗪𝗫𝗬𝗭abcdefghijklmnopqrstuvwxyz0123456789"},
   {m:"𝘈𝘉𝘊𝘋𝘌𝘍𝘎𝘏𝘐𝘑𝘒𝘓𝘔𝘕𝘖𝘗𝘘𝘙𝘚𝘛𝘜𝘝𝘞𝘟𝘠𝘡abcdefghijklmnopqrstuvwxyz0123456789"},
-  {m:"𝙰𝙱𝙲𝙳𝙴𝙵𝙶𝙷𝙸𝙹𝙺𝙻𝙼𝙽𝙾𝙿𝚀𝚁𝚂𝚃𝚄𝚅𝚆𝚇𝚈𝚉abcdefghijklmnopqrstuvwxyz0123456789"},
+  {m:"𝙰𝙱𝙲𝙳𝙴𝙵𝙶𝙷𝙸𝙹𝙺𝙻𝙼𝙽𝙾𝙿𝚀𝚁𝚂𝚃𝚄|𝚅𝚆𝚇𝚈𝚉abcdefghijklmnopqrstuvwxyz0123456789"},
   {m:"𝔄𝔅ℭ𝔇𝔈𝔉𝔊ℌℑ𝔍𝔎𝔏𝔐𝔑𝔒𝔓𝔔ℜ𝔖𝔗𝔘𝔙𝔚𝔛𝔜ℨabcdefghijklmnopqrstuvwxyz0123456789"},
   {m:"𝕬𝕭𝕮𝕯𝕰𝕱𝕲𝕳𝕴𝕵𝕶𝕷𝕸𝕹𝕺𝕻𝕼𝕽𝕾𝕿𝖀𝖁𝖂𝖃𝖄𝖅abcdefghijklmnopqrstuvwxyz0123456789"},
   {m:"𝔸𝔹ℂ𝔻𝔼𝔽𝔾ℍ𝕀𝕁𝕂𝕃𝕄ℕ𝕆ℙℚℝ𝕊𝕋𝕌𝕍𝕎𝕏𝕐ℤabcdefghijklmnopqrstuvwxyz0123456789"},
@@ -449,8 +445,8 @@ const alphas = [
   {m:"ᗩᗷᑕᗪEᖴGᕼIᒍKᒪᗰᑎOᑭᑫᖇᔕTᑌᐯᗯ᙭Yᘔabcdefghijklmnopqrstuvwxyz0123456789"},
   {m:"ΛBCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"},
   {m:"ȺƁƇƊɆƑƓĦɪʝҠŁⱮȠØⱣꝖɌŞŦɄVŴӾɎƵabcdefghijklmnopqrstuvwxyz0123456789"},
-  {m:"𝙰𝙱𝙲𝙳𝙴𝙵𝙶𝙷𝙸𝙹𝙺𝙻𝙼𝙽𝙾𝙿𝚀𝚁𝚂𝚃𝚄𝚅𝚆𝚇𝚈𝚉𝚊𝚋𝚌𝚍𝚎𝚏𝚐𝚑𝚒𝚓𝚔𝚕𝚖𝚗𝚘𝚙𝚚𝚛𝚜𝘵𝚞𝑣𝚠𝚡𝚢𝚣𝟶𝟷𝟸𝟹𝟺𝟻𝟼𝟽𝟾𝟿"},
-  {m:"ᴬʙᴄᴅᴇғɢʜɪᴊᴋʟᴍɴᴏᴘqʀsᴛᴜᴠᴡxʏᴢabcdefghijklmnopqrstuvwxyz0123456789"}
+  {m:"𝙰𝙱𝙲𝙳𝙴𝙵𝙶𝙷𝙸𝙹𝙺𝙻𝙼𝙽𝙾𝙿𝚀𝚁𝚂𝚃𝚄𝚅𝚆𝚇𝚈𝚉𝚊𝚋𝚌𝚍𝚎𝚏𝚐𝚑𝚒𝚓𝚔𝚕|𝚖|𝚗𝚘𝚙𝚚𝚛𝚜𝘵𝚞𝑣𝚠𝚡𝚢𝚣𝟶𝟷𝟸𝟹𝟺𝟻𝟼𝟽𝟾𝟿"},
+  {m:"ᴬʙᴄᴅᴇғɢʜɪᴊᴋʟᴍɴᴏᴘqʀsᴛᴜᴠ|ᴡxʏᴢabcdefghijklmnopqrstuvwxyz0123456789"}
 ];
 function genFonts(){
   const val=document.getElementById('font-input').value, resBox=document.getElementById('font-results'); resBox.innerHTML=""; if(!val)return;
@@ -470,7 +466,7 @@ const symData = {
     "Cross": ["ⵜ","𐤕","𐤲","𓏶","†","✝","✞","✟","☨","☦","♱","☥","♰","‡","⊹","☩","✙"],
     "Email": ["✉️","📨","📧","💌","📩","📥","📤","📫","📪","📬","📭","📮","📦"],
     "Flowers": ["❁","❃","❀","✿","🌺","🌼","🍀","🌸","🌻","💮","✿","⚘","✾","⚜","💐","🌷","🌹","☘","✥","✤","✣","❈","❉","❊","❇","❋","✽","✻","✼","ꕤ","ꕥ","🏵️","꧁","꧂","⁕","ꙮ","᪥","֎","🥀","𓇋","𓁙","𓆹","𓇑","𓋇","𓇗","𓇚","𓆸","𓇊","𓇬","𓆱","𓇣","𓆼","𓇕","𓇛","𓇟","𓆭","𓆰","𓁋"],
-    "Lines": ["┃","╽","╿","╏","║","╎","┇","︱","┊","︳","┋","┆","╵","〡","╹","╻","╷","〢","〣","☴","☵","☶","☷","☰","☱","☲","☳","﹉","﹍","﹊","﹎","≡","═","━","─","┄","┈","╌","╍","┅","┉","╴","╶","╸","╺","╼","╾","︲","⑆","⑇","⑈","⑉","⑊","⑄","⑀","︴","﹏","﹌","﹋","╲","╱","︶","︵","〵","〴","〆","`","ᐟ","‐","⁃","⎯"],
+    "Lines": ["┃","╽","╿","╏","║","╎","┇","︱","┊","︳","┋","┆","╵","〡","╹","╻","╷","〢","㣣","☴","☵","☶","☷","☰","☱","☲","☳","﹉","﹍","﹊","﹎","≡","═","━","─","┄","┈","╌","╍","┅","┉","╴","╶","╸","╺","╼","╾","︲","⑆","⑇","⑈","⑉","⑊","⑄","⑀","︴","﹏","﹌","﹋","╲","╱","︶","︵","〵","〴","〆","`","ᐟ","‐","⁃","⎯"],
     "Music": ["♩","♪","♬","♫","♭","♮","♯","°","ø","؂","≠","≭","🎶","🎵","🎼","🎤","🎧","📻","🎸","🎷","🎹","🎻","🎺","📣","📢","🔊"],
     "Peace": ["✌","✙","✚","✛","✜","✝","✞","✟","†","⊹","‡","☮","☸","☨","☩","☫","☬","☭","☯","☽","☾","♁","⚔","❖","❆","♅","✠","✡","✢","卍","卐","〷","☠","☢","☣","☦","⚖"],
     "Punctuation": ["‒","–","—","―","·","‑","‖","†","‡","‰","‱","ʰ","ʱ","ʲ","ʳ","ʴ","ʵ","ʶ","ʷ","ʸ","‗","‘","’","‚","‛","“","”","„","‟","•","‣","․","‥","…","‧","′","″","‴","‵","‶","‷","❛","❜","❝","❞","ʹ","ʺ","ʻ","ʼ","ʽ","ʾ","ʿ","ˀ","ˁ","˂","˃","˄","˅","ˆ","ˇ","ː","ˑ","˒","˓","˔","˕","˖","˗","˘","˙","ˈ","ˉ","ˊ","ˋ","ˌ","ˍ","ˎ","ˏ","˚","˛","˜","˝","ˠ","～","¿","〃","〝","〞","︰","！","﹐","﹒","﹔","﹕","，","．","：","；","、","。"],
@@ -576,11 +572,10 @@ const colorData = {
     'Yellows': [ {c:'#ffd700'}, {c:'#daa520'}, {c:'#b8860b'}, {c:'#bdb76b'}, {c:'#f0e68c'}, {c:'#khaki'}, {c:'#ffff00'}, {c:'#ffff33'}, {c:'#ffff66'}, {c:'#ffff99'}, {c:'#lightyellow'}, {c:'#ffffe0'} ],
     'Greens': [ {c:'#006400'}, {c:'#008000'}, {c:'#228b22'}, {c:'#2e8b57'}, {c:'#3cb371'}, {c:'#32cd32'}, {c:'#00ff00'}, {c:'#7cfc00'}, {c:'#7fff00'}, {c:'#adff2f'}, {c:'#90ee90'}, {c:'#98fb98'}, {c:'#00fa9a'}, {c:'#00ff7f'}, {c:'#66cdaa'} ],
     'Cyans': [ {c:'#008080'}, {c:'#008b8b'}, {c:'#20b2aa'}, {c:'#48d1cc'}, {c:'#00ced1'}, {c:'#40e0d0'}, {c:'#00ffff'}, {c:'#00ffff'}, {c:'#7fffd4'}, {c:'#afeeee'}, {c:'#e0ffff'} ],
-    'Blues': [ {c:'#000080'}, {c:'#00008b'}, {c:'#0000cd'}, {c:'#0000ff'}, {c:'#1e90ff'}, {c:'#4169e1'}, {c:'#6495ed'}, {c:'#87cefa'}, {c:'#87ceeb'}, {c:'#add8e6'}, {c:'#b0c4de'}, {c:'#f0f8ff'} ],
+    'Blues': [ {c:'#000080'}, {c:'#00008b'}, {c:'#0000cd'}, {c:'#0000ff'}, {c:'#1e90ff'}, {c:'#4169e1'}, {c:'#6495ed'}, {c:'#add8e6'}, {c:'#add8e6'}, {c:'#b0c4de'}, {c:'#f0f8ff'} ],
     'Purples': [ {c:'#4b0082'}, {c:'#483d8b'}, {c:'#6a5acd'}, {c:'#7b68ee'}, {c:'#800080'}, {c:'#8b008b'}, {c:'#9400d3'}, {c:'#9932cc'}, {c:'#ba55d3'}, {c:'#dda0dd'}, {c:'#e6e6fa'} ],
     'Pinks': [ {c:'#8b0000'}, {c:'#c71585'}, {c:'#db7093'}, {c:'#ff1493'}, {c:'#ff69b4'}, {c:'#ffb6c1'}, {c:'#ffc0cb'}, {c:'#fff0f5'} ]
 };
-
 function togglePaletteUI() {
     const el = document.getElementById('palette-wrapper');
     const btn = document.querySelector("button[onclick='togglePaletteUI()']");
@@ -620,7 +615,6 @@ function renderCat(cat) {
                 d.style.boxShadow = `0 0 10px ${item.c}`;
                 d.style.border = '2px solid white';
             } else if (item.t && gradientDefs[item.t]) {
-                // RENDER GRADIENT BUTTON
                 d.classList.add('is-metal'); 
                 const cols = gradientDefs[item.t];
                 d.style.background = `linear-gradient(135deg, ${cols[0]}, ${cols[1]})`;
@@ -712,11 +706,8 @@ function d(){
           x.lineWidth = 8; x.strokeStyle = '#FFFFFF'; x.stroke();
       }
       else {
-          // --- ✨ GRADIENT & METALLIC RENDERING ---
           x.beginPath(); x.arc(400, 400, cfg.m, 0, Math.PI * 2); x.lineWidth = 25; 
-          
           if (cfg.pType && gradientDefs[cfg.pType]) {
-             // NEW GRADIENT LOGIC
              const cols = gradientDefs[cfg.pType];
              let g = x.createLinearGradient(0, 0, 800, 800);
              g.addColorStop(0, cols[0]);
@@ -837,6 +828,7 @@ c.ontouchmove=e=>{
 window.ontouchend=()=>{isP=false;}
 
 // --- ⚡ NEON GIF ENGINE (The Masterpiece Version) ---
+// This uses the Hybrid Blob Import method that bypasses the security block
 const workerBlob = new Blob([`importScripts('https://cdnjs.cloudflare.com/ajax/libs/gif.js/0.2.0/gif.worker.js');`], { type: 'application/javascript' });
 const workerUrl = URL.createObjectURL(workerBlob);
 
@@ -1030,3 +1022,4 @@ go.onclick = () => {
 </script>
 </body>
 </html>
+
