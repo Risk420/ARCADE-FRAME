@@ -754,8 +754,15 @@ go.onclick = () => {
         let dx = (OUT_SIZE - dW) / 2 + (gifX * outputScale), dy = (OUT_SIZE - dH) / 2 + (gifY * outputScale);
         const captureFrame = () => { if (cTime >= duration) { msg.innerText = "Encoding..."; gif.render(); return; } capVid.currentTime = cTime; };
         capVid.onseeked = () => {
-            ctx.fillStyle = '#000'; ctx.fillRect(0, 0, OUT_SIZE, OUT_SIZE);
+            ctx.clearRect(0, 0, OUT_SIZE, OUT_SIZE);
+            ctx.save();
+            ctx.beginPath();
+            ctx.arc(OUT_SIZE / 2, OUT_SIZE / 2, OUT_SIZE / 2, 0, Math.PI * 2);
+            ctx.clip();
+            ctx.fillStyle = '#000';
+            ctx.fillRect(0, 0, OUT_SIZE, OUT_SIZE);
             ctx.drawImage(capVid, dx, dy, dW, dH);
+            ctx.restore();
             gif.addFrame(ctx, { copy: true, delay: (1000 / fps) / playbackSpeed });
             cTime += (1 / fps); setTimeout(captureFrame, 10);
         };
