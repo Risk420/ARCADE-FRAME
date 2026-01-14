@@ -402,14 +402,25 @@ let cfg={s:1, m:375, x:400, y:400, r:0, lx:0, ly:0, pColor: null, pType: null};
 let player, musicOn=true, audioStarted=false;
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
-// --- ⚠️ BROWSER DETECTION LOGIC (THE FIX) ---
+// --- ⚠️ BROWSER DETECTION LOGIC (FIXED) ---
 function detectPlato() {
     const ua = navigator.userAgent || navigator.vendor || window.opera;
-    // Detects Plato or generic WebViews which block file uploads
-    const isInApp = (ua.indexOf("Plato") > -1) || (ua.indexOf("WV") > -1) || (ua.indexOf("Android") > -1 && ua.indexOf("Version/") > -1 && ua.indexOf("Chrome") > -1); 
     
-    // If inside Plato, show the Warning Overlay
-    if (isInApp && ua.indexOf("Plato") > -1) { 
+    // 1. Check for specific "Plato" signature
+    const isPlato = ua.indexOf("Plato") > -1;
+    
+    // 2. Check for "wv" (WebView) common in Android
+    const isWV = ua.indexOf("wv") > -1;
+    
+    // 3. Check for generic Android WebView (Version/X.X + Chrome)
+    const isAndroidWebView = (ua.indexOf("Android") > -1 && ua.indexOf("Version/") > -1 && ua.indexOf("Chrome") > -1);
+    
+    // 4. Check for iPhone/iPad WebViews (Not Safari)
+    const isIOS = /iPhone|iPad|iPod/.test(ua);
+    const isIOSWebView = isIOS && !window.MSStream && !/Safari/.test(ua); // If it's iOS but NOT Safari, it's a webview (like Plato)
+
+    // THE FIX: If ANY of these are true, show the overlay
+    if (isPlato || isWV || isAndroidWebView || isIOSWebView) { 
         document.getElementById('plato-overlay').style.display = 'flex';
         document.body.style.overflow = 'hidden'; // Stop scrolling
     }
