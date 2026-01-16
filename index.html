@@ -808,7 +808,7 @@ function setPlainFrame(color, type=null) {
     d(); 
     playClick();
 }
-// --- ✨ FIXED MAGIC FILTERS (Corrects Blue Skin + iPhone Support) ---
+// --- ✨ FIXED MAGIC FILTERS (Hybrid CSS + Canvas Engine) ---
 const magicFilters = [
   { name: 'ORIGINAL', f: 'none' },
   { name: 'ENHANCE', f: 'contrast(1.1) brightness(1.1) saturate(1.1)' },
@@ -899,12 +899,15 @@ function renderFilters() {
 
 function applyFilter(filterVal, btn) {
     cfg.filter = filterVal;
+    // 1. Force Visual Update (CSS) - Works instantly on iPhone
+    c.style.filter = filterVal; 
+    
     document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active-filter'));
     if(btn) btn.classList.add('active-filter');
     d(); playClick();
 }
 
-// --- 🖼️ FRAME ENGINE & DRAWING ---
+// --- 🖼️ FRAME ENGINE ---
 let isBoundaryLocked = true;
 function toggleBoundaryLock() {
     isBoundaryLocked = !isBoundaryLocked;
@@ -921,7 +924,7 @@ function toggleBoundaryLock() {
     d(); playClick();
 }
 
-// --- 🛠️ STABLE DRAWING ENGINE (DIRECT CLIP - iOS Compatible) ---
+// --- 🛠️ STABLE DRAWING ENGINE (HYBRID IOS MODE) ---
 function d(){ 
   x.clearRect(0,0,800,800); 
 
@@ -935,32 +938,39 @@ function d(){
       cfg.x = Math.max(400-rangeX, Math.min(400+rangeX, cfg.x)); cfg.y = Math.max(400-rangeY, Math.min(400+rangeY, cfg.y));
   }
 
-  // 2. Draw User Image (Using Clipping instead of Composite)
+  // 2. Draw User Image (With iPhone Fallback)
   if(i.src){
       x.save();
-      // A. Create the circular mask
-      x.beginPath(); 
-      x.arc(400, 400, cfg.m, 0, 6.28); 
-      x.clip(); 
+      x.beginPath(); x.arc(400, 400, cfg.m, 0, 6.28); x.clip(); 
       
-      // B. Position and Rotate
       let w = i.width * cfg.s, h = i.height * cfg.s;
       x.translate(cfg.x, cfg.y);
       x.rotate(cfg.r * Math.PI / 180);
       
-      // C. Apply Filter (Directly to Context)
+      // A. Try Native Filter
       if(cfg.filter && cfg.filter !== 'none') { 
           x.filter = cfg.filter; 
       }
       
-      // D. Draw
+      // B. iPhone Fallback: If native filter fails or is ignored, use basic composites
+      // This ensures at least basic effects work on older WebViews
+      if (cfg.filter && cfg.filter !== 'none') {
+        if(cfg.filter.includes('grayscale')) x.globalCompositeOperation = 'luminosity';
+        if(cfg.filter.includes('sepia')) {
+            // Draw background sepia overlay
+            x.fillStyle = 'rgba(112, 66, 20, 0.5)';
+            x.fillRect(-w/2, -h/2, w, h);
+            x.globalCompositeOperation = 'destination-atop';
+        }
+      }
+
       x.drawImage(i, -w/2, -h/2, w, h);
       x.restore();
   }
 
   // 3. Draw Generated Border
   if (cfg.pColor) {
-      x.save(); x.filter = 'none'; 
+      x.save(); x.filter = 'none'; // Ensure border is never filtered
       if ((cfg.pColor === '#000000' || cfg.pColor === '#808080') && cfg.pType === 'neon') {
           const shadowCol = cfg.pColor;
           const innerShadowCol = (cfg.pColor === '#000000') ? 'rgba(0,0,0,0.7)' : 'rgba(128,128,128,0.7)';
@@ -1060,6 +1070,8 @@ function resetProject(){
     zSl.value=1; rSl.value=0; mSl.value=375; 
     mLbl.innerText = "CIRCLE SIZE";
     document.getElementById('u1').value = ''; document.getElementById('u2').value = '';
+    // Reset Filter Visuals
+    c.style.filter = 'none';
     document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active-filter'));
     document.getElementById('filter-list').innerHTML = '';
     d(); playShutter(); updS(zSl); updS(rSl); updS(mSl); document.getElementById('save').disabled = true;
@@ -1155,13 +1167,10 @@ function updateGifTransform() {
     const currentW = renderW * z;
     const currentH = renderH * z;
     const boxSize = 320;
-    
-    // --- 🔐 BOUNDARY LOCK LOGIC ---
     const maxX = Math.max(0, (currentW - boxSize) / 2);
     const maxY = Math.max(0, (currentH - boxSize) / 2);
     gifX = Math.max(-maxX, Math.min(maxX, gifX));
     gifY = Math.max(-maxY, Math.min(maxY, gifY));
-    
     v.style.transform = `translate(calc(-50% + ${gifX}px), calc(-50% + ${gifY}px)) scale(${z})`;
 }
 
