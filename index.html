@@ -154,7 +154,6 @@
     text-shadow: 0 0 5px rgba(255,255,255,0.2);
   }
   .menu-toggle:active { transform: scale(0.90); background: rgba(255, 255, 255, 0.1); border-color: #fff; }
-  
   /* --- SIDEBAR MENU --- */
   #menu-panel { 
     position: fixed; top: 0; left: -260px; width: 240px; height: 100%; 
@@ -216,7 +215,6 @@
   h1 { color: #fff; margin: 60px 0 0 0; font-family: "Arial Black", sans-serif; font-style: italic; font-size: 36px; text-transform: uppercase; letter-spacing: -1px; text-shadow: 2px 2px 0px #ff0000, -1px -1px 10px rgba(255, 0, 0, 0.8); animation: arcadeBounce 1.8s infinite ease-in-out; }
   @keyframes arcadeBounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
   .sub { color: #fff; font-weight: bold; margin: 2px 0 15px 0; text-transform: uppercase; font-size: 11px; letter-spacing: 2px; text-align: center; }
-  
   /* --- LAYOUT LOGIC --- */
   .studio-sec { display: none; width: 320px; flex-direction: column; align-items: center; }
   .active-sec { display: flex; }
@@ -411,7 +409,6 @@
   <a href="https://platopedia.com/groups/arcade" target="_blank" class="lnk" style="border-color:#00ffff;"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg><span>Arcade Website</span></a>
   <div class="designed-by">DESIGNED BY <b>RISK</b></div>
 </div>
-
 <div id="yt-player"></div>
 <h1 id="studio-name">ARCADE</h1>
 <p class="sub" id="studio-sub">FRAME STUDIO</p>
@@ -468,7 +465,6 @@
     <button id="save" class="btn" onclick="downloadPic()" disabled>DOWNLOAD PICTURE</button>
   </div>
 </div>
-
 <div id="font-studio" class="studio-sec">
   <input type="text" id="font-input" class="font-input" placeholder="Type text here..." oninput="genFonts()">
   <div class="lbl">TAP TO COPY <span class="val-tag" id="font-count">0 STYLES</span></div>
@@ -536,7 +532,6 @@ let i=new Image(), f=new Image();
 let cfg={s:1, m:375, x:400, y:400, r:0, lx:0, ly:0, pColor: null, pType: null, filter: 'none'}; 
 let player, musicOn=true, audioStarted=false;
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-
 // --- ⚠️ BROWSER DETECTION LOGIC ---
 function detectPlato() {
     const ua = navigator.userAgent || navigator.vendor || window.opera;
@@ -699,7 +694,6 @@ function genFonts(){
   let d=document.createElement('div'); d.className="font-item"; d.innerText=txt; d.onclick=()=>{navigator.clipboard.writeText(txt);playShutter();}; resBox.appendChild(d); count++; });
   document.getElementById('font-count').innerText=count+" STYLES";
 }
-
 const symData = {
     "Hearts": ["ֶָ֢","ᵕ̈","❣︎","-'♡'-","ᥫ᭡","。♡","̆̈","♡︎","ᢉ𐭩","ᥫ᭡.","˗ˋˏ ♡ ˎˊ˗","˚₊· ͟͟͞͞➳❥","𖨆♡𖨆","ـــــــــــــــﮩ٨ـ❤️️","♡ ᪲᪲᪲","🖤⃝🦋","𐀶"],
     "Sparkles & Stars": [".𖥔 ݁ ˖","༘⋆","──","⋆⋅☆⋅⋆","──","*ੈ✩‧₊˚","⋆˙⟡","⋆.𐙚 ̊","˙⋆✮","ᯓ★","˙⋆✮꩜","✮⋆˙","✨","★","☆","✡","✦","✧","✩","✪","✫","✬","✭","✮","✯","✰","⁂","⁎","⁑","✢","✣","✤","✥","✱","✲","✳","✴","✵","✶","✷","✸","✹","✺","✻","✼","✽","✾","✿","❀","❁","❂","❃","❄","❅","❆","❇","❈","❉","❊","❋"],
@@ -992,7 +986,6 @@ function toggleBoundaryLock() {
     } else { btn.innerHTML = "BOUNDARY LOCK: OFF 🔓"; btn.style.borderColor = "#ff0000"; btn.style.color = "#ff0000"; zSl.min = 0.1; }
     d(); playClick();
 }
-
 function d(){ 
   x.clearRect(0,0,800,800); 
   
@@ -1200,8 +1193,9 @@ c.ontouchmove=e=>{
 }
 window.ontouchend=()=>{isP=false;}
 
-// --- ⚡ NEON GIF ENGINE ---
-const workerBlob = new Blob([`importScripts('https://cdnjs.cloudflare.com/ajax/libs/gif.js/0.2.0/gif.worker.js');`], { type: 'application/javascript' });
+// --- ⚡ NEON GIF ENGINE (The Masterpiece Version) ---
+// This uses the Hybrid Blob Import method that bypasses the security block
+const workerBlob = new Blob(['importScripts(\'https://cdnjs.cloudflare.com/ajax/libs/gif.js/0.2.0/gif.worker.js\');'], { type: 'application/javascript' });
 const workerUrl = URL.createObjectURL(workerBlob);
 
 const gfInput = document.getElementById('gfInput');
@@ -1304,6 +1298,7 @@ go.onclick = () => {
     vp.style.pointerEvents = 'none'; msg.innerText = "Processing..."; msg.classList.add('active');
 
     const OUT_SIZE = 480;
+    // --- 30 WORKERS ACTIVATED (Masterpiece Logic) ---
     const gif = new GIF({ workers: 30, quality: 20, width: OUT_SIZE, height: OUT_SIZE, workerScript: workerUrl, dither: false });
     const canvas = document.createElement('canvas'); canvas.width = OUT_SIZE; canvas.height = OUT_SIZE; const ctx = canvas.getContext('2d');
     const fps = 15, duration = v.duration, playbackSpeed = parseFloat(speed.value), capVid = document.createElement('video');
