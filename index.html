@@ -851,6 +851,7 @@ const magicFilters = [
   { name: 'GLITCH-X', f: 'saturate(4) hue-rotate(90deg) contrast(1.5)' },
   { name: 'CYBERPUNK', f: 'contrast(1.4) hue-rotate(190deg) saturate(1.2)' },
   { name: 'TOXIC', f: 'hue-rotate(90deg) contrast(1.2) brightness(1.1)' },
+  { name: 'X-RAY', f: 'invert(1) grayscale(1)' },
   { name: 'ALIEN', f: 'hue-rotate(280deg) contrast(1.2) invert(0.8)' },
   { name: 'INFRARED', f: 'hue-rotate(180deg) saturate(2)' },
   { name: 'MATRIX', f: 'sepia(1) hue-rotate(50deg) saturate(3) contrast(1.2)' },
@@ -868,9 +869,7 @@ const magicFilters = [
   { name: 'SUNSET', f: 'hue-rotate(-20deg) saturate(1.5)' },
   { name: 'FOREST', f: 'sepia(0.5) hue-rotate(60deg) saturate(0.8)' },
   { name: 'PASTEL', f: 'brightness(1.2) saturate(0.8) contrast(0.9)' },
-    
 ];
-
 
 
 function toggleFilterUI() {
@@ -994,7 +993,56 @@ function toggleBoundaryLock() {
     d(); playClick();
 }
 
-           x.beginPath(); x.arc(400, 400, cfg.m, 0, 2 * Math.PI); 
+function d(){ 
+  x.clearRect(0,0,800,800); 
+  
+  // 1. Boundary Lock Calculation
+  if(i.src){
+      if (isBoundaryLocked) {
+          const rad = cfg.r*Math.PI/180, cos = Math.abs(Math.cos(rad)), sin = Math.abs(Math.sin(rad));
+          const reqW = (cfg.m*2*cos + cfg.m*2*sin), reqH = (cfg.m*2*sin + cfg.m*2*cos);
+          const minS = Math.max(reqW/i.width, reqH/i.height);
+          if(cfg.s < minS) { cfg.s = minS; zSl.value = minS; zVal.innerText=Math.round((minS/zSl.min)*100)+"%"; }
+          const rangeX = (i.width*cfg.s - reqW)/2, rangeY = (i.height*cfg.s - reqH)/2;
+          cfg.x = Math.max(400-rangeX, Math.min(400+rangeX, cfg.x)); cfg.y = Math.max(400-rangeY, Math.min(400+rangeY, cfg.y));
+      } 
+  }
+
+  // 2. Draw User Image (With Filter)
+  x.save(); 
+  x.beginPath(); x.arc(400,400,cfg.m,0,6.28); x.clip(); 
+  
+  if(i.src){ 
+      let w=i.width*cfg.s, h=i.height*cfg.s; 
+      x.save(); 
+      x.translate(cfg.x,cfg.y); 
+      x.rotate(cfg.r*Math.PI/180); 
+      
+      // ✨ APPLY MAGIC FILTER HERE ✨
+      if(cfg.filter) x.filter = cfg.filter;
+      
+      x.drawImage(i,-w/2,-h/2,w,h); 
+      x.restore(); 
+  } 
+  x.restore(); 
+
+  // 3. Draw Frame/Border (NO Filter)
+  if (cfg.pColor) {
+      x.save(); 
+      // Reset filter so the border doesn't get blurry/colored
+      x.filter = 'none'; 
+      
+      if ((cfg.pColor === '#000000' || cfg.pColor === '#808080') && cfg.pType === 'neon') {
+          const shadowCol = cfg.pColor;
+          const innerShadowCol = (cfg.pColor === '#000000') ? 'rgba(0,0,0,0.7)' : 'rgba(128,128,128,0.7)';
+          x.beginPath(); x.arc(400, 400, cfg.m, 0, Math.PI * 2); 
+          x.lineWidth = 25; x.strokeStyle = shadowCol; x.shadowBlur = 60; x.shadowColor = shadowCol; x.stroke();
+          x.beginPath(); x.arc(400, 400, cfg.m, 0, Math.PI * 2); 
+          x.lineWidth = 18; x.strokeStyle = shadowCol; x.shadowBlur = 10; x.shadowColor = shadowCol; x.stroke();
+          x.beginPath(); x.arc(400, 400, cfg.m, 0, Math.PI * 2); 
+          x.lineWidth = 6; x.strokeStyle = '#FFFFFF'; x.shadowBlur = 0; x.stroke();
+          x.save(); x.beginPath(); x.arc(400, 400, cfg.m - 3, 0, 2 * Math.PI); x.clip();
+          x.beginPath(); x.arc(400, 400, cfg.m, 0, 2 * Math.PI); 
           x.strokeStyle = innerShadowCol; x.lineWidth = 30; x.shadowBlur = 25; x.shadowColor = shadowCol; x.stroke();
           x.restore();
       } 
@@ -1015,7 +1063,9 @@ function toggleBoundaryLock() {
           if (cfg.pType && gradientDefs[cfg.pType]) {
              const cols = gradientDefs[cfg.pType];
              let g = x.createLinearGradient(0, 0, 800, 800);
-             g.addColorStop(0, cols[0]); g.addColorStop(1, cols[1]); x.strokeStyle = g;
+             g.addColorStop(0, cols[0]);
+             g.addColorStop(1, cols[1]);
+             x.strokeStyle = g;
           } 
           else if (cfg.pType && (cfg.pType === 'gold' || cfg.pType === 'silver' || cfg.pType === 'bronze')) {
               let g = x.createLinearGradient(0, 0, 800, 800);
@@ -1023,15 +1073,16 @@ function toggleBoundaryLock() {
               else if (cfg.pType === 'silver') { g.addColorStop(0, '#E0E0E0'); g.addColorStop(0.5, '#B0B0B0'); g.addColorStop(1, '#E0E0E0'); }
               else if (cfg.pType === 'bronze') { g.addColorStop(0, '#CD7F32'); g.addColorStop(0.5, '#A0522D'); g.addColorStop(1, '#CD7F32'); }
               x.strokeStyle = g;
-          } else { x.strokeStyle = cfg.pColor; }
+          } else { 
+              x.strokeStyle = cfg.pColor; 
+          }
           x.stroke(); 
       }
       x.restore();
-     }
-  
-  // 4. Draw Custom Uploaded Frame (Guaranteed to work)
+  }
   if(f.src) x.drawImage(f,0,0,800,800); 
-    }
+}
+
 function handleFile(e){ 
   let r=new FileReader(); r.onload=v=>{ let n=new Image(); n.onload=()=>{
       i=n; let minScale = Math.max(800/i.width,800/i.height); cfg.s = minScale; cfg.x=400; cfg.y=400; cfg.r=0; 
@@ -1300,7 +1351,7 @@ go.onclick = () => {
     });
 };
 </script>
-    <script>
+   <script>
 // --- 🛠️ FIX FOR MAGIC FILTERS BUTTON ---
 window.onclick = e => {
   initAudio(); 
