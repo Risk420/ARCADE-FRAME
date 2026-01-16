@@ -808,7 +808,7 @@ function setPlainFrame(color, type=null) {
     d(); 
     playClick();
 }
-// --- ✨ FIXED MAGIC FILTERS (Layered Engine) ---
+// --- ✨ FIXED MAGIC FILTERS (Ultimate Collection) ---
 const magicFilters = [
   { name: 'ORIGINAL', f: 'none' },
 
@@ -912,28 +912,48 @@ function createAdjustUI() {
     const wrapper = document.getElementById('filter-wrapper');
     const p = document.createElement('div');
     p.id = 'adj-panel';
-    p.style.cssText = "display:none; flex-direction:column; width:100%; gap:8px; padding:5px;";
+    p.style.cssText = "display:none; flex-direction:column; width:100%; gap:15px; padding:10px 5px;";
     
-    const styleStr = "width:100%; -webkit-appearance:none; background:transparent; margin:5px 0;";
+    // ARCADE STYLE: Alternating Red/Cyan Colors
+    const baseStyle = "width:100%; -webkit-appearance:none; height:6px; background:#444; border-radius:3px; outline:none;";
     
-    // Brightness
-    p.innerHTML += `<div style="display:flex; justify-content:space-between; color:#aaa; font-size:10px; font-weight:bold;"><span>BRIGHTNESS</span><span id="val-b">100%</span></div>
-    <input type="range" id="sl-b" min="0" max="200" value="100" style="${styleStr}" oninput="adjChange('b', this.value)">`;
+    // Slider 1: RED (#ff0055)
+    // Slider 2: CYAN (#00ffff)
+    // Slider 3: RED (#ff0055)
     
-    // Contrast
-    p.innerHTML += `<div style="display:flex; justify-content:space-between; color:#aaa; font-size:10px; font-weight:bold;"><span>CONTRAST</span><span id="val-c">100%</span></div>
-    <input type="range" id="sl-c" min="0" max="200" value="100" style="${styleStr}" oninput="adjChange('c', this.value)">`;
-    
-    // Saturation
-    p.innerHTML += `<div style="display:flex; justify-content:space-between; color:#aaa; font-size:10px; font-weight:bold;"><span>SATURATION</span><span id="val-s">100%</span></div>
-    <input type="range" id="sl-s" min="0" max="200" value="100" style="${styleStr}" oninput="adjChange('s', this.value)">`;
+    const sliderHTML = (id, func, label, color) => `
+        <div style="display:flex; justify-content:space-between; color:${color}; font-family:'Segoe UI', sans-serif; font-size:12px; font-weight:bold; letter-spacing:1px; margin-bottom:5px;">
+            <span>${label}</span><span id="val-${id}" style="color:#fff;">100%</span>
+        </div>
+        <input type="range" id="sl-${id}" min="0" max="200" value="100" class="neon-slider" data-col="${color}" style="${baseStyle}" 
+        oninput="${func}">
+    `;
+
+    p.innerHTML = 
+        sliderHTML('b', "adjChange('b', this.value, this)", "BRIGHTNESS", "#ff0055") +
+        sliderHTML('c', "adjChange('c', this.value, this)", "CONTRAST", "#00ffff") +
+        sliderHTML('s', "adjChange('s', this.value, this)", "SATURATION", "#ff0055");
 
     const doneBtn = document.createElement('button');
     doneBtn.innerText = "DONE ✓";
-    doneBtn.style.cssText = "width:100%; background:#00ff00; color:#000; font-weight:900; border:none; padding:10px; margin-top:5px; border-radius:4px; cursor:pointer;";
+    doneBtn.style.cssText = "width:100%; background:#00ffff; color:#000; font-weight:900; border:none; padding:12px; margin-top:10px; border-radius:4px; cursor:pointer; font-family:'Segoe UI', sans-serif;";
     doneBtn.onclick = closeAdjust;
     p.appendChild(doneBtn);
     wrapper.appendChild(p);
+    
+    // Initialize Gradient Colors
+    setTimeout(() => {
+        ['b','c','s'].forEach(k => {
+            const el = document.getElementById('sl-'+k);
+            if(el) updateSliderColor(el, 100, 200);
+        });
+    }, 50);
+}
+
+function updateSliderColor(el, val, max) {
+    const percent = (val / max) * 100;
+    const col = el.getAttribute('data-col') || '#00ffff';
+    el.style.background = `linear-gradient(to right, ${col} 0%, ${col} ${percent}%, #444 ${percent}%, #444 100%)`;
 }
 
 function renderFilters() {
@@ -970,26 +990,27 @@ function closeAdjust() {
     playClick();
 }
 
-function adjChange(type, val) {
+function adjChange(type, val, el) {
     cfg.adj[type] = parseInt(val);
     document.getElementById(`val-${type}`).innerText = val + "%";
+    if(el) updateSliderColor(el, val, 200);
     d(); 
 }
 
 function applyFilter(filterVal, btn) {
     if(cfg.filter !== filterVal) {
         cfg.adj = { b: 100, c: 100, s: 100 };
-        if(document.getElementById('sl-b')) {
-            document.getElementById('sl-b').value = 100; document.getElementById('val-b').innerText = "100%";
-            document.getElementById('sl-c').value = 100; document.getElementById('val-c').innerText = "100%";
-            document.getElementById('sl-s').value = 100; document.getElementById('val-s').innerText = "100%";
-        }
+        ['b','c','s'].forEach(k => {
+            const el = document.getElementById('sl-'+k);
+            if(el) {
+                el.value = 100;
+                document.getElementById('val-'+k).innerText = "100%";
+                updateSliderColor(el, 100, 200);
+            }
+        });
     }
     cfg.filter = filterVal;
-    
-    // FIX 2: Do NOT apply CSS filter to the whole canvas (Fixes White Neon Bug)
     c.style.filter = 'none'; 
-    
     document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active-filter'));
     if(btn) btn.classList.add('active-filter');
     d(); playClick();
@@ -1012,7 +1033,7 @@ function toggleBoundaryLock() {
     d(); playClick();
 }
 
-// --- 🛠️ STABLE DRAWING ENGINE (STRICT LAYERING) ---
+// --- 🛠️ STABLE DRAWING ENGINE ---
 function d(){ 
   x.clearRect(0,0,800,800); 
 
@@ -1025,7 +1046,7 @@ function d(){
       cfg.x = Math.max(400-rangeX, Math.min(400+rangeX, cfg.x)); cfg.y = Math.max(400-rangeY, Math.min(400+rangeY, cfg.y));
   }
 
-  // 2. Draw User Image (LAYER 1)
+  // 2. Draw User Image
   if(i.src){
       x.save();
       x.beginPath(); x.arc(400, 400, cfg.m, 0, 6.28); x.clip(); 
@@ -1034,25 +1055,21 @@ function d(){
       x.translate(cfg.x, cfg.y);
       x.rotate(cfg.r * Math.PI / 180);
       
-      // Calculate Filter String
       let finalF = (cfg.filter && cfg.filter !== 'none') ? cfg.filter : '';
       if(cfg.adj.b !== 100) finalF += ` brightness(${cfg.adj.b}%)`;
       if(cfg.adj.c !== 100) finalF += ` contrast(${cfg.adj.c}%)`;
       if(cfg.adj.s !== 100) finalF += ` saturate(${cfg.adj.s}%)`;
 
-      // Apply Filter ONLY to Image Context
       if(finalF !== '') x.filter = finalF; else x.filter = 'none';
 
       x.drawImage(i, -w/2, -h/2, w, h);
-      
-      // RESTORE: This removes the filter from the brush!
       x.restore(); 
   }
 
-  // 3. Draw Generated Border (LAYER 2 - CLEAN BRUSH)
+  // 3. Draw Generated Border
   if (cfg.pColor) {
       x.save(); 
-      x.filter = 'none'; // DOUBLE ENSURE FILTER IS OFF FOR BORDER
+      x.filter = 'none'; 
       
       if ((cfg.pColor === '#000000' || cfg.pColor === '#808080') && cfg.pType === 'neon') {
           const shadowCol = cfg.pColor;
@@ -1123,17 +1140,13 @@ function handleFile(e){
             }
             renderFilters();
             
-            // FIX 1: AUTO-MENU REMOVED. 
-            // The logic that forced the menu open is gone.
-            
             d(); 
 
-            // --- 📱 UNIVERSAL MOBILE BUTTON FIX ---
+            // --- 📱 UNIVERSAL MOBILE BUTTON FIX (No Scrolling) ---
             const uiPanel = document.querySelector('.ui');
             uiPanel.style.paddingBottom = "200px"; 
             const saveBtn = document.getElementById('save');
             saveBtn.disabled = false;
-            setTimeout(() => { saveBtn.scrollIntoView({behavior: "smooth", block: "center"}); }, 300);
         };
         n.src = v.target.result;
     };
