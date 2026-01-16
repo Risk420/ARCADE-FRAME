@@ -1021,15 +1021,19 @@ function toggleBoundaryLock() {
     d(); playClick();
 }
 
+// --- 🛠️ STABLE DRAWING ENGINE (FIXED CIRCLE BOUNDARIES) ---
 function d(){ 
   x.clearRect(0,0,800,800); 
   if(i.src && isBoundaryLocked){
-      const rad = cfg.r*Math.PI/180, cos = Math.abs(Math.cos(rad)), sin = Math.abs(Math.sin(rad));
-      const reqW = (cfg.m*2*cos + cfg.m*2*sin), reqH = (cfg.m*2*sin + cfg.m*2*cos);
+      // CIRCLE BOUNDARY LOGIC: Diameter is the requirement
+      const reqW = cfg.m * 2, reqH = cfg.m * 2;
       const minS = Math.max(reqW/i.width, reqH/i.height);
       if(cfg.s < minS) { cfg.s = minS; zSl.value = minS; zVal.innerText=Math.round((minS/zSl.min)*100)+"%"; }
+      
+      // Calculate free range based on circle diameter
       const rangeX = (i.width*cfg.s - reqW)/2, rangeY = (i.height*cfg.s - reqH)/2;
-      cfg.x = Math.max(400-rangeX, Math.min(400+rangeX, cfg.x)); cfg.y = Math.max(400-rangeY, Math.min(400+rangeY, cfg.y));
+      cfg.x = Math.max(400-rangeX, Math.min(400+rangeX, cfg.x)); 
+      cfg.y = Math.max(400-rangeY, Math.min(400+rangeY, cfg.y));
   }
   if(i.src){
       x.save(); x.beginPath(); x.arc(400, 400, cfg.m, 0, 6.28); x.clip(); 
@@ -1086,8 +1090,7 @@ function handleFile(e){
         n.onload = () => {
             i = n; cfg.x = 400; cfg.y = 400; cfg.r = 0;
             if(isBoundaryLocked) {
-                const rad = cfg.r*Math.PI/180, cos = Math.abs(Math.cos(rad)), sin = Math.abs(Math.sin(rad));
-                const reqW = (cfg.m*2*cos + cfg.m*2*sin), reqH = (cfg.m*2*sin + cfg.m*2*cos);
+                const reqW = cfg.m * 2, reqH = cfg.m * 2;
                 const minS = Math.max(reqW/i.width, reqH/i.height); cfg.s = minS; zSl.min = minS; zSl.value = minS; zVal.innerText = Math.round((minS/zSl.min)*100)+"%";
             } else { cfg.s = Math.max(800/i.width, 800/i.height); zSl.value = cfg.s; zVal.innerText = "100%"; }
             renderFilters(); d(); 
@@ -1125,21 +1128,21 @@ function downloadPic(){ if(!i.src) return; d(); let a=document.createElement('a'
 function updS(el){ if(el.parentElement.classList.contains('ui-gif')) return; const val = (el.value-el.min)/(el.max-el.min)*100; el.style.setProperty('--v', val + '%'); }
 document.querySelectorAll('input[type=range]').forEach(el => { el.addEventListener('input', () => updS(el)); updS(el); });
 
-// --- 🖱️ INTERACTION ENGINE (STRICT DRAG + MULTI-TOUCH RESTORED) ---
+// --- 🖱️ INTERACTION ENGINE (FIXED HORIZONTAL AXIS) ---
 let isP=false, tStart={x:0,y:0}, initialDist=0, initialScale=1, initialAngle=0, initialRot=0;
-
 c.onmousedown=e=>{isP=true; tStart={x:e.offsetX,y:e.offsetY};}
 c.onmousemove=e=>{ if(!isP)return; let scale = 800 / c.offsetWidth; cfg.x += (e.offsetX - tStart.x) * scale; cfg.y += (e.offsetY - tStart.y) * scale; tStart={x:e.offsetX,y:e.offsetY}; d(); }
 window.onmouseup=()=>{isP=false;}
 
 c.addEventListener('touchstart', e => { 
     if(i.src) { e.preventDefault(); } 
+    const t = e.touches[0];
     if(e.touches.length===1){ 
-        isP=true; tStart={x:e.touches[0].clientX, y:e.touches[0].clientY}; 
+        isP=true; tStart={x:t.pageX, y:t.pageY}; 
     } else if(e.touches.length===2){ 
         isP=false; 
-        const dx = e.touches[0].clientX - e.touches[1].clientX; 
-        const dy = e.touches[0].clientY - e.touches[1].clientY; 
+        const dx = e.touches[0].pageX - e.touches[1].pageX; 
+        const dy = e.touches[0].pageY - e.touches[1].pageY; 
         initialDist = Math.sqrt(dx*dx + dy*dy); 
         initialScale = cfg.s; initialAngle = Math.atan2(dy, dx); initialRot = cfg.r; 
     } 
@@ -1148,14 +1151,15 @@ c.addEventListener('touchstart', e => {
 c.addEventListener('touchmove', e => { 
     if(i.src) { e.preventDefault(); } 
     if(e.touches.length===1 && isP){ 
+        const t = e.touches[0];
         let scale = 800 / c.offsetWidth; 
-        let dx = e.touches[0].clientX - tStart.x; 
-        let dy = e.touches[0].clientY - tStart.y; 
+        let dx = t.pageX - tStart.x; 
+        let dy = t.pageY - tStart.y; 
         cfg.x += dx * scale; cfg.y += dy * scale; 
-        tStart={x:e.touches[0].clientX, y:e.touches[0].clientY}; d(); 
+        tStart={x:t.pageX, y:t.pageY}; d(); 
     } else if(e.touches.length===2){ 
-        const dx = e.touches[0].clientX - e.touches[1].clientX; 
-        const dy = e.touches[0].clientY - e.touches[1].clientY; 
+        const dx = e.touches[0].pageX - e.touches[1].pageX; 
+        const dy = e.touches[0].pageY - e.touches[1].pageY; 
         const dist = Math.sqrt(dx*dx + dy*dy); 
         const scaleFactor = dist / initialDist; 
         let newScale = initialScale * scaleFactor; 
@@ -1169,10 +1173,8 @@ c.addEventListener('touchmove', e => {
         rVal.innerText = Math.round(cfg.r) + "°"; updS(rSl); d(); 
     } 
 }, { passive: false });
+window.addEventListener('touchend', () => { isP=false; });
 
-window.addEventListener('touchend', () => { isP = false; });
-
-// --- ⚡ NEON GIF ENGINE (STRICT PROCESSING LOCK) ---
 const workerBlob = new Blob(['importScripts(\'https://cdnjs.cloudflare.com/ajax/libs/gif.js/0.2.0/gif.worker.js\');'], { type: 'application/javascript' });
 const workerUrl = URL.createObjectURL(workerBlob);
 const gfInput = document.getElementById('gfInput'); const upBtn = document.getElementById('upBtn'); const v = document.getElementById('v'); const o = document.getElementById('o'); const vp = document.getElementById('vp'); const speed = document.getElementById('speed'); const sv = document.getElementById('sv'); const zoom = document.getElementById('zoom'); const zv = document.getElementById('zv'); const go = document.getElementById('go'); const msg = document.getElementById('msg'); const dlBox = document.getElementById('dlBox'); const dl = document.getElementById('dl'); const resetBox = document.getElementById('resetBox');
@@ -1198,22 +1200,12 @@ function updateGifTransform() { if (!v.src) return; const z = parseInt(zoom.valu
 zoom.oninput = function () { zv.innerText = this.value + '%'; updateGifTransform(); };
 speed.oninput = () => { sv.innerText = speed.value + 'x'; if (v.src) v.playbackRate = parseFloat(speed.value); };
 
-vp.addEventListener('touchstart', e => { 
-    if (isProcessingGif) return; 
-    if (!v.src || v.style.display === 'none') return; 
-    isGifDrag = true; startX = e.touches[0].clientX; startY = e.touches[0].clientY; initX = gifX; initY = gifY; 
-}, { passive: false });
-vp.addEventListener('touchmove', e => { 
-    if (isProcessingGif) return; 
-    if (!v.src || v.style.display === 'none') return; if (!isGifDrag) return; 
-    e.preventDefault(); const dx = e.touches[0].clientX - startX; const dy = e.touches[0].clientY - startY; 
-    gifX = initX + dx; gifY = initY + dy; requestAnimationFrame(updateGifTransform); 
-}, { passive: false });
+vp.addEventListener('touchstart', e => { if (isProcessingGif) return; if (!v.src || v.style.display === 'none') return; isGifDrag = true; startX = e.touches[0].clientX; startY = e.touches[0].clientY; initX = gifX; initY = gifY; }, { passive: false });
+vp.addEventListener('touchmove', e => { if (isProcessingGif) return; if (!v.src || v.style.display === 'none') return; if (!isGifDrag) return; e.preventDefault(); const dx = e.touches[0].clientX - startX; const dy = e.touches[0].clientY - startY; gifX = initX + dx; gifY = initY + dy; requestAnimationFrame(updateGifTransform); }, { passive: false });
 
 go.onclick = () => {
     if (!v.src) return; go.disabled = true; upBtn.disabled = true; zoom.disabled = true; speed.disabled = true; 
-    msg.innerText = "Processing..."; msg.classList.add('active'); 
-    isProcessingGif = true; vp.style.pointerEvents = 'none'; 
+    msg.innerText = "Processing..."; msg.classList.add('active'); isProcessingGif = true; vp.style.pointerEvents = 'none'; 
     const OUT_SIZE = 480; const gif = new GIF({ workers: 30, quality: 20, width: OUT_SIZE, height: OUT_SIZE, workerScript: workerUrl, dither: false });
     const canvas = document.createElement('canvas'); canvas.width = OUT_SIZE; canvas.height = OUT_SIZE; const ctx = canvas.getContext('2d');
     const fps = 15, duration = v.duration, playbackSpeed = parseFloat(speed.value), capVid = document.createElement('video'); capVid.src = v.src; capVid.muted = true; capVid.playsInline = true;
@@ -1231,8 +1223,7 @@ go.onclick = () => {
         reader.onloadend = () => {
             const finalData = reader.result; v.style.display = 'none'; o.src = finalData; o.style.display = 'block'; 
             dl.href = finalData; dl.download = `Arcade_GIF_${Date.now()}.gif`; dlBox.style.display = 'block'; resetBox.style.display = 'block'; 
-            msg.classList.remove('active'); document.getElementById('goBox').style.display = 'none'; 
-            isProcessingGif = false; vp.style.pointerEvents = 'auto'; 
+            msg.classList.remove('active'); document.getElementById('goBox').style.display = 'none'; isProcessingGif = false; vp.style.pointerEvents = 'auto'; 
             const autoLink = document.createElement('a'); autoLink.href = finalData; autoLink.download = dl.download;
             document.body.appendChild(autoLink); autoLink.click(); document.body.removeChild(autoLink);
         }; reader.readAsDataURL(blob);
@@ -1243,4 +1234,3 @@ window.onclick = e => { initAudio(); if (panel.classList.contains('open') && !pa
 </script>
 </body>
 </html>
-
