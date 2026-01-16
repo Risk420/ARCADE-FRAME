@@ -993,8 +993,7 @@ function toggleBoundaryLock() {
     } else { btn.innerHTML = "BOUNDARY LOCK: OFF 🔓"; btn.style.borderColor = "#ff0000"; btn.style.color = "#ff0000"; zSl.min = 0.1; }
     d(); playClick();
 }
-
-// --- 🛠️ SAFARI "SCRATCH CANVAS" FIX (LEVEL 2) ---
+// --- 🛠️ ULTIMATE FIX (PIXEL ENGINE FOR IOS) ---
 function d(){ 
   x.clearRect(0,0,800,800); 
 
@@ -1008,45 +1007,78 @@ function d(){
       cfg.x = Math.max(400-rangeX, Math.min(400+rangeX, cfg.x)); cfg.y = Math.max(400-rangeY, Math.min(400+rangeY, cfg.y));
   }
 
-  // 2. Draw User Image (Using Hidden Scratch Canvas)
+  // 2. Draw User Image (Smart Engine)
   if(i.src){
-      // Create a reusable hidden canvas if it doesn't exist
       if(!window.scrC) { window.scrC = document.createElement('canvas'); window.scrC.width = 800; window.scrC.height = 800; }
       const sc = window.scrC;
       const sCtx = sc.getContext('2d');
-      
-      // A. Clear the hidden canvas
+      const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent); // Detect iPhone
+
+      // A. Clear & Draw Raw Image to Scratch Canvas
       sCtx.clearRect(0, 0, 800, 800);
-      
-      // B. Draw the Filtered Image onto the Hidden Canvas FIRST
       sCtx.save();
       let w = i.width * cfg.s, h = i.height * cfg.s;
       sCtx.translate(cfg.x, cfg.y);
       sCtx.rotate(cfg.r * Math.PI / 180);
       
-      // Apply Filter HERE (Safari is happy because there is no clipping yet)
-      if(cfg.filter) sCtx.filter = cfg.filter;
-      
+      // B. Apply Filter (Two Methods)
+      if (cfg.filter && cfg.filter !== 'none') {
+          if (!isIOS) {
+              // Method 1: Fast (Android/PC)
+              sCtx.filter = cfg.filter;
+          }
+      }
       sCtx.drawImage(i, -w/2, -h/2, w, h);
       sCtx.restore();
 
-      // C. Now draw the Mask (Circle) on the Main Canvas
+      // C. Method 2: Manual Pixel Math (iPhone Fix)
+      if (isIOS && cfg.filter && cfg.filter !== 'none') {
+          const id = sCtx.getImageData(0, 0, 800, 800);
+          const d = id.data;
+          const fStr = cfg.filter;
+          
+          // Parse Filter Values
+          const getVal = (n, def) => fStr.includes(n) ? (parseFloat(fStr.split(n + '(')[1]) || def) : def;
+          const br = getVal('brightness', 1);
+          const ct = getVal('contrast', 1);
+          const sat = getVal('saturate', 1);
+          const sep = getVal('sepia', 0);
+          const gry = getVal('grayscale', 0);
+          const inv = getVal('invert', 0);
+
+          for (let k = 0; k < d.length; k += 4) {
+              let r = d[k], g = d[k+1], b = d[k+2];
+
+              // Grayscale
+              if (gry > 0) { const avg = 0.299*r + 0.587*g + 0.114*b; r=r*(1-gry)+avg*gry; g=g*(1-gry)+avg*gry; b=b*(1-gry)+avg*gry; }
+              // Sepia
+              if (sep > 0) { const tr=(r*0.393)+(g*0.769)+(b*0.189), tg=(r*0.349)+(g*0.686)+(b*0.168), tb=(r*0.272)+(g*0.534)+(b*0.131); r=r*(1-sep)+tr*sep; g=g*(1-sep)+tg*sep; b=b*(1-sep)+tb*sep; }
+              // Contrast
+              if (ct !== 1) { r=(r-128)*ct+128; g=(g-128)*ct+128; b=(b-128)*ct+128; }
+              // Brightness
+              if (br !== 1) { r*=br; g*=br; b*=br; }
+              // Invert
+              if (inv > 0) { r=(255-r)*inv+r*(1-inv); g=(255-g)*inv+g*(1-inv); b=(255-b)*inv+b*(1-inv); }
+              // Saturation (Simple)
+              if (sat !== 1) { const avg=(r+g+b)/3; r=avg+(r-avg)*sat; g=avg+(g-avg)*sat; b=avg+(b-avg)*sat; }
+
+              d[k] = r; d[k+1] = g; d[k+2] = b;
+          }
+          sCtx.putImageData(id, 0, 0);
+      }
+
+      // D. Draw Masked Result to Main Canvas
       x.save();
       x.beginPath(); x.arc(400, 400, cfg.m, 0, 6.28);
       x.fillStyle = '#000000'; x.fill();
-
-      // D. "Stamp" the Hidden Canvas onto the Main Canvas
       x.globalCompositeOperation = 'source-in';
-      x.drawImage(sc, 0, 0); // No filters or transforms needed here
-      
+      x.drawImage(sc, 0, 0); 
       x.restore();
   }
 
-  // 3. Draw Frame/Border (Standard Layering)
+  // 3. Draw Frame (Standard)
   if (cfg.pColor) {
-      x.save(); 
-      x.filter = 'none'; 
-      
+      x.save(); x.filter = 'none'; 
       if ((cfg.pColor === '#000000' || cfg.pColor === '#808080') && cfg.pType === 'neon') {
           const shadowCol = cfg.pColor;
           const innerShadowCol = (cfg.pColor === '#000000') ? 'rgba(0,0,0,0.7)' : 'rgba(128,128,128,0.7)';
@@ -1078,8 +1110,7 @@ function d(){
           if (cfg.pType && gradientDefs[cfg.pType]) {
              const cols = gradientDefs[cfg.pType];
              let g = x.createLinearGradient(0, 0, 800, 800);
-             g.addColorStop(0, cols[0]); g.addColorStop(1, cols[1]);
-             x.strokeStyle = g;
+             g.addColorStop(0, cols[0]); g.addColorStop(1, cols[1]); x.strokeStyle = g;
           } 
           else if (cfg.pType && (cfg.pType === 'gold' || cfg.pType === 'silver' || cfg.pType === 'bronze')) {
               let g = x.createLinearGradient(0, 0, 800, 800);
@@ -1087,14 +1118,13 @@ function d(){
               else if (cfg.pType === 'silver') { g.addColorStop(0, '#E0E0E0'); g.addColorStop(0.5, '#B0B0B0'); g.addColorStop(1, '#E0E0E0'); }
               else if (cfg.pType === 'bronze') { g.addColorStop(0, '#CD7F32'); g.addColorStop(0.5, '#A0522D'); g.addColorStop(1, '#CD7F32'); }
               x.strokeStyle = g;
-          } else { 
-              x.strokeStyle = cfg.pColor; 
-          }
+          } else { x.strokeStyle = cfg.pColor; }
           x.stroke(); 
       }
       x.restore();
   }
 }
+
 
 
 
