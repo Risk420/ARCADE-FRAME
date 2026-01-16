@@ -1190,11 +1190,13 @@ function resetGifProject() {
     o.style.display = 'none'; 
     dlBox.style.display = 'none'; 
     
-    // --- SECURITY FIX: FULLY DEACTIVATE DOWNLOAD ---
+    // --- 🛡️ FULL RESET & DEACTIVATION ---
     dl.href = "#"; 
     dl.removeAttribute('download'); 
-    dl.onclick = (e) => { if(!dl.download) e.preventDefault(); }; 
-    // ----------------------------------------------
+    dl.style.pointerEvents = 'none'; // Prevents any clicking
+    dl.style.opacity = '0.5';        // Visual cue that it is disabled
+    dl.onclick = (e) => { e.preventDefault(); return false; }; 
+    // ------------------------------------
     
     resetBox.style.display = 'none'; 
     document.getElementById('goBox').style.display = 'inline-block'; 
@@ -1239,7 +1241,15 @@ go.onclick = () => {
         const reader = new FileReader();
         reader.onloadend = () => {
             const finalData = reader.result; v.style.display = 'none'; o.src = finalData; o.style.display = 'block'; 
-            dl.href = finalData; dl.download = `Arcade_GIF_${Date.now()}.gif`; dl.onclick = null; dlBox.style.display = 'block'; resetBox.style.display = 'block'; 
+            dl.href = finalData; dl.download = `Arcade_GIF_${Date.now()}.gif`; 
+            
+            // --- RE-ACTIVATE DOWNLOAD ---
+            dl.style.pointerEvents = 'auto'; 
+            dl.style.opacity = '1'; 
+            dl.onclick = null; 
+            // ----------------------------
+            
+            dlBox.style.display = 'block'; resetBox.style.display = 'block'; 
             msg.classList.remove('active'); document.getElementById('goBox').style.display = 'none'; isProcessingGif = false; vp.style.pointerEvents = 'auto'; 
         }; reader.readAsDataURL(blob);
     });
