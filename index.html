@@ -808,7 +808,7 @@ function setPlainFrame(color, type=null) {
     d(); 
     playClick();
 }
-// --- ✨ FIXED MAGIC FILTERS (Corrects Blue Skin) ---
+// --- ✨ FIXED MAGIC FILTERS (Corrects Blue Skin + iPhone Support) ---
 const magicFilters = [
   { name: 'ORIGINAL', f: 'none' },
   { name: 'ENHANCE', f: 'contrast(1.1) brightness(1.1) saturate(1.1)' },
@@ -921,7 +921,7 @@ function toggleBoundaryLock() {
     d(); playClick();
 }
 
-// --- 🛠️ STABLE DRAWING ENGINE (Scratch Canvas Method) ---
+// --- 🛠️ STABLE DRAWING ENGINE (DIRECT CLIP - iOS Compatible) ---
 function d(){ 
   x.clearRect(0,0,800,800); 
 
@@ -935,23 +935,26 @@ function d(){
       cfg.x = Math.max(400-rangeX, Math.min(400+rangeX, cfg.x)); cfg.y = Math.max(400-rangeY, Math.min(400+rangeY, cfg.y));
   }
 
-  // 2. Draw User Image
+  // 2. Draw User Image (Using Clipping instead of Composite)
   if(i.src){
-      const sc = document.createElement('canvas'); sc.width = 800; sc.height = 800;
-      const sCtx = sc.getContext('2d');
-      sCtx.save();
-      let w = i.width * cfg.s, h = i.height * cfg.s;
-      sCtx.translate(cfg.x, cfg.y);
-      sCtx.rotate(cfg.r * Math.PI / 180);
-      if(cfg.filter && cfg.filter !== 'none') { sCtx.filter = cfg.filter; }
-      sCtx.drawImage(i, -w/2, -h/2, w, h);
-      sCtx.restore();
-
       x.save();
-      x.beginPath(); x.arc(400, 400, cfg.m, 0, 6.28);
-      x.fillStyle = '#000000'; x.fill();
-      x.globalCompositeOperation = 'source-in';
-      x.drawImage(sc, 0, 0); 
+      // A. Create the circular mask
+      x.beginPath(); 
+      x.arc(400, 400, cfg.m, 0, 6.28); 
+      x.clip(); 
+      
+      // B. Position and Rotate
+      let w = i.width * cfg.s, h = i.height * cfg.s;
+      x.translate(cfg.x, cfg.y);
+      x.rotate(cfg.r * Math.PI / 180);
+      
+      // C. Apply Filter (Directly to Context)
+      if(cfg.filter && cfg.filter !== 'none') { 
+          x.filter = cfg.filter; 
+      }
+      
+      // D. Draw
+      x.drawImage(i, -w/2, -h/2, w, h);
       x.restore();
   }
 
