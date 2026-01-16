@@ -874,12 +874,17 @@ const magicFilters = [
 
   // --- 🌈 COLORS & POP ART ---
   { name: 'CLR-HUE-POP', f: 'hue-rotate(90deg) saturate(1.5)' },
+  { name: 'CLR-INVERT', f: 'invert(1)' },
   { name: 'CLR-NEG-BW', f: 'invert(1) grayscale(1)' },
   { name: 'CLR-PINK', f: 'sepia(1) hue-rotate(300deg) saturate(1.5)' },
   { name: 'CLR-BLUE', f: 'sepia(1) hue-rotate(180deg) saturate(1.5)' },
   { name: 'CLR-PURPLE', f: 'sepia(1) hue-rotate(250deg) saturate(1.5)' },
+  { name: 'POP-ART', f: 'saturate(3.0) contrast(1.5)' },
   { name: 'POP-WARHOL', f: 'contrast(2.0) saturate(2.0) hue-rotate(45deg)' }
 ];
+
+// Initialize Adjustments in Config
+cfg.adj = { b: 100, c: 100, s: 100 };
 
 function toggleFilterUI() {
     const el = document.getElementById('filter-wrapper');
@@ -893,9 +898,47 @@ function toggleFilterUI() {
         el.classList.add('active');
         btn.innerHTML = "CLOSE FILTERS ✖";
         btn.style.color = "#ff00ff"; btn.style.borderColor = "#ff00ff";
+        
+        // Ensure UI exists
         if(document.getElementById('filter-list').children.length === 0) renderFilters();
+        if(!document.getElementById('adj-panel')) createAdjustUI();
+        
+        // Always start in List View
+        document.getElementById('filter-list').style.display = 'flex';
+        document.getElementById('adj-panel').style.display = 'none';
     }
     playClick();
+}
+
+// --- 🛠️ DYNAMIC UI CREATION (SAFE INJECTION) ---
+function createAdjustUI() {
+    const wrapper = document.getElementById('filter-wrapper');
+    const p = document.createElement('div');
+    p.id = 'adj-panel';
+    p.style.cssText = "display:none; flex-direction:column; width:100%; gap:8px; padding:5px;";
+    
+    const styleStr = "width:100%; -webkit-appearance:none; background:transparent; margin:5px 0;";
+    
+    // Brightness
+    p.innerHTML += `<div style="display:flex; justify-content:space-between; color:#aaa; font-size:10px; font-weight:bold;"><span>BRIGHTNESS</span><span id="val-b">100%</span></div>
+    <input type="range" id="sl-b" min="0" max="200" value="100" style="${styleStr}" oninput="adjChange('b', this.value)">`;
+    
+    // Contrast
+    p.innerHTML += `<div style="display:flex; justify-content:space-between; color:#aaa; font-size:10px; font-weight:bold;"><span>CONTRAST</span><span id="val-c">100%</span></div>
+    <input type="range" id="sl-c" min="0" max="200" value="100" style="${styleStr}" oninput="adjChange('c', this.value)">`;
+    
+    // Saturation
+    p.innerHTML += `<div style="display:flex; justify-content:space-between; color:#aaa; font-size:10px; font-weight:bold;"><span>SATURATION</span><span id="val-s">100%</span></div>
+    <input type="range" id="sl-s" min="0" max="200" value="100" style="${styleStr}" oninput="adjChange('s', this.value)">`;
+
+    // Done Button
+    const doneBtn = document.createElement('button');
+    doneBtn.innerText = "DONE ✓";
+    doneBtn.style.cssText = "width:100%; background:#00ff00; color:#000; font-weight:900; border:none; padding:10px; margin-top:5px; border-radius:4px; cursor:pointer;";
+    doneBtn.onclick = closeAdjust;
+    p.appendChild(doneBtn);
+
+    wrapper.appendChild(p);
 }
 
 function renderFilters() {
@@ -914,17 +957,53 @@ function renderFilters() {
         span.innerText = mf.name;
         btn.appendChild(img);
         btn.appendChild(span);
+        
+        // Single Click: Apply
         btn.onclick = () => { applyFilter(mf.f, btn); };
+        
+        // Double Click: Open Editor
+        btn.ondblclick = () => { applyFilter(mf.f, btn); openAdjust(); };
+        
         list.appendChild(btn);
     });
 }
 
+function openAdjust() {
+    document.getElementById('filter-list').style.display = 'none';
+    document.getElementById('adj-panel').style.display = 'flex';
+    playClick();
+}
+
+function closeAdjust() {
+    document.getElementById('adj-panel').style.display = 'none';
+    document.getElementById('filter-list').style.display = 'flex';
+    playClick();
+}
+
+function adjChange(type, val) {
+    cfg.adj[type] = parseInt(val);
+    document.getElementById(`val-${type}`).innerText = val + "%";
+    d(); // Redraw immediately
+}
+
 function applyFilter(filterVal, btn) {
+    // Reset adjustments when picking a NEW filter
+    if(cfg.filter !== filterVal) {
+        cfg.adj = { b: 100, c: 100, s: 100 };
+        if(document.getElementById('sl-b')) {
+            document.getElementById('sl-b').value = 100; document.getElementById('val-b').innerText = "100%";
+            document.getElementById('sl-c').value = 100; document.getElementById('val-c').innerText = "100%";
+            document.getElementById('sl-s').value = 100; document.getElementById('val-s').innerText = "100%";
+        }
+    }
+    
     cfg.filter = filterVal;
-    c.style.filter = filterVal; 
+    
     document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active-filter'));
     if(btn) btn.classList.add('active-filter');
-    d(); playClick();
+    
+    d(); 
+    playClick();
 }
 
 // --- 🖼️ FRAME ENGINE ---
@@ -944,7 +1023,7 @@ function toggleBoundaryLock() {
     d(); playClick();
 }
 
-// --- 🛠️ STABLE DRAWING ENGINE ---
+// --- 🛠️ STABLE DRAWING ENGINE (WITH ADJUSTMENTS) ---
 function d(){ 
   x.clearRect(0,0,800,800); 
 
@@ -967,7 +1046,20 @@ function d(){
       x.translate(cfg.x, cfg.y);
       x.rotate(cfg.r * Math.PI / 180);
       
-      if(cfg.filter && cfg.filter !== 'none') { x.filter = cfg.filter; }
+      // --- APPLY COMBINED FILTER (Base + Adjustments) ---
+      // This is the Safe "Adding" Method
+      let finalF = (cfg.filter && cfg.filter !== 'none') ? cfg.filter : '';
+      if(cfg.adj.b !== 100) finalF += ` brightness(${cfg.adj.b}%)`;
+      if(cfg.adj.c !== 100) finalF += ` contrast(${cfg.adj.c}%)`;
+      if(cfg.adj.s !== 100) finalF += ` saturate(${cfg.adj.s}%)`;
+
+      if(finalF !== '') { 
+          x.filter = finalF; 
+          c.style.filter = finalF; // Instant iPhone Preview
+      } else {
+          x.filter = 'none';
+          c.style.filter = 'none';
+      }
 
       x.drawImage(i, -w/2, -h/2, w, h);
       x.restore();
@@ -1049,16 +1141,11 @@ function handleFile(e){
             d(); 
 
             // --- 📱 UNIVERSAL MOBILE BUTTON FIX ---
-            // 1. Add massive padding to bottom of UI
             const uiPanel = document.querySelector('.ui');
             uiPanel.style.paddingBottom = "200px"; 
-            
-            // 2. Enable button and SCROLL IT INTO VIEW (Center)
             const saveBtn = document.getElementById('save');
             saveBtn.disabled = false;
-            setTimeout(() => { 
-                saveBtn.scrollIntoView({behavior: "smooth", block: "center"}); 
-            }, 300);
+            setTimeout(() => { saveBtn.scrollIntoView({behavior: "smooth", block: "center"}); }, 300);
         };
         n.src = v.target.result;
     };
@@ -1083,17 +1170,25 @@ function updateM(v){ cfg.m=parseInt(v); mVal.innerText=v+"px"; d(); }
 function centerSubject(){ cfg.x=400; cfg.y=400; cfg.r=0; rSl.value=0; d(); playShutter(); }
 function resetProject(){ 
     i=new Image(); f=new Image(); 
-    cfg={s:1,m:375,x:400,y:400,r:0, pColor:null, pType:null, filter:'none'};
+    cfg={s:1,m:375,x:400,y:400,r:0, pColor:null, pType:null, filter:'none', adj:{b:100,c:100,s:100}};
     zSl.value=1; rSl.value=0; mSl.value=375; 
     mLbl.innerText = "CIRCLE SIZE";
     document.getElementById('u1').value = ''; document.getElementById('u2').value = '';
+    
     // Reset Filter Visuals
     c.style.filter = 'none';
     document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active-filter'));
     document.getElementById('filter-list').innerHTML = '';
+    
+    // Reset Sliders UI
+    if(document.getElementById('adj-panel')) {
+        document.getElementById('filter-list').style.display = 'flex';
+        document.getElementById('adj-panel').style.display = 'none';
+    }
+
     d(); playShutter(); updS(zSl); updS(rSl); updS(mSl); 
     document.getElementById('save').disabled = true;
-    document.querySelector('.ui').style.paddingBottom = "0px"; // Reset padding
+    document.querySelector('.ui').style.paddingBottom = "0px"; 
 }
 
 function downloadPic(){ if(!i.src) return; d(); let a=document.createElement('a'); a.download=`Arcade_${Date.now()}.png`; a.href=c.toDataURL(); a.click(); playShutter(); }
@@ -1241,4 +1336,3 @@ window.onclick = e => { initAudio(); if (panel.classList.contains('open') && !pa
 </script>
 </body>
 </html>
-
