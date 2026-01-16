@@ -154,7 +154,7 @@
     text-shadow: 0 0 5px rgba(255,255,255,0.2);
   }
   .menu-toggle:active { transform: scale(0.90); background: rgba(255, 255, 255, 0.1); border-color: #fff; }
-/* --- SIDEBAR MENU --- */
+  /* --- SIDEBAR MENU --- */
   #menu-panel { 
     position: fixed; top: 0; left: -260px; width: 240px; height: 100%; 
     background: #1a1a1c; padding-top: 60px; 
@@ -211,7 +211,7 @@
   .lnk:active { transform: scale(0.96); background: rgba(255,255,255,0.1); }
   .lnk svg { width: 18px; height: 18px; fill: white; }
   
- /* HEADERS */
+  /* HEADERS */
   h1 { color: #fff; margin: 60px 0 0 0; font-family: "Arial Black", sans-serif; font-style: italic; font-size: 36px; text-transform: uppercase; letter-spacing: -1px; text-shadow: 2px 2px 0px #ff0000, -1px -1px 10px rgba(255, 0, 0, 0.8); animation: arcadeBounce 1.8s infinite ease-in-out; }
   @keyframes arcadeBounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
   .sub { color: #fff; font-weight: bold; margin: 2px 0 15px 0; text-transform: uppercase; font-size: 11px; letter-spacing: 2px; text-align: center; }
@@ -232,7 +232,7 @@
     #sym-container { max-height: 70vh; overflow-y: scroll; padding-right: 10px; width: 100%; }
     .sym-btn { flex: 1 0 50px; }
   }
-/* --- 🖼️ FRAME STUDIO CSS --- */
+  /* --- 🖼️ FRAME STUDIO CSS --- */
   #box { position: relative; width: 310px; height: 310px; border-radius: 50%; overflow: hidden; border: 3px solid #ff0000; box-sizing: border-box; background: transparent; z-index: 10; flex-shrink: 0; }
   
   /* 🛠️ TOUCH FIX: 'touch-action: none' enables 1-finger dragging on the canvas */
@@ -257,7 +257,7 @@
   .lbl { font-size: 9px; color: #888; text-transform: uppercase; margin-top: 2px; display: flex; justify-content: space-between; align-items: center; width: 100%; }
   .val-tag { color: #ff0000; font-weight: bold; font-family: monospace; font-size: 10px; }
   
-/* --- 🛑 SLIDER FIX (NO JUMP + SCROLL SAFETY) --- */
+  /* --- 🛑 SLIDER FIX (NO JUMP + SCROLL SAFETY) --- */
   input[type=range] { 
       -webkit-appearance: none; 
       width: 100%; 
@@ -304,13 +304,13 @@
 
   @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
 
- /* --- ✍️ FONT STUDIO CSS --- */
+  /* --- ✍️ FONT STUDIO CSS --- */
   .font-input { width: 100%; background: #111; border: 2px solid #00ffff; color: #fff; padding: 15px; border-radius: 8px; font-weight: bold; text-align: center; margin-bottom: 15px; font-size: 16px; outline: none; box-sizing: border-box; }
   .font-scroll { width: 100%; max-height: 500px; overflow-y: auto; display: flex; flex-direction: column; border-radius: 8px; overflow-x: hidden; border: 1px solid rgba(255,255,255,0.1); box-sizing: border-box; touch-action: pan-y; }
   .font-item { background: #1a1a1c; border-bottom: 1px solid rgba(255,255,255,0.1); padding: 16px; width: 100%; text-align: center; cursor: pointer; color: #eee; font-size: 16px; white-space: pre-wrap; transition: transform 0.05s ease; }
   .font-item:active { transform: scale(0.98); background: #333; color: #fff; }
   
-/* --- ✨ SYMBOLS STUDIO CSS --- */
+  /* --- ✨ SYMBOLS STUDIO CSS --- */
   .sym-box-container { width: 100%; margin-bottom: 15px; }
   .sym-input { width: 100%; background: #000; border: 1px solid #00ffff; color: #00ffff; padding: 12px; font-size: 18px; border-radius: 6px; text-align: center; box-sizing: border-box; outline: none; }
   .sym-input:focus { border-color: #ff00ff; box-shadow: 0 0 10px rgba(255,0,255,0.5); }
@@ -319,7 +319,7 @@
   .sym-btn { background: #1a1a1c; border: 1px solid #333; color: white; padding: 15px 0; font-size: 20px; border-radius: 6px; cursor: pointer; text-align: center; flex: 1 0 18%; min-width: 50px; transition: transform 0.05s ease; }
   .sym-btn:active { transform: scale(0.90); background: #ff0000; color: #000; }
   
-/* --- ⚡ GIF STUDIO CSS --- */
+  /* --- ⚡ GIF STUDIO CSS --- */
   @keyframes rotate { 100% { transform: rotate(360deg); } }
   
   /* 🛠️ TOUCH FIX: 'touch-action: none' enables dragging for the GIF studio */
@@ -385,8 +385,7 @@
     <button id="switch-btn" onclick="toggleSwitchMenu(event)">SWITCH TO 📂</button>
     <div id="switch-menu">
       <button id="nav-frame" class="active-link" onclick="changeStudio('frame')">🖼️ Frame Studio</button>
-      <button id="nav-font"
-onclick="changeStudio('font')">✍️ Font Generator</button>
+      <button id="nav-font" onclick="changeStudio('font')">✍️ Font Generator</button>
       <button id="nav-gif" onclick="changeStudio('gif')">⚡ GIF Maker</button>
       <button id="nav-sym" onclick="changeStudio('sym')">✨ Symbols Studio</button>
     </div>
@@ -415,7 +414,7 @@ onclick="changeStudio('font')">✍️ Font Generator</button>
     </select>
   </div>
   
- <a href="https://discord.gg/ardc" target="_blank" class="lnk" style="border-color:#5865F2;"><svg viewBox="0 0 127.14 96.36"><path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36,77.11,77.11,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1A105.25,105.25,0,0,0,126.6,80.22c2.36-24.44-5.42-48.18-18.9-72.15ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54,46,53.89,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.25,60,73.25,53s5-12.74,11.44-12.74S96.23,46,96.12,53,91.08,65.69,84.69,65.69Z"/></svg><span>Discord Server</span></a>
+  <a href="https://discord.gg/ardc" target="_blank" class="lnk" style="border-color:#5865F2;"><svg viewBox="0 0 127.14 96.36"><path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36,77.11,77.11,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1A105.25,105.25,0,0,0,126.6,80.22c2.36-24.44-5.42-48.18-18.9-72.15ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54,46,53.89,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.25,60,73.25,53s5-12.74,11.44-12.74S96.23,46,96.12,53,91.08,65.69,84.69,65.69Z"/></svg><span>Discord Server</span></a>
   <a href="https://platopedia.com/groups/arcade" target="_blank" class="lnk" style="border-color:#00ffff;"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg><span>Arcade Website</span></a>
   <div class="designed-by">DESIGNED BY <b>RISK</b></div>
 </div>
@@ -436,7 +435,6 @@ onclick="changeStudio('font')">✍️ Font Generator</button>
             <div class="filter-scroll" id="filter-list">
                 </div>
         </div>
-
 
         <button class="btn" style="border-color:#ffffff; color:#ffffff;" onclick="togglePaletteUI()">COLOR PALETTE 🎨</button>
         
@@ -618,7 +616,7 @@ const alphas = [
   {m:"⒜⒝⒞⒟⒠⒡⒢⒣⒤⒥⒦⒧⒨⒩⒪⒫⒬⒭⒮⒯⒰⒱⒲⒳⒴⒵⒜⒝⒞⒟⒠⒡⒢⒣⒤⒥⒦⒧⒨⒩⒪⒫⒬⒭⒮⒯⒰⒱⒲⒳⒴⒵0123456789"},
   {m:"🄐🄑🄒🄓🄔🄕🄖🄗🄘🄙🄚🄛🄜🄝🄞🄟🄠🄡🄢🄣🄤🄥🄦🄧🄨🄩🄐🄑🄒🄓🄔🄕🄖🄗🄘🄙🄚🄛🄜🄝🄞🄟🄠🄡🄢🄣🄤🄥🄦🄧🄨🄩0123456789"},
   {m:"🅰🅱🅲🅳🅴🅵🅶🅷🅸🅹🅺🅻🅼🅽🅾🅿🆀🆁🆂🆃🆄🆅🆆🆇🆈🆉🅰🅱🅲🅳🅴🅵🅶🅷🅸🅹🅺🅻🅼🅽🅾🅿🆀🆁🆂🆃🆄🆅🆆🆇🆈🆉0123456789"},
- {m:"ᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘQʀꜱᴛᴜᴠᴡxʏᴢᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘQʀꜱᴛᴜᴠᴡxʏᴢ0123456789"},
+  {m:"ᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘQʀꜱᴛᴜᴠᴡxʏᴢᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘQʀꜱᴛᴜᴠᴡxʏᴢ0123456789"},
   {m:"ᴬᴮᶜᴰᴱᶠᴳᴴᴵᴶᴷᴸᴹᴺᴼᴾᑫᴿˢᵀᵁⱽᵂˣʸᶻᵃᵇᶜᵈᵉᶠᵍʰⁱʲᵏˡᵐⁿᵒᵖqʳˢᵗᵘᵛʷˣʸᶻ0123456789"},
   {m:"𝔸𝔹ℂ𝔻𝔼𝔽𝔾ℍ𝕀𝕁𝕂𝕃𝕄ℕ𝕆ℙℚℝ𝕊𝕋𝕌𝕍𝕎𝕏𝕐ℤ𝕒𝕓𝕔𝕕𝕖𝕗𝕘𝕙𝕚𝕛𝕜𝕝𝕞𝕟𝕠𝕡𝕢𝕣𝕤𝕥𝕦𝕧𝕨𝕩𝕪𝕫𝟘𝟙𝟚𝟛𝟜𝟝𝟞𝟟𝟠𝟡"},
   {m:"𝔄𝔅ℭ𝔇𝔈𝔉𝔊ℌℑ𝔍𝔎𝔏𝔐𝔑𝔒𝔓𝔔ℜ𝔖𝔗𝔘𝔙𝔚𝔛𝔜ℨ𝔞𝔟𝔠𝔡𝔢𝔣𝔤𝔥𝔦𝔧𝔨𝔩𝔪𝔫𝔬𝔭𝔮𝔯𝔰ŧ𝔲𝔳𝔴𝔵𝔶𝔷0123456789"},
@@ -632,8 +630,7 @@ const alphas = [
   {m:"𝓐𝓑𝓒𝓓𝓔𝓕𝓖𝓗𝓘𝓙𝓚𝓛𝓜𝓝𝓞𝓟𝓠𝓡𝓢𝓣𝓤𝓥𝓦𝓧𝓨𝓩abcdefghijklmnopqrstuvwxyz0123456789"},
   {m:"𝖠𝖡𝖢𝖣𝖤𝖥𝖦𝖧𝖨𝖩𝖪𝖫𝖬𝖭𝖮𝖯𝖰𝖱𝖲𝖳𝖴𝖵𝖶𝖷𝖸𝖹abcdefghijklmnopqrstuvwxyz0123456789"},
   {m:"𝗔𝗕Ｃ𝗗ＥＦＧＨＩＪＫＬＭＮＯＰ𝗤𝗥𝗦Ｔ𝗨𝗩𝗪𝗫𝗬𝗭abcdefghijklmnopqrstuvwxyz0123456789"},
-
-{m:"𝘈𝘉𝘊𝘋𝘌𝘍𝘎𝘏𝘐𝘑𝘒𝘓𝘔𝘕𝘖𝘗𝘘𝘙𝘚𝘛𝘜𝘝𝘞𝘟𝘠𝘡abcdefghijklmnopqrstuvwxyz0123456789"},
+  {m:"𝘈𝘉𝘊𝘋𝘌𝘍𝘎𝘏𝘐𝘑𝘒𝘓𝘔𝘕𝘖𝘗𝘘𝘙𝘚𝘛𝘜𝘝𝘞𝘟𝘠𝘡abcdefghijklmnopqrstuvwxyz0123456789"},
   {m:"𝙰𝙱𝙲𝙳𝙴𝙵𝙶𝙷𝙸𝙹𝙺𝙻𝙼𝙽𝙾𝙿𝚀𝚁𝚂𝚃𝚄𝚅𝚆𝚇𝚈𝚉abcdefghijklmnopqrstuvwxyz0123456789"},
   {m:"𝔄𝔅ℭ𝔇𝔈𝔉𝔊ℌℑ𝔍𝔎𝔏𝔐𝔑𝔒𝔓𝔔ℜ𝔖𝔗𝔘𝔙𝔚𝔛𝔜ℨabcdefghijklmnopqrstuvwxyz0123456789"},
   {m:"𝕬𝕭𝕮𝕯𝕰𝕱𝕲𝕳𝕴𝕵𝕶𝕷𝕸𝕹𝕺𝕻𝕼𝕽𝕾𝕿𝖀𝖁𝖂𝖃𝖄𝖅abcdefghijklmnopqrstuvwxyz0123456789"},
@@ -660,7 +657,7 @@ const symData = {
     "Sparkles & Stars": [".𖥔 ݁ ˖","༘⋆","──","⋆⋅☆⋅⋆","──","*ੈ✩‧₊˚","⋆˙⟡","⋆.𐙚 ̊","˙⋆✮","ᯓ★","˙⋆✮꩜","✮⋆˙","✨","★","☆","✡","✦","✧","✩","✪","✫","✬","✭","✮","✯","✰","⁂","⁎","⁑","✢","✣","✤","✥","✱","✲","✳","✴","✵","✶","✷","✸","✹","✺","✻","✼","✽","✾","✿","❀","❁","❂","❃","❄","❅","❆","❇","❈","❉","❊","❋"],
     "Hanging Stars": ["*̣̥☆·͙̥","‧͙⁺˚*･༓☾","☽༓･*˚⁺‧͙","★*","*★","☆.","¸.·","·.¸"],
     "Arrows": ["←","→","↓","↑","↖","↗","↘","↙","↔","↕","↚","↛","↜","↝","↞","↟","↠","↡","↢","↣","↤","↥","↦","↧","↨","↩","↪","↫","↬","↭","↮","↯","↰","↱","↲","↳","↴","↶","↷","↸","↹","↺","↻","↼","↽","↾","↿","⇀","⇁","⇂","⇃","⇄","⇅","⇆","⇇","⇈","⇉","⇊","⇋","⇌","⇍","⇎","⇏","⇕","⇖","⇗","⇘","⇙","⇚","⇛","⇜","⇝","⇞","⇟","⇠","⇡","⇢","⇣","⇤","⇥","⇦","⇧","⇨","⇩","⇪","⌅","⌆","⌤","⏎","▶","☇","☈","☊","☋","☌","☍","➔","➘","➙","➚","➛","➜","➝","➞","➟","➠","➡","➢","➣","➤","➥","➦","➧","➨","➩","➪","➫","➬","➭","➮","➯","➱","➲","➳","➴","➵","➶","➷","➸","➹","➺","➻","➼","➽","➾","⤴","⤵","↵","⇰","⇫","⇬","⇭","⇳","⇮","⇯","⇱","⇲","⇴","⇵","⇷","⇸","⇹","⇺","⇑","⇓","⤪","⤨","⤧","⤩","⤭","⤮","⤯","⤰","⤱","⤲","⤫","⤬","⇽","⇾","⇿","⬳","⟿","⤉","⤈","⇻","⇼","⬴","⤀","⬵","⤁","⬹","⤔","⬺","⤕","⬶","⤅","⬻","⤖","⬷","⤐","⬼","⤗","⬽","⤘","⤝","⤞","⤟","⤠","⤡","⤢","⤣","⤤","⤥","⤦","⬐","⬎","⬑","⬏","⤶","⤷","⥂","⥃","⥄","⭀","⥱","⥶","⥸","⭂","⭈","⭊","⥵","⭁","⭇","⭉","⥲","⭋","⭌","⥳","⥴","⥆","⥅","⥹","⥻","⬰","⥈","⬾","⥇","⬲","⟴","⥷","⭃","⥺","⭄","⥉","⥰","⬿","⤳","⥊","⥋","⥌","⥍","⥎","⥏","⥐","⥑","⥒","⥓","⥔","⥕","⥖","⥗","⥤","⥣","⥥","⥦","⥨","⥧","⥩","⥮","⥯","⥪","⥬","⥫","⥭","⤌","⤍","⤎","⤏","⬸","⤑","⟵","⟶","⟷","⬅","⬆","⬇","⬈","⬉","⬊","⬋","⬌","⬍","⬄","⬀","⬁","⬂","⬃","⟻","⟼","⤒","⤓","⤙","⤚","⤛","⤜","⥼","⥽","⥾","⥿","⤼","⤽","⤾","⤿","⤸","⤺","⤹","⤻","⥀","⥁","⟲","⟳","⬱","⟸","⟹","⟺","⤂","⤃","⤄","⤆","⤇","⤊","⤋","⇐","⇒","⇔","⇶","⭅","⭆","⟰","⟱"],
-  "Astrological": ["☉","⊕","♁","☽","☿","♀︎","♂︎","♃","♄","♅","⛢","♆","⯓","♇","⯔","⯕","⯖","🌑︎","🌒︎","🌓︎","🌔︎","🌕︎","🌖︎","🌗︎","🌘︎","⚳","⚴","⚵","⚶","⯙","⚕","⯚","⚷","☄︎","⯰","⯘","⯗","⊗","⚸","⯞","☊","☋","☿"],
+    "Astrological": ["☉","⊕","♁","☽","☿","♀︎","♂︎","♃","♄","♅","⛢","♆","⯓","♇","⯔","⯕","⯖","🌑︎","🌒︎","🌓︎","🌔︎","🌕︎","🌖︎","🌗︎","🌘︎","⚳","⚴","⚵","⚶","⯙","⚕","⯚","⚷","☄︎","⯰","⯘","⯗","⊗","⚸","⯞","☊","☋","☿"],
     "Bracket": ["（","）","[","]","【","】","『","』","「","」","《","》","〈","〉","〔","〕","︹","︺","︷","︸","︵","︶","︻","︼","︽","︾","︿","﹀","﹁","﹂","﹃","﹄","㛛","㙙","〖","〗","｛","｝","＜","＞","﹤","﹥","﹙","﹚","﹝","﹞","﹛","﹜","〈","〉","«","»","‹","›"],
     "Check Marks": ["✓","✔","✔️","✅","✘","✗","☓","∨","√","☐","☒","☑","㤤","㤥","✇","💯","❌","❎"],
     "Cross": ["ⵜ","𐤕","𐤲","𓏶","†","✝","✞","✟","☨","☦","♱","☥","♰","‡","⊹","☩","✙"],
@@ -669,15 +666,13 @@ const symData = {
     "Lines": ["┃","╽","╿","╏","║","╎","┇","︱","┊","︳","┋","┆","╵","〡","╹","╻","╷","〢","㣣","☴","☵","☶","☷","☰","☱","☲","☳","﹉","﹍","﹊","﹎","≡","═","━","─","┄","┈","╌","╍","┅","┉","╴","╶","╸","╺","╼","╾","︲","⑆","⑇","⑈","⑉","⑊","⑄","⑀","︴","﹏","﹌","﹋","╲","╱","︶","︵","〵","〴","〆","`","ᐟ","‐","⁃","⎯"],
     "Music": ["♩","♪","♬","♫","♭","♮","♯","°","ø","؂","≠","≭","🎶","🎵","🎼","🎤","🎧","📻","🎸","🎷","🎹","🎻","🎺","📣","📢","🔊"],
     "Peace": ["✌","✙","✚","✛","✜","✝","✞","✟","†","⊹","‡","☮","☸","☨","☩","☫","☬","☭","☯","☽","☾","♁","⚔","❖","❆","♅","✠","✡","✢","卍","卐","〷","☠","☢","☣","☦","⚖"],
-
-"Punctuation": ["‒","–","—","―","·","‑","‖","†","‡","‰","‱","ʰ","ʱ","ʲ","ʳ","ʴ","ʵ","ʶ","ʷ","ʸ","‗","‘","’","‚","‛","“","”","„","‟","•","‣","․","‥","…","‧","′","″","‴","‵","‶","‷","❛","❜","❝","❞","ʹ","ʺ","ʻ","ʼ","ʽ","ʾ","ʿ","ˀ","ˁ","˂","˃","˄","˅","ˆ","ˇ","ː","ˑ","˒","˓","˔","˕","˖","˗","˘","˙","ˈ","ˉ","ˊ","ˋ","ˌ","ˍ","ˎ","ˏ","˚","˛","˜","˝","ˠ","～","¿","〃","〝","〞","︰","！","﹐","﹒","﹔","﹕","，","．","：","；","、","。"],
+    "Punctuation": ["‒","–","—","―","·","‑","‖","†","‡","‰","‱","ʰ","ʱ","ʲ","ʳ","ʴ","ʵ","ʶ","ʷ","ʸ","‗","‘","’","‚","‛","“","”","„","‟","•","‣","․","‥","…","‧","′","″","‴","‵","‶","‷","❛","❜","❝","❞","ʹ","ʺ","ʻ","ʼ","ʽ","ʾ","ʿ","ˀ","ˁ","˂","˃","˄","˅","ˆ","ˇ","ː","ˑ","˒","˓","˔","˕","˖","˗","˘","˙","ˈ","ˉ","ˊ","ˋ","ˌ","ˍ","ˎ","ˏ","˚","˛","˜","˝","ˠ","～","¿","〃","〝","〞","︰","！","﹐","﹒","﹔","﹕","，","．","：","；","、","。"],
     "Rectangle": ["▁","▂","▃","▄","▀","▅","▆","▇","▉","▊","▋","█","▌","▐","▍","▎","▏","▕","❘","❙","❚","▔","▬","▭","▮","▯","░","▒","▓"],
     "Time & Calendar": ["⏰","🕐","🕑","🕒","🕓","🕔","🕕","🕟","🕠","🕡","🕢","🕣","🕤","🕥","🕦","🕖","🕗","🕘","🕙","🕚","🕛","🕜","🕝","🕞","⏳","⧖","⧗","⋈","⧑","⧒","⧓","⧔","⧕","⌛","📅","📆","🗓","⌚","⏱","𝍄"],
     "Degree & Weather": ["⛅","☀","☁","🌀","🌈","☂","🌂","☔","⛄","🔥","💧","💦","🌊","🌑","🌓","🌔","🌕","🌙","🌛","🌌","°","℃","℉","ϟ","⚡","☃","☉","☼","☽","☾","♁","♨","❄","❅","❆","☇","☈","☄"],
     "Zodiac": ["♈︎","♉︎","♊︎","♋︎","♌︎","♍︎","♎︎","♏︎","♐︎","♑︎","♒︎","♓︎"],
     "Writing": ["✐","✎","✍︎","✏","📝","✒","✑","✒️","✉","🔏"],
     "Dividers": ["〰","﹏","—","─","━","│","┃","┄","┅","┆","┇","┈","┉","┊","┋","╌","╍","╎","╏","═","║","╒","╓","╔","╕","╖","╗","╘","╙","╚","╛","╜","╝","╞","╟","╠","╡","╢","╣","╤","╥","╦","╧","╨","╩","╪","╫","╬"],
-
     "Borders": ["╔","╗","╚","╝","╠","╣","═","║","╬","╭","╮","╯","╰","╱","╲","╳","▏","▕","▖","▗","▘","▙","▚","▛","▜","▝","▞","▟"],
     "Triangles": ["▲","△","▴","▵","▶","▷","▸","▹","►","▻","▼","▽","▾","▿","◀","◁","◂","◃","◄","◅","◢","◣","◤","◥","◬","◭","◮"],
     "Circles & Dots": ["•","○","◌","◍","◎","●","◐","◑","◒","◓","◔","◕","◖","◗","◘","◙","◚","◛","◜","◝","◞","◟","◠","◡","◦","◧","◨","◩","◪","◫","◯","◰","◱","◲","◳","◴","◵","◶","◷"],
@@ -713,7 +708,6 @@ const colorData = {
         {c:'#00FF00', t:'neon'}, {c:'#32cd32', t:'neon'}, {c:'#00FA9A', t:'neon'}, {c:'#7FFF00', t:'neon'}, 
         {c:'#ADFF2F', t:'neon'}, {c:'#90ee90', t:'neon'}, {c:'#2e8b57', t:'neon'}, {c:'#008000', t:'neon'},
         {c:'#006400', t:'neon'}, {c:'#228b22', t:'neon'},
-
         {c:'#00FFFF', t:'neon'}, {c:'#00CED1', t:'neon'}, {c:'#40e0d0', t:'neon'}, {c:'#7fffd4', t:'neon'},
         {c:'#afeeee', t:'neon'}, {c:'#008b8b', t:'neon'}, {c:'#008080', t:'neon'},
         {c:'#0000FF', t:'neon'}, {c:'#1E90FF', t:'neon'}, {c:'#4169E1', t:'neon'}, {c:'#0000CD', t:'neon'},
@@ -729,7 +723,6 @@ const colorData = {
         {c:'#FF80AB', t:'grad-rose'}, {c:'#FF69B4', t:'grad-hotpink'}, {c:'#FF00FF', t:'grad-magenta'},
         {c:'#D080FF', t:'grad-purple'}, {c:'#E040FB', t:'grad-violet'}, {c:'#7C4DFF', t:'grad-indigo'},
         {c:'#536DFE', t:'grad-midnight'}, {c:'#60C0FF', t:'grad-blue'}, {c:'#448AFF', t:'grad-azure'},
-
         {c:'#40C4FF', t:'grad-sky'}, {c:'#18FFFF', t:'grad-cyan'}, {c:'#64FFDA', t:'grad-teal'},
         {c:'#69F0AE', t:'grad-emerald'}, {c:'#80E080', t:'grad-green'}, {c:'#EEFF41', t:'grad-lime'},
         {c:'#FFF080', t:'grad-yellow'}, {c:'#FFD740', t:'grad-amber'}, {c:'#FFC060', t:'grad-orange'},
@@ -743,7 +736,6 @@ const colorData = {
     'Oranges': [ {c:'#8b4500'}, {c:'#a0522d'}, {c:'#d2691e'}, {c:'#cd853f'}, {c:'#f4a460'}, {c:'#ff8c00'}, {c:'#ffa500'}, {c:'#ffb347'}, {c:'#ffcc80'}, {c:'#ffe5b4'} ],
     'Yellows': [ {c:'#ffd700'}, {c:'#daa520'}, {c:'#b8860b'}, {c:'#bdb76b'}, {c:'#f0e68c'}, {c:'#khaki'}, {c:'#ffff00'}, {c:'#ffff33'}, {c:'#ffff66'}, {c:'#ffff99'}, {c:'#lightyellow'}, {c:'#ffffe0'} ],
     'Greens': [ {c:'#006400'}, {c:'#008000'}, {c:'#228b22'}, {c:'#2e8b57'}, {c:'#3cb371'}, {c:'#32cd32'}, {c:'#00ff00'}, {c:'#7cfc00'}, {c:'#7fff00'}, {c:'#adff2f'}, {c:'#90ee90'}, {c:'#98fb98'}, {c:'#00fa9a'}, {c:'#00ff7f'}, {c:'#66cdaa'} ],
-
     'Cyans': [ {c:'#008080'}, {c:'#008b8b'}, {c:'#20b2aa'}, {c:'#48d1cc'}, {c:'#00ced1'}, {c:'#40e0d0'}, {c:'#00ffff'}, {c:'#00ffff'}, {c:'#7fffd4'}, {c:'#afeeee'}, {c:'#e0ffff'} ],
     'Blues': [ {c:'#000080'}, {c:'#00008b'}, {c:'#0000cd'}, {c:'#0000ff'}, {c:'#1e90ff'}, {c:'#4169e1'}, {c:'#6495ed'}, {c:'#add8e6'}, {c:'#add8e6'}, {c:'#b0c4de'}, {c:'#f0f8ff'} ],
     'Purples': [ {c:'#4b0082'}, {c:'#483d8b'}, {c:'#6a5acd'}, {c:'#7b68ee'}, {c:'#800080'}, {c:'#8b008b'}, {c:'#9400d3'}, {c:'#9932cc'}, {c:'#ba55d3'}, {c:'#dda0dd'}, {c:'#e6e6fa'} ],
@@ -769,8 +761,7 @@ function togglePaletteUI() {
 
 function renderCat(cat) {
     playClick();
-
-document.querySelectorAll('.cat-btn').forEach(b => {
+    document.querySelectorAll('.cat-btn').forEach(b => {
         b.classList.remove('active-cat');
         if(b.innerText === cat.toUpperCase()) b.classList.add('active-cat');
     });
@@ -817,10 +808,11 @@ function setPlainFrame(color, type=null) {
     d(); 
     playClick();
 }
-// --- ✨ FIXED MAGIC FILTERS (Ultimate Collection + ENHANCE) ---
+// --- ✨ FIXED MAGIC FILTERS (Ultimate Collection) ---
 const magicFilters = [
   { name: 'ORIGINAL', f: 'none' },
-  { name: 'ENHANCE', f: 'contrast(1.2) saturate(1.3) brightness(1.05) sepia(0.05)' },
+
+  // --- 🎬 FILM SECTION ---
   { name: 'FILM-1', f: 'contrast(1.1) saturate(1.5) brightness(0.9)' },
   { name: 'FILM-2', f: 'sepia(0.2) contrast(1.2) brightness(1.1)' },
   { name: 'FILM-B&W', f: 'grayscale(1) contrast(1.2)' },
@@ -829,6 +821,8 @@ const magicFilters = [
   { name: 'KODAK-GOLD', f: 'saturate(1.4) contrast(1.1) hue-rotate(-5deg)' },
   { name: 'PORTRA', f: 'saturate(1.1) brightness(1.1) contrast(0.9) hue-rotate(-5deg)' },
   { name: 'FUJI', f: 'saturate(1.2) hue-rotate(10deg) brightness(1.05)' },
+
+  // --- 🎞️ VINTAGE & RETRO ---
   { name: 'VINTAGE-IVORY', f: 'sepia(0.4) contrast(0.9) brightness(1.1)' },
   { name: 'VINTAGE-1970', f: 'sepia(0.5) hue-rotate(-10deg) saturate(1.2)' },
   { name: 'VINTAGE-1990', f: 'contrast(1.1) saturate(0.8) brightness(0.9)' },
@@ -836,12 +830,14 @@ const magicFilters = [
   { name: 'RETRO-WARM', f: 'sepia(0.6) brightness(0.9) contrast(1.2)' },
   { name: 'LIGHT-LEAK', f: 'brightness(1.2) sepia(0.3) saturate(1.3)' },
   { name: 'FADED-FILM', f: 'contrast(0.7) brightness(1.2) sepia(0.2)' },
+
+  // --- ⚡ FX SECTION ---
   { name: 'FX-HDR-1', f: 'contrast(1.3) saturate(1.4) brightness(1.05) sepia(0.1)' },
   { name: 'FX-HDR-2', f: 'contrast(1.5) saturate(1.5)' },
   { name: 'FX-LIGHT-CROSS', f: 'contrast(1.1) brightness(1.1) sepia(0.3) hue-rotate(-15deg) saturate(1.1)' },
   { name: 'FX-DODGER', f: 'brightness(1.15) contrast(0.85) saturate(0.9) sepia(0.05)' },
   { name: 'FX-TWILIGHT', f: 'contrast(1.2) brightness(0.9) hue-rotate(210deg) saturate(0.7)' },
- { name: 'FX-SUNNY', f: 'brightness(1.1) sepia(0.4) saturate(1.3) contrast(1.1)' },
+  { name: 'FX-SUNNY', f: 'brightness(1.1) sepia(0.4) saturate(1.3) contrast(1.1)' },
   { name: 'FX-CROSS-PROC', f: 'contrast(1.2) brightness(1.1) sepia(0.3) hue-rotate(-30deg)' },
   { name: 'FX-CINERAMA', f: 'contrast(1.2) brightness(0.9) saturate(1.2) sepia(0.2)' },
   { name: 'FX-LOMO', f: 'contrast(1.4) saturate(1.2) sepia(0.2)' },
@@ -851,6 +847,8 @@ const magicFilters = [
   { name: 'FX-1993', f: 'contrast(0.8) brightness(1.2) grayscale(0.2)' },
   { name: 'FX-1994', f: 'sepia(0.4) contrast(1.2) brightness(0.9)' },
   { name: 'FX-BW-HICON', f: 'grayscale(1) contrast(1.6) brightness(0.9)' },
+
+  // --- 🎨 SIMPLE SECTION ---
   { name: 'SMP-SUNNY', f: 'contrast(1.1) brightness(1.1) saturate(1.3) sepia(0.2)' },
   { name: 'SMP-VIBRANT', f: 'saturate(1.8) contrast(1.1)' },
   { name: 'SMP-WARM', f: 'sepia(0.3) saturate(1.2) hue-rotate(-10deg)' },
@@ -859,27 +857,29 @@ const magicFilters = [
   { name: 'SMP-BRIGHT', f: 'brightness(1.2) contrast(1.05)' },
   { name: 'SMP-DARK', f: 'brightness(0.8) contrast(1.2)' },
   { name: 'SMP-FADED', f: 'contrast(0.8) brightness(1.2) sepia(0.1)' },
+
+  // --- 🏁 B&W SECTION ---
   { name: 'BW-STANDARD', f: 'grayscale(1)' },
   { name: 'BW-HICON', f: 'grayscale(1) contrast(1.6) brightness(0.9)' },
   { name: 'BW-LOWCON', f: 'grayscale(1) contrast(0.7) brightness(1.2)' },
   { name: 'BW-FILM', f: 'grayscale(1) contrast(1.2) brightness(0.9)' },
   { name: 'BW-SEPIA', f: 'sepia(1.0) contrast(1.1)' },
   { name: 'BW-WARM', f: 'grayscale(1) sepia(0.3)' },
+
+  // --- 💧 BLUR SECTION ---
   { name: 'BL-SMART', f: 'blur(0.5px) contrast(1.1)' },
   { name: 'BL-SOFT', f: 'blur(1px) brightness(1.1)' },
   { name: 'BL-MEDIUM', f: 'blur(2px)' },
   { name: 'BL-DREAMY', f: 'blur(1.5px) brightness(1.2) saturate(0.8)' },
+
+  // --- 🌈 COLORS & POP ART ---
   { name: 'CLR-HUE-POP', f: 'hue-rotate(90deg) saturate(1.5)' },
-  { name: 'CLR-INVERT', f: 'invert(1)' },
   { name: 'CLR-NEG-BW', f: 'invert(1) grayscale(1)' },
   { name: 'CLR-PINK', f: 'sepia(1) hue-rotate(300deg) saturate(1.5)' },
   { name: 'CLR-BLUE', f: 'sepia(1) hue-rotate(180deg) saturate(1.5)' },
   { name: 'CLR-PURPLE', f: 'sepia(1) hue-rotate(250deg) saturate(1.5)' },
-  { name: 'POP-ART', f: 'saturate(3.0) contrast(1.5)' },
   { name: 'POP-WARHOL', f: 'contrast(2.0) saturate(2.0) hue-rotate(45deg)' }
 ];
-
-cfg.adj = { b: 100, c: 100, s: 100 };
 
 function toggleFilterUI() {
     const el = document.getElementById('filter-wrapper');
@@ -894,53 +894,8 @@ function toggleFilterUI() {
         btn.innerHTML = "CLOSE FILTERS ✖";
         btn.style.color = "#ff00ff"; btn.style.borderColor = "#ff00ff";
         if(document.getElementById('filter-list').children.length === 0) renderFilters();
-        if(!document.getElementById('adj-panel')) createAdjustUI();
-        if(!document.getElementById('open-adj-btn')) createSmartEditBtn();
-        document.getElementById('filter-list').style.display = 'flex';
-        document.getElementById('adj-panel').style.display = 'none';
-        document.getElementById('open-adj-btn').style.display = (cfg.filter && cfg.filter !== 'none') ? 'block' : 'none';
     }
     playClick();
-}
-
-function createSmartEditBtn() {
-    const wrapper = document.getElementById('filter-wrapper');
-    const b = document.createElement('button');
-    b.id = 'open-adj-btn';
-    b.innerHTML = "ADJUST SETTINGS ⚙️";
-    b.style.cssText = "width:100%; background:black; color:#00ffff; border:2px solid #00ffff; font-weight:900; padding:12px; margin-top:10px; border-radius:8px; cursor:pointer; display:none; font-family:'Segoe UI', sans-serif; letter-spacing:1px;";
-    b.onclick = openAdjust;
-    wrapper.insertBefore(b, document.getElementById('filter-list').nextSibling);
-}
-
-function createAdjustUI() {
-    const wrapper = document.getElementById('filter-wrapper');
-    const p = document.createElement('div');
-    p.id = 'adj-panel';
-    p.style.cssText = "display:none; flex-direction:column; width:100%; gap:15px; padding:10px 5px;";
-    const baseStyle = "width:100%; -webkit-appearance:none; height:6px; background:#444; border-radius:3px; outline:none;";
-    const sliderHTML = (id, func, label, color) => `
-        <div style="display:flex; justify-content:space-between; color:${color}; font-family:'Segoe UI', sans-serif; font-size:12px; font-weight:bold; letter-spacing:1px; margin-bottom:5px;">
-            <span>${label}</span><span id="val-${id}" style="color:#fff;">100%</span>
-        </div>
-        <input type="range" id="sl-${id}" min="0" max="200" value="100" class="neon-slider" data-col="${color}" style="${baseStyle}" oninput="${func}">
-    `;
-    p.innerHTML = sliderHTML('b', "adjChange('b', this.value, this)", "BRIGHTNESS", "#ff0055") +
-                  sliderHTML('c', "adjChange('c', this.value, this)", "CONTRAST", "#00ffff") +
-                  sliderHTML('s', "adjChange('s', this.value, this)", "SATURATION", "#ff0055");
-    const doneBtn = document.createElement('button');
-    doneBtn.innerText = "DONE ✓";
-    doneBtn.style.cssText = "width:100%; background:#00ff00; color:#000; font-weight:900; border:none; padding:12px; margin-top:10px; border-radius:4px; cursor:pointer;";
-    doneBtn.onclick = closeAdjust;
-    p.appendChild(doneBtn);
-    wrapper.appendChild(p);
-    setTimeout(() => { ['b','c','s'].forEach(k => { const el = document.getElementById('sl-'+k); if(el) updateSliderColor(el, 100, 200); }); }, 50);
-}
-
-function updateSliderColor(el, val, max) {
-    const percent = (val / max) * 100;
-    const col = el.getAttribute('data-col') || '#00ffff';
-    el.style.background = `linear-gradient(to right, ${col} 0%, ${col} ${percent}%, #444 ${percent}%, #444 100%)`;
 }
 
 function renderFilters() {
@@ -964,46 +919,11 @@ function renderFilters() {
     });
 }
 
-function openAdjust() {
-    document.getElementById('filter-list').style.display = 'none';
-    document.getElementById('open-adj-btn').style.display = 'none';
-    document.getElementById('adj-panel').style.display = 'flex';
-    playClick();
-}
-
-function closeAdjust() {
-    document.getElementById('adj-panel').style.display = 'none';
-    document.getElementById('filter-list').style.display = 'flex';
-    document.getElementById('open-adj-btn').style.display = 'block';
-    playClick();
-}
-
-function adjChange(type, val, el) {
-    cfg.adj[type] = parseInt(val);
-    document.getElementById(`val-${type}`).innerText = val + "%";
-    if(el) updateSliderColor(el, val, 200);
-    let finalF = (cfg.filter && cfg.filter !== 'none') ? cfg.filter : '';
-    if(cfg.adj.b !== 100) finalF += ` brightness(${cfg.adj.b}%)`;
-    if(cfg.adj.c !== 100) finalF += ` contrast(${cfg.adj.c}%)`;
-    if(cfg.adj.s !== 100) finalF += ` saturate(${cfg.adj.s}%)`;
-    if(finalF !== '') c.style.filter = finalF; else c.style.filter = 'none';
-    d(); 
-}
-
 function applyFilter(filterVal, btn) {
-    if(cfg.filter !== filterVal) {
-        cfg.adj = { b: 100, c: 100, s: 100 };
-        ['b','c','s'].forEach(k => {
-            const el = document.getElementById('sl-'+k);
-            if(el) { el.value = 100; document.getElementById('val-'+k).innerText = "100%"; updateSliderColor(el, 100, 200); }
-        });
-    }
     cfg.filter = filterVal;
     c.style.filter = filterVal; 
     document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active-filter'));
     if(btn) btn.classList.add('active-filter');
-    const editBtn = document.getElementById('open-adj-btn');
-    if(editBtn) editBtn.style.display = (filterVal === 'none') ? 'none' : 'block';
     d(); playClick();
 }
 
@@ -1024,8 +944,11 @@ function toggleBoundaryLock() {
     d(); playClick();
 }
 
+// --- 🛠️ STABLE DRAWING ENGINE ---
 function d(){ 
   x.clearRect(0,0,800,800); 
+
+  // 1. Boundary Lock Calculation
   if(i.src && isBoundaryLocked){
       const rad = cfg.r*Math.PI/180, cos = Math.abs(Math.cos(rad)), sin = Math.abs(Math.sin(rad));
       const reqW = (cfg.m*2*cos + cfg.m*2*sin), reqH = (cfg.m*2*sin + cfg.m*2*cos);
@@ -1034,40 +957,58 @@ function d(){
       const rangeX = (i.width*cfg.s - reqW)/2, rangeY = (i.height*cfg.s - reqH)/2;
       cfg.x = Math.max(400-rangeX, Math.min(400+rangeX, cfg.x)); cfg.y = Math.max(400-rangeY, Math.min(400+rangeY, cfg.y));
   }
-if(i.src){
-      x.save(); x.beginPath(); x.arc(400, 400, cfg.m, 0, 6.28); x.clip(); 
+
+  // 2. Draw User Image
+  if(i.src){
+      x.save();
+      x.beginPath(); x.arc(400, 400, cfg.m, 0, 6.28); x.clip(); 
+      
       let w = i.width * cfg.s, h = i.height * cfg.s;
-      x.translate(cfg.x, cfg.y); x.rotate(cfg.r * Math.PI / 180);
-      let finalF = (cfg.filter && cfg.filter !== 'none') ? cfg.filter : '';
-      if(cfg.adj.b !== 100) finalF += ` brightness(${cfg.adj.b}%)`;
-      if(cfg.adj.c !== 100) finalF += ` contrast(${cfg.adj.c}%)`;
-      if(cfg.adj.s !== 100) finalF += ` saturate(${cfg.adj.s}%)`;
-      if(finalF !== '') { x.filter = finalF; c.style.filter = finalF; } else { x.filter = 'none'; c.style.filter = 'none'; }
-      x.drawImage(i, -w/2, -h/2, w, h); x.restore(); 
+      x.translate(cfg.x, cfg.y);
+      x.rotate(cfg.r * Math.PI / 180);
+      
+      if(cfg.filter && cfg.filter !== 'none') { x.filter = cfg.filter; }
+
+      x.drawImage(i, -w/2, -h/2, w, h);
+      x.restore();
   }
-  x.filter = 'none'; 
+
+  // 3. Draw Generated Border
   if (cfg.pColor) {
-      x.save(); 
+      x.save(); x.filter = 'none'; 
       if ((cfg.pColor === '#000000' || cfg.pColor === '#808080') && cfg.pType === 'neon') {
-          const shadowCol = cfg.pColor; const innerShadowCol = (cfg.pColor === '#000000') ? 'rgba(0,0,0,0.7)' : 'rgba(128,128,128,0.7)';
-          x.beginPath(); x.arc(400, 400, cfg.m, 0, Math.PI * 2); x.lineWidth = 25; x.strokeStyle = shadowCol; x.shadowBlur = 60; x.shadowColor = shadowCol; x.stroke();
-          x.beginPath(); x.arc(400, 400, cfg.m, 0, Math.PI * 2); x.lineWidth = 18; x.strokeStyle = shadowCol; x.shadowBlur = 10; x.shadowColor = shadowCol; x.stroke();
-          x.beginPath(); x.arc(400, 400, cfg.m, 0, Math.PI * 2); x.lineWidth = 6; x.strokeStyle = '#FFFFFF'; x.shadowBlur = 0; x.stroke();
+          const shadowCol = cfg.pColor;
+          const innerShadowCol = (cfg.pColor === '#000000') ? 'rgba(0,0,0,0.7)' : 'rgba(128,128,128,0.7)';
+          x.beginPath(); x.arc(400, 400, cfg.m, 0, Math.PI * 2); 
+          x.lineWidth = 25; x.strokeStyle = shadowCol; x.shadowBlur = 60; x.shadowColor = shadowCol; x.stroke();
+          x.beginPath(); x.arc(400, 400, cfg.m, 0, Math.PI * 2); 
+          x.lineWidth = 18; x.strokeStyle = shadowCol; x.shadowBlur = 10; x.shadowColor = shadowCol; x.stroke();
+          x.beginPath(); x.arc(400, 400, cfg.m, 0, Math.PI * 2); 
+          x.lineWidth = 6; x.strokeStyle = '#FFFFFF'; x.shadowBlur = 0; x.stroke();
           x.save(); x.beginPath(); x.arc(400, 400, cfg.m - 3, 0, 2 * Math.PI); x.clip();
-          x.beginPath(); x.arc(400, 400, cfg.m, 0, 2 * Math.PI); x.strokeStyle = innerShadowCol; x.lineWidth = 30; x.shadowBlur = 25; x.shadowColor = shadowCol; x.stroke(); x.restore();
+          x.beginPath(); x.arc(400, 400, cfg.m, 0, 2 * Math.PI); 
+          x.strokeStyle = innerShadowCol; x.lineWidth = 30; x.shadowBlur = 25; x.shadowColor = shadowCol; x.stroke();
+          x.restore();
       } 
       else if (cfg.pColor === '#FEFEFE' && cfg.pType === 'neon') {
-          x.beginPath(); x.arc(400, 400, cfg.m, 0, Math.PI * 2); x.lineWidth = 15; x.strokeStyle = '#FFFFFF'; x.shadowBlur = 60; x.shadowColor = '#FFFFFF'; x.stroke();
-          x.beginPath(); x.arc(400, 400, cfg.m, 0
-Math.PI * 2); x.lineWidth = 6; x.strokeStyle = '#FFFFFF'; x.stroke();
+          x.beginPath(); x.arc(400, 400, cfg.m, 0, Math.PI * 2); 
+          x.lineWidth = 15; x.strokeStyle = '#FFFFFF'; x.shadowBlur = 60; x.shadowColor = '#FFFFFF'; x.stroke();
+          x.beginPath(); x.arc(400, 400, cfg.m, 0, Math.PI * 2); 
+          x.lineWidth = 6; x.strokeStyle = '#FFFFFF'; x.stroke();
       }
       else if (cfg.pType === 'neon') {
-          x.beginPath(); x.arc(400, 400, cfg.m, 0, Math.PI * 2); x.lineWidth = 25; x.strokeStyle = cfg.pColor; x.shadowBlur = 30; x.shadowColor = cfg.pColor; x.stroke();
-          x.beginPath(); x.arc(400, 400, cfg.m, 0, Math.PI * 2); x.lineWidth = 8; x.strokeStyle = '#FFFFFF'; x.stroke();
+          x.beginPath(); x.arc(400, 400, cfg.m, 0, Math.PI * 2); 
+          x.lineWidth = 25; x.strokeStyle = cfg.pColor; x.shadowBlur = 30; x.shadowColor = cfg.pColor; x.stroke();
+          x.beginPath(); x.arc(400, 400, cfg.m, 0, Math.PI * 2); 
+          x.lineWidth = 8; x.strokeStyle = '#FFFFFF'; x.stroke();
       }
       else {
           x.beginPath(); x.arc(400, 400, cfg.m, 0, Math.PI * 2); x.lineWidth = 25; 
-          if (cfg.pType && gradientDefs[cfg.pType]) { const cols = gradientDefs[cfg.pType]; let g = x.createLinearGradient(0, 0, 800, 800); g.addColorStop(0, cols[0]); g.addColorStop(1, cols[1]); x.strokeStyle = g; } 
+          if (cfg.pType && gradientDefs[cfg.pType]) {
+             const cols = gradientDefs[cfg.pType];
+             let g = x.createLinearGradient(0, 0, 800, 800);
+             g.addColorStop(0, cols[0]); g.addColorStop(1, cols[1]); x.strokeStyle = g;
+          } 
           else if (cfg.pType && (cfg.pType === 'gold' || cfg.pType === 'silver' || cfg.pType === 'bronze')) {
               let g = x.createLinearGradient(0, 0, 800, 800);
               if (cfg.pType === 'gold') { g.addColorStop(0, '#FFD700'); g.addColorStop(0.25, '#FDB931'); g.addColorStop(0.5, '#FFD700'); g.addColorStop(0.75, '#FDB931'); g.addColorStop(1, '#FFD700'); }
@@ -1082,33 +1023,58 @@ Math.PI * 2); x.lineWidth = 6; x.strokeStyle = '#FFFFFF'; x.stroke();
   if(f.src) x.drawImage(f,0,0,800,800); 
 }
 
+// --- 📂 FILE HANDLING ---
 function handleFile(e){
-    const files = e.target ? e.target.files : e.files; if(!files || !files[0]) return;
+    const files = e.target ? e.target.files : e.files;
+    if(!files || !files[0]) return;
     const r = new FileReader();
     r.onload = v => {
         const n = new Image();
         n.onload = () => {
-            i = n; cfg.x = 400; cfg.y = 400; cfg.r = 0;
+            i = n;
+            cfg.x = 400; cfg.y = 400; cfg.r = 0;
             if(isBoundaryLocked) {
                 const rad = cfg.r*Math.PI/180, cos = Math.abs(Math.cos(rad)), sin = Math.abs(Math.sin(rad));
                 const reqW = (cfg.m*2*cos + cfg.m*2*sin), reqH = (cfg.m*2*sin + cfg.m*2*cos);
-                const minS = Math.max(reqW/i.width, reqH/i.height); cfg.s = minS; zSl.min = minS; zSl.value = minS; zVal.innerText = Math.round((minS/zSl.min)*100)+"%";
-            } else { cfg.s = Math.max(800/i.width, 800/i.height); zSl.value = cfg.s; zVal.innerText = "100%"; }
-            renderFilters(); d(); 
-            const uiPanel = document.querySelector('.ui'); uiPanel.style.paddingBottom = "200px"; 
-            const saveBtn = document.getElementById('save'); saveBtn.disabled = false;
-        }; n.src = v.target.result;
-    }; r.readAsDataURL(files[0]);
+                const minS = Math.max(reqW/i.width, reqH/i.height);
+                cfg.s = minS; zSl.min = minS; zSl.value = minS; 
+                zVal.innerText = Math.round((minS/zSl.min)*100)+"%";
+            } else {
+                cfg.s = Math.max(800/i.width, 800/i.height);
+                zSl.value = cfg.s; zVal.innerText = "100%";
+            }
+            renderFilters();
+            const ui = document.getElementById('filter-wrapper');
+            if(ui.style.display !== 'flex') toggleFilterUI(); 
+            d(); 
+
+            // --- 📱 UNIVERSAL MOBILE BUTTON FIX ---
+            // 1. Add massive padding to bottom of UI
+            const uiPanel = document.querySelector('.ui');
+            uiPanel.style.paddingBottom = "200px"; 
+            
+            // 2. Enable button and SCROLL IT INTO VIEW (Center)
+            const saveBtn = document.getElementById('save');
+            saveBtn.disabled = false;
+            setTimeout(() => { 
+                saveBtn.scrollIntoView({behavior: "smooth", block: "center"}); 
+            }, 300);
+        };
+        n.src = v.target.result;
+    };
+    r.readAsDataURL(files[0]);
 }
 
 function handleFrame(e){
-    const files = e.target ? e.target.files : e.files; if(!files || !files[0]) return;
+    const files = e.target ? e.target.files : e.files;
+    if(!files || !files[0]) return;
     const r = new FileReader();
     r.onload = v => {
         const n = new Image();
         n.onload = () => { f.src = n.src; cfg.pColor = null; cfg.pType = null; mLbl.innerText = "FRAME OPENING SIZE"; d(); };
         n.src = v.target.result;
-    }; r.readAsDataURL(files[0]);
+    };
+    r.readAsDataURL(files[0]);
 }
 
 function updateZ(v){ cfg.s=parseFloat(v); zVal.innerText=Math.round((v/zSl.min)*100)+"%"; d(); }
@@ -1116,91 +1082,162 @@ function updateR(v){ cfg.r=parseInt(v); rVal.innerText=v+"°"; d(); }
 function updateM(v){ cfg.m=parseInt(v); mVal.innerText=v+"px"; d(); }
 function centerSubject(){ cfg.x=400; cfg.y=400; cfg.r=0; rSl.value=0; d(); playShutter(); }
 function resetProject(){ 
-    i=new Image(); f=new Image(); cfg={s:1,m:375,x:400,y:400,r:0, pColor:null, pType:null, filter:'none', adj:{b:100,c:100,s:100}};
-    zSl.value=1; rSl.value=0; mSl.value=375; mLbl.innerText = "CIRCLE SIZE";
+    i=new Image(); f=new Image(); 
+    cfg={s:1,m:375,x:400,y:400,r:0, pColor:null, pType:null, filter:'none'};
+    zSl.value=1; rSl.value=0; mSl.value=375; 
+    mLbl.innerText = "CIRCLE SIZE";
     document.getElementById('u1').value = ''; document.getElementById('u2').value = '';
-    c.style.filter = 'none'; document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active-filter'));
+    // Reset Filter Visuals
+    c.style.filter = 'none';
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active-filter'));
     document.getElementById('filter-list').innerHTML = '';
-    if(document.getElementById('adj-panel')) { document.getElementById('filter-list').style.display = 'flex'; document.getElementById('adj-panel').style.display = 'none'; }
-    if(document.getElementById('open-adj-btn')) document.getElementById('open-adj-btn').style.display = 'none';
-    d(); playShutter(); updS(zSl); updS(rSl); updS(mSl); document.getElementById('save').disabled = true; document.querySelector('.ui').style.paddingBottom = "0px"; 
+    d(); playShutter(); updS(zSl); updS(rSl); updS(mSl); 
+    document.getElementById('save').disabled = true;
+    document.querySelector('.ui').style.paddingBottom = "0px"; // Reset padding
 }
+
 function downloadPic(){ if(!i.src) return; d(); let a=document.createElement('a'); a.download=`Arcade_${Date.now()}.png`; a.href=c.toDataURL(); a.click(); playShutter(); }
 function updS(el){ if(el.parentElement.classList.contains('ui-gif')) return; const val = (el.value-el.min)/(el.max-el.min)*100; el.style.setProperty('--v', val + '%'); }
 document.querySelectorAll('input[type=range]').forEach(el => { el.addEventListener('input', () => updS(el)); updS(el); });
 
-// --- 🖱️ INTERACTION ---
+// --- 🖱️ INTERACTION (TOUCH FIX FOR FRAME) ---
 let isP=false, tStart={x:0,y:0}, initialDist=0, initialScale=1, initialAngle=0, initialRot=0;
+c.addEventListener('dragover', (e) => { e.preventDefault(); e.stopPropagation(); });
+c.addEventListener('drop', (e) => {
+    e.preventDefault(); e.stopPropagation();
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+        const file = e.dataTransfer.files[0];
+        if (file.type.startsWith('image/')) {
+            const reader = new FileReader();
+            reader.onload = (v) => {
+                let n = new Image();
+                n.onload = () => {
+                    i = n;
+                    let minScale = Math.max(800 / i.width, 800 / i.height);
+                    cfg.s = minScale; cfg.x = 400; cfg.y = 400; cfg.r = 0;
+                    if(isBoundaryLocked) zSl.min = minScale; else zSl.min = 0.1;
+                    zSl.max = minScale * 2.5; zSl.value = minScale;
+                    renderFilters(); d(); playClick(); updS(zSl); document.getElementById('save').disabled = false;
+                }; n.src = v.target.result;
+            }; reader.readAsDataURL(file);
+        }
+    }
+});
+
 c.onmousedown=e=>{isP=true; tStart={x:e.offsetX,y:e.offsetY};}
 c.onmousemove=e=>{ if(!isP)return; let scale = 800 / c.offsetWidth; cfg.x += (e.offsetX - tStart.x) * scale; cfg.y += (e.offsetY - tStart.y) * scale; tStart={x:e.offsetX,y:e.offsetY}; d(); }
 window.onmouseup=()=>{isP=false;}
+
 c.ontouchstart=e=>{ if(i.src) { e.preventDefault(); } if(e.touches.length===1){ isP=true; tStart={x:e.touches[0].clientX, y:e.touches[0].clientY}; } else if(e.touches.length===2){ isP=false; const dx = e.touches[0].clientX - e.touches[1].clientX; const dy = e.touches[0].clientY - e.touches[1].clientY; initialDist = Math.sqrt(dx*dx + dy*dy); initialScale = cfg.s; initialAngle = Math.atan2(dy, dx); initialRot = cfg.r; } }
 c.ontouchmove=e=>{ if(i.src) { e.preventDefault(); } if(e.touches.length===1 && isP){ let scale = 800 / c.offsetWidth; let dx = e.touches[0].clientX - tStart.x; let dy = e.touches[0].clientY - tStart.y; cfg.x += dx * scale; cfg.y += dy * scale; tStart={x:e.touches[0].clientX, y:e.touches[0].clientY}; d(); } else if(e.touches.length===2){ const dx = e.touches[0].clientX - e.touches[1].clientX; const dy = e.touches[0].clientY - e.touches[1].clientY; const dist = Math.sqrt(dx*dx + dy*dy); const scaleFactor = dist / initialDist; let newScale = initialScale * scaleFactor; newScale = Math.max(zSl.min, Math.min(zSl.max, newScale)); cfg.s = newScale; zSl.value = newScale; zVal.innerText=Math.round((newScale/zSl.min)*100)+"%"; updS(zSl); const angle = Math.atan2(dy, dx); let rotationDiff = (angle - initialAngle) * (180/Math.PI); cfg.r = (initialRot + rotationDiff) % 360; rSl.value = (cfg.r % 360 + 360) % 360; rVal.innerText = Math.round(cfg.r) + "°"; updS(rSl); d(); } }
 window.ontouchend=()=>{isP=false;}
 
-// --- ⚡ NEON GIF ENGINE (Fixed Download & Reset) ---
+// --- ⚡ NEON GIF ENGINE (30 Workers + Hybrid Blob + Locked/Movable) ---
 const workerBlob = new Blob(['importScripts(\'https://cdnjs.cloudflare.com/ajax/libs/gif.js/0.2.0/gif.worker.js\');'], { type: 'application/javascript' });
 const workerUrl = URL.createObjectURL(workerBlob);
-const gfInput = document.getElementById('gfInput'); const upBtn = document.getElementById('upBtn'); const v = document.getElementById('v'); const o = document.getElementById('o'); const vp = document.getElementById('vp'); const speed = document.getElementById('speed'); const sv = document.getElementById('sv'); const zoom = document.getElementById('zoom'); const zv = document.getElementById('zv'); const go = document.getElementById('go'); const msg = document.getElementById('msg'); const dlBox = document.getElementById('dlBox'); const dl = document.getElementById('dl'); const resetBox = document.getElementById('resetBox');
+
+const gfInput = document.getElementById('gfInput');
+const upBtn = document.getElementById('upBtn');
+const v = document.getElementById('v');
+const o = document.getElementById('o');
+const vp = document.getElementById('vp');
+const speed = document.getElementById('speed');
+const sv = document.getElementById('sv');
+const zoom = document.getElementById('zoom');
+const zv = document.getElementById('zv');
+const go = document.getElementById('go');
+const msg = document.getElementById('msg');
+const dlBox = document.getElementById('dlBox');
+const dl = document.getElementById('dl');
+const resetBox = document.getElementById('resetBox');
+
 let gifX = 0, gifY = 0, vidW = 0, vidH = 0, renderW, renderH;
 
-function resetGifProject() { 
-    v.pause(); v.src = ""; v.load(); v.style.display = 'none'; 
-    o.src = ''; o.style.display = 'none'; 
-    dlBox.style.display = 'none'; resetBox.style.display = 'none'; 
-    document.getElementById('goBox').style.display = 'inline-block'; 
-    go.disabled = false; upBtn.disabled = false; zoom.disabled = false; zoom.value = 100; speed.disabled = false; 
-    msg.classList.remove('active'); zv.innerText = "100%"; 
-    gfInput.value = ''; gifX = 0; gifY = 0; 
+function resetGifProject() {
+    v.src = ''; v.style.display = 'none'; v.style.transform = `translate(-50%, -50%) scale(1)`;
+    o.style.display = 'none'; dlBox.style.display = 'none'; resetBox.style.display = 'none';
+    document.getElementById('goBox').style.display = 'inline-block';
+    go.disabled = false; upBtn.disabled = false; zoom.disabled = false; zoom.value = 100; speed.disabled = false;
+    msg.classList.remove('active'); zv.innerText = "100%"; if(vp) vp.style.pointerEvents = 'auto';
+    gfInput.value = ''; gifX = 0; gifY = 0; if(upBtn) upBtn.parentElement.style.display = 'block'; 
 }
 
-gfInput.onchange = (e) => { 
-    const file = e.target.files[0]; if (!file) return; 
-    v.style.display = 'block'; o.style.display = 'none'; dlBox.style.display = 'none'; 
-    v.src = URL.createObjectURL(file); v.playbackRate = parseFloat(speed.value); 
-    go.disabled = false; v.onloadedmetadata = () => { vidW = v.videoWidth; vidH = v.videoHeight; setCoverSize(); v.play(); }; 
+gfInput.onchange = (e) => {
+    const file = e.target.files[0]; if (!file) return;
+    v.style.display = 'block'; o.style.display = 'none'; dlBox.style.display = 'none'; resetBox.style.display = 'none';
+    v.src = URL.createObjectURL(file); v.playbackRate = parseFloat(speed.value);
+    go.disabled = false;
+    v.onloadedmetadata = () => { vidW = v.videoWidth; vidH = v.videoHeight; setCoverSize(); v.play(); };
 };
 
-function setCoverSize() { const boxSize = 320; const aspect = vidW / vidH; if (aspect > 1) { renderH = boxSize; renderW = boxSize * aspect; } else { renderW = boxSize; renderH = boxSize / aspect; } v.style.width = renderW + 'px'; v.style.height = renderH + 'px'; zoom.min = 100; updateGifTransform(); gifX = 0; gifY = 0; }
-function updateGifTransform() { if (!v.src) return; const z = parseInt(zoom.value) / 100; const currentW = renderW * z; const currentH = renderH * z; const boxSize = 320; const maxX = Math.max(0, (currentW - boxSize) /
-2); const maxY = Math.max(0, (currentH - boxSize) / 2); gifX = Math.max(-maxX, Math.min(maxX, gifX)); gifY = Math.max(-maxY, Math.min(maxY, gifY)); v.style.transform = `translate(calc(-50% + ${gifX}px), calc(-50% + ${gifY}px)) scale(${z})`; }
+function setCoverSize() {
+    const boxSize = 320; 
+    const aspect = vidW / vidH;
+    if (aspect > 1) { renderH = boxSize; renderW = boxSize * aspect; } 
+    else { renderW = boxSize; renderH = boxSize / aspect; }
+    v.style.width = renderW + 'px'; v.style.height = renderH + 'px';
+    zoom.min = 100; updateGifTransform();
+    gifX = 0; gifY = 0;
+}
+
+function updateGifTransform() {
+    if (!v.src) return;
+    const z = parseInt(zoom.value) / 100;
+    const currentW = renderW * z;
+    const currentH = renderH * z;
+    const boxSize = 320;
+    const maxX = Math.max(0, (currentW - boxSize) / 2);
+    const maxY = Math.max(0, (currentH - boxSize) / 2);
+    gifX = Math.max(-maxX, Math.min(maxX, gifX));
+    gifY = Math.max(-maxY, Math.min(maxY, gifY));
+    v.style.transform = `translate(calc(-50% + ${gifX}px), calc(-50% + ${gifY}px)) scale(${z})`;
+}
+
 zoom.oninput = function () { zv.innerText = this.value + '%'; updateGifTransform(); };
 speed.oninput = () => { sv.innerText = speed.value + 'x'; if (v.src) v.playbackRate = parseFloat(speed.value); };
 
 let isGifDrag = false, startX, startY, initX, initY;
 vp.addEventListener('touchstart', e => { if (!v.src || v.style.display === 'none') return; isGifDrag = true; startX = e.touches[0].clientX; startY = e.touches[0].clientY; initX = gifX; initY = gifY; }, { passive: false });
 vp.addEventListener('touchmove', e => { if (!v.src || v.style.display === 'none') return; if (!isGifDrag) return; e.preventDefault(); const dx = e.touches[0].clientX - startX; const dy = e.touches[0].clientY - startY; gifX = initX + dx; gifY = initY + dy; requestAnimationFrame(updateGifTransform); }, { passive: false });
+vp.addEventListener('mousedown', e => { if (!v.src) return; isGifDrag = true; startX = e.clientX; startY = e.clientY; initX = gifX; initY = gifY; });
+window.addEventListener('mousemove', e => { if (!isGifDrag) return; const dx = e.clientX - startX; const dy = e.clientY - startY; gifX = initX + dx; gifY = initY + dy; requestAnimationFrame(updateGifTransform); });
+window.addEventListener('mouseup', () => isGifDrag = false);
+window.addEventListener('touchend', () => isGifDrag = false);
 
 go.onclick = () => {
-    if (!v.src) return; go.disabled = true; upBtn.disabled = true; zoom.disabled = true; speed.disabled = true; msg.innerText = "Processing..."; msg.classList.add('active');
-    const OUT_SIZE = 480; const gif = new GIF({ workers: 30, quality: 20, width: OUT_SIZE, height: OUT_SIZE, workerScript: workerUrl, dither: false });
-    const canvas =
-document.createElement('canvas'); canvas.width = OUT_SIZE; canvas.height = OUT_SIZE; const ctx = canvas.getContext('2d');
-    const fps = 15, duration = v.duration, playbackSpeed = parseFloat(speed.value), capVid = document.createElement('video'); capVid.src = v.src; capVid.muted = true; capVid.playsInline = true;
+    if (!v.src) return;
+    go.disabled = true; upBtn.disabled = true; zoom.disabled = true; speed.disabled = true;
+    vp.style.pointerEvents = 'none'; msg.innerText = "Processing..."; msg.classList.add('active');
+
+    const OUT_SIZE = 480;
+    const gif = new GIF({ workers: 30, quality: 20, width: OUT_SIZE, height: OUT_SIZE, workerScript: workerUrl, dither: false });
+    const canvas = document.createElement('canvas'); canvas.width = OUT_SIZE; canvas.height = OUT_SIZE; const ctx = canvas.getContext('2d');
+    const fps = 15, duration = v.duration, playbackSpeed = parseFloat(speed.value), capVid = document.createElement('video');
+    capVid.src = v.src; capVid.muted = true; capVid.playsInline = true; capVid.crossOrigin = "anonymous";
+
     capVid.onloadeddata = () => {
-        let cTime = 0; const currentVpSize = 320; const outputScale = OUT_SIZE / currentVpSize; const scale = parseInt(zoom.value) / 100; const aspect = capVid.videoWidth / capVid.videoHeight;
-        let drawW, drawH; if (aspect > 1) { drawH = currentVpSize; drawW = currentVpSize * aspect; } else { drawW = currentVpSize; drawH = currentVpSize / aspect; }
-        drawW *= scale * outputScale; drawH *= scale * outputScale; const finalX = gifX * outputScale; const finalY = gifY * outputScale;
+        let cTime = 0;
+        const currentVpSize = 320;
+        const outputScale = OUT_SIZE / currentVpSize;
+        const scale = parseInt(zoom.value) / 100;
+        const aspect = capVid.videoWidth / capVid.videoHeight;
+        let drawW, drawH;
+        if (aspect > 1) { drawH = currentVpSize; drawW = currentVpSize * aspect; } else { drawW = currentVpSize; drawH = currentVpSize / aspect; }
+        drawW *= scale * outputScale; drawH *= scale * outputScale;
+        const finalX = gifX * outputScale; const finalY = gifY * outputScale;
         let dx = (OUT_SIZE - drawW) / 2 + finalX; let dy = (OUT_SIZE - drawH) / 2 + finalY;
         const captureFrame = () => { if (cTime >= duration) { msg.innerText = "Encoding..."; gif.render(); return; } capVid.currentTime = cTime; };
         capVid.onseeked = () => { ctx.fillStyle = '#000000'; ctx.fillRect(0, 0, OUT_SIZE, OUT_SIZE); ctx.drawImage(capVid, dx, dy, drawW, drawH); gif.addFrame(ctx, { copy: true, delay: (1000 / fps) / playbackSpeed }); cTime += (1 / fps); setTimeout(captureFrame, 10); };
-
         captureFrame();
     };
-    gif.on('finished', blob => { 
-        const reader = new FileReader();
-        reader.onloadend = () => {
-            v.style.display = 'none'; 
-            o.src = reader.result; o.style.display = 'block'; 
-            dl.href = reader.result; dl.download = `Arcade_Neon_${Date.now()}.gif`;
-            dlBox.style.display = 'block'; resetBox.style.display = 'block'; 
-            msg.classList.remove('active'); document.getElementById('goBox').style.display = 'none'; 
-        };
-        reader.readAsDataURL(blob);
+
+    gif.on('finished', blob => {
+        const url = URL.createObjectURL(blob), rNum = Math.floor(Math.random() * 90000) + 10000;
+        v.style.display = 'none'; o.src = url; o.style.display = 'block'; dl.download = `neon_focus_${rNum}.gif`; dl.href = url; dlBox.style.display = 'block'; resetBox.style.display = 'block';
+        msg.classList.remove('active'); document.getElementById('goBox').style.display = 'none'; if(upBtn) upBtn.parentElement.style.display = 'none'; vp.style.pointerEvents = 'auto'; 
     });
 };
-
-window.onclick = e => { initAudio(); if (panel.classList.contains('open') && !panel.contains(e.target) && !e.target.classList.contains('menu-toggle')) { panel.classList.remove('open'); playClick(); } if (swMenu.style.display === 'flex' && !document.querySelector('.switch-container').contains(e.target)) { swMenu.style.display = 'none'; playClick(); } if (thMenu.style.display === 'flex' && !document.querySelector('.switch-container').contains(e.target)) { thMenu.style.display = 'none'; playClick(); } const fw = document.getElementById('filter-wrapper'); if (fw.style.display === 'flex' && !fw.contains(e.target) && !e.target.innerText.includes('FILTERS') && !e.target.id.includes('val')) { fw.style.display = 'none'; const btn = document.querySelector("button[onclick='toggleFilterUI()']"); if(btn) { btn.innerHTML = "MAGIC FILTERS ✨"; btn.style.color = "#00ffff"; btn.style.borderColor = "#00ffff"; } } };
+window.onclick = e => { initAudio(); if (panel.classList.contains('open') && !panel.contains(e.target) && !e.target.classList.contains('menu-toggle')) { panel.classList.remove('open'); playClick(); } if (swMenu.style.display === 'flex' && !document.querySelector('.switch-container').contains(e.target)) { swMenu.style.display = 'none'; playClick(); } if (thMenu.style.display === 'flex' && !document.querySelector('.switch-container').contains(e.target)) { thMenu.style.display = 'none'; playClick(); } const fw = document.getElementById('filter-wrapper'); if (fw.style.display === 'flex' && !fw.contains(e.target) && !e.target.innerText.includes('FILTERS')) { fw.style.display = 'none'; const btn = document.querySelector("button[onclick='toggleFilterUI()']"); if(btn) { btn.innerHTML = "MAGIC FILTERS ✨"; btn.style.color = "#00ffff"; btn.style.borderColor = "#00ffff"; } } };
 </script>
 </body>
 </html>
