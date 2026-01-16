@@ -994,11 +994,11 @@ function toggleBoundaryLock() {
     d(); playClick();
 }
 
-// --- 🛠️ SAFARI-OPTIMIZED DRAWING FUNCTION ---
+// --- 🛠️ SAFARI "SCRATCH CANVAS" FIX (LEVEL 2) ---
 function d(){ 
   x.clearRect(0,0,800,800); 
-  
-  // 1. Boundary Lock Calculation (Math Only)
+
+  // 1. Boundary Lock Calculation
   if(i.src && isBoundaryLocked){
       const rad = cfg.r*Math.PI/180, cos = Math.abs(Math.cos(rad)), sin = Math.abs(Math.sin(rad));
       const reqW = (cfg.m*2*cos + cfg.m*2*sin), reqH = (cfg.m*2*sin + cfg.m*2*cos);
@@ -1008,33 +1008,44 @@ function d(){
       cfg.x = Math.max(400-rangeX, Math.min(400+rangeX, cfg.x)); cfg.y = Math.max(400-rangeY, Math.min(400+rangeY, cfg.y));
   }
 
-  // 2. Draw User Image (Using 'Source-In' for Safari Compatibility)
-  if(i.src){ 
-      x.save(); 
+  // 2. Draw User Image (Using Hidden Scratch Canvas)
+  if(i.src){
+      // Create a reusable hidden canvas if it doesn't exist
+      if(!window.scrC) { window.scrC = document.createElement('canvas'); window.scrC.width = 800; window.scrC.height = 800; }
+      const sc = window.scrC;
+      const sCtx = sc.getContext('2d');
       
-      // A. Draw the Mask (The Circle)
-      x.beginPath(); x.arc(400,400,cfg.m,0,6.28); 
-      x.fillStyle = '#000000'; x.fill(); 
+      // A. Clear the hidden canvas
+      sCtx.clearRect(0, 0, 800, 800);
+      
+      // B. Draw the Filtered Image onto the Hidden Canvas FIRST
+      sCtx.save();
+      let w = i.width * cfg.s, h = i.height * cfg.s;
+      sCtx.translate(cfg.x, cfg.y);
+      sCtx.rotate(cfg.r * Math.PI / 180);
+      
+      // Apply Filter HERE (Safari is happy because there is no clipping yet)
+      if(cfg.filter) sCtx.filter = cfg.filter;
+      
+      sCtx.drawImage(i, -w/2, -h/2, w, h);
+      sCtx.restore();
 
-      // B. Set Composite Mode (Keeps image ONLY inside the circle)
+      // C. Now draw the Mask (Circle) on the Main Canvas
+      x.save();
+      x.beginPath(); x.arc(400, 400, cfg.m, 0, 6.28);
+      x.fillStyle = '#000000'; x.fill();
+
+      // D. "Stamp" the Hidden Canvas onto the Main Canvas
       x.globalCompositeOperation = 'source-in';
-
-      // C. Apply Filter (Now works on Safari because we aren't using clip())
-      if(cfg.filter) x.filter = cfg.filter;
+      x.drawImage(sc, 0, 0); // No filters or transforms needed here
       
-      // D. Draw the Image
-      let w=i.width*cfg.s, h=i.height*cfg.s; 
-      x.translate(cfg.x,cfg.y); 
-      x.rotate(cfg.r*Math.PI/180); 
-      x.drawImage(i,-w/2,-h/2,w,h); 
-      
-      x.restore(); // Resets Composite Mode & Filter for the border
-  } 
+      x.restore();
+  }
 
   // 3. Draw Frame/Border (Standard Layering)
   if (cfg.pColor) {
       x.save(); 
-      x.filter = 'none'; // Ensure border is crisp
+      x.filter = 'none'; 
       
       if ((cfg.pColor === '#000000' || cfg.pColor === '#808080') && cfg.pType === 'neon') {
           const shadowCol = cfg.pColor;
@@ -1045,7 +1056,6 @@ function d(){
           x.lineWidth = 18; x.strokeStyle = shadowCol; x.shadowBlur = 10; x.shadowColor = shadowCol; x.stroke();
           x.beginPath(); x.arc(400, 400, cfg.m, 0, Math.PI * 2); 
           x.lineWidth = 6; x.strokeStyle = '#FFFFFF'; x.shadowBlur = 0; x.stroke();
-          // Inner Shadow for Neon
           x.save(); x.beginPath(); x.arc(400, 400, cfg.m - 3, 0, 2 * Math.PI); x.clip();
           x.beginPath(); x.arc(400, 400, cfg.m, 0, 2 * Math.PI); 
           x.strokeStyle = innerShadowCol; x.lineWidth = 30; x.shadowBlur = 25; x.shadowColor = shadowCol; x.stroke();
@@ -1085,6 +1095,7 @@ function d(){
       x.restore();
   }
 }
+
 
 
 function handleFile(e){ 
