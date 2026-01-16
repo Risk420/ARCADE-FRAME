@@ -808,11 +808,11 @@ function setPlainFrame(color, type=null) {
     d(); 
     playClick();
 }
-// --- ✨ FIXED MAGIC FILTERS (Ultimate Picsart Collection) ---
+// --- ✨ FIXED MAGIC FILTERS (Ultimate Collection) ---
 const magicFilters = [
   { name: 'ORIGINAL', f: 'none' },
 
-  // --- 🎬 FILM SECTION (Cinematic) ---
+  // --- 🎬 FILM SECTION ---
   { name: 'FILM-1', f: 'contrast(1.1) saturate(1.5) brightness(0.9)' },
   { name: 'FILM-2', f: 'sepia(0.2) contrast(1.2) brightness(1.1)' },
   { name: 'FILM-B&W', f: 'grayscale(1) contrast(1.2)' },
@@ -822,7 +822,7 @@ const magicFilters = [
   { name: 'PORTRA', f: 'saturate(1.1) brightness(1.1) contrast(0.9) hue-rotate(-5deg)' },
   { name: 'FUJI', f: 'saturate(1.2) hue-rotate(10deg) brightness(1.05)' },
 
-  // --- 🎞️ VINTAGE & RETRO SECTION ---
+  // --- 🎞️ VINTAGE & RETRO ---
   { name: 'VINTAGE-IVORY', f: 'sepia(0.4) contrast(0.9) brightness(1.1)' },
   { name: 'VINTAGE-1970', f: 'sepia(0.5) hue-rotate(-10deg) saturate(1.2)' },
   { name: 'VINTAGE-1990', f: 'contrast(1.1) saturate(0.8) brightness(0.9)' },
@@ -831,7 +831,7 @@ const magicFilters = [
   { name: 'LIGHT-LEAK', f: 'brightness(1.2) sepia(0.3) saturate(1.3)' },
   { name: 'FADED-FILM', f: 'contrast(0.7) brightness(1.2) sepia(0.2)' },
 
-  // --- ⚡ FX SECTION (The Classics) ---
+  // --- ⚡ FX SECTION ---
   { name: 'FX-HDR-1', f: 'contrast(1.3) saturate(1.4) brightness(1.05) sepia(0.1)' },
   { name: 'FX-HDR-2', f: 'contrast(1.5) saturate(1.5)' },
   { name: 'FX-LIGHT-CROSS', f: 'contrast(1.1) brightness(1.1) sepia(0.3) hue-rotate(-15deg) saturate(1.1)' },
@@ -923,9 +923,7 @@ function renderFilters() {
 
 function applyFilter(filterVal, btn) {
     cfg.filter = filterVal;
-    // 1. Force Visual Update (CSS) - Works instantly on iPhone
     c.style.filter = filterVal; 
-    
     document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active-filter'));
     if(btn) btn.classList.add('active-filter');
     d(); playClick();
@@ -948,7 +946,7 @@ function toggleBoundaryLock() {
     d(); playClick();
 }
 
-// --- 🛠️ STABLE DRAWING ENGINE (BLANK SCREEN FIXED) ---
+// --- 🛠️ STABLE DRAWING ENGINE ---
 function d(){ 
   x.clearRect(0,0,800,800); 
 
@@ -962,7 +960,7 @@ function d(){
       cfg.x = Math.max(400-rangeX, Math.min(400+rangeX, cfg.x)); cfg.y = Math.max(400-rangeY, Math.min(400+rangeY, cfg.y));
   }
 
-  // 2. Draw User Image (Cleaner Method)
+  // 2. Draw User Image
   if(i.src){
       x.save();
       x.beginPath(); x.arc(400, 400, cfg.m, 0, 6.28); x.clip(); 
@@ -971,11 +969,7 @@ function d(){
       x.translate(cfg.x, cfg.y);
       x.rotate(cfg.r * Math.PI / 180);
       
-      // A. APPLY FILTER (Standard)
-      // I removed the dangerous fallback block here that was causing the blank screens.
-      if(cfg.filter && cfg.filter !== 'none') { 
-          x.filter = cfg.filter; 
-      }
+      if(cfg.filter && cfg.filter !== 'none') { x.filter = cfg.filter; }
 
       x.drawImage(i, -w/2, -h/2, w, h);
       x.restore();
@@ -983,7 +977,7 @@ function d(){
 
   // 3. Draw Generated Border
   if (cfg.pColor) {
-      x.save(); x.filter = 'none'; // Ensure border is never filtered
+      x.save(); x.filter = 'none'; 
       if ((cfg.pColor === '#000000' || cfg.pColor === '#808080') && cfg.pType === 'neon') {
           const shadowCol = cfg.pColor;
           const innerShadowCol = (cfg.pColor === '#000000') ? 'rgba(0,0,0,0.7)' : 'rgba(128,128,128,0.7)';
@@ -1055,6 +1049,18 @@ function handleFile(e){
             const ui = document.getElementById('filter-wrapper');
             if(ui.style.display !== 'flex') toggleFilterUI(); 
             d(); 
+
+            // --- 📱 UNIVERSAL MOBILE BUTTON FIX ---
+            // 1. Add massive padding to bottom of UI
+            const uiPanel = document.querySelector('.ui');
+            uiPanel.style.paddingBottom = "200px"; 
+            
+            // 2. Enable button and SCROLL IT INTO VIEW (Center)
+            const saveBtn = document.getElementById('save');
+            saveBtn.disabled = false;
+            setTimeout(() => { 
+                saveBtn.scrollIntoView({behavior: "smooth", block: "center"}); 
+            }, 300);
         };
         n.src = v.target.result;
     };
@@ -1087,7 +1093,9 @@ function resetProject(){
     c.style.filter = 'none';
     document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active-filter'));
     document.getElementById('filter-list').innerHTML = '';
-    d(); playShutter(); updS(zSl); updS(rSl); updS(mSl); document.getElementById('save').disabled = true;
+    d(); playShutter(); updS(zSl); updS(rSl); updS(mSl); 
+    document.getElementById('save').disabled = true;
+    document.querySelector('.ui').style.paddingBottom = "0px"; // Reset padding
 }
 
 function downloadPic(){ if(!i.src) return; d(); let a=document.createElement('a'); a.download=`Arcade_${Date.now()}.png`; a.href=c.toDataURL(); a.click(); playShutter(); }
