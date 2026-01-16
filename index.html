@@ -1181,7 +1181,35 @@ const workerUrl = URL.createObjectURL(workerBlob);
 const gfInput = document.getElementById('gfInput'); const upBtn = document.getElementById('upBtn'); const v = document.getElementById('v'); const o = document.getElementById('o'); const vp = document.getElementById('vp'); const speed = document.getElementById('speed'); const sv = document.getElementById('sv'); const zoom = document.getElementById('zoom'); const zv = document.getElementById('zv'); const go = document.getElementById('go'); const msg = document.getElementById('msg'); const dlBox = document.getElementById('dlBox'); const dl = document.getElementById('dl'); const resetBox = document.getElementById('resetBox');
 let gifX = 0, gifY = 0, vidW = 0, vidH = 0, renderW, renderH, isProcessingGif = false;
 
-function resetGifProject() { v.pause(); v.src = ""; v.load(); v.style.display = 'none'; o.src = ''; o.style.display = 'none'; dlBox.style.display = 'none'; resetBox.style.display = 'none'; document.getElementById('goBox').style.display = 'inline-block'; go.disabled = false; upBtn.disabled = false; zoom.disabled = false; zoom.value = 100; speed.disabled = false; msg.classList.remove('active'); zv.innerText = "100%"; gfInput.value = ''; gifX = 0; gifY = 0; isProcessingGif = false; vp.style.pointerEvents = 'auto'; }
+function resetGifProject() { 
+    v.pause(); 
+    v.src = ""; 
+    v.load(); 
+    v.style.display = 'none'; 
+    o.src = ''; 
+    o.style.display = 'none'; 
+    dlBox.style.display = 'none'; 
+    
+    // Fix: Explicitly clear the download link data so it's not clickable on a blank screen
+    dl.href = ""; 
+    dl.removeAttribute('download'); 
+    
+    resetBox.style.display = 'none'; 
+    document.getElementById('goBox').style.display = 'inline-block'; 
+    go.disabled = false; 
+    upBtn.disabled = false; 
+    zoom.disabled = false; 
+    zoom.value = 100; 
+    speed.disabled = false; 
+    msg.classList.remove('active'); 
+    zv.innerText = "100%"; 
+    gfInput.value = ''; 
+    gifX = 0; 
+    gifY = 0; 
+    isProcessingGif = false; 
+    vp.style.pointerEvents = 'auto'; 
+}
+
 gfInput.onchange = (e) => { const file = e.target.files[0]; if (!file) return; v.style.display = 'block'; o.style.display = 'none'; dlBox.style.display = 'none'; v.src = URL.createObjectURL(file); v.playbackRate = parseFloat(speed.value); go.disabled = false; v.onloadedmetadata = () => { vidW = v.videoWidth; vidH = v.videoHeight; setCoverSize(); v.play(); }; };
 function setCoverSize() { const boxSize = 320; const aspect = vidW / vidH; if (aspect > 1) { renderH = boxSize; renderW = boxSize * aspect; } else { renderW = boxSize; renderH = boxSize / aspect; } v.style.width = renderW + 'px'; v.style.height = renderH + 'px'; zoom.min = 100; updateGifTransform(); gifX = 0; gifY = 0; }
 function updateGifTransform() { if (!v.src) return; const z = parseInt(zoom.value) / 100; const currentW = renderW * z; const currentH = renderH * z; const boxSize = 320; const maxX = Math.max(0, (currentW - boxSize) / 2); const maxY = Math.max(0, (currentH - boxSize) / 2); gifX = Math.max(-maxX, Math.min(maxX, gifX)); gifY = Math.max(-maxY, Math.min(maxY, gifY)); v.style.transform = `translate(calc(-50% + ${gifX}px), calc(-50% + ${gifY}px)) scale(${z})`; }
@@ -1211,7 +1239,7 @@ go.onclick = () => {
             const finalData = reader.result; v.style.display = 'none'; o.src = finalData; o.style.display = 'block'; 
             dl.href = finalData; dl.download = `Arcade_GIF_${Date.now()}.gif`; dlBox.style.display = 'block'; resetBox.style.display = 'block'; 
             msg.classList.remove('active'); document.getElementById('goBox').style.display = 'none'; isProcessingGif = false; vp.style.pointerEvents = 'auto'; 
-            // Manual download only: The autoLink click logic has been removed to ensure the user must click the button.
+            // Automatic download trigger removed
         }; reader.readAsDataURL(blob);
     });
 };
