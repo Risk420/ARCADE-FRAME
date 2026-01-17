@@ -921,24 +921,43 @@ cfg.adj = { b: 100, c: 100, s: 100 };
 function toggleFilterUI() {
     const el = document.getElementById('filter-wrapper');
     const btn = document.querySelector("button[onclick='toggleFilterUI()']");
+    // Select all other buttons to hide them (Focus Mode)
+    const siblings = document.querySelectorAll('#frame-btn-group > label, #frame-btn-group > button:not([onclick="toggleFilterUI()"])');
+
     if(el.style.display === 'flex') {
+        // --- CLOSING FILTERS (Bring everything back) ---
         el.style.display = 'none';
         btn.innerHTML = "MAGIC FILTERS ✨";
         btn.style.color = "#00ffff"; btn.style.borderColor = "#00ffff";
+        
+        // Show other buttons again
+        siblings.forEach(s => s.style.display = '');
     } else {
+        // --- OPENING FILTERS (Focus Mode Active) ---
         el.style.display = 'flex';
         el.classList.add('active');
         btn.innerHTML = "CLOSE FILTERS ✖";
         btn.style.color = "#ff00ff"; btn.style.borderColor = "#ff00ff";
+        
+        // Hide other buttons to keep image on screen
+        siblings.forEach(s => s.style.display = 'none');
+        // Also force close palette if open
+        document.getElementById('palette-wrapper').style.display = 'none';
+        const palBtn = document.querySelector("button[onclick='togglePaletteUI()']");
+        if(palBtn) { palBtn.innerHTML = "COLOR PALETTE 🎨"; palBtn.style.color = "#ffffff"; palBtn.style.borderColor = "#ffffff"; }
+
+        // Setup Filter UI
         if(document.getElementById('filter-list').children.length === 0) renderFilters();
         if(!document.getElementById('adj-panel')) createAdjustUI();
         if(!document.getElementById('open-adj-btn')) createSmartEditBtn();
+        
         document.getElementById('filter-list').style.display = 'flex';
         document.getElementById('adj-panel').style.display = 'none';
         document.getElementById('open-adj-btn').style.display = (cfg.filter && cfg.filter !== 'none') ? 'block' : 'none';
     }
     playClick();
 }
+
 
 function createSmartEditBtn() {
     const wrapper = document.getElementById('filter-wrapper');
