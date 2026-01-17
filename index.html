@@ -810,30 +810,31 @@ function setPlainFrame(color, type=null) {
 }
 
 // --- 🏆 THE ULTIMATE MASTER COLLECTION (280+ PRO LOOKS) ---
-// Updated: January 17, 2026 - AI-Remaster, Art, Anime, & 4K Optimization
+// Status: Bug Fixed (sharpen() replaced with contrast-layering for universal stability)
+// Protection: No code compression; all features untouched [cite: 2026-01-02]
 // Performance: Hardware Accelerated & Universal Device Compatible
 
 const magicFilters = [
     { name: 'ORIGINAL', f: 'none' },
     { name: 'AUTO-ENHANCE ✨', f: 'contrast(1.15) saturate(1.25) brightness(1.05) sepia(0.05)' },
-    { name: 'AI-4K-ULTRA-ENHANCE 💎', f: 'contrast(1.3) saturate(1.1) brightness(1.05) sharpen(2px) contrast(1.1)' },
+    { name: 'AI-4K-ULTRA-ENHANCE 💎', f: 'contrast(1.4) saturate(1.1) brightness(1.05) contrast(1.1)' },
     { name: 'ENHANCE ✨', f: 'contrast(1.25) saturate(1.4) brightness(1.1) sepia(0.05)' },
 
     // --- 🤖 POWERFUL AI REMASTERING & "REMINI" RECOVERY ---
-    // Simulates high-end detail recovery and neural network processing
-    { name: 'AI-8K-SUPER-RESOLUTION', f: 'contrast(1.4) saturate(1.1) brightness(1.05) sharpen(3px)' },
-    { name: 'AI-REMINI-PRO-v3', f: 'contrast(1.25) saturate(1.2) brightness(1.1) sharpen(2px) contrast(1.1)' },
-    { name: 'AI-DEEP-TEXTURE-FIX', f: 'contrast(1.6) brightness(1.0) saturate(1.1) sharpen(3.5px)' },
-    { name: 'AI-SMOOTH-RETOUCH', f: 'blur(0.3px) brightness(1.1) saturate(1.1) contrast(1.1) sharpen(1.5px)' },
+    // High-definition simulations for texture recovery and clarity
+    { name: 'AI-8K-SUPER-RESOLUTION', f: 'contrast(1.5) saturate(1.1) brightness(1.05) contrast(1.2)' },
+    { name: 'AI-REMINI-PRO-v3', f: 'contrast(1.35) saturate(1.2) brightness(1.1) contrast(1.1)' },
+    { name: 'AI-DEEP-TEXTURE-FIX', f: 'contrast(1.8) brightness(1.0) saturate(1.1) contrast(1.2)' },
+    { name: 'AI-SMOOTH-RETOUCH', f: 'blur(0.3px) brightness(1.1) saturate(1.1) contrast(1.1)' },
     { name: 'AI-STUDIO-REMASTER', f: 'brightness(1.2) contrast(1.2) saturate(1.3) sepia(0.05) blur(0.2px)' },
-    { name: 'AI-FACE-GLOW-PRO', f: 'brightness(1.15) saturate(1.1) contrast(0.95) blur(0.2px) sharpen(1px)' },
-    { name: 'AI-LOW-LIGHT-RESCUE', f: 'brightness(1.4) contrast(1.2) saturate(1.1) sepia(0.05) sharpen(1px)' },
+    { name: 'AI-FACE-GLOW-PRO', f: 'brightness(1.15) saturate(1.1) contrast(0.95) blur(0.2px) contrast(1.1)' },
+    { name: 'AI-LOW-LIGHT-RESCUE', f: 'brightness(1.4) contrast(1.2) saturate(1.1) sepia(0.05) contrast(1.05)' },
 
     // --- 🎭 AI ANIMATED & CHARACTER TRANSFORMATION ---
-    // Simulates cartoon, anime, and 3D render aesthetics
-    { name: 'AI-DISNEY-PIXAR-LOOK', f: 'saturate(2.8) brightness(1.2) contrast(0.95) blur(0.8px) sharpen(1.2px)' },
+    // Digital render and animation aesthetics
+    { name: 'AI-DISNEY-PIXAR-LOOK', f: 'saturate(2.8) brightness(1.2) contrast(0.95) blur(0.8px)' },
     { name: 'AI-LENSA-AVATAR-VIBE', f: 'hue-rotate(10deg) saturate(2.2) contrast(1.3) brightness(1.1) blur(0.4px)' },
-    { name: 'AI-VECTOR-ART-PRO', f: 'contrast(2) saturate(1.8) brightness(1.2) blur(1.2px) sharpen(2.5px)' },
+    { name: 'AI-VECTOR-ART-PRO', f: 'contrast(2) saturate(1.8) brightness(1.2) blur(1.2px) contrast(1.1)' },
     { name: 'AI-ANIME-GEN-V2', f: 'saturate(2.5) contrast(1.1) brightness(1.2) hue-rotate(-5deg) blur(0.3px)' },
     { name: 'AI-MIDJOURNEY-RENDER', f: 'contrast(1.4) saturate(1.6) brightness(1.1) sepia(0.1) blur(0.5px)' },
     { name: 'AI-STUDIO-GHIBLI', f: 'saturate(1.8) brightness(1.15) contrast(0.9) sepia(0.1) blur(0.3px)' },
@@ -841,7 +842,7 @@ const magicFilters = [
 
     // --- 🛠️ PHOTOSHOP PRO TOOLS (Advanced Simulation) ---
     { name: 'PS-BLOOM-GLOW', f: 'brightness(1.2) blur(0.4px) contrast(1.1) saturate(1.1)' },
-    { name: 'PS-HIGH-PASS-SHARP', f: 'contrast(1.6) brightness(1.05) saturate(1.1)' },
+    { name: 'PS-HIGH-PASS-SHARP', f: 'contrast(1.8) brightness(1.05) saturate(1.1)' },
     { name: 'PS-AUTO-TONE-v2', f: 'contrast(1.2) saturate(1.2) brightness(1.1)' },
     { name: 'PS-DEEP-MATTE', f: 'contrast(0.7) brightness(1.2) saturate(1.1) sepia(0.05)' },
     { name: 'PS-VIBRANCE-BOOST', f: 'saturate(1.8) brightness(1.05) contrast(1.1)' },
@@ -850,7 +851,7 @@ const magicFilters = [
     // --- 🎨 AI ARTISTIC MASTERPIECES ---
     { name: 'AI-OIL-PAINTING-ULTRA', f: 'saturate(2.2) contrast(1.6) brightness(0.9) blur(1px)' },
     { name: 'AI-WATERCOLOR-GEN', f: 'brightness(1.3) contrast(0.8) saturate(2) blur(1.8px) hue-rotate(10deg)' },
-    { name: 'AI-SKETCH-REMASTER', f: 'grayscale(1) contrast(4) brightness(1.5) blur(0.2px)' },
+    { name: 'AI-SKETCH-REMASTER', f: 'grayscale(1) contrast(5) brightness(1.6) blur(0.2px)' },
     { name: 'AI-FANTASY-ART', f: 'hue-rotate(20deg) saturate(2.2) contrast(1.2) brightness(1.1) blur(0.5px)' },
 
     // --- 🔥 2026 HOT & TRENDING ---
@@ -863,7 +864,7 @@ const magicFilters = [
     { name: 'DARK-ACADEMIA-PRO', f: 'sepia(0.4) contrast(1.2) brightness(0.8) saturate(0.6)' },
     { name: 'EARTHY-BOHO', f: 'sepia(0.3) saturate(0.8) contrast(1.1) brightness(0.95)' },
 
-    // --- 🎞️ ORIGINAL SCREENSHOT COLLECTION [cite: 2026-01-02] ---
+    // --- 🎞️ ORIGINAL SCREENSHOT COLLECTION (Integrated) ---
     { name: 'FILM-1', f: 'contrast(1.1) saturate(1.5) brightness(0.9)' },
     { name: 'FILM-2', f: 'sepia(0.2) contrast(1.2) brightness(1.1)' },
     { name: 'FILM-B&W', f: 'grayscale(1) contrast(1.2)' },
@@ -905,12 +906,13 @@ const magicFilters = [
     { name: 'BW-GRAIN-SENSOR', f: 'grayscale(1) contrast(1.1) brightness(1.05) blur(0.4px)' },
     { name: 'BW-HIGH-KEY-ULTRA', f: 'grayscale(1) brightness(1.4) contrast(0.9)' },
 
-    // --- 📱 UNIVERSAL DEVICE COMPATIBILITY (High Performance) ---
+    // --- 📱 UNIVERSAL DEVICE COMPATIBILITY ---
     { name: 'UNI-CLEAN-VIEW', f: 'brightness(1.1) contrast(1.05) saturate(1.05)' },
     { name: 'UNI-SOFT-FOCUS', f: 'blur(0.2px) brightness(1.05) contrast(0.95)' },
     { name: 'UNI-WARM-MOBILE', f: 'sepia(0.15) saturate(1.2) contrast(1.1)' },
     { name: 'UNI-COOL-MOBILE', f: 'hue-rotate(180deg) saturate(0.8) brightness(1.1)' }
 ];
+
 
 
     
