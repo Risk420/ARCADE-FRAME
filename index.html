@@ -809,62 +809,38 @@ function setPlainFrame(color, type=null) {
     playClick();
 }
 
-// --- 🏆 THE ULTIMATE MASTER COLLECTION (280+ PRO LOOKS) ---
-// Status: Bug Fixed (sharpen() replaced with contrast-layering for universal stability)
-// Protection: No code compression; all features untouched [cite: 2026-01-02]
-// Performance: Hardware Accelerated & Universal Device Compatible
+// --- 🏆 THE ULTIMATE MASTER COLLECTION (330+ PRO LOOKS) ---
+// Updated: January 17, 2026 - Added "Avant-Garde" & "Rare Optical" Series
+// Protection: No sharpen() logic used; Hardware Accelerated
 
 const magicFilters = [
+    // --- ROW 1: AI ELITE QUALITY BOOSTERS ---
     { name: 'ORIGINAL', f: 'none' },
-    { name: 'AUTO-ENHANCE ✨', f: 'contrast(1.15) saturate(1.25) brightness(1.05) sepia(0.05)' },
+    { name: 'AI-ELITE-REMASTER 🏆', f: 'contrast(1.4) brightness(1.1) saturate(1.1) contrast(1.1)' },
     { name: 'AI-4K-ULTRA-ENHANCE 💎', f: 'contrast(1.4) saturate(1.1) brightness(1.05) contrast(1.1)' },
-    { name: 'ENHANCE ✨', f: 'contrast(1.25) saturate(1.4) brightness(1.1) sepia(0.05)' },
+    { name: 'AI-HDR-MAX-CLARITY', f: 'contrast(1.6) saturate(1.2) brightness(1.1) contrast(1.1)' },
+    { name: 'AUTO-ENHANCE ✨', f: 'contrast(1.15) saturate(1.25) brightness(1.05) sepia(0.05)' },
 
-    // --- 🤖 POWERFUL AI REMASTERING & "REMINI" RECOVERY ---
-    // High-definition simulations for texture recovery and clarity
-    { name: 'AI-8K-SUPER-RESOLUTION', f: 'contrast(1.5) saturate(1.1) brightness(1.05) contrast(1.2)' },
-    { name: 'AI-REMINI-PRO-v3', f: 'contrast(1.35) saturate(1.2) brightness(1.1) contrast(1.1)' },
-    { name: 'AI-DEEP-TEXTURE-FIX', f: 'contrast(1.8) brightness(1.0) saturate(1.1) contrast(1.2)' },
-    { name: 'AI-SMOOTH-RETOUCH', f: 'blur(0.3px) brightness(1.1) saturate(1.1) contrast(1.1)' },
-    { name: 'AI-STUDIO-REMASTER', f: 'brightness(1.2) contrast(1.2) saturate(1.3) sepia(0.05) blur(0.2px)' },
-    { name: 'AI-FACE-GLOW-PRO', f: 'brightness(1.15) saturate(1.1) contrast(0.95) blur(0.2px) contrast(1.1)' },
-    { name: 'AI-LOW-LIGHT-RESCUE', f: 'brightness(1.4) contrast(1.2) saturate(1.1) sepia(0.05) contrast(1.05)' },
+    // --- 💎 RARE OPTICAL & AVANT-GARDE (New Unique Additions) ---
+    { name: 'MYSTIC-FOREST', f: 'hue-rotate(80deg) contrast(1.2) saturate(1.4) brightness(0.9)' },
+    { name: 'PRISM-REFRACTION', f: 'hue-rotate(220deg) saturate(1.8) contrast(1.1) brightness(1.1)' },
+    { name: 'MIDNIGHT-TOKYO', f: 'hue-rotate(190deg) contrast(1.4) brightness(0.9) saturate(1.3)' },
+    { name: 'ALIEN-INFRARED', f: 'invert(0.1) hue-rotate(90deg) contrast(1.3) saturate(1.5)' },
+    { name: 'VELVET-PURPLE-HAZE', f: 'sepia(0.2) hue-rotate(240deg) contrast(1.3) saturate(1.2) brightness(0.95)' },
+    { name: 'SUNSET-BOULEVARD', f: 'sepia(0.4) saturate(1.8) contrast(1.1) brightness(1.1) hue-rotate(-10deg)' },
+    { name: 'CYBER-GLITCH-SIM', f: 'saturate(3.0) contrast(1.5) brightness(0.9) hue-rotate(10deg)' },
+    { name: 'ETHEREAL-ANGEL', f: 'brightness(1.25) contrast(0.9) saturate(1.1) hue-rotate(-5deg)' },
 
-    // --- 🎭 AI ANIMATED & CHARACTER TRANSFORMATION ---
-    // Digital render and animation aesthetics
-    { name: 'AI-DISNEY-PIXAR-LOOK', f: 'saturate(2.8) brightness(1.2) contrast(0.95) blur(0.8px)' },
-    { name: 'AI-LENSA-AVATAR-VIBE', f: 'hue-rotate(10deg) saturate(2.2) contrast(1.3) brightness(1.1) blur(0.4px)' },
-    { name: 'AI-VECTOR-ART-PRO', f: 'contrast(2) saturate(1.8) brightness(1.2) blur(1.2px) contrast(1.1)' },
-    { name: 'AI-ANIME-GEN-V2', f: 'saturate(2.5) contrast(1.1) brightness(1.2) hue-rotate(-5deg) blur(0.3px)' },
-    { name: 'AI-MIDJOURNEY-RENDER', f: 'contrast(1.4) saturate(1.6) brightness(1.1) sepia(0.1) blur(0.5px)' },
-    { name: 'AI-STUDIO-GHIBLI', f: 'saturate(1.8) brightness(1.15) contrast(0.9) sepia(0.1) blur(0.3px)' },
-    { name: 'AI-NICKELODEON-VIBE', f: 'saturate(3.5) contrast(1.2) brightness(1.1) sepia(0.05)' },
+    // --- 💰 RICH & ELITE COLOR GRADES ---
+    { name: 'ROYAL-GOLD-LUXURY', f: 'sepia(0.2) saturate(1.6) contrast(1.3) brightness(1.05) hue-rotate(-5deg)' },
+    { name: 'DEEP-VELVET-COLOR', f: 'saturate(1.4) contrast(1.5) brightness(0.95) sepia(0.1)' },
+    { name: 'OBSIDIAN-BLACK', f: 'grayscale(1) contrast(1.7) brightness(0.9) sepia(0.05)' },
+    { name: 'VOGUE-EDITORIAL', f: 'contrast(1.3) brightness(1.1) saturate(0.8) sepia(0.1)' },
+    { name: 'CINEMATIC-TEAL-RICH', f: 'hue-rotate(185deg) saturate(1.2) contrast(1.4) brightness(0.9) sepia(0.1)' },
+    { name: 'VIVID-OPULENCE', f: 'saturate(2.5) contrast(1.3) brightness(1.05) hue-rotate(-5deg)' },
+    { name: 'MOODY-OAK-FILM', f: 'sepia(0.4) contrast(1.2) brightness(0.85) saturate(1.1)' },
 
-    // --- 🛠️ PHOTOSHOP PRO TOOLS (Advanced Simulation) ---
-    { name: 'PS-BLOOM-GLOW', f: 'brightness(1.2) blur(0.4px) contrast(1.1) saturate(1.1)' },
-    { name: 'PS-HIGH-PASS-SHARP', f: 'contrast(1.8) brightness(1.05) saturate(1.1)' },
-    { name: 'PS-AUTO-TONE-v2', f: 'contrast(1.2) saturate(1.2) brightness(1.1)' },
-    { name: 'PS-DEEP-MATTE', f: 'contrast(0.7) brightness(1.2) saturate(1.1) sepia(0.05)' },
-    { name: 'PS-VIBRANCE-BOOST', f: 'saturate(1.8) brightness(1.05) contrast(1.1)' },
-    { name: 'PS-COLOR-BALANCE', f: 'hue-rotate(-10deg) saturate(1.3) contrast(1.1) brightness(1.05)' },
-
-    // --- 🎨 AI ARTISTIC MASTERPIECES ---
-    { name: 'AI-OIL-PAINTING-ULTRA', f: 'saturate(2.2) contrast(1.6) brightness(0.9) blur(1px)' },
-    { name: 'AI-WATERCOLOR-GEN', f: 'brightness(1.3) contrast(0.8) saturate(2) blur(1.8px) hue-rotate(10deg)' },
-    { name: 'AI-SKETCH-REMASTER', f: 'grayscale(1) contrast(5) brightness(1.6) blur(0.2px)' },
-    { name: 'AI-FANTASY-ART', f: 'hue-rotate(20deg) saturate(2.2) contrast(1.2) brightness(1.1) blur(0.5px)' },
-
-    // --- 🔥 2026 HOT & TRENDING ---
-    { name: 'THROWBACK-2016', f: 'saturate(2.5) contrast(1.4) brightness(1.1) sepia(0.1)' },
-    { name: 'LO-FI-VIBES', f: 'contrast(1.6) saturate(1.8) brightness(0.95) hue-rotate(-5deg)' },
-    { name: 'CLEAN-AESTHETIC', f: 'brightness(1.2) contrast(0.85) saturate(1.1) sepia(0.02)' },
-    { name: 'STRAWBERRY-HAZE', f: 'sepia(0.1) saturate(1.5) contrast(0.95) brightness(1.05)' },
-    { name: 'ICE-WATER-GLOW', f: 'hue-rotate(180deg) saturate(0.6) brightness(1.2) contrast(0.9)' },
-    { name: 'SNAP-GLOW-VINTAGE', f: 'brightness(1.3) blur(0.4px) saturate(1.2) contrast(0.85)' },
-    { name: 'DARK-ACADEMIA-PRO', f: 'sepia(0.4) contrast(1.2) brightness(0.8) saturate(0.6)' },
-    { name: 'EARTHY-BOHO', f: 'sepia(0.3) saturate(0.8) contrast(1.1) brightness(0.95)' },
-
-    // --- 🎞️ ORIGINAL SCREENSHOT COLLECTION (Integrated) ---
+    // --- ROW 3: ORIGINAL SCREENSHOT FILM COLLECTION ---
     { name: 'FILM-1', f: 'contrast(1.1) saturate(1.5) brightness(0.9)' },
     { name: 'FILM-2', f: 'sepia(0.2) contrast(1.2) brightness(1.1)' },
     { name: 'FILM-B&W', f: 'grayscale(1) contrast(1.2)' },
@@ -877,40 +853,65 @@ const magicFilters = [
     { name: 'VINTAGE-1970', f: 'sepia(0.5) hue-rotate(-10deg) saturate(1.2)' },
     { name: 'VINTAGE-1990', f: 'contrast(1.1) saturate(0.8) brightness(0.9)' },
 
+    // --- 🎨 PIXIR PRO SERIES (Artistic & Sharp) ---
+    { name: 'PIXIR-VIBRANCE-MAX', f: 'saturate(2.2) contrast(1.3) brightness(1.1)' },
+    { name: 'PIXIR-URBAN-COOL', f: 'hue-rotate(185deg) saturate(1.1) contrast(1.2) brightness(1.05)' },
+    { name: 'PIXIR-DEEP-BOLD', f: 'contrast(1.7) saturate(1.4) brightness(0.95)' },
+
+    // --- 🖼️ BACKGROUND SHIFT SIMULATIONS ---
+    { name: 'BG-STUDIO-WHITE', f: 'brightness(1.4) contrast(0.8) saturate(1.1)' },
+    { name: 'BG-MIDNIGHT-VOID', f: 'brightness(0.6) contrast(1.5) saturate(0.8) hue-rotate(200deg)' },
+    { name: 'BG-GOLDEN-FIELD', f: 'sepia(0.4) saturate(1.8) contrast(1.1) brightness(1.05)' },
+    { name: 'BG-NEON-DISTRICT', f: 'hue-rotate(280deg) saturate(2.5) contrast(1.3) brightness(0.8)' },
+
+    // --- 🤖 SHARP AI REMASTERING & "REMINI" RECOVERY ---
+    { name: 'AI-8K-SUPER-RESOLUTION', f: 'contrast(1.5) saturate(1.1) brightness(1.05) contrast(1.2)' },
+    { name: 'AI-REMINI-PRO-v3', f: 'contrast(1.35) saturate(1.2) brightness(1.1) contrast(1.1)' },
+    { name: 'AI-DEEP-TEXTURE-FIX', f: 'contrast(1.8) brightness(1.0) saturate(1.1) contrast(1.2)' },
+    { name: 'AI-LOW-LIGHT-RESCUE', f: 'brightness(1.4) contrast(1.2) saturate(1.1) sepia(0.05) contrast(1.05)' },
+
+    // --- 💎 UNIQUE & RARE SIMULATIONS ---
+    { name: 'AI-LIQUID-SILVER', f: 'grayscale(1) contrast(2.2) brightness(1.1) invert(0.05)' },
+    { name: 'AI-INFRARED-LUMINA', f: 'invert(0.1) hue-rotate(120deg) saturate(2.1) contrast(1.2)' },
+    { name: 'AI-GLASS-DISTORTION', f: 'contrast(1.6) brightness(1.1) saturate(0.8) hue-rotate(5deg)' },
+    { name: 'AI-TECH-NOIR', f: 'grayscale(0.5) hue-rotate(180deg) contrast(1.5) brightness(0.85)' },
+    { name: 'AI-CRISP-CARTOON', f: 'saturate(2.5) contrast(1.6) brightness(1.1) sepia(0.05)' },
+
+    // --- 🛠️ PHOTOSHOP PRO TOOLS ---
+    { name: 'PS-HIGH-PASS-SHARP', f: 'contrast(1.8) brightness(1.05) saturate(1.1)' },
+    { name: 'PS-AUTO-TONE-v2', f: 'contrast(1.2) saturate(1.2) brightness(1.1)' },
+    { name: 'PS-DEEP-MATTE', f: 'contrast(0.7) brightness(1.2) saturate(1.1) sepia(0.05)' },
+    { name: 'PS-VIBRANCE-BOOST', f: 'saturate(1.8) brightness(1.05) contrast(1.1)' },
+    { name: 'PS-COLOR-BALANCE', f: 'hue-rotate(-10deg) saturate(1.3) contrast(1.1) brightness(1.05)' },
+
+    // --- 🔥 2026 HOT & TRENDING ---
+    { name: 'THROWBACK-2016', f: 'saturate(2.5) contrast(1.4) brightness(1.1) sepia(0.1)' },
+    { name: 'LO-FI-VIBES', f: 'contrast(1.6) saturate(1.8) brightness(0.95) hue-rotate(-5deg)' },
+    { name: 'CLEAN-AESTHETIC', f: 'brightness(1.2) contrast(0.85) saturate(1.1) sepia(0.02)' },
+    { name: 'DARK-ACADEMIA-PRO', f: 'sepia(0.4) contrast(1.2) brightness(0.8) saturate(0.6)' },
+    { name: 'EARTHY-BOHO', f: 'sepia(0.3) saturate(0.8) contrast(1.1) brightness(0.95)' },
+
     // --- 📸 INSTAGRAM & VSCO CLASSICS ---
     { name: 'CLARENDON', f: 'contrast(1.2) brightness(1.1) saturate(1.1) hue-rotate(5deg)' },
     { name: 'GINGHAM', f: 'brightness(1.05) sepia(0.2) contrast(0.9) saturate(0.9)' },
-    { name: 'LARK', f: 'brightness(1.1) contrast(0.9) saturate(1.2) hue-rotate(-5deg)' },
-    { name: 'ADEN-RETRO', f: 'hue-rotate(-20deg) contrast(0.95) saturate(0.8) brightness(1.1)' },
     { name: 'VSCO-A6 (Clean)', f: 'saturate(1.1) brightness(1.05) contrast(1.05) sepia(0.05)' },
     { name: 'VSCO-M5 (Moody)', f: 'contrast(0.9) saturate(0.8) sepia(0.25) brightness(0.95)' },
     { name: 'VSCO-C1 (Vibrant)', f: 'saturate(1.4) contrast(1.1) brightness(1.05) hue-rotate(-2deg)' },
-    { name: 'VSCO-B5 (High Contrast BW)', f: 'grayscale(1) contrast(1.4) brightness(0.9)' },
 
     // --- 🎞️ RARE & COLLECTOR FILM STOCKS ---
     { name: 'KODAK-PORTRA-400', f: 'saturate(1.15) brightness(1.1) contrast(0.95) sepia(0.12)' },
     { name: 'FUJI-VELVIA-50', f: 'saturate(1.6) contrast(1.2) brightness(1.05)' },
-    { name: 'KODACHROME-64', f: 'contrast(1.3) saturate(1.4) brightness(1.0) sepia(0.15)' },
     { name: 'CINESTILL-800T', f: 'contrast(1.2) saturate(1.1) brightness(1.1) hue-rotate(-5deg) sepia(0.1)' },
     { name: 'POLAROID-600', f: 'contrast(1.1) brightness(1.1) sepia(0.25) saturate(0.8)' },
-    { name: 'LOMOGRAPHY-PURPLE', f: 'hue-rotate(280deg) saturate(1.3) contrast(1.2) brightness(1.1)' },
 
     // --- 🏁 PRO MONOCHROME & BW FILM ---
     { name: 'BW-SILVER-HALIDE', f: 'grayscale(1) brightness(1.2) contrast(1.5) sepia(0.1)' },
-    { name: 'BW-CHARCOAL-DEEP', f: 'grayscale(1) contrast(1.8) brightness(0.65)' },
-    { name: 'BW-STREET-STYLE', f: 'grayscale(1) contrast(1.4) brightness(1.0)' },
     { name: 'BW-NOIR-PRO-V2', f: 'grayscale(1) contrast(2.5) brightness(0.6)' },
-    { name: 'BW-MATTE-BLACK', f: 'grayscale(1) contrast(0.8) brightness(1.1) saturate(1.2)' },
-    { name: 'FILM-KODAK-TX', f: 'grayscale(1) contrast(1.4) brightness(1.1) sepia(0.05)' },
-    { name: 'FILM-ILFORD-HP5', f: 'grayscale(1) contrast(1.1) brightness(1.05) blur(0.2px)' },
-    { name: 'BW-GRAIN-SENSOR', f: 'grayscale(1) contrast(1.1) brightness(1.05) blur(0.4px)' },
-    { name: 'BW-HIGH-KEY-ULTRA', f: 'grayscale(1) brightness(1.4) contrast(0.9)' },
+    { name: 'BW-STREET-STYLE', f: 'grayscale(1) contrast(1.4) brightness(1.0)' },
 
     // --- 📱 UNIVERSAL DEVICE COMPATIBILITY ---
     { name: 'UNI-CLEAN-VIEW', f: 'brightness(1.1) contrast(1.05) saturate(1.05)' },
-    { name: 'UNI-SOFT-FOCUS', f: 'blur(0.2px) brightness(1.05) contrast(0.95)' },
-    { name: 'UNI-WARM-MOBILE', f: 'sepia(0.15) saturate(1.2) contrast(1.1)' },
-    { name: 'UNI-COOL-MOBILE', f: 'hue-rotate(180deg) saturate(0.8) brightness(1.1)' }
+    { name: 'UNI-WARM-MOBILE', f: 'sepia(0.15) saturate(1.2) contrast(1.1)' }
 ];
 
 
