@@ -1102,7 +1102,6 @@ function toggleBoundaryLock() {
     }
     d(); playClick();
 }
-
 // --- 🛠️ CORE DRAWING ENGINE (STRICT STABILITY RESTORED) ---
 function d(){ 
   x.clearRect(0,0,800,800); 
@@ -1122,11 +1121,15 @@ function d(){
       x.beginPath(); x.arc(400, 400, cfg.m, 0, 6.28); x.clip(); 
       let w = i.width * cfg.s, h = i.height * cfg.s;
       x.translate(cfg.x, cfg.y); x.rotate(cfg.r * Math.PI / 180);
+      
+      // --- ✨ FILTER LISTENER (Connects to Upper Code) ---
+      // This part checks the settings from your top block and applies them
       let fs = (cfg.filter && cfg.filter !== 'none') ? cfg.filter : '';
       if(cfg.adj.b !== 100) fs += ` brightness(${cfg.adj.b}%)`;
       if(cfg.adj.c !== 100) fs += ` contrast(${cfg.adj.c}%)`;
       if(cfg.adj.s !== 100) fs += ` saturate(${cfg.adj.s}%)`;
       x.filter = (fs !== '') ? fs : 'none';
+      
       x.drawImage(i, -w/2, -h/2, w, h); 
       x.restore(); 
   }
@@ -1163,20 +1166,23 @@ function d(){
   if(f.src) x.drawImage(f,0,0,800,800); 
 }
 
-// --- 📂 FILE HANDLERS (DECODING & BLANK FIX) ---
+// --- 📂 FILE HANDLERS (IPHONE FIX & DECODING) ---
 function handleFile(e){
     const files = e.target ? e.target.files : e.files; if(!files || !files[0]) return;
     const r = new FileReader();
     r.onload = v => {
         const n = new Image();
         n.onload = async () => {
+            // 🔥 IPHONE FIX: FORCE DECODE
             if ('decode' in n) { try { await n.decode(); } catch(err) { } }
             i = n; cfg.x = 400; cfg.y = 400; cfg.r = 0;
             if(isBoundaryLocked) {
                 const reqW = cfg.m * 2, reqH = cfg.m * 2;
                 const minS = Math.max(reqW/i.width, reqH/i.height); cfg.s = minS; zSl.min = minS; zSl.value = minS; zVal.innerText = Math.round((minS/zSl.min)*100)+"%";
             } else { cfg.s = Math.max(800/i.width, 800/i.height); zSl.min = 0.01; zSl.value = cfg.s; zVal.innerText = "100%"; }
-            renderFilters(); d(); 
+            // Note: renderFilters() is assumed to exist above in your code
+            if(typeof renderFilters === 'function') renderFilters(); 
+            d(); 
             const uiPanel = document.querySelector('.ui'); uiPanel.style.paddingBottom = "200px"; 
             document.getElementById('save').disabled = false;
         }; n.src = v.target.result;
@@ -1202,7 +1208,7 @@ function resetProject(){
     zSl.value=1; rSl.value=0; mSl.value=375; mLbl.innerText = "CIRCLE SIZE";
     document.getElementById('u1').value = ''; document.getElementById('u2').value = '';
     c.style.filter = 'none'; document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active-filter'));
-    document.getElementById('filter-list').innerHTML = '';
+    if(document.getElementById('filter-list')) document.getElementById('filter-list').innerHTML = '';
     if(document.getElementById('adj-panel')) { document.getElementById('filter-list').style.display = 'flex'; document.getElementById('adj-panel').style.display = 'none'; }
     if(document.getElementById('open-adj-btn')) document.getElementById('open-adj-btn').style.display = 'none';
     d(); playShutter(); updS(zSl); updS(rSl); updS(mSl); document.getElementById('save').disabled = true; document.querySelector('.ui').style.paddingBottom = "0px"; 
@@ -1292,31 +1298,26 @@ go.onclick = () => {
     });
 };
 
+// --- 👻 GHOST MODE ---
+document.querySelectorAll('input[type=range]').forEach(el => {
+    const panels = [document.querySelector('.ui'), document.getElementById('uiPanel'), document.getElementById('adj-panel')];
+    el.addEventListener('touchstart', () => { panels.forEach(p => { if(p) p.style.opacity = '0.1'; }); }, {passive: true});
+    el.addEventListener('touchend', () => { panels.forEach(p => { if(p) p.style.opacity = '1'; }); });
+    el.addEventListener('mousedown', () => { panels.forEach(p => { if(p) p.style.opacity = '0.1'; }); });
+    el.addEventListener('mouseup', () => { panels.forEach(p => { if(p) p.style.opacity = '1'; }); });
+});
+
 // --- 🌐 GLOBAL MENU HANDLER ---
 window.onclick = e => { 
     initAudio(); 
-    // 1. Close Main Menu
-    if (panel.classList.contains('open') && !panel.contains(e.target) && !e.target.classList.contains('menu-toggle')) { 
-        panel.classList.remove('open'); playClick(); 
-    }
-    // 2. Close Switcher Menu
-    if (typeof swMenu !== 'undefined' && swMenu.style.display === 'flex' && !document.querySelector('.switch-container').contains(e.target)) {
-        swMenu.style.display = 'none'; playClick();
-    }
-    // 3. Close Theme Menu
-    if (typeof thMenu !== 'undefined' && thMenu.style.display === 'flex' && !document.querySelector('.switch-container').contains(e.target)) {
-        thMenu.style.display = 'none'; playClick();
-    }
-    // 4. Close Magic Filters
+    if (panel.classList.contains('open') && !panel.contains(e.target) && !e.target.classList.contains('menu-toggle')) { panel.classList.remove('open'); playClick(); }
+    if (typeof swMenu !== 'undefined' && swMenu.style.display === 'flex' && !document.querySelector('.switch-container').contains(e.target)) { swMenu.style.display = 'none'; playClick(); }
+    if (typeof thMenu !== 'undefined' && thMenu.style.display === 'flex' && !document.querySelector('.switch-container').contains(e.target)) { thMenu.style.display = 'none'; playClick(); }
     const fw = document.getElementById('filter-wrapper');
     if (fw && fw.style.display === 'flex' && !fw.contains(e.target) && !e.target.innerText.includes('FILTERS') && !e.target.id.includes('val')) {
         fw.style.display = 'none';
         const btn = document.querySelector("button[onclick='toggleFilterUI()']");
-        if(btn) {
-            btn.innerHTML = "MAGIC FILTERS ✨";
-            btn.style.color = "#00ffff";
-            btn.style.borderColor = "#00ffff";
-        }
+        if(btn) { btn.innerHTML = "MAGIC FILTERS ✨"; btn.style.color = "#00ffff"; btn.style.borderColor = "#00ffff"; }
     }
 };
 </script>
