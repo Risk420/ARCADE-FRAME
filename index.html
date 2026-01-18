@@ -1224,10 +1224,6 @@ c.addEventListener('touchmove', e => {
 // --- ⚡ NEON GIF ENGINE (FINAL REPAIR) ---
 // This version allows selecting GIFs directly and prevents the Black Screen bug.
 
-// Variables (RESTORED to fix the "Frozen" issue)
-let gifX = 0, gifY = 0, vidW = 0, vidH = 0, renderW, renderH, isProcessingGif = false;
-let isGifDrag = false, startX = 0, startY = 0, initX = 0, initY = 0;
-
 gfInput.onchange = (e) => { 
     const file = e.target.files[0]; 
     if (!file) return; 
