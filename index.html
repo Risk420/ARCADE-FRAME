@@ -1122,16 +1122,13 @@ function d(){
       let w = i.width * cfg.s, h = i.height * cfg.s;
       x.translate(cfg.x, cfg.y); x.rotate(cfg.r * Math.PI / 180);
       
-      // --- ✨ IPHONE FILTER FIX (Visual + Logic) ---
+      // --- ✨ IPHONE FILTER FIX ---
       let fs = (cfg.filter && cfg.filter !== 'none') ? cfg.filter : '';
       if(cfg.adj.b !== 100) fs += ` brightness(${cfg.adj.b}%)`;
       if(cfg.adj.c !== 100) fs += ` contrast(${cfg.adj.c}%)`;
       if(cfg.adj.s !== 100) fs += ` saturate(${cfg.adj.s}%)`;
       
-      // 1. Apply to Context (For the GIF Engine)
       x.filter = (fs !== '') ? fs : 'none';
-      
-      // 2. Apply to CSS (For Instant iPhone Preview)
       if(c) c.style.filter = (fs !== '') ? fs : 'none';
       
       x.drawImage(i, -w/2, -h/2, w, h); 
@@ -1170,7 +1167,7 @@ function d(){
   if(f.src) x.drawImage(f,0,0,800,800); 
 }
 
-// --- 📂 FILE HANDLERS (UPDATED: START BIG & FIX RED LINE) ---
+// --- 📂 FILE HANDLERS (SMART AUTO-SIZING) ---
 function handleFile(e){
     const files = e.target ? e.target.files : e.files; if(!files || !files[0]) return;
     const r = new FileReader();
@@ -1180,32 +1177,25 @@ function handleFile(e){
             if ('decode' in n) { try { await n.decode(); } catch(err) { } }
             i = n; cfg.x = 400; cfg.y = 400; cfg.r = 0;
             
-            // 🚀 NEW: Calculate "Fill Screen" size (Starts Big)
+            // 🔥 DEFAULT: 400px if no frame is active
+            if(!f.src) { cfg.m = 400; mSl.value = 400; mVal.innerText = "400px"; }
+
             const fillSize = Math.max(800/i.width, 800/i.height);
             
             if(isBoundaryLocked) {
-                // Calculate Safety Floor (Minimum Size)
                 const rad = cfg.r * Math.PI / 180;
                 const cos = Math.abs(Math.cos(rad)), sin = Math.abs(Math.sin(rad));
                 const reqW = (cfg.m*2*cos + cfg.m*2*sin), reqH = (cfg.m*2*sin + cfg.m*2*cos);
                 const minS = Math.max(reqW/i.width, reqH/i.height);
-                
-                // Set floor, but START at Fill Size
                 zSl.min = minS; 
                 cfg.s = Math.max(minS, fillSize); 
-                
                 zSl.value = cfg.s; 
                 zVal.innerText = Math.round((cfg.s/zSl.min)*100)+"%";
             } else { 
-                cfg.s = fillSize; 
-                zSl.min = 0.01; 
-                zSl.value = cfg.s; 
-                zVal.innerText = "100%"; 
+                cfg.s = fillSize; zSl.min = 0.01; zSl.value = cfg.s; zVal.innerText = "100%"; 
             }
             
-            // 🔥 FIX: Force Red Line to update immediately
-            updS(zSl); 
-            
+            updS(zSl); updS(mSl);
             if(typeof renderFilters === 'function') renderFilters(); 
             d(); 
             const uiPanel = document.querySelector('.ui'); uiPanel.style.paddingBottom = "200px"; 
@@ -1219,7 +1209,18 @@ function handleFrame(e){
     const r = new FileReader();
     r.onload = v => {
         const n = new Image();
-        n.onload = () => { f.src = n.src; cfg.pColor = null; cfg.pType = null; mLbl.innerText = "FRAME OPENING SIZE"; d(); };
+        n.onload = () => { 
+            f.src = n.src; 
+            // 🔥 FRAME ACTIVE: Snap to 375px automatically
+            cfg.m = 375; 
+            mSl.value = 375; 
+            mVal.innerText = "375px";
+            
+            cfg.pColor = null; cfg.pType = null; mLbl.innerText = "FRAME OPENING SIZE"; 
+            
+            updS(mSl); // Update visual slider
+            d(); 
+        };
         n.src = v.target.result;
     }; r.readAsDataURL(files[0]);
 }
@@ -1228,19 +1229,63 @@ function updateZ(v){ cfg.s=parseFloat(v); zVal.innerText=Math.round((v/zSl.min)*
 function updateR(v){ cfg.r=parseInt(v); rVal.innerText=v+"°"; d(); }
 function updateM(v){ cfg.m=parseInt(v); mVal.innerText=v+"px"; d(); }
 function centerSubject(){ cfg.x=400; cfg.y=400; cfg.r=0; rSl.value=0; d(); playShutter(); }
+
 function resetProject(){ 
-    i=new Image(); f=new Image(); cfg={s:1,m:375,x:400,y:400,r:0, pColor:null, pType:null, filter:'none', adj:{b:100,c:100,s:100}};
-    zSl.value=1; rSl.value=0; mSl.value=375; mLbl.innerText = "CIRCLE SIZE";
+    i=new Image(); f=new Image(); 
+    cfg={s:1, m:400, x:400, y:400, r:0, pColor:null, pType:null, filter:'none', adj:{b:100,c:100,s:100}};
+    zSl.value=1; rSl.value=0; mSl.value=400; mVal.innerText="400px"; mLbl.innerText = "CIRCLE SIZE";
     document.getElementById('u1').value = ''; document.getElementById('u2').value = '';
     c.style.filter = 'none'; document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active-filter'));
     if(document.getElementById('filter-list')) document.getElementById('filter-list').innerHTML = '';
-    if(document.getElementById('adj-panel')) { document.getElementById('filter-list').style.display = 'flex'; document.getElementById('adj-panel').style.display = 'none'; }
+    
+    // Close Adjustment Panel if open
+    if(document.getElementById('adj-panel')) { 
+        document.getElementById('filter-list').style.display = 'flex'; 
+        document.getElementById('adj-panel').style.display = 'none'; 
+        
+        // 🔥 RESET: Show Main Buttons (in case reset while adjusting)
+        document.querySelectorAll('.ui > button, .ui > label, #lock-btn').forEach(el => {
+            if(!el.innerText.includes('HIDE MENU')) el.style.display = '';
+        });
+    }
     if(document.getElementById('open-adj-btn')) document.getElementById('open-adj-btn').style.display = 'none';
-    d(); playShutter(); updS(zSl); updS(rSl); updS(mSl); document.getElementById('save').disabled = true; document.querySelector('.ui').style.paddingBottom = "0px"; 
+    
+    d(); playShutter(); updS(zSl); updS(rSl); updS(mSl); 
+    document.getElementById('save').disabled = true; document.querySelector('.ui').style.paddingBottom = "0px"; 
 }
+
 function downloadPic(){ if(!i.src) return; d(); let a=document.createElement('a'); a.download=`Arcade_${Date.now()}.png`; a.href=c.toDataURL(); a.click(); playShutter(); }
 function updS(el){ if(el.parentElement.classList.contains('ui-gif')) return; const val = (el.value-el.min)/(el.max-el.min)*100; el.style.setProperty('--v', val + '%'); }
 document.querySelectorAll('input[type=range]').forEach(el => { el.addEventListener('input', () => updS(el)); updS(el); });
+
+// --- ⚙️ ADJUSTMENT UI LOGIC (FOCUS MODE) ---
+function openAdjust() {
+    document.getElementById('filter-list').style.display = 'none';
+    document.getElementById('open-adj-btn').style.display = 'none';
+    document.getElementById('adj-panel').style.display = 'flex';
+    
+    // 🔥 HIDE ALL MENU BUTTONS (Except Top Toggle)
+    document.querySelectorAll('.ui > button, .ui > label, #lock-btn').forEach(el => {
+        if(el.innerText && el.innerText.includes('HIDE MENU')) return;
+        if(el.id === 'open-adj-btn') return;
+        if(el.id === 'filter-wrapper') return;
+        el.style.display = 'none';
+    });
+    playClick();
+}
+
+function closeAdjust() {
+    document.getElementById('adj-panel').style.display = 'none';
+    document.getElementById('filter-list').style.display = 'flex';
+    document.getElementById('open-adj-btn').style.display = 'block';
+    
+    // 🔥 SHOW ALL MENU BUTTONS
+    document.querySelectorAll('.ui > button, .ui > label, #lock-btn').forEach(el => {
+        if(el.innerText && el.innerText.includes('HIDE MENU')) return;
+        el.style.display = ''; // Restore CSS default
+    });
+    playClick();
+}
 
 // --- 🖱️ INTERACTION ENGINE (REPAIRED FOR IPHONE & REALME) ---
 let isP=false, tStart={x:0,y:0}, initialDist=0, initialScale=1, initialAngle=0, initialRot=0;
@@ -1334,8 +1379,8 @@ window.onclick = e => {
         if(btn) { btn.innerHTML = "MAGIC FILTERS ✨"; btn.style.color = "#00ffff"; btn.style.borderColor = "#00ffff"; }
     }
 };
-</script> 
-    
+</script>
+
 </script>   
 </body>
 </html>
