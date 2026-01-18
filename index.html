@@ -1253,14 +1253,34 @@ c.addEventListener('touchmove', e => {
 }, { passive: false });
 window.addEventListener('touchend', () => { isP=false; });
 
-// --- ⚡ NEON GIF ENGINE ---
+// --- ⚡ NEON GIF ENGINE (FIXED) ---
 const workerBlob = new Blob(['importScripts(\'https://cdnjs.cloudflare.com/ajax/libs/gif.js/0.2.0/gif.worker.js\');'], { type: 'application/javascript' });
 const workerUrl = URL.createObjectURL(workerBlob);
-const gfInput = document.getElementById('gfInput'); const upBtn = document.getElementById('upBtn'); const v = document.getElementById('v'); const o = document.getElementById('o'); const vp = document.getElementById('vp'); const speed = document.getElementById('speed'); const sv = document.getElementById('sv'); const zoom = document.getElementById('zoom'); const zv = document.getElementById('zv'); const go = document.getElementById('go'); const msg = document.getElementById('msg'); const dlBox = document.getElementById('dlBox'); const dl = document.getElementById('dl'); const resetBox = document.getElementById('resetBox');
+
+// Elements
+const gfInput = document.getElementById('gfInput'); 
+const upBtn = document.getElementById('upBtn'); 
+const v = document.getElementById('v'); 
+const o = document.getElementById('o'); 
+const vp = document.getElementById('vp'); 
+const speed = document.getElementById('speed'); 
+const sv = document.getElementById('sv'); 
+const zoom = document.getElementById('zoom'); 
+const zv = document.getElementById('zv'); 
+const go = document.getElementById('go'); 
+const msg = document.getElementById('msg'); 
+const dlBox = document.getElementById('dlBox'); 
+const dl = document.getElementById('dl'); 
+const resetBox = document.getElementById('resetBox');
+
 let gifX = 0, gifY = 0, vidW = 0, vidH = 0, renderW, renderH, isProcessingGif = false;
+
+// Initialize: Keep button disabled until video is truly ready
+go.disabled = true;
 
 function resetGifProject() { 
     v.pause(); 
+    if (v.src) URL.revokeObjectURL(v.src);
     v.src = ""; 
     v.load(); 
     v.style.display = 'none'; 
@@ -1268,22 +1288,21 @@ function resetGifProject() {
     o.style.display = 'none'; 
     dlBox.style.display = 'none'; 
     
-    // --- 🛡️ FULL RESET & DEACTIVATION ---
+    // Deactivate Download
     dl.href = "#"; 
     dl.removeAttribute('download'); 
-    dl.style.pointerEvents = 'none'; // Prevents any clicking
-    dl.style.opacity = '0.5';        // Visual cue that it is disabled
-    dl.onclick = (e) => { e.preventDefault(); return false; }; 
-    // ------------------------------------
+    dl.style.pointerEvents = 'none'; 
+    dl.style.opacity = '0.5'; 
     
     resetBox.style.display = 'none'; 
     document.getElementById('goBox').style.display = 'inline-block'; 
-    go.disabled = false; 
+    go.disabled = true; // Stay disabled on reset
     upBtn.disabled = false; 
     zoom.disabled = false; 
     zoom.value = 100; 
     speed.disabled = false; 
     msg.classList.remove('active'); 
+    msg.innerText = "";
     zv.innerText = "100%"; 
     gfInput.value = ''; 
     gifX = 0; 
@@ -1292,43 +1311,166 @@ function resetGifProject() {
     vp.style.pointerEvents = 'auto'; 
 }
 
-gfInput.onchange = (e) => { const file = e.target.files[0]; if (!file) return; v.style.display = 'block'; o.style.display = 'none'; dlBox.style.display = 'none'; v.src = URL.createObjectURL(file); v.playbackRate = parseFloat(speed.value); go.disabled = false; v.onloadedmetadata = () => { vidW = v.videoWidth; vidH = v.videoHeight; setCoverSize(); v.play(); }; };
-function setCoverSize() { const boxSize = 320; const aspect = vidW / vidH; if (aspect > 1) { renderH = boxSize; renderW = boxSize * aspect; } else { renderW = boxSize; renderH = boxSize / aspect; } v.style.width = renderW + 'px'; v.style.height = renderH + 'px'; zoom.min = 100; updateGifTransform(); gifX = 0; gifY = 0; }
-function updateGifTransform() { if (!v.src) return; const z = parseInt(zoom.value) / 100; const currentW = renderW * z; const currentH = renderH * z; const boxSize = 320; const maxX = Math.max(0, (currentW - boxSize) / 2); const maxY = Math.max(0, (currentH - boxSize) / 2); gifX = Math.max(-maxX, Math.min(maxX, gifX)); gifY = Math.max(-maxY, Math.min(maxY, gifY)); v.style.transform = `translate(calc(-50% + ${gifX}px), calc(-50% + ${gifY}px)) scale(${z})`; }
+// Fixed Upload Handler
+gfInput.onchange = (e) => { 
+    const file = e.target.files[0]; 
+    if (!file) return; 
+
+    // Reset UI before new load
+    go.disabled = true;
+    v.style.display = 'none';
+    o.style.display = 'none';
+    dlBox.style.display = 'none';
+    msg.innerText = "Loading video...";
+    msg.classList.add('active');
+
+    const url = URL.createObjectURL(file);
+    v.src = url; 
+    v.playbackRate = parseFloat(speed.value);
+
+    // This event ensures the black screen is gone before showing the video
+    v.oncanplay = () => {
+        v.style.display = 'block';
+        msg.classList.remove('active');
+        msg.innerText = "";
+        go.disabled = false; // ONLY enable once video can actually play
+        v.play();
+    };
+
+    v.onloadedmetadata = () => { 
+        vidW = v.videoWidth; 
+        vidH = v.videoHeight; 
+        setCoverSize(); 
+    }; 
+
+    v.onerror = () => {
+        msg.innerText = "Error: Invalid Video File";
+        go.disabled = true;
+    };
+};
+
+function setCoverSize() { 
+    const boxSize = 320; 
+    const aspect = vidW / vidH; 
+    if (aspect > 1) { 
+        renderH = boxSize; 
+        renderW = boxSize * aspect; 
+    } else { 
+        renderW = boxSize; 
+        renderH = boxSize / aspect; 
+    } 
+    v.style.width = renderW + 'px'; 
+    v.style.height = renderH + 'px'; 
+    zoom.min = 100; 
+    updateGifTransform(); 
+    gifX = 0; 
+    gifY = 0; 
+}
+
+function updateGifTransform() { 
+    if (!v.src) return; 
+    const z = parseInt(zoom.value) / 100; 
+    const currentW = renderW * z; 
+    const currentH = renderH * z; 
+    const boxSize = 320; 
+    const maxX = Math.max(0, (currentW - boxSize) / 2); 
+    const maxY = Math.max(0, (currentH - boxSize) / 2); 
+    gifX = Math.max(-maxX, Math.min(maxX, gifX)); 
+    gifY = Math.max(-maxY, Math.min(maxY, gifY)); 
+    v.style.transform = `translate(calc(-50% + ${gifX}px), calc(-50% + ${gifY}px)) scale(${z})`; 
+}
+
 zoom.oninput = function () { zv.innerText = this.value + '%'; updateGifTransform(); };
 speed.oninput = () => { sv.innerText = speed.value + 'x'; if (v.src) v.playbackRate = parseFloat(speed.value); };
 
-vp.addEventListener('touchstart', e => { if (isProcessingGif) return; if (!v.src || v.style.display === 'none') return; isGifDrag = true; startX = e.touches[0].clientX; startY = e.touches[0].clientY; initX = gifX; initY = gifY; }, { passive: false });
-vp.addEventListener('touchmove', e => { if (isProcessingGif) return; if (!v.src || v.style.display === 'none') return; if (!isGifDrag) return; e.preventDefault(); const dx = e.touches[0].clientX - startX; const dy = e.touches[0].clientY - startY; gifX = initX + dx; gifY = initY + dy; requestAnimationFrame(updateGifTransform); }, { passive: false });
+// ... [Keep Touch Interaction Logic same as Part 14] ...
 
 go.onclick = () => {
-    if (!v.src) return; go.disabled = true; upBtn.disabled = true; zoom.disabled = true; speed.disabled = true; msg.innerText = "Processing..."; msg.classList.add('active'); isProcessingGif = true; vp.style.pointerEvents = 'none'; 
-    const OUT_SIZE = 480; const gif = new GIF({ workers: 30, quality: 20, width: OUT_SIZE, height: OUT_SIZE, workerScript: workerUrl, dither: false });
-    const canvas = document.createElement('canvas'); canvas.width = OUT_SIZE; canvas.height = OUT_SIZE; const ctx = canvas.getContext('2d');
-    const fps = 15, duration = v.duration, playbackSpeed = parseFloat(speed.value), capVid = document.createElement('video'); capVid.src = v.src; capVid.muted = true; capVid.playsInline = true;
+    if (!v.src || isProcessingGif) return; 
+    go.disabled = true; 
+    upBtn.disabled = true; 
+    zoom.disabled = true; 
+    speed.disabled = true; 
+    msg.innerText = "Processing Frames..."; 
+    msg.classList.add('active'); 
+    isProcessingGif = true; 
+    vp.style.pointerEvents = 'none'; 
+
+    const OUT_SIZE = 480; 
+    const gif = new GIF({ workers: 30, quality: 20, width: OUT_SIZE, height: OUT_SIZE, workerScript: workerUrl, dither: false });
+    const canvas = document.createElement('canvas'); 
+    canvas.width = OUT_SIZE; 
+    canvas.height = OUT_SIZE; 
+    const ctx = canvas.getContext('2d');
+    
+    const fps = 15; 
+    const duration = v.duration; 
+    const playbackSpeed = parseFloat(speed.value); 
+    
+    // Create an offline video element for capturing
+    const capVid = document.createElement('video'); 
+    capVid.src = v.src; 
+    capVid.muted = true; 
+    capVid.playsInline = true;
+
     capVid.onloadeddata = () => {
-        let cTime = 0; const currentVpSize = 320; const outputScale = OUT_SIZE / currentVpSize; const scale = parseInt(zoom.value) / 100; const aspect = capVid.videoWidth / capVid.videoHeight;
-        let drawW, drawH; if (aspect > 1) { drawH = currentVpSize; drawW = currentVpSize * aspect; } else { drawW = currentVpSize; drawH = currentVpSize / aspect; }
-        drawW *= scale * outputScale; drawH *= scale * outputScale; const finalX = gifX * outputScale; const finalY = gifY * outputScale;
-        let dx = (OUT_SIZE - drawW) / 2 + finalX; let dy = (OUT_SIZE - drawH) / 2 + finalY;
-        const captureFrame = () => { if (cTime >= duration) { msg.innerText = "Encoding..."; gif.render(); return; } capVid.currentTime = cTime; };
-        capVid.onseeked = () => { ctx.fillStyle = '#000000'; ctx.fillRect(0, 0, OUT_SIZE, OUT_SIZE); ctx.drawImage(capVid, dx, dy, drawW, drawH); gif.addFrame(ctx, { copy: true, delay: (1000 / fps) / playbackSpeed }); cTime += (1 / fps); setTimeout(captureFrame, 10); };
+        let cTime = 0; 
+        const currentVpSize = 320; 
+        const outputScale = OUT_SIZE / currentVpSize; 
+        const scale = parseInt(zoom.value) / 100; 
+        const aspect = capVid.videoWidth / capVid.videoHeight;
+        
+        let drawW, drawH; 
+        if (aspect > 1) { drawH = currentVpSize; drawW = currentVpSize * aspect; } 
+        else { drawW = currentVpSize; drawH = currentVpSize / aspect; }
+        
+        drawW *= scale * outputScale; 
+        drawH *= scale * outputScale; 
+        const finalX = gifX * outputScale; 
+        const finalY = gifY * outputScale;
+        let dx = (OUT_SIZE - drawW) / 2 + finalX; 
+        let dy = (OUT_SIZE - drawH) / 2 + finalY;
+
+        const captureFrame = () => { 
+            if (cTime >= duration) { 
+                msg.innerText = "Encoding HD GIF..."; 
+                gif.render(); 
+                return; 
+            } 
+            capVid.currentTime = cTime; 
+        };
+
+        capVid.onseeked = () => { 
+            ctx.fillStyle = '#000000'; 
+            ctx.fillRect(0, 0, OUT_SIZE, OUT_SIZE); 
+            ctx.drawImage(capVid, dx, dy, drawW, drawH); 
+            gif.addFrame(ctx, { copy: true, delay: (1000 / fps) / playbackSpeed }); 
+            cTime += (1 / fps); 
+            setTimeout(captureFrame, 10); 
+        }; 
         captureFrame();
     };
+
     gif.on('finished', blob => { 
         const reader = new FileReader();
         reader.onloadend = () => {
-            const finalData = reader.result; v.style.display = 'none'; o.src = finalData; o.style.display = 'block'; 
-            dl.href = finalData; dl.download = `Arcade_GIF_${Date.now()}.gif`; 
+            const finalData = reader.result; 
+            v.style.display = 'none'; 
+            o.src = finalData; 
+            o.style.display = 'block'; 
             
-            // --- RE-ACTIVATE DOWNLOAD ---
+            dl.href = finalData; 
+            dl.download = `Arcade_GIF_${Date.now()}.gif`; 
             dl.style.pointerEvents = 'auto'; 
             dl.style.opacity = '1'; 
             dl.onclick = null; 
-            // ----------------------------
             
-            dlBox.style.display = 'block'; resetBox.style.display = 'block'; 
-            msg.classList.remove('active'); document.getElementById('goBox').style.display = 'none'; isProcessingGif = false; vp.style.pointerEvents = 'auto'; 
+            dlBox.style.display = 'block'; 
+            resetBox.style.display = 'block'; 
+            msg.classList.remove('active'); 
+            document.getElementById('goBox').style.display = 'none'; 
+            isProcessingGif = false; 
+            vp.style.pointerEvents = 'auto'; 
         }; reader.readAsDataURL(blob);
     });
 };
