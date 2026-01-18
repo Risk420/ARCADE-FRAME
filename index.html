@@ -1176,12 +1176,8 @@ function handleFile(e){
         n.onload = async () => {
             if ('decode' in n) { try { await n.decode(); } catch(err) { } }
             i = n; cfg.x = 400; cfg.y = 400; cfg.r = 0;
-            
-            // 🔥 DEFAULT: 400px if no frame is active
             if(!f.src) { cfg.m = 400; mSl.value = 400; mVal.innerText = "400px"; }
-
             const fillSize = Math.max(800/i.width, 800/i.height);
-            
             if(isBoundaryLocked) {
                 const rad = cfg.r * Math.PI / 180;
                 const cos = Math.abs(Math.cos(rad)), sin = Math.abs(Math.sin(rad));
@@ -1194,7 +1190,6 @@ function handleFile(e){
             } else { 
                 cfg.s = fillSize; zSl.min = 0.01; zSl.value = cfg.s; zVal.innerText = "100%"; 
             }
-            
             updS(zSl); updS(mSl);
             if(typeof renderFilters === 'function') renderFilters(); 
             d(); 
@@ -1211,15 +1206,9 @@ function handleFrame(e){
         const n = new Image();
         n.onload = () => { 
             f.src = n.src; 
-            // 🔥 FRAME ACTIVE: Snap to 375px automatically
-            cfg.m = 375; 
-            mSl.value = 375; 
-            mVal.innerText = "375px";
-            
+            cfg.m = 375; mSl.value = 375; mVal.innerText = "375px";
             cfg.pColor = null; cfg.pType = null; mLbl.innerText = "FRAME OPENING SIZE"; 
-            
-            updS(mSl); // Update visual slider
-            d(); 
+            updS(mSl); d(); 
         };
         n.src = v.target.result;
     }; r.readAsDataURL(files[0]);
@@ -1238,15 +1227,11 @@ function resetProject(){
     c.style.filter = 'none'; document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active-filter'));
     if(document.getElementById('filter-list')) document.getElementById('filter-list').innerHTML = '';
     
-    // Close Adjustment Panel if open
+    // Close Adjustment Panel if open (and restore buttons)
     if(document.getElementById('adj-panel')) { 
         document.getElementById('filter-list').style.display = 'flex'; 
         document.getElementById('adj-panel').style.display = 'none'; 
-        
-        // 🔥 RESET: Show Main Buttons (in case reset while adjusting)
-        document.querySelectorAll('.ui > button, .ui > label, #lock-btn').forEach(el => {
-            if(!el.innerText.includes('HIDE MENU')) el.style.display = '';
-        });
+        closeAdjust(); // 🔥 FORCE RESTORE BUTTONS
     }
     if(document.getElementById('open-adj-btn')) document.getElementById('open-adj-btn').style.display = 'none';
     
@@ -1258,17 +1243,19 @@ function downloadPic(){ if(!i.src) return; d(); let a=document.createElement('a'
 function updS(el){ if(el.parentElement.classList.contains('ui-gif')) return; const val = (el.value-el.min)/(el.max-el.min)*100; el.style.setProperty('--v', val + '%'); }
 document.querySelectorAll('input[type=range]').forEach(el => { el.addEventListener('input', () => updS(el)); updS(el); });
 
-// --- ⚙️ ADJUSTMENT UI LOGIC (FOCUS MODE) ---
+// --- ⚙️ ADJUSTMENT UI LOGIC (AGGRESSIVE FOCUS MODE) ---
 function openAdjust() {
     document.getElementById('filter-list').style.display = 'none';
     document.getElementById('open-adj-btn').style.display = 'none';
     document.getElementById('adj-panel').style.display = 'flex';
     
-    // 🔥 HIDE ALL MENU BUTTONS (Except Top Toggle)
-    document.querySelectorAll('.ui > button, .ui > label, #lock-btn').forEach(el => {
-        if(el.innerText && el.innerText.includes('HIDE MENU')) return;
-        if(el.id === 'open-adj-btn') return;
-        if(el.id === 'filter-wrapper') return;
+    // 🔥 AGGRESSIVE HIDE: Hunt down buttons everywhere
+    const uiElements = document.querySelectorAll('.ui button, .ui label, #lock-btn');
+    uiElements.forEach(el => {
+        if(el.closest('#filter-wrapper')) return; // Don't hide the sliders!
+        if(el.closest('#adj-panel')) return;     // Don't hide the "Done" button!
+        if(el.innerText && el.innerText.includes('HIDE MENU')) return; // Keep top toggle
+        
         el.style.display = 'none';
     });
     playClick();
@@ -1279,10 +1266,12 @@ function closeAdjust() {
     document.getElementById('filter-list').style.display = 'flex';
     document.getElementById('open-adj-btn').style.display = 'block';
     
-    // 🔥 SHOW ALL MENU BUTTONS
-    document.querySelectorAll('.ui > button, .ui > label, #lock-btn').forEach(el => {
+    // 🔥 AGGRESSIVE RESTORE: Bring them back
+    const uiElements = document.querySelectorAll('.ui button, .ui label, #lock-btn');
+    uiElements.forEach(el => {
+        if(el.closest('#filter-wrapper')) return;
         if(el.innerText && el.innerText.includes('HIDE MENU')) return;
-        el.style.display = ''; // Restore CSS default
+        el.style.display = ''; // Restore to default CSS
     });
     playClick();
 }
@@ -1380,7 +1369,7 @@ window.onclick = e => {
     }
 };
 </script>
-
+    
 </script>   
 </body>
 </html>
