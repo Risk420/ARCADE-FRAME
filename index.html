@@ -1124,7 +1124,7 @@ function toggleBoundaryLock() {
     }
     d(); playClick();
 }
-// --- 🛠️ CORE DRAWING ENGINE (MASTER FIX: 365PX + ALL COLORS + FILTERS) ---
+// --- 🛠️ CORE DRAWING ENGINE (ULTRA SAFE 360PX + ALL FIXES) ---
 function d(){ 
   x.clearRect(0,0,800,800); 
   
@@ -1132,13 +1132,13 @@ function d(){
   // This ensures the filter applies ONLY to the photo, not the frame/neon.
   if(c) c.style.filter = 'none';
 
-  // 2. SMART SIZE LOGIC (MASTER FIX)
+  // 2. SMART SIZE LOGIC (ULTRA SAFE FIX)
   let drawM = cfg.m;
   
-  // 🔥 FIX: Check 'cfg.pColor' (Applies to Pink, Neon, Basic, Gold - EVERYTHING)
-  // 🔥 FIX: Cap at 365px (User choice: 100% Safe from cropping)
-  if (cfg.pColor && cfg.m > 365) {
-      drawM = 365;
+  // 🔥 FIX: Check 'cfg.pColor' (Covers Pink, Neon, Basic, Gold - EVERYTHING)
+  // 🔥 FIX: Cap at 360px. This gives 40px of safety so the Glow NEVER cuts off.
+  if (cfg.pColor && cfg.m > 360) {
+      drawM = 360;
   }
 
   // 3. Handle Boundary Lock
@@ -1146,8 +1146,8 @@ function d(){
       const rad = cfg.r * Math.PI / 180;
       const cos = Math.abs(Math.cos(rad)), sin = Math.abs(Math.sin(rad));
       
-      // 🔥 SAFETY FIX: Cap the math calculation at 365px too
-      const calcM = Math.min(drawM, 365);
+      // 🔥 SAFETY FIX: Cap the math calculation at 360px to match drawing
+      const calcM = Math.min(drawM, 360);
       
       // Use 'calcM' for the requirements
       const reqW = (calcM*2*cos + calcM*2*sin), reqH = (calcM*2*sin + calcM*2*cos);
@@ -1231,7 +1231,6 @@ function d(){
   // 7. Draw Custom Frame (Will be unaffected by filter)
   if(f.src) x.drawImage(f,0,0,800,800); 
 }
-
 
   // 4. Draw User Image (APPLY FILTER HERE)
   if(i.src){
