@@ -1370,71 +1370,79 @@ window.onclick = e => {
     }
 };
 
-    // --- 🖼️ NEW GALLERY ENGINE (Favorites & Delete) ---
-// 1. Data Structure: Load saved images or start empty
+<script>
+// --- 🖼️ ADVANCED GALLERY ENGINE (IMAGES + TEXT + UI FIXES) ---
+
+// 1. Data Structure
 let myGallery = JSON.parse(localStorage.getItem('arcadeGallery')) || [];
 
-// 2. Save Logic (Automatically triggers when you Download)
+// 2. Save Logic (Images)
 function saveToGallery() {
-    if(!c) return; // If canvas doesn't exist, stop
+    if(!c) return; 
     const data = c.toDataURL();
     const id = Date.now();
-    const item = { id: id, img: data, fav: false, date: new Date().toLocaleDateString() };
-    
-    // Add new image to the START of the list
+    const item = { id: id, type: 'img', data: data, fav: false, date: new Date().toLocaleDateString() };
     myGallery.unshift(item); 
-    
-    // Save to phone storage
     localStorage.setItem('arcadeGallery', JSON.stringify(myGallery));
+    refreshGalleryIfOpen();
+}
+
+// 3. Save Logic (Text/Symbols/Fonts)
+function saveTextToGallery(text) {
+    if(!text || text.trim() === "") return alert("Type something first!");
+    const id = Date.now();
+    const item = { id: id, type: 'text', data: text, fav: false, date: new Date().toLocaleDateString() };
+    myGallery.unshift(item);
+    localStorage.setItem('arcadeGallery', JSON.stringify(myGallery));
+    refreshGalleryIfOpen();
     
-    // If gallery is open, update it
+    // Visual Feedback (Popup)
+    const msg = document.createElement('div');
+    msg.innerText = "SAVED TO STUDIO 💾";
+    msg.style.cssText = "position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); background:rgba(0,0,0,0.9); color:#0f0; padding:20px; border-radius:10px; z-index:10000; font-weight:bold; border:2px solid #0f0; font-family:sans-serif;";
+    document.body.appendChild(msg);
+    setTimeout(() => msg.remove(), 1000);
+}
+
+function refreshGalleryIfOpen() {
     if(document.getElementById('gallery-wrapper') && document.getElementById('gallery-wrapper').style.display === 'flex') {
         renderGallery();
     }
 }
 
-// 3. UI Logic: Create the popup window
+// 4. UI Logic
 function toggleGalleryUI() {
     let el = document.getElementById('gallery-wrapper');
     if(!el) { createGalleryUI(); el = document.getElementById('gallery-wrapper'); }
     
     if(el.style.display === 'flex') {
         el.style.display = 'none';
-        document.body.style.overflow = 'auto'; // Unlock scrolling
+        document.body.style.overflow = 'auto'; 
     } else {
         el.style.display = 'flex';
-        document.body.style.overflow = 'hidden'; // Lock scrolling
+        document.body.style.overflow = 'hidden'; 
         renderGallery();
     }
-    playClick();
+    if(typeof playClick === 'function') playClick();
 }
 
 function createGalleryUI() {
+    if(document.getElementById('gallery-wrapper')) return;
+    
     const div = document.createElement('div');
     div.id = 'gallery-wrapper';
     div.style.cssText = "display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:#0a0a0c; z-index:9999; flex-direction:column; padding:20px; box-sizing:border-box; overflow-y:auto; backdrop-filter:blur(10px);";
     
+    // 🔥 FIX: Title CENTERED so Menu button won't block it
     div.innerHTML = `
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; position:sticky; top:0; background:#0a0a0c; padding-bottom:10px; z-index:2; border-bottom:1px solid #333;">
-            <h2 style="color:#00ffff; font-family:'Arial Black', sans-serif; margin:0; text-shadow:0 0 10px #00ffff;">MY STUDIO 💾</h2>
-            <button onclick="toggleGalleryUI()" style="background:none; border:2px solid #ff0055; color:#ff0055; font-weight:bold; padding:8px 15px; border-radius:20px;">CLOSE</button>
+        <div style="display:flex; justify-content:center; align-items:center; margin-bottom:20px; position:sticky; top:0; background:#0a0a0c; padding:15px 0; z-index:2; border-bottom:1px solid #333;">
+            <h2 style="color:#00ffff; font-family:sans-serif; margin:0; text-shadow:0 0 10px #00ffff; font-size: 22px;">MY STUDIO 💾</h2>
+            <button onclick="toggleGalleryUI()" style="position:absolute; right:0; background:none; border:2px solid #ff0055; color:#ff0055; font-weight:bold; padding:8px 15px; border-radius:20px;">CLOSE</button>
         </div>
         <div id="gallery-grid" style="display:grid; grid-template-columns:repeat(2, 1fr); gap:15px; padding-bottom:50px;"></div>
-        <div id="empty-msg" style="color:#444; text-align:center; margin-top:50px; display:none; font-family:monospace;">NO SAVED MASTERPIECES YET...<br>CREATE SOMETHING!</div>
+        <div id="empty-msg" style="color:#444; text-align:center; margin-top:50px; display:none; font-family:monospace;">NO SAVED ITEMS YET...</div>
     `;
     document.body.appendChild(div);
-    
-    // Add "Open Gallery" Button to the Main Menu (top)
-    const menu = document.querySelector('.ui');
-    if(menu && !document.getElementById('open-gal-btn')) {
-        const btn = document.createElement('button');
-        btn.id = 'open-gal-btn';
-        btn.innerHTML = "📂 MY SAVED PROJECTS";
-        btn.style.cssText = "width:100%; background:linear-gradient(45deg, #222, #000); color:#fff; border:1px solid #444; margin-bottom:10px; padding:12px; font-weight:bold; border-radius:8px; cursor:pointer; box-shadow:0 4px 15px rgba(0,0,0,0.5);";
-        btn.onclick = toggleGalleryUI;
-        // Insert it at the very top of the menu
-        menu.insertBefore(btn, menu.firstChild);
-    }
 }
 
 function renderGallery() {
@@ -1450,79 +1458,131 @@ function renderGallery() {
 
     myGallery.forEach(item => {
         const card = document.createElement('div');
-        card.style.cssText = "position:relative; border:1px solid #333; border-radius:12px; overflow:hidden; background:#111;";
+        card.style.cssText = "position:relative; border:1px solid #333; border-radius:12px; overflow:hidden; background:#111; display:flex; flex-direction:column;";
         
-        // The Image
-        const img = document.createElement('img');
-        img.src = item.img;
-        img.style.cssText = "width:100%; height:auto; display:block; aspect-ratio:1/1; object-fit:cover;";
+        // --- 🅰️ TEXT ITEM RENDER ---
+        if(item.type === 'text') {
+            const textBox = document.createElement('div');
+            textBox.style.cssText = "padding:15px; color:#fff; font-family:monospace; font-size:14px; word-break:break-word; background:#222; flex-grow:1; min-height:100px; white-space: pre-wrap;";
+            textBox.innerText = item.data;
+            card.appendChild(textBox);
+        } 
+        // --- 🖼️ IMAGE ITEM RENDER ---
+        else {
+            const img = document.createElement('img');
+            img.src = item.data || item.img; 
+            img.style.cssText = "width:100%; height:auto; display:block; aspect-ratio:1/1; object-fit:cover;";
+            card.appendChild(img);
+        }
         
-        // The Toolbar (Heart + Trash)
+        // --- TOOLBAR ---
         const bar = document.createElement('div');
-        bar.style.cssText = "position:absolute; bottom:0; left:0; width:100%; background:rgba(0,0,0,0.85); display:flex; justify-content:space-between; padding:8px 12px; box-sizing:border-box; backdrop-filter:blur(4px);";
+        bar.style.cssText = "width:100%; background:rgba(0,0,0,0.9); display:flex; justify-content:space-between; align-items:center; padding:8px 12px; box-sizing:border-box; border-top:1px solid #333;";
         
-        // Fav Button
+        const leftGrp = document.createElement('div');
+        leftGrp.style.display = 'flex';
+        leftGrp.style.gap = '15px';
+
         const favBtn = document.createElement('span');
-        favBtn.innerHTML = item.fav ? "★" : "☆"; // Solid star if fav, outline if not
-        favBtn.style.cssText = item.fav ? "color:#ffff00; font-size:22px; cursor:pointer; text-shadow:0 0 10px yellow;" : "color:#666; font-size:22px; cursor:pointer;";
+        favBtn.innerHTML = item.fav ? "★" : "☆"; 
+        favBtn.style.cssText = item.fav ? "color:#ffff00; font-size:22px; cursor:pointer;" : "color:#666; font-size:22px; cursor:pointer;";
         favBtn.onclick = () => toggleFav(item.id);
-        
-        // Delete Button
+        leftGrp.appendChild(favBtn);
+
+        if(item.type === 'text') {
+            const copyBtn = document.createElement('span');
+            copyBtn.innerHTML = "📋";
+            copyBtn.style.cssText = "font-size:20px; cursor:pointer;";
+            copyBtn.onclick = () => {
+                navigator.clipboard.writeText(item.data);
+                copyBtn.innerHTML = "✅";
+                setTimeout(()=>copyBtn.innerHTML="📋", 1000);
+            };
+            leftGrp.appendChild(copyBtn);
+        }
+
         const delBtn = document.createElement('span');
         delBtn.innerHTML = "🗑️";
-        delBtn.style.cssText = "font-size:18px; cursor:pointer; opacity:0.8;";
+        delBtn.style.cssText = "font-size:18px; cursor:pointer; opacity:0.8; color:#ff4444;";
         delBtn.onclick = () => deleteItem(item.id);
 
-        bar.appendChild(favBtn);
+        bar.appendChild(leftGrp);
         bar.appendChild(delBtn);
-        card.appendChild(img);
         card.appendChild(bar);
+        
+        if(item.type === 'text') card.style.gridColumn = "span 2";
         grid.appendChild(card);
     });
 }
 
-// 4. Actions (Favorite & Delete)
+// 5. Actions
 function toggleFav(id) {
     const idx = myGallery.findIndex(x => x.id === id);
     if(idx > -1) {
         myGallery[idx].fav = !myGallery[idx].fav;
-        
-        // Optional: Sort favorites to top
         if(myGallery[idx].fav) {
             const item = myGallery.splice(idx, 1)[0];
             myGallery.unshift(item);
         }
-        
         localStorage.setItem('arcadeGallery', JSON.stringify(myGallery));
         renderGallery();
-        playClick();
+        if(typeof playClick === 'function') playClick();
     }
 }
 
 function deleteItem(id) {
-    if(confirm("Permanently delete this masterpiece?")) {
+    if(confirm("Delete this item?")) {
         myGallery = myGallery.filter(x => x.id !== id);
         localStorage.setItem('arcadeGallery', JSON.stringify(myGallery));
         renderGallery();
-        playClick();
+        if(typeof playClick === 'function') playClick();
     }
 }
 
-// 5. HOOK: Connect to the existing Download Button
-// This trick makes your old "Download Picture" button also save to the gallery automatically.
-const oldDownload = downloadPic;
-downloadPic = function() {
-    saveToGallery(); // 1. Save to internal gallery
-    oldDownload();   // 2. Download to phone
-    
-    // Ensure the Gallery Button appears if it wasn't there
-    if(!document.getElementById('open-gal-btn')) createGalleryUI();
-}
+// --- 🤖 AUTO-INJECT SAVE BUTTONS & GALLERY LINK ---
+setInterval(() => {
+    // 1. Inject into SYMBOLS Studio
+    const symBox = document.getElementById('sym-box');
+    if(symBox && !document.getElementById('save-sym-btn')) {
+        const btn = document.createElement('button');
+        btn.id = 'save-sym-btn';
+        btn.innerHTML = "💾 SAVE BIO TO STUDIO";
+        btn.style.cssText = "width:100%; background:#222; color:#0f0; border:1px solid #0f0; padding:10px; margin-top:5px; margin-bottom:15px; font-weight:bold; border-radius:5px;";
+        btn.onclick = () => saveTextToGallery(symBox.value);
+        symBox.parentNode.insertBefore(btn, symBox.nextSibling);
+    }
 
-// Initialize the Gallery button on startup
-setTimeout(createGalleryUI, 1000);
+    // 2. Inject into FONTS Studio
+    const fontInput = document.getElementById('font-input'); 
+    if(fontInput && !document.getElementById('save-font-btn')) {
+        const btn = document.createElement('button');
+        btn.id = 'save-font-btn';
+        btn.innerHTML = "💾 SAVE TEXT TO STUDIO";
+        btn.style.cssText = "width:100%; background:#222; color:#0f0; border:1px solid #0f0; padding:10px; margin-top:5px; margin-bottom:15px; font-weight:bold; border-radius:5px;";
+        btn.onclick = () => saveTextToGallery(fontInput.value);
+        fontInput.parentNode.insertBefore(btn, fontInput.nextSibling);
+    }
 
+    // 3. Inject Gallery Open Button into Menu
+    const menu = document.querySelector('.ui');
+    if (menu && !document.getElementById('open-gal-btn')) {
+        const btn = document.createElement('button');
+        btn.id = 'open-gal-btn';
+        btn.innerHTML = "📂 MY SAVED PROJECTS";
+        btn.style.cssText = "width:100%; background:linear-gradient(45deg, #222, #000); color:#fff; border:1px solid #444; margin-bottom:10px; padding:12px; font-weight:bold; border-radius:8px; cursor:pointer; box-shadow:0 4px 15px rgba(0,0,0,0.5);";
+        btn.onclick = toggleGalleryUI;
+        menu.insertBefore(btn, menu.firstChild);
+        
+        // Hook Download Button Logic
+        if(typeof downloadPic !== 'undefined') {
+             const oldDownload = downloadPic;
+             downloadPic = function() {
+                 saveToGallery();
+                 oldDownload();
+             }
+        }
+    }
+}, 1000);
 </script>
 </body>
 </html>
-
