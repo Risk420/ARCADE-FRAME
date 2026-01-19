@@ -1143,7 +1143,12 @@ function d(){
       const rad = cfg.r * Math.PI / 180;
       const cos = Math.abs(Math.cos(rad)), sin = Math.abs(Math.sin(rad));
       
-      const reqW = (drawM*2*cos + drawM*2*sin), reqH = (drawM*2*sin + drawM*2*cos);
+      // 🔥 SAFETY FIX: Cap the math calculation at 385px
+      // This prevents the zoom from jumping too close when you hit 400px
+      const calcM = Math.min(drawM, 385); 
+      
+      // We use 'calcM' here instead of 'drawM' for the requirements
+      const reqW = (calcM*2*cos + calcM*2*sin), reqH = (calcM*2*sin + calcM*2*cos);
       const minS = Math.max(reqW/i.width, reqH/i.height);
       
       if(cfg.s < minS) { cfg.s = minS; zSl.value = minS; zVal.innerText=Math.round((minS/zSl.min)*100)+"%"; }
