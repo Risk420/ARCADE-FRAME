@@ -1088,10 +1088,8 @@ function adjChange(type, val, el) {
     d(); 
 }
 function applyFilter(filterVal, btn) {
-    // 1. Only run if a new filter is selected
     if (cfg.filter !== filterVal) {
-        
-        // 2. Reset adjustment sliders (Standard Reset)
+        // 1. Reset adjustment sliders to 100%
         cfg.adj = { b: 100, c: 100, s: 100 };
         
         ['b', 'c', 's'].forEach(k => {
@@ -1103,14 +1101,12 @@ function applyFilter(filterVal, btn) {
             }
         });
         
-        // 3. Save the filter to the config object
+        // 2. Save the filter to the config
         cfg.filter = filterVal;
         
-        // ✅ ANDROID PROTECTION: 
-        // We do NOT use "c.style.filter" here. 
-        // This stops the browser from forcing the filter onto your frame colors.
+        // 🛡️ ANDROID PROTECTION: We never use c.style.filter here.
         
-        // 4. Update UI Button Highlights
+        // 3. Update UI Button Highlights
         document.querySelectorAll('.filter-btn').forEach(b => {
             b.classList.remove('active-filter');
         });
@@ -1118,13 +1114,9 @@ function applyFilter(filterVal, btn) {
             btn.classList.add('active-filter');
         }
         
-        // 5. Trigger the Drawing Engine
+        // 4. Trigger the optimized engine
         d(); 
-        
-        // 6. Sound Feedback
-        if (typeof playClick === 'function') {
-            playClick();
-        }
+        if (typeof playClick === 'function') playClick();
     }
 }
 
@@ -1149,7 +1141,7 @@ function toggleBoundaryLock() {
     d();
     if(typeof playClick === 'function') playClick();
 }
-// --- 🛠️ CORE DRAWING ENGINE (FULL UNCOMPRESSED VERSION) ---
+// --- 🛠️ CORE DRAWING ENGINE (MEMORY-SAFE IPHONE BAKE) ---
 function d(){ 
   if(!x) return;
   x.clearRect(0, 0, 800, 800); 
@@ -1160,29 +1152,24 @@ function d(){
       drawM = 360;
   }
 
-  // 2. FULL BOUNDARY LOCK MATH
+  // 2. FULL BOUNDARY LOCK MATH (Restored & Untouched)
   if(i.src && isBoundaryLocked){
       const rad = cfg.r * Math.PI / 180;
       const cos = Math.abs(Math.cos(rad));
       const sin = Math.abs(Math.sin(rad));
-      
       const mathM = drawM + 15; 
       const reqW = (mathM * 2 * cos + mathM * 2 * sin);
       const reqH = (mathM * 2 * sin + mathM * 2 * cos);
-      
       const minS = Math.max(reqW / i.width, reqH / i.height);
-      
       if(cfg.s < minS) { 
           cfg.s = minS; 
           if(window.zSl) zSl.value = minS; 
           if(window.zVal) zVal.innerText = Math.round((minS / zSl.min) * 100) + "%";
       }
-      
       const w = i.width * cfg.s;
       const h = i.height * cfg.s;
       const rangeX = Math.max(0, (w - reqW) / 2);
       const rangeY = Math.max(0, (h - reqH) / 2);
-      
       cfg.x = Math.max(400 - rangeX, Math.min(400 + rangeX, cfg.x));
       cfg.y = Math.max(400 - rangeY, Math.min(400 + rangeY, cfg.y));
   }
@@ -1197,34 +1184,39 @@ function d(){
       let w = i.width * cfg.s;
       let h = i.height * cfg.s;
       
-      // Calculate the combined filter string
-      let fs = (cfg.filter && cfg.filter !== 'none') ? cfg.filter : '';
-      if(cfg.adj.b !== 100) fs += ` brightness(${cfg.adj.b}%)`;
-      if(cfg.adj.c !== 100) fs += ` contrast(${cfg.adj.c}%)`;
-      if(cfg.adj.s !== 100) fs += ` saturate(${cfg.adj.s}%)`;
+      // Calculate Filter String (Cleaned up formatting)
+      let filters = [];
+      if(cfg.filter && cfg.filter !== 'none') filters.push(cfg.filter);
+      if(cfg.adj.b !== 100) filters.push(`brightness(${cfg.adj.b}%)`);
+      if(cfg.adj.c !== 100) filters.push(`contrast(${cfg.adj.c}%)`);
+      if(cfg.adj.s !== 100) filters.push(`saturate(${cfg.adj.s}%)`);
+      let fs = filters.join(' ');
 
-      // 🧠 SMART DETECTION
-      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+      // 🧠 ROBUST IPHONE DETECTION
+      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 
       if (isIOS && fs !== '') {
-          // 🍎 IPHONE BAKING METHOD:
-          // We create a hidden "Baking Canvas" (The Oven)
-          const bakeC = document.createElement('canvas');
-          const bx = bakeC.getContext('2d');
-          bakeC.width = i.width;
-          bakeC.height = i.height;
+          // 🍎 OPTIMIZED IPHONE "OVEN"
+          // We use a global variable to reuse the canvas instead of creating new ones
+          if(!window.ovenC) {
+              window.ovenC = document.createElement('canvas');
+              window.ox = window.ovenC.getContext('2d');
+          }
           
-          // Bake the filters onto the pixels here
-          bx.filter = fs;
-          bx.drawImage(i, 0, 0);
+          // CAP RESOLUTION: Prevents high-res 4K photos from crashing iPhone RAM
+          const maxDim = 1200; 
+          let scale = Math.min(1, maxDim / Math.max(i.width, i.height));
+          window.ovenC.width = i.width * scale;
+          window.ovenC.height = i.height * scale;
           
-          // Draw the already-baked image to the main canvas
+          window.ox.filter = fs;
+          window.ox.drawImage(i, 0, 0, window.ovenC.width, window.ovenC.height);
+          
           x.translate(cfg.x, cfg.y); 
           x.rotate(cfg.r * Math.PI / 180);
-          x.drawImage(bakeC, -w/2, -h/2, w, h);
+          x.drawImage(window.ovenC, -w/2, -h/2, w, h);
       } else {
-          // 🤖 ANDROID / PC METHOD:
-          // Keep using the original logic that works for your frames
+          // 🤖 ANDROID / PC NATIVE PATH
           x.translate(cfg.x, cfg.y); 
           x.rotate(cfg.r * Math.PI / 180);
           x.filter = fs || 'none';
@@ -1233,64 +1225,41 @@ function d(){
       x.restore(); 
   }
   
-  // 🛡️ THE PROTECTION WALL (Reset filters before drawing frames)
+  // 🛡️ THE PROTECTION WALL
   x.filter = 'none'; 
 
   // 4. SEAM SEALER
   if (cfg.pColor) {
-      x.save(); 
-      x.beginPath(); 
-      x.arc(400, 400, drawM, 0, Math.PI * 2); 
-      x.lineWidth = 6; 
-      x.strokeStyle = cfg.pColor; 
-      x.stroke(); 
-      x.restore();
+      x.save(); x.beginPath(); x.arc(400, 400, drawM, 0, Math.PI * 2); 
+      x.lineWidth = 6; x.strokeStyle = cfg.pColor; x.stroke(); x.restore();
   }
 
-  // 5. FULL NEON / GRADIENT / METALLIC FRAME LOGIC
+  // 5. FULL NEON / GRADIENT / METALLIC FRAME LOGIC (Untouched & Uncompressed)
   if (cfg.pColor) {
       x.save(); 
-      
-      // Black/Grey Neon
       if ((cfg.pColor === '#000000' || cfg.pColor === '#808080') && cfg.pType === 'neon') {
           const sC = cfg.pColor; 
           x.beginPath(); x.arc(400, 400, drawM, 0, Math.PI * 2); x.lineWidth = 25; x.strokeStyle = sC; x.shadowBlur = 60; x.shadowColor = sC; x.stroke();
           x.beginPath(); x.arc(400, 400, drawM, 0, Math.PI * 2); x.lineWidth = 18; x.strokeStyle = sC; x.shadowBlur = 10; x.shadowColor = sC; x.stroke();
           x.beginPath(); x.arc(400, 400, drawM, 0, Math.PI * 2); x.lineWidth = 6; x.strokeStyle = '#FFFFFF'; x.stroke();
-      } 
-      // White Neon
-      else if (cfg.pColor === '#FEFEFE' && cfg.pType === 'neon') {
+      } else if (cfg.pColor === '#FEFEFE' && cfg.pType === 'neon') {
           x.beginPath(); x.arc(400, 400, drawM, 0, Math.PI * 2); x.lineWidth = 15; x.strokeStyle = '#FFFFFF'; x.shadowBlur = 60; x.shadowColor = '#FFFFFF'; x.stroke();
           x.beginPath(); x.arc(400, 400, drawM, 0, Math.PI * 2); x.lineWidth = 6; x.strokeStyle = '#FFFFFF'; x.stroke();
-      }
-      // Standard Colored Neon
-      else if (cfg.pType === 'neon') {
+      } else if (cfg.pType === 'neon') {
           x.beginPath(); x.arc(400, 400, drawM, 0, Math.PI * 2); x.lineWidth = 25; x.strokeStyle = cfg.pColor; x.shadowBlur = 30; x.shadowColor = cfg.pColor; x.stroke();
           x.beginPath(); x.arc(400, 400, drawM, 0, Math.PI * 2); x.lineWidth = 8; x.strokeStyle = '#FFFFFF'; x.stroke();
-      } 
-      // Metallic / Gradient logic
-      else {
+      } else {
           x.beginPath(); x.arc(400, 400, drawM, 0, Math.PI * 2); x.lineWidth = 25; 
-          
           if (cfg.pType === 'gold') {
-              let g = x.createLinearGradient(0, 0, 800, 800);
-              g.addColorStop(0, '#FFD700'); g.addColorStop(0.5, '#FDB931'); g.addColorStop(1, '#FFD700');
-              x.strokeStyle = g;
+              let g = x.createLinearGradient(0, 0, 800, 800); g.addColorStop(0, '#FFD700'); g.addColorStop(0.5, '#FDB931'); g.addColorStop(1, '#FFD700'); x.strokeStyle = g;
           } else if (cfg.pType === 'silver') { 
-              let g = x.createLinearGradient(0, 0, 800, 800);
-              g.addColorStop(0, '#E0E0E0'); g.addColorStop(0.5, '#B0B0B0'); g.addColorStop(1, '#E0E0E0');
-              x.strokeStyle = g;
-          } else { 
-              x.strokeStyle = cfg.pColor; 
-          }
+              let g = x.createLinearGradient(0, 0, 800, 800); g.addColorStop(0, '#E0E0E0'); g.addColorStop(0.5, '#B0B0B0'); g.addColorStop(1, '#E0E0E0'); x.strokeStyle = g;
+          } else { x.strokeStyle = cfg.pColor; }
           x.stroke(); 
       }
       x.restore();
   }
-  
-  if(f.src) {
-      x.drawImage(f, 0, 0, 800, 800); 
-  }
+  if(f.src) x.drawImage(f, 0, 0, 800, 800); 
 }
 
 // --- 📂 FILE HANDLERS (SMART AUTO-SIZING: 400px vs 375px) ---
