@@ -1252,7 +1252,7 @@ function d(){
   if(f.src) x.drawImage(f,0,0,800,800); 
 }
 
-// --- 📂 FILE HANDLERS (SMART AUTO-SIZING) ---
+// --- 📂 FILE HANDLERS (SMART AUTO-SIZING: 400px vs 375px) ---
 function handleFile(e){
     const files = e.target ? e.target.files : e.files; if(!files || !files[0]) return;
     const r = new FileReader();
@@ -1262,8 +1262,9 @@ function handleFile(e){
             if ('decode' in n) { try { await n.decode(); } catch(err) { } }
             i = n; cfg.x = 400; cfg.y = 400; cfg.r = 0;
             
-            // 🔥 FIX: Default to 375px so it matches the Frame Size
-            if(!f.src) { cfg.m = 375; mSl.value = 375; mVal.innerText = "375px"; }
+            // 🔥 LOGIC: If NO frame is active, go to 400px (Full Size).
+            // If a frame IS active, this line is skipped, so it stays at 375px.
+            if(!f.src && !cfg.pColor) { cfg.m = 400; mSl.value = 400; mVal.innerText = "400px"; }
             
             const fillSize = Math.max(800/i.width, 800/i.height);
             if(isBoundaryLocked) {
@@ -1309,19 +1310,20 @@ function centerSubject(){ cfg.x=400; cfg.y=400; cfg.r=0; rSl.value=0; d(); playS
 
 function resetProject(){ 
     i=new Image(); f=new Image(); 
-    // 🔥 FIX: Defaulting everything to 375px to match Frame Size
-    cfg={s:1, m:375, x:400, y:400, r:0, pColor:null, pType:null, filter:'none', adj:{b:100,c:100,s:100}};
-    zSl.value=1; rSl.value=0; mSl.value=375; mVal.innerText="375px"; mLbl.innerText = "CIRCLE SIZE";
+    
+    // 🔥 RESET TO 400px (Normal Mode)
+    cfg={s:1, m:400, x:400, y:400, r:0, pColor:null, pType:null, filter:'none', adj:{b:100,c:100,s:100}};
+    zSl.value=1; rSl.value=0; mSl.value=400; mVal.innerText="400px"; mLbl.innerText = "CIRCLE SIZE";
     
     document.getElementById('u1').value = ''; document.getElementById('u2').value = '';
     c.style.filter = 'none'; document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active-filter'));
     if(document.getElementById('filter-list')) document.getElementById('filter-list').innerHTML = '';
     
-    // Close Adjustment Panel if open (and restore buttons)
+    // Close Adjustment Panel
     if(document.getElementById('adj-panel')) { 
         document.getElementById('filter-list').style.display = 'flex'; 
         document.getElementById('adj-panel').style.display = 'none'; 
-        closeAdjust(); // 🔥 FORCE RESTORE BUTTONS
+        closeAdjust(); 
     }
     if(document.getElementById('open-adj-btn')) document.getElementById('open-adj-btn').style.display = 'none';
     
