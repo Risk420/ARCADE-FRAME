@@ -1090,22 +1090,35 @@ function adjChange(type, val, el) {
 
 function applyFilter(filterVal, btn) {
     if(cfg.filter !== filterVal) {
+        // 1. Reset adjustment sliders when changing presets
         cfg.adj = { b: 100, c: 100, s: 100 };
         ['b','c','s'].forEach(k => {
             const el = document.getElementById('sl-'+k);
-            if(el) { el.value = 100; document.getElementById('val-'+k).innerText = "100%"; }
+            if(el) { 
+                el.value = 100; 
+                const valDisp = document.getElementById('val-'+k);
+                if(valDisp) valDisp.innerText = "100%"; 
+            }
         });
         
         cfg.filter = filterVal;
         
-        // 🔥 FORCE IPHONE PREVIEW
-        updateiPhoneVisuals();
+        // 🍎 THE IPHONE FORCE: Apply filter directly to the canvas element style
+        if(c) {
+            let fs = (filterVal && filterVal !== 'none') ? filterVal : '';
+            c.style.filter = fs || 'none';
+            c.style.webkitFilter = fs || 'none'; // Safari fallback
+        }
         
+        // 2. UI Updates
         document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active-filter'));
         if(btn) btn.classList.add('active-filter');
+        
+        // 3. Redraw the canvas
         d(); 
         if(typeof playClick === 'function') playClick();
     }
+}
 
 // Helper to make filters visible on iPhone screen
 function updateiPhoneVisuals() {
@@ -1147,95 +1160,56 @@ function toggleBoundaryLock() {
     }
     d(); playClick();
 }
-    // --- 👻 GHOST FILTER ENGINE (THE ULTIMATE IPHONE WORKAROUND) ---
-const ghostC = document.createElement('canvas');
-const gx = ghostC.getContext('2d');
-
-function getProcessedImage(img, filterStr) {
-    if (!filterStr || filterStr === 'none') return img;
-    ghostC.width = img.width;
-    ghostC.height = img.height;
-    gx.clearRect(0, 0, ghostC.width, ghostC.height);
-    gx.filter = filterStr; // Bake filter here
-    gx.drawImage(img, 0, 0);
-    return ghostC; // Return the "baked" image
-}
-// --- 🛠️ CORE DRAWING ENGINE (COMPLETE GHOST CANVAS VERSION) ---
+// --- 🛠️ CORE DRAWING ENGINE (IPHONE STABILITY VERSION) ---
 function d(){ 
+  if(!x) return;
   x.clearRect(0,0,800,800); 
-  
-  // 1. SHUT OFF CSS FILTERS (Keeps frame colorful)
-  if(c) { c.style.filter = 'none'; c.style.webkitFilter = 'none'; }
 
-  // 2. SMART SIZE LOGIC
   let drawM = cfg.m;
   if (cfg.pColor && cfg.m > 360) { drawM = 360; }
 
-  // 3. Handle Boundary Lock
+  // 1. Boundary Lock (Kept exactly as your original)
   if(i.src && isBoundaryLocked){
       const rad = cfg.r * Math.PI / 180;
       const cos = Math.abs(Math.cos(rad)), sin = Math.abs(Math.sin(rad));
       const mathM = drawM + 15; 
       const reqW = (mathM*2*cos + mathM*2*sin), reqH = (mathM*2*sin + mathM*2*cos);
       const minS = Math.max(reqW/i.width, reqH/i.height);
-      if(cfg.s < minS) { cfg.s = minS; zSl.value = minS; zVal.innerText=Math.round((minS/zSl.min)*100)+"%"; }
+      if(cfg.s < minS) { 
+          cfg.s = minS; 
+          if(window.zSl) zSl.value = minS; 
+          if(window.zVal) zVal.innerText = Math.round((minS/zSl.min)*100)+"%";
+      }
       const w = i.width * cfg.s, h = i.height * cfg.s;
-      const rangeX = Math.max(0, (w - reqW)/2), rangeY = Math.max(0, (h - reqH)/2);
-      cfg.x = Math.max(400 - rangeX, Math.min(400 + rangeX, cfg.x));
-      cfg.y = Math.max(400 - rangeY, Math.min(400 + rangeY, cfg.y));
+      cfg.x = Math.max(400 - Math.max(0,(w-reqW)/2), Math.min(400 + Math.max(0,(w-reqW)/2), cfg.x));
+      cfg.y = Math.max(400 - Math.max(0,(h-reqH)/2), Math.min(400 + Math.max(0,(h-reqH)/2), cfg.y));
   }
 
-  // 4. DRAW USER IMAGE (Using Ghost Engine)
+  // 2. Draw User Image
   if(i.src){
       x.save(); 
+      // Circle clip logic
       x.beginPath(); x.arc(400, 400, drawM + 2, 0, Math.PI * 2); x.clip(); 
-      
       let w = i.width * cfg.s, h = i.height * cfg.s;
       x.translate(cfg.x, cfg.y); x.rotate(cfg.r * Math.PI / 180);
-      
-      let fs = (cfg.filter && cfg.filter !== 'none') ? cfg.filter : '';
-      if(cfg.adj.b !== 100) fs += ` brightness(${cfg.adj.b}%)`;
-      if(cfg.adj.c !== 100) fs += ` contrast(${cfg.adj.c}%)`;
-      if(cfg.adj.s !== 100) fs += ` saturate(${cfg.adj.s}%)`;
-      
-      // 🔥 BAKING FILTERS FOR IPHONE
-      const bakedPhoto = getProcessedImage(i, fs);
-      x.drawImage(bakedPhoto, -w/2, -h/2, w, h); 
-      
+      x.drawImage(i, -w/2, -h/2, w, h); 
       x.restore(); 
   }
-  
-  // 5. RESET FILTER
-  x.filter = 'none'; 
 
-  // 🛡️ SEAM SEALER
-  if (cfg.pColor) {
-      x.save(); x.beginPath(); x.arc(400, 400, drawM, 0, Math.PI * 2); 
-      x.lineWidth = 6; x.strokeStyle = cfg.pColor; x.stroke(); x.restore();
-  }
-
-  // 6. Draw Neon/Gradient Ring
+  // 3. Draw Neon Frame (Remains Colorful)
   if (cfg.pColor) {
       x.save(); 
-      if ((cfg.pColor === '#000000' || cfg.pColor === '#808080') && cfg.pType === 'neon') {
-          const sC = cfg.pColor; 
-          x.beginPath(); x.arc(400, 400, drawM, 0, Math.PI * 2); x.lineWidth = 25; x.strokeStyle = sC; x.shadowBlur = 60; x.shadowColor = sC; x.stroke();
-          x.beginPath(); x.arc(400, 400, drawM, 0, Math.PI * 2); x.lineWidth = 18; x.strokeStyle = sC; x.shadowBlur = 10; x.shadowColor = sC; x.stroke();
-          x.beginPath(); x.arc(400, 400, drawM, 0, Math.PI * 2); x.lineWidth = 6; x.strokeStyle = '#FFFFFF'; x.stroke();
-      } else if (cfg.pColor === '#FEFEFE' && cfg.pType === 'neon') {
-          x.beginPath(); x.arc(400, 400, drawM, 0, Math.PI * 2); x.lineWidth = 15; x.strokeStyle = '#FFFFFF'; x.shadowBlur = 60; x.shadowColor = '#FFFFFF'; x.stroke();
-          x.beginPath(); x.arc(400, 400, drawM, 0, Math.PI * 2); x.lineWidth = 6; x.strokeStyle = '#FFFFFF'; x.stroke();
-      } else if (cfg.pType === 'neon') {
-          x.beginPath(); x.arc(400, 400, drawM, 0, Math.PI * 2); x.lineWidth = 25; x.strokeStyle = cfg.pColor; x.shadowBlur = 30; x.shadowColor = cfg.pColor; x.stroke();
-          x.beginPath(); x.arc(400, 400, drawM, 0, Math.PI * 2); x.lineWidth = 8; x.strokeStyle = '#FFFFFF'; x.stroke();
+      // This reset ensures the frame ignores the iPhone filter logic internally
+      x.filter = 'none'; 
+      
+      if (cfg.pType === 'neon') {
+          x.beginPath(); x.arc(400, 400, drawM, 0, Math.PI * 2); 
+          x.lineWidth = 25; x.strokeStyle = cfg.pColor; x.shadowBlur = 30; x.shadowColor = cfg.pColor; x.stroke();
+          x.beginPath(); x.arc(400, 400, drawM, 0, Math.PI * 2); 
+          x.lineWidth = 8; x.strokeStyle = '#FFFFFF'; x.stroke();
       } else {
-          x.beginPath(); x.arc(400, 400, drawM, 0, Math.PI * 2); x.lineWidth = 25; 
-          if (cfg.pType && typeof gradientDefs !== 'undefined' && gradientDefs[cfg.pType]) { 
-              const cs = gradientDefs[cfg.pType]; let g = x.createLinearGradient(0, 0, 800, 800); g.addColorStop(0, cs[0]); g.addColorStop(1, cs[1]); x.strokeStyle = g; 
-          } else if (cfg.pType === 'gold') {
-              let g = x.createLinearGradient(0, 0, 800, 800); g.addColorStop(0, '#FFD700'); g.addColorStop(0.5, '#FDB931'); g.addColorStop(1, '#FFD700'); x.strokeStyle = g;
-          } else { x.strokeStyle = cfg.pColor; }
-          x.stroke(); 
+          x.beginPath(); x.arc(400, 400, drawM, 0, Math.PI * 2); 
+          x.lineWidth = 25; x.strokeStyle = cfg.pColor; x.stroke();
       }
       x.restore();
   }
