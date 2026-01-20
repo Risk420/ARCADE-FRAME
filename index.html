@@ -1124,19 +1124,17 @@ function toggleBoundaryLock() {
     }
     d(); playClick();
 }
-// --- 🛠️ CORE DRAWING ENGINE (LAYER-SPECIFIC FILTERING) ---
+// --- 🛠️ CORE DRAWING ENGINE (FINAL MASTER FIX) ---
 function d(){ 
   x.clearRect(0,0,800,800); 
   
   // 1. DISABLE GLOBAL CSS FILTER
-  // This ensures the filter applies ONLY to the photo, not the frame/neon.
   if(c) c.style.filter = 'none';
 
-          // 2. SMART SIZE LOGIC (AGGRESSIVE BUFFER FIX)
+  // 2. SMART SIZE LOGIC (ULTRA SAFE FIX)
   let drawM = cfg.m;
   
-  // 🔥 FIX: Check 'cfg.pColor' (Covers Pink, Neon, Basic, Gold - EVERYTHING)
-  // 🔥 FIX: Cap at 360px so the Glow NEVER gets cut off.
+  // 🔥 FIX: Cap at 360px for ALL colors.
   if (cfg.pColor && cfg.m > 360) {
       drawM = 360;
   }
@@ -1146,13 +1144,9 @@ function d(){
       const rad = cfg.r * Math.PI / 180;
       const cos = Math.abs(Math.cos(rad)), sin = Math.abs(Math.sin(rad));
       
-      // 🔥 MASTER FIX: The "Over-Zoom" Buffer (+15px)
-      // We tell the math engine the hole is 15px bigger than it is.
-      // This forces the image to tuck DEEP under the frame edge.
-      // The gap will simply cease to exist.
+      // 🔥 MATH BUFFER: Force logic to think hole is 15px bigger
       const mathM = drawM + 15; 
       
-      // We use 'mathM' (375px) for the zoom calculation
       const reqW = (mathM*2*cos + mathM*2*sin), reqH = (mathM*2*sin + mathM*2*cos);
       const minS = Math.max(reqW/i.width, reqH/i.height);
       
@@ -1164,52 +1158,48 @@ function d(){
       cfg.y = Math.max(400 - rangeY, Math.min(400 + rangeY, cfg.y));
   }
 
-    // 4. Draw User Image (APPLY FILTER HERE)
+  // 4. Draw User Image
   if(i.src){
       x.save(); 
-      // 🔥 BLEED FIX: drawM + 2
-      // We cut the image 2px larger than the frame.
-      // This forces the image to tuck UNDER the border. No more gaps!
+      // 🔥 BLEED FIX: Cut image 2px larger (+2) to tuck under frame
       x.beginPath(); x.arc(400, 400, drawM + 2, 0, 6.28); x.clip(); 
       
       let w = i.width * cfg.s, h = i.height * cfg.s;
       x.translate(cfg.x, cfg.y); x.rotate(cfg.r * Math.PI / 180);
       
-      // Build the Filter String
+      // Build Filter
       let fs = (cfg.filter && cfg.filter !== 'none') ? cfg.filter : '';
       if(cfg.adj.b !== 100) fs += ` brightness(${cfg.adj.b}%)`;
       if(cfg.adj.c !== 100) fs += ` contrast(${cfg.adj.c}%)`;
       if(cfg.adj.s !== 100) fs += ` saturate(${cfg.adj.s}%)`;
       
-      // Apply Filter ONLY to the Context (The Image Layer)
       x.filter = (fs !== '') ? fs : 'none';
-      
       x.drawImage(i, -w/2, -h/2, w, h); 
       x.restore(); 
   }
- 
-    // 5. RESET FILTER & SEAL THE GAP
-  x.filter = 'none'; 
   
-  // 🛡️ SEAM SEALER: Fills the tiny white crack between image and frame
-  if (cfg.pColor && i.src) {
+  // 5. RESET FILTER
+  x.filter = 'none'; 
+
+  // 🛡️ SEAM SEALER (THE GAP KILLER)
+  // This draws a solid ring BEHIND the frame to plug the white line.
+  if (cfg.pColor) {
       x.save();
       x.beginPath(); 
-      // We draw a solid line exactly where the gap is
       x.arc(400, 400, drawM, 0, 6.28); 
-      x.lineWidth = 5; // Thick enough to plug the hole
-      x.strokeStyle = cfg.pColor; // Same color as the frame
+      x.lineWidth = 6; // Thick enough to plug the hole
+      x.strokeStyle = cfg.pColor; // Matches the frame
       x.stroke();
       x.restore();
   }
 
-  // 6. Draw Neon/Gradient Ring
+  // 6. Draw Neon/Gradient Ring (Top Layer)
   if (cfg.pColor) {
       x.save(); 
       
       // A. Dark Neons
       if ((cfg.pColor === '#000000' || cfg.pColor === '#808080') && cfg.pType === 'neon') {
-          const sC = cfg.pColor; const iC = (cfg.pColor === '#000000') ? 'rgba(0,0,0,0.7)' : 'rgba(128,128,128,0.7)';
+          const sC = cfg.pColor; 
           x.beginPath(); x.arc(400, 400, drawM, 0, 6.28); x.lineWidth = 25; x.strokeStyle = sC; x.shadowBlur = 60; x.shadowColor = sC; x.stroke();
           x.beginPath(); x.arc(400, 400, drawM, 0, 6.28); x.lineWidth = 18; x.strokeStyle = sC; x.shadowBlur = 10; x.shadowColor = sC; x.stroke();
           x.beginPath(); x.arc(400, 400, drawM, 0, 6.28); x.lineWidth = 6; x.strokeStyle = '#FFFFFF'; x.stroke();
@@ -1240,6 +1230,9 @@ function d(){
       x.restore();
   }
   
+  if(f.src) x.drawImage(f,0,0,800,800); 
+}
+
   // 7. Draw Custom Frame (Will be unaffected by filter)
   if(f.src) x.drawImage(f,0,0,800,800); 
 }
