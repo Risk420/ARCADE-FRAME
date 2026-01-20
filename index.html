@@ -1620,7 +1620,6 @@ function renderGallery() {
 
     myGallery.forEach(item => {
         const card = document.createElement('div');
-        // Card styling
         card.style.cssText = "position:relative; border-radius:16px; overflow:hidden; background:linear-gradient(145deg, #1a1a1a, #0d0d0d); display:flex; flex-direction:column; box-shadow: 0 4px 15px rgba(0,0,0,0.6); border:1px solid #333; transition: transform 0.2s;";
         
         // Handle Text vs Image
@@ -1634,6 +1633,16 @@ function renderGallery() {
             const img = document.createElement('img');
             img.src = item.data || item.img; 
             img.style.cssText = "width:100%; height:auto; display:block; aspect-ratio:1/1; object-fit:cover;";
+            
+            // 🔥 ANDROID FIX: Block the native "Hold" menu
+            // This forces the unique name download instead of "download (1)"
+            img.oncontextmenu = (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                downloadFromGallery(item.data); // Run our custom namer
+                return false;
+            };
+            
             card.appendChild(img);
         }
         
@@ -1643,38 +1652,38 @@ function renderGallery() {
         
         const leftGrp = document.createElement('div');
         leftGrp.style.display = 'flex';
-        leftGrp.style.gap = '15px';
+        leftGrp.style.gap = '20px'; // Wider gap for fingers
 
-        // 1. Fav Button
+        // 1. Fav Button (Improved Touch)
         const favBtn = document.createElement('span');
         favBtn.innerHTML = item.fav ? "★" : "☆"; 
-        favBtn.style.cssText = item.fav ? "color:#ffff00; font-size:18px; cursor:pointer; text-shadow:0 0 8px #ffff00;" : "color:#555; font-size:18px; cursor:pointer;";
-        favBtn.onclick = () => toggleFav(item.id);
+        favBtn.style.cssText = item.fav ? "color:#ffff00; font-size:22px; cursor:pointer; text-shadow:0 0 8px #ffff00;" : "color:#555; font-size:22px; cursor:pointer;";
+        favBtn.onclick = (e) => { e.stopPropagation(); toggleFav(item.id); };
         leftGrp.appendChild(favBtn);
 
-        // 2. 🔥 NEW: Download Button (The Fix)
+        // 2. Download Button (Arrow)
         if(item.type !== 'text') {
             const dlBtn = document.createElement('span');
             dlBtn.innerHTML = "⬇️";
-            dlBtn.style.cssText = "font-size:16px; cursor:pointer; opacity:0.8; color:#00ffff;";
-            // This triggers the specialized download function
-            dlBtn.onclick = () => downloadFromGallery(item.data);
+            dlBtn.style.cssText = "font-size:18px; cursor:pointer; opacity:0.8; color:#00ffff;";
+            // This triggers the missing function from Step 1
+            dlBtn.onclick = (e) => { e.stopPropagation(); downloadFromGallery(item.data); };
             leftGrp.appendChild(dlBtn);
         }
 
-        // 3. Copy Button (Text only)
+        // 3. Copy Button
         if(item.type === 'text') {
             const copyBtn = document.createElement('span');
             copyBtn.innerHTML = "📋";
-            copyBtn.style.cssText = "font-size:16px; cursor:pointer; opacity:0.7;";
-            copyBtn.onclick = () => { navigator.clipboard.writeText(item.data); showToast("COPIED!", "#fff"); };
+            copyBtn.style.cssText = "font-size:18px; cursor:pointer; opacity:0.7;";
+            copyBtn.onclick = (e) => { e.stopPropagation(); navigator.clipboard.writeText(item.data); showToast("COPIED!", "#fff"); };
             leftGrp.appendChild(copyBtn);
         }
 
         const delBtn = document.createElement('span');
         delBtn.innerHTML = "🗑️";
-        delBtn.style.cssText = "font-size:16px; cursor:pointer; opacity:0.6; color:#ff4444;";
-        delBtn.onclick = function() { deleteItem(item.id); };
+        delBtn.style.cssText = "font-size:18px; cursor:pointer; opacity:0.6; color:#ff4444;";
+        delBtn.onclick = function(e) { e.stopPropagation(); deleteItem(item.id); };
 
         bar.appendChild(leftGrp);
         bar.appendChild(delBtn);
@@ -1699,13 +1708,21 @@ function showToast(text, color) {
 }
 
 function toggleFav(id) {
-    // 🔥 FIX: Loose equality check (==) helps match numbers correctly
+    // 🔥 FIX: Use loose equality (==) to match string/number IDs
     const idx = myGallery.findIndex(x => x.id == id);
+    
     if(idx > -1) {
         myGallery[idx].fav = !myGallery[idx].fav;
-        if(myGallery[idx].fav) { const item = myGallery.splice(idx, 1)[0]; myGallery.unshift(item); }
+        
+        // Move favorites to top
+        if(myGallery[idx].fav) { 
+            const item = myGallery.splice(idx, 1)[0]; 
+            myGallery.unshift(item); 
+        }
+        
         localStorage.setItem('arcadeGallery', JSON.stringify(myGallery));
         renderGallery();
+        
         if(typeof playClick === 'function') playClick();
     }
 }
@@ -1810,6 +1827,41 @@ setInterval(() => {
              }
         }
     }
+    
+    function downloadFromGallery(base64Data) {
+    // 1. Convert the saved Base64 string back into a File Blob
+    fetch(base64Data)
+    .then(res => res.blob())
+    .then(blob => {
+        // 2. Generate Unique Name
+        const uniqueName = `Arcade_Backup_${Date.now()}_${Math.floor(Math.random() * 9999)}.png`;
+        const file = new File([blob], uniqueName, { type: "image/png" });
+
+        // 3. iPhone Share Sheet / Android Download
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+            navigator.share({
+                files: [file],
+                title: 'Arcade Studio',
+                text: 'Saved from my backups'
+            }).catch(e => console.log('Cancelled'));
+        } else {
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = uniqueName;
+            document.body.appendChild(a);
+            a.click();
+            setTimeout(() => {
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+            }, 100);
+        }
+    });
+    
+    // 4. Sound
+    if(typeof playClick === 'function') playClick();
+}
+
 }, 1000);
 </script>
 </body>
