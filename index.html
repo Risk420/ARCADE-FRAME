@@ -1836,35 +1836,12 @@ setInterval(() => {
         btn.style.cssText = "width:100%; background:linear-gradient(180deg, #1a1a1a, #000); color:#fff; border:1px solid #333; margin-bottom:10px; padding:14px; font-weight:bold; border-radius:10px; cursor:pointer; box-shadow:0 4px 10px rgba(0,0,0,0.5); letter-spacing:1px; font-family:sans-serif;";
         btn.onclick = toggleGalleryUI;
         menu.insertBefore(btn, menu.firstChild);
-            // Hook Download Button Logic (Fixed: Studio + Gallery)
-    if(typeof downloadPic !== 'undefined') {
-        downloadPic = function() {
-            // 1. Save to My Studio (Internal Backup)
-            if(typeof saveToGallery === 'function') saveToGallery();
-
-            // 2. Download to Android Gallery (Directly)
-            const canvas = document.getElementById('c');
-            if(canvas) {
-                // Ensure filters are baked in
-                if(typeof d === 'function') d();
-                
-                canvas.toBlob(function(blob) {
-                    const url = URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = `Arcade_${Date.now()}.png`;
-                    document.body.appendChild(a);
-                    a.click(); // <--- Forces the download to your Phone Gallery
-                    
-                    // Cleanup to prevent memory leaks
-                    setTimeout(() => {
-                        document.body.removeChild(a);
-                        window.URL.revokeObjectURL(url);
-                    }, 100);
-                });
-            }
-        }
+        // Hook Download Button Logic (Fixed: Single Download Only)
+if(typeof downloadPic !== 'undefined') {
+    downloadPic = function() {
+        saveToGallery();
     }
+}
 
 }, 1000);
 </script>
