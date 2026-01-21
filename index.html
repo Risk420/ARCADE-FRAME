@@ -1724,9 +1724,8 @@ function downloadFromGallery(base64Data) {
     const uniqueName = `Arcade_${Date.now()}_${Math.floor(Math.random() * 9999)}.png`;
 
     // 2. INSTANT DOWNLOAD (No Fetch, No Lag)
-    // We use the image data directly to force the save.
     const a = document.createElement('a');
-    a.href = base64Data; 
+    a.href = base64Data;
     a.download = uniqueName;
     document.body.appendChild(a);
     a.click(); // Triggers the Android download immediately
@@ -1736,10 +1735,9 @@ function downloadFromGallery(base64Data) {
         document.body.removeChild(a);
     }, 100);
 }
-    
-    if(typeof playClick === 'function') playClick();
-}
 
+// 🔊 Play Sound (Moved safely outside the function)
+if(typeof playClick === 'function') playClick();
 
 // --- 🗑️ CUSTOM DELETE MODAL LOGIC (NEON THEME) ---
 let deleteTargetId = null;
