@@ -1159,7 +1159,7 @@ function toggleBoundaryLock() {
     d();
     if(typeof playClick === 'function') playClick();
 }
-// --- 🛠️ CORE DRAWING ENGINE (SEGREGATED: IPHONE FIX vs ANDROID SHIELD) ---
+// --- 🛠️ CORE DRAWING ENGINE (FIXED: RESTORES ANDROID FILTERS) ---
 function d(){ 
   if(!x) return;
   x.clearRect(0,0,800,800); 
@@ -1174,9 +1174,10 @@ function d(){
   // 🧠 SMART DEVICE DETECTION
   const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 
-  // 2. SCREEN PREVIEW (CSS)
+  // 2. SCREEN PREVIEW (CSS LAYER)
   if (isIOS) {
-      // 🍎 IPHONE: Show CSS filter for Live Preview
+      // 🍎 IPHONE: We use CSS for the live preview.
+      // If saving, we turn CSS off to prevent double-glitches.
       if(c) {
           if(!window.isSaving) {
               c.style.filter = (cssFilter !== '') ? cssFilter : 'none';
@@ -1187,8 +1188,9 @@ function d(){
           }
       }
   } else {
-      // 🤖 ANDROID PROTECTION: STRICTLY 'none'
-      // Android does not participate in the iPhone logic.
+      // 🤖 ANDROID: We BLOCK CSS completely.
+      // Android uses the Canvas Engine (Step 4) for both screen and save.
+      // This prevents the "Double Filter" glitch.
       if(c) {
           c.style.filter = 'none';
           c.style.webkitFilter = 'none';
@@ -1212,7 +1214,7 @@ function d(){
       cfg.y = Math.max(400 - rangeY, Math.min(400 + rangeY, cfg.y));
   }
 
-  // 4. IMAGE DRAWING
+  // 4. IMAGE DRAWING & FILTER APPLICATION
   if(i.src){
       x.save(); 
       x.beginPath(); x.arc(400, 400, drawM + 2, 0, Math.PI * 2); x.clip(); 
@@ -1221,26 +1223,27 @@ function d(){
       x.translate(cfg.x, cfg.y); 
       x.rotate(cfg.r * Math.PI / 180);
       
-      // 🔥 THE SEGREGATED FIX 🔥
+      // 🔥 FILTER LOGIC (The Correction) 🔥
       if (isIOS) {
-          // 🍎 IPHONE ONLY: 
-          // If 'isSaving' is true (triggered by download button), Hard Bake the filter.
+          // 🍎 IPHONE: Only apply filter to pixels if we are SAVING.
           if (window.isSaving) {
               x.filter = (cssFilter !== '') ? cssFilter : 'none';
           } else {
               x.filter = 'none';
           }
       } else {
-          // 🛡️ ANDROID SHIELD: 
-          // Strictly 'none'. It completely ignores the 'isSaving' flag.
-          x.filter = 'none'; 
+          // 🤖 ANDROID: ALWAYS apply filter to pixels.
+          // This restores the filters for Android users.
+          x.filter = (cssFilter !== '') ? cssFilter : 'none';
       }
       
       x.drawImage(i, -w/2, -h/2, w, h);
       x.restore(); 
   }
   
-  // 5. RESET FILTER (Prevents Frame Tinting)
+  // 5. RESET FILTER (CRITICAL PROTECTION)
+  // We turn the filter OFF before drawing the frame.
+  // This ensures the frame NEVER gets colored/tinted on Android or iPhone.
   x.filter = 'none'; 
 
   // 6. FRAME DRAWING
@@ -1273,6 +1276,7 @@ function d(){
   }
   if(f.src) x.drawImage(f,0,0,800,800); 
 }
+
 
 // --- 📂 FILE HANDLERS (SMART AUTO-SIZING: 400px vs 375px) ---
 function handleFile(e){
