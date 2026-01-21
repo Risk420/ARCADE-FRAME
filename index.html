@@ -1170,36 +1170,40 @@ function applyFilter(filterVal, btn) {
         }
     }
 }
-/// --- 🔒 BOUNDARY LOCK LOGIC (FIXES STUCK SLIDER) ---
+/// --- 🔒 BOUNDARY LOCK LOGIC (FIXED) ---
 let isBoundaryLocked = true;
 function toggleBoundaryLock() {
     isBoundaryLocked = !isBoundaryLocked;
     const btn = document.getElementById('lock-btn');
-    
+    const zSlider = document.getElementById('z'); 
+
     if (isBoundaryLocked) {
-        // 🔒 LOCK MODE
+        // 🔒 LOCK ON
         if(btn) {
             btn.innerHTML = "BOUNDARY LOCK: ON 🔒";
             btn.style.borderColor = "#00ff00";
             btn.style.color = "#00ff00";
         }
+        d(); // Snap back to limits
     } else {
-        // 🔓 FREEDOM MODE
+        // 🔓 LOCK OFF
         if(btn) {
             btn.innerHTML = "BOUNDARY LOCK: OFF 🔓";
             btn.style.borderColor = "#ff0000";
             btn.style.color = "#ff0000";
         }
         
-        // 🔥 THE FIX: FORCE SLIDER TO UNSTICK
-        // We set the minimum to 0.01 so it can slide all the way down.
-        if(window.zSl) {
-            zSl.min = "0.01";
-            zSl.value = cfg.s; // Make sure the handle stays with the image
+        // 🔥 FORCE UNLOCK (The Missing Piece)
+        if(zSlider) {
+            zSlider.min = "0.01";                // JS Property
+            zSlider.setAttribute('min', '0.01'); // HTML Attribute (Crucial for Mobile)
+            zSlider.step = "0.01";               // Ensures smooth dragging
+            
+            // Force the visual red/blue line to update instantly
+            if(typeof updS === 'function') updS(zSlider);
         }
     }
     
-    d(); // Update the canvas
     if(typeof playClick === 'function') playClick();
 }
 
