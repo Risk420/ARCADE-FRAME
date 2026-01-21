@@ -1860,6 +1860,58 @@ setInterval(() => {
     }
        
 }, 1000);
+    // ------------------------------------------------------------------
+// 🍏 iOS FILTER FIX (PROTECTED)
+// This applies ONLY to iPhone/iPad to bake filters into the download.
+// Android is completely ignored.
+// ------------------------------------------------------------------
+function fixIOSDownloads() {
+    // 1. STRICT iOS DETECTION
+    const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+    if (!isIOS) return; // Stop immediately if not iOS
+
+    // 2. Find the Canvas and Download Button
+    const canvas = document.querySelector('canvas');
+    
+    // Try to find the button by text or ID
+    const allBtns = Array.from(document.querySelectorAll('button'));
+    const downloadBtn = allBtns.find(b => b.innerText && b.innerText.includes('DOWNLOAD')) 
+                        || document.getElementById('save-btn');
+
+    if (!canvas || !downloadBtn) {
+        // If not found yet, wait and try again (for slow loading)
+        setTimeout(fixIOSDownloads, 1000);
+        return;
+    }
+
+    // 3. Intercept the Click
+    downloadBtn.addEventListener('click', () => {
+        const currentStyle = window.getComputedStyle(canvas);
+        const activeFilter = currentStyle.filter;
+
+        // Only act if there is a real filter
+        if (activeFilter && activeFilter !== 'none') {
+            const ctx = canvas.getContext('2d');
+
+            // Copy original image
+            const tempCanvas = document.createElement('canvas');
+            tempCanvas.width = canvas.width;
+            tempCanvas.height = canvas.height;
+            tempCanvas.getContext('2d').drawImage(canvas, 0, 0);
+
+            // Redraw with filter "baked in"
+            ctx.save();
+            ctx.filter = activeFilter; 
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(tempCanvas, 0, 0);
+            ctx.restore();
+        }
+    }, { capture: true }); // 'capture' ensures this runs BEFORE the download
+}
+
+// Start the fix
+fixIOSDownloads();
+
 </script>
 </body>
 </html>
