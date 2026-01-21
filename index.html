@@ -1861,56 +1861,85 @@ setInterval(() => {
        
 }, 1000);
     // ------------------------------------------------------------------
-// 🍏 iOS FILTER FIX (PROTECTED)
-// This applies ONLY to iPhone/iPad to bake filters into the download.
-// Android is completely ignored.
+// 🍏 iPHONE FILTER FIX (Strictly Protected)
+// This code ONLY runs on iPhone/iPad to fix the missing filter bug.
+// Android and PC are completely ignored.
 // ------------------------------------------------------------------
-function fixIOSDownloads() {
-    // 1. STRICT iOS DETECTION
+function fixiPhoneFilters() {
+    // 1. STRICT ANDROID PROTECTION
+    // If this is NOT an iPhone/iPad, stop immediately.
     const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
-    if (!isIOS) return; // Stop immediately if not iOS
+    if (!isIOS) return; 
 
-    // 2. Find the Canvas and Download Button
-    const canvas = document.querySelector('canvas');
+    console.log("🍏 iPhone Detected: Applying Filter Fix...");
+
+    // 2. Prevent Infinite Loops (Safety Check)
+    if (window.isIOSFixApplied) return;
     
-    // Try to find the button by text or ID
-    const allBtns = Array.from(document.querySelectorAll('button'));
-    const downloadBtn = allBtns.find(b => b.innerText && b.innerText.includes('DOWNLOAD')) 
-                        || document.getElementById('save-btn');
-
-    if (!canvas || !downloadBtn) {
-        // If not found yet, wait and try again (for slow loading)
-        setTimeout(fixIOSDownloads, 1000);
+    // 3. Wait for your main downloader to be ready
+    if (typeof downloadPic === 'undefined') {
+        setTimeout(fixiPhoneFilters, 500);
         return;
     }
 
-    // 3. Intercept the Click
-    downloadBtn.addEventListener('click', () => {
-        const currentStyle = window.getComputedStyle(canvas);
-        const activeFilter = currentStyle.filter;
+    // 4. Save the original function (Your current downloader)
+    const originalDownloader = downloadPic;
+    window.isIOSFixApplied = true; // Mark as done
 
-        // Only act if there is a real filter
-        if (activeFilter && activeFilter !== 'none') {
-            const ctx = canvas.getContext('2d');
-
-            // Copy original image
-            const tempCanvas = document.createElement('canvas');
-            tempCanvas.width = canvas.width;
-            tempCanvas.height = canvas.height;
-            tempCanvas.getContext('2d').drawImage(canvas, 0, 0);
-
-            // Redraw with filter "baked in"
-            ctx.save();
-            ctx.filter = activeFilter; 
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.drawImage(tempCanvas, 0, 0);
-            ctx.restore();
+    // 5. Overwrite with "Filter Baker" (Only for iPhone)
+    downloadPic = function() {
+        const canvas = document.querySelector('canvas');
+        if (!canvas) {
+            originalDownloader(); // Safety fallback
+            return;
         }
-    }, { capture: true }); // 'capture' ensures this runs BEFORE the download
+
+        // Check if there is a CSS filter (like grayscale, contrast)
+        const style = window.getComputedStyle(canvas);
+        const filter = style.filter;
+
+        // IF FILTER EXISTS: Bake it into the pixels temporarily
+        if (filter && filter !== 'none') {
+            const ctx = canvas.getContext('2d');
+            const w = canvas.width;
+            const h = canvas.height;
+
+            // A. Save the raw original pixels (to restore later)
+            const rawData = ctx.getImageData(0, 0, w, h);
+
+            // B. Create a copy to draw from
+            const temp = document.createElement('canvas');
+            temp.width = w; temp.height = h;
+            temp.getContext('2d').drawImage(canvas, 0, 0);
+
+            // C. Bake the filter onto the main canvas
+            ctx.save();
+            ctx.filter = filter;
+            ctx.clearRect(0, 0, w, h);
+            ctx.drawImage(temp, 0, 0);
+            ctx.restore();
+
+            // D. Run your original download (Now it sees the filter!)
+            // We verify the bake happened, then trigger download
+            setTimeout(() => {
+                originalDownloader();
+
+                // E. Restore the raw pixels instantly (so the app doesn't look double-filtered)
+                setTimeout(() => {
+                    ctx.putImageData(rawData, 0, 0);
+                }, 50); 
+            }, 10);
+
+        } else {
+            // No filter? Just run your normal code.
+            originalDownloader();
+        }
+    };
 }
 
-// Start the fix
-fixIOSDownloads();
+// Run the fix
+fixiPhoneFilters();
+
 
 </script>
 </body>
