@@ -1171,27 +1171,38 @@ function applyFilter(filterVal, btn) {
     }
 }
 
-// --- 🔒 2. BOUNDARY LOCK LOGIC ---
+// --- 🔒 BOUNDARY LOCK LOGIC (FIXED ZOOM OUT) ---
 let isBoundaryLocked = true;
 function toggleBoundaryLock() {
     isBoundaryLocked = !isBoundaryLocked;
     const btn = document.getElementById('lock-btn');
+    
     if (isBoundaryLocked) {
+        // LOCKING: Calculate limits based on the circle
         if(btn) {
             btn.innerHTML = "BOUNDARY LOCK: ON 🔒";
             btn.style.borderColor = "#00ff00";
             btn.style.color = "#00ff00";
         }
+        // Run d() to enforce the lock immediately
+        d();
     } else {
+        // UNLOCKING: FREEDOM MODE
         if(btn) {
             btn.innerHTML = "BOUNDARY LOCK: OFF 🔓";
             btn.style.borderColor = "#ff0000";
             btn.style.color = "#ff0000";
         }
+        // 🔥 CRITICAL FIX: Allow zooming out completely (0.01)
+        if(window.zSl) {
+            zSl.min = 0.01; 
+        }
+        // Don't force d() here, just let the slider be free
     }
-    d();
+    
     if(typeof playClick === 'function') playClick();
 }
+
 // --- 🛠️ CORE DRAWING ENGINE (ANDROID RESTORED) ---
 function d(){ 
   if(!x) return;
