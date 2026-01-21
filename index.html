@@ -1849,15 +1849,19 @@ setInterval(() => {
         btn.onclick = toggleGalleryUI;
         menu.insertBefore(btn, menu.firstChild);
         
-        // Hook Download Button Logic (Fixed: Single Download Only)
-if(typeof downloadPic !== 'undefined') {
-    downloadPic = function() {
-        saveToGallery();
+        // Hook Download Button Logic
+        if(typeof downloadPic !== 'undefined') {
+             const oldDownload = downloadPic;
+             downloadPic = function() {
+                 saveToGallery();
+                 oldDownload();
+             }
+        }
     }
-}
-
+       
 }, 1000);
 </script>
 </body>
 </html>
+
 
