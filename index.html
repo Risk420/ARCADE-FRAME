@@ -1159,36 +1159,51 @@ function toggleBoundaryLock() {
     d();
     if(typeof playClick === 'function') playClick();
 }
-
-// --- 🛠️ CORE DRAWING ENGINE (FINAL MERGE: OLD FILTERS + NEW IPHONE FIX) ---
+// --- 🛠️ CORE DRAWING ENGINE (STRICT SEPARATION: IPHONE FIXED + ANDROID RESTORED) ---
 function d(){ 
   if(!x) return;
   x.clearRect(0,0,800,800); 
 
   // ----------------------------------------------------
-  // 1. FILTER LOGIC (Taken EXACTLY from your Old Code)
+  // 1. PREPARE FILTERS (We need both formats)
   // ----------------------------------------------------
+  
+  // Format A: CSS String (For Android Screen)
+  let cssFilter = '';
+  if(cfg.filter && cfg.filter !== 'none') cssFilter += cfg.filter;
+  if(cfg.adj.b !== 100) cssFilter += ` brightness(${cfg.adj.b}%)`;
+  if(cfg.adj.c !== 100) cssFilter += ` contrast(${cfg.adj.c}%)`;
+  if(cfg.adj.s !== 100) cssFilter += ` saturate(${cfg.adj.s}%)`;
+
+  // Format B: Canvas String (For iPhone/Mac Hard Bake - From Old Code)
   let finalF = (cfg.filter && cfg.filter !== 'none') ? cfg.filter : '';
   if(cfg.adj.b !== 100) finalF += ` brightness(${cfg.adj.b}%)`;
   if(cfg.adj.c !== 100) finalF += ` contrast(${cfg.adj.c}%)`;
   if(cfg.adj.s !== 100) finalF += ` saturate(${cfg.adj.s}%)`;
 
   // ----------------------------------------------------
-  // 2. DEVICE DETECTION (Friend's Fix + Mac Support)
+  // 2. DEVICE DETECTION (Mac + iPhone vs Android)
   // ----------------------------------------------------
-  // This detects: iPhone, iPad, iPod, AND Mac (Macintosh)
   const isApple = /Mac|iPhone|iPod|iPad|AppleWebKit/.test(navigator.userAgent) && !/Android/.test(navigator.userAgent);
   
-  // 🛡️ UNIVERSAL SHIELD:
-  // We disable CSS filters for EVERYONE.
-  // This protects Android from "Double Filters" and protects iPhone from bugs.
-  if(c) {
-      c.style.filter = 'none';
-      c.style.webkitFilter = 'none';
+  // ----------------------------------------------------
+  // 3. SCREEN PREVIEW LOGIC
+  // ----------------------------------------------------
+  if (isApple) {
+      // 🍎 APPLE: Disable CSS (We use Canvas Filter below)
+      // This prevents the "Invisible Canvas" bug on Safari.
+      if(c) { c.style.filter = 'none'; c.style.webkitFilter = 'none'; }
+  } else {
+      // 🤖 ANDROID: Use CSS (Restores your Android Visuals)
+      // This makes the screen look right on Android immediately.
+      if(c) { 
+          c.style.filter = (cssFilter !== '') ? cssFilter : 'none'; 
+          c.style.webkitFilter = (cssFilter !== '') ? cssFilter : 'none';
+      }
   }
 
   // ----------------------------------------------------
-  // 3. ZOOM & BOUNDARY LOGIC (Keeps the Slider Fix)
+  // 4. ZOOM & BOUNDARY LOGIC (Keeps Slider Fix)
   // ----------------------------------------------------
   let drawM = cfg.m;
   if (cfg.pColor && cfg.m > 360) { drawM = 360; }
@@ -1200,7 +1215,6 @@ function d(){
       const reqW = (mathM*2*cos + mathM*2*sin), reqH = (mathM*2*sin + mathM*2*cos);
       const minS = Math.max(reqW/i.width, reqH/i.height);
       
-      // Update Slider if below limit (The Fix)
       if(cfg.s < minS) { 
           cfg.s = minS; 
           if(window.zSl) zSl.value = minS; 
@@ -1214,7 +1228,7 @@ function d(){
   }
 
   // ----------------------------------------------------
-  // 4. IMAGE DRAWING (The Merge)
+  // 5. IMAGE DRAWING (STRICT SEPARATION)
   // ----------------------------------------------------
   if(i.src){
       x.save(); 
@@ -1224,25 +1238,25 @@ function d(){
       x.translate(cfg.x, cfg.y); 
       x.rotate(cfg.r * Math.PI / 180);
       
-      // ✅ APPLYING OLD FILTER LOGIC
       if (isApple) {
-          // 🍎 IPHONE/MAC: Hard Bake the filter so it saves.
+          // 🍎 IPHONE/MAC: Apply Filter to Canvas (The Old Code Fix)
+          // This ensures the image saves with filters.
           if(finalF !== '') x.filter = finalF; else x.filter = 'none';
       } else {
-          // 🤖 ANDROID: Protected Logic.
-          // We apply the same filter here (visuals only) since CSS is off.
-          if(finalF !== '') x.filter = finalF; else x.filter = 'none';
+          // 🤖 ANDROID: PROTECTED (The Current Code Logic)
+          // We set this to 'none' to avoid glitches, relying on CSS for the screen.
+          x.filter = 'none';
       }
       
       x.drawImage(i, -w/2, -h/2, w, h);
       x.restore(); 
   }
   
-  // 5. RESET FILTER (Crucial for frames)
+  // 6. RESET FILTER
   x.filter = 'none'; 
 
   // ----------------------------------------------------
-  // 6. FRAME DRAWING (Safe Modern Logic)
+  // 7. FRAME DRAWING
   // ----------------------------------------------------
   if (cfg.pColor) {
       x.save(); x.beginPath(); x.arc(400, 400, drawM, 0, Math.PI * 2); 
@@ -1273,6 +1287,7 @@ function d(){
   }
   if(f.src) x.drawImage(f,0,0,800,800); 
 }
+
 // --- 📂 FILE HANDLERS (SMART AUTO-SIZING: 400px vs 375px) ---
 function handleFile(e){
     const files = e.target ? e.target.files : e.files; if(!files || !files[0]) return;
