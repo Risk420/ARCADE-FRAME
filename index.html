@@ -562,7 +562,14 @@ function toggleMenu(e) { e.stopPropagation(); initAudio(); panel.classList.toggl
 function toggleSwitchMenu(e) { e.stopPropagation(); swMenu.style.display = swMenu.style.display === 'flex' ? 'none' : 'flex'; thMenu.style.display = 'none'; playClick(); }
 function toggleThemeMenu(e) { e.stopPropagation(); thMenu.style.display = thMenu.style.display === 'flex' ? 'none' : 'flex'; swMenu.style.display = 'none'; playClick(); }
 // --- 🎵 AUDIO ---
-const playlist = ["jfKfPfyJRdk", "BrnDlRmW5hs", "tLYL_3NcJck", "FKtzkolncnk", "_Ojv9Zu1IZY", "OBoMLZTtqb8", "lT8JepVwxBQ", "MedT9ECothA", "eAdtqDV06Ho", "2kzQ272Le8Q", "0qCL3Sz1--M", "2UN1ZVbBelU", "iDVKMdnvgl8", "9JMjZbIpmS8", "TNGsftqag6M", "GedLli_YXEI"];
+const playlist = [
+    "jfKfPfyJRdk", "BrnDlRmW5hs", "tLYL_3NcJck", "FKtzkolncnk", "_Ojv9Zu1IZY", 
+    "OBoMLZTtqb8", "lT8JepVwxBQ", "AMcVJmb5mvk", "K1k35lDpzdw", "_Rz2Gbr_3uE", 
+    "bnrgRTv62Ys", "6joZ4QHH64E", "Td0iFptEmo0", "MedT9ECothA", "eAdtqDV06Ho", 
+    "2kzQ272Le8Q", "0qCL3Sz1--M", "2UN1ZVbBelU", "iDVKMdnvgl8", "9JMjZbIpmS8", 
+    "TNGsftqag6M", "GedLli_YXEI"
+];
+
 function initAudio(){ if(!audioStarted){ audioCtx.resume().then(()=>{ audioStarted=true; if(player&&musicOn){ player.unMute(); player.playVideo(); }});}}
 function onYouTubeIframeAPIReady(){ 
     const rId = playlist[Math.floor(Math.random() * playlist.length)]; 
