@@ -576,16 +576,25 @@ function onYouTubeIframeAPIReady(){
         host: 'https://www.youtube-nocookie.com',
         playerVars: {
             'autoplay': 1,
-            'loop': 1,
-            'playlist': rId,
             'mute': 0,
             'origin': window.location.origin
+            // ⚠️ REMOVED 'loop' & 'playlist' parameters here.
+            // If we leave them, the song repeats forever and never shuffles.
         },
         events: {
-            'onReady': e => { e.target.setVolume(25); }
+            'onReady': e => { e.target.setVolume(25); },
+            'onStateChange': e => {
+                // 🔀 SHUFFLE FIX: When song ends (0), pick new random song
+                if (e.data === 0) {
+                    const nextSong = playlist[Math.floor(Math.random() * playlist.length)];
+                    player.loadVideoById(nextSong);
+                    if(sel) sel.value = nextSong;
+                }
+            }
         }
     });
 }
+
 
 function changeMusic(id){ if(player)player.loadVideoById(id); playShutter(); }
 function toggleMusic(){ initAudio(); playClick(); musicOn=!musicOn; if(musicOn){ player.playVideo(); mStat.innerText="ON"; mStat.style.color="#ff0000"; }else{ player.pauseVideo(); mStat.innerText="OFF"; mStat.style.color="#888"; }}
