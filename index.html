@@ -14,7 +14,7 @@
       background-color: #0a0a0c; /* <--- SAFETY NET: Prevents white bar glitches */
       height: 100%;
   }
-  
+
   /* DEFAULT (ORIGINAL) THEME */
   body {
     background: #0a0a0c; color: white; font-family: sans-serif;
@@ -57,7 +57,7 @@
     background-size: cover;
     min-height: 100vh;
   }
-  
+
   /* Retro Grid Floor Effect */
   body.theme-retro::before {
       content: ""; position: fixed; bottom: 0; left: 0; width: 100%; height: 40vh;
@@ -89,7 +89,7 @@
   .plato-icon { font-size: 50px; margin-bottom: 20px; animation: bounce 1s infinite; }
   .plato-msg { color: #ff0000; font-family: "Arial Black", sans-serif; font-size: 22px; text-transform: uppercase; margin-bottom: 15px; text-shadow: 0 0 15px rgba(255,0,0,0.6); }
   .plato-desc { color: #eee; font-size: 13px; max-width: 320px; margin-bottom: 30px; line-height: 1.6; font-weight: bold; background: #222; padding: 15px; border-radius: 8px; border: 1px solid #444; }
-  
+
   /* FIXED BUTTON STYLE: Blue/Teal (Initial State) */
   .plato-btn { 
       background: #004d4d; /* Deep Teal */
@@ -120,7 +120,7 @@
   /* --- ✨ NEW FEATURE: MAGIC FILTERS MENU CSS --- */
   #filter-wrapper { display: none; flex-direction: column; width: 100%; margin-top: 5px; background: #111; border: 1px solid #333; border-radius: 8px; padding: 10px; box-sizing: border-box; }
   #filter-wrapper.active { display: flex; animation: slideDown 0.3s ease; }
-  
+
   .filter-scroll { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 5px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
   .filter-scroll::-webkit-scrollbar { display: none; }
   .filter-btn { 
@@ -129,10 +129,10 @@
   }
   .filter-btn:hover, .filter-btn.active-filter { opacity: 1; transform: scale(1.05); }
   .filter-btn.active-filter .filter-preview { border-color: #00ffff; box-shadow: 0 0 8px #00ffff; }
-  
+
   .filter-preview { width: 60px; height: 60px; border-radius: 6px; border: 2px solid #444; object-fit: cover; background: #000; }
   .filter-name { color: #fff; font-size: 9px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; }
-  
+
   @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
   /* --- NAVIGATION BUTTONS --- */
   .menu-toggle { 
@@ -162,9 +162,9 @@
     box-sizing: border-box; padding-bottom: 80px; 
   }
   #menu-panel.open { left: 0; }
-  
+
   .switch-container { position: relative; width: 100%; }
-  
+
   /* Shared style for Switch To and Theme buttons */
   #switch-btn, #theme-btn { 
     background: rgba(255,255,255,0.05); color: white; border: 2px solid #ff0000; 
@@ -206,7 +206,7 @@
   }
   .lnk:active { transform: scale(0.96); background: rgba(255,255,255,0.1); }
   .lnk svg { width: 18px; height: 18px; fill: white; }
-  
+
   /* HEADERS */
   h1 { color: #fff; margin: 60px 0 0 0; font-family: "Arial Black", sans-serif; font-style: italic; font-size: 36px; text-transform: uppercase; letter-spacing: -1px; text-shadow: 2px 2px 0px #ff0000, -1px -1px 10px rgba(255, 0, 0, 0.8); animation: arcadeBounce 1.8s infinite ease-in-out; }
   @keyframes arcadeBounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
@@ -230,15 +230,15 @@
   }
   /* --- 🖼️ FRAME STUDIO CSS --- */
   #box { position: relative; width: 310px; height: 310px; border-radius: 50%; overflow: hidden; border: 3px solid #ff0000; box-sizing: border-box; background: transparent; z-index: 10; flex-shrink: 0; }
-  
+
   /* 🛠️ TOUCH FIX: 'touch-action: none' enables 1-finger dragging on the canvas */
   canvas#c { position: absolute; top: 50%; left: 50%; width: 310px; height: 310px; transform: translate(-50%, -50%); z-index: 15; touch-action: none; }
-  
+
   #frame-btn-group { display: flex; flex-direction: column; gap: 6px; width: 100%; }
   #ui-toggle-btn { margin-bottom: 6px; }
 
   .ui { margin-top: 20px; width: 310px; display: flex; flex-direction: column; gap: 6px; background: transparent; }
-  
+
   .btn { 
     background: #000; border: 2px solid #fff; color: white; padding: 12px; 
     text-align: center; border-radius: 8px; font-weight: 900; 
@@ -251,7 +251,7 @@
   .btn-r { border-color: #ff0000; }
   .lbl { font-size: 9px; color: #888; text-transform: uppercase; margin-top: 2px; display: flex; justify-content: space-between; align-items: center; width: 100%; }
   .val-tag { color: #ff0000; font-weight: bold; font-family: monospace; font-size: 10px; }
-  
+
   /* --- 🛑 SLIDER FIX (NO JUMP + SCROLL SAFETY) --- */
   input[type=range] { 
       -webkit-appearance: none; 
@@ -277,10 +277,10 @@
   /* --- 🎨 PALETTE CSS --- */
   #palette-wrapper { display: none; flex-direction: column; width: 100%; margin-top: 5px; background: #000; border: 1px solid #333; border-radius: 8px; padding: 8px; box-sizing: border-box; }
   #palette-wrapper.active { display: flex; }
-  
+
   .cat-scroll { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 8px; margin-bottom: 5px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
   .cat-scroll::-webkit-scrollbar { display: none; }
-  
+
   .cat-btn { 
     flex: 0 0 auto; padding: 8px 12px; background: #1a1a1c; 
     border: 1px solid #444; border-radius: 20px; 
@@ -292,7 +292,7 @@
 
   .color-grid-container { display: none; grid-template-columns: repeat(auto-fill, minmax(32px, 1fr)); gap: 6px; max-height: 220px; overflow-y: auto; padding-top: 5px; }
   .color-grid-container.show { display: grid; animation: fadeIn 0.2s ease; }
-  
+
   .c-sq { height: 32px; border-radius: 6px; cursor: pointer; border: 1px solid rgba(255,255,255,0.1); position: relative; box-sizing: border-box; }
   .c-sq:active { transform: scale(0.9); border-color: #fff; }
   .c-sq.is-metal { border: 1px solid #fff; }
@@ -312,24 +312,24 @@
   .sym-grid { display: flex; flex-wrap: wrap; gap: 5px; width: 100%; padding: 5px; box-sizing: border-box; }
   .sym-btn { background: #1a1a1c; border: 1px solid #333; color: white; padding: 15px 0; font-size: 20px; border-radius: 6px; cursor: pointer; text-align: center; flex: 1 0 18%; min-width: 50px; transition: transform 0.05s ease; }
   .sym-btn:active { transform: scale(0.90); background: #ff0000; color: #000; }
-  
+
   /* --- ⚡ GIF STUDIO CSS --- */
   @keyframes rotate { 100% { transform: rotate(360deg); } }
-  
+
   /* 🛠️ TOUCH FIX: 'touch-action: none' enables dragging for the GIF studio */
   .stage { position: relative; width: 320px; height: 320px; display: flex; align-items: center; justify-content: center; margin-bottom: 30px; touch-action: none; flex-shrink: 0; }
-  
+
   .led-ring { position: absolute; inset: -15px; border-radius: 50%; background: conic-gradient(from 0deg, #00f3ff, #bc13fe, #ff0055, #00f3ff); animation: rotate 1.0s linear infinite; filter: blur(20px); z-index: 1; pointer-events: none; }
-  
+
   /* 🛠️ TOUCH FIX applied here too */
   .viewport { position: relative; z-index: 5; width: 100%; height: 100%; border-radius: 50%; overflow: hidden; background-color: #000; display: flex; justify-content: center; align-items: center; box-shadow: inset 0 0 20px #000; touch-action: none; }
-  
+
   #v { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); pointer-events: none; will-change: transform; }
   #o { width: 100%; height: 100%; object-fit: contain; display: none; }
-  
+
   .ui-gif { z-index: 10; background: transparent; padding: 25px; border-radius: 30px; width: 340px; border: none; margin-bottom: 20px; max-width: 90%; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; }
   .label-row { display: flex; justify-content: space-between; font-size: 11px; color: #888; margin-bottom: 8px; font-weight: 600; width: 100%; }
-  
+
   .ui-gif input[type="range"] { margin-bottom: 25px; -webkit-appearance: none; width: 100%; background: transparent; cursor: pointer; }
   .ui-gif input[type="range"]::-webkit-slider-runnable-track { background: #333; height: 6px; border-radius: 3px; }
   .ui-gif input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; height: 20px; width: 20px; border-radius: 50%; background: #00f3ff; box-shadow: 0 0 10px #00f3ff; border: 2px solid #fff; margin-top: -7px; }
@@ -337,13 +337,13 @@
 
   .status { margin-top: 20px; font-size: 14px; text-align: center; color: #00f3ff; font-weight: 600; opacity: 0; transition: 0.3s; height: 20px; }
   .status.active { opacity: 1; }
-  
+
   .neon-wrap { position: relative; width: 100%; margin-top: 15px; padding: 3px; border-radius: 50px; overflow: hidden; box-sizing: border-box; display: inline-block; box-shadow: 0 0 15px rgba(0,0,0,0.5); }
   .neon-wrap::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; z-index: 0; animation: rotate 3s linear infinite; pointer-events: none; }
   .neon-wrap.blue::before { background: conic-gradient(transparent, transparent, #00f3ff, #bc13fe, #ff0055, #00f3ff, transparent, transparent); }
   .neon-wrap.red { margin-top: 20px; }
   .neon-wrap.red::before { background: conic-gradient(transparent, transparent, #ff0000, #ff5500, transparent, transparent); }
-  
+
   .btn-inner { position: relative; z-index: 10; display: block; width: 100%; background: #000; color: white; padding: 15px 0; border-radius: 46px; font-weight: 900; font-size: 14px; text-align: center; text-decoration: none; border: none; cursor: pointer; box-sizing: border-box; pointer-events: auto; text-transform: uppercase; transition: transform 0.1s ease, background 0.1s; }
   .btn-inner:active { transform: scale(0.95); background: #111; }
   .btn-inner:disabled { opacity: 0.5; color: #555; cursor: not-allowed; transform: none; }
@@ -406,7 +406,7 @@
      <option value="GedLli_YXEI">Final Insert Coin</option>
     </select>
   </div>
-  
+
   <a href="https://discord.gg/ardc" target="_blank" class="lnk" style="border-color:#5865F2;"><svg viewBox="0 0 127.14 96.36"><path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36,77.11,77.11,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1A105.25,105.25,0,0,0,126.6,80.22c2.36-24.44-5.42-48.18-18.9-72.15ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54,46,53.89,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.25,60,73.25,53s5-12.74,11.44-12.74S96.23,46,96.12,53,91.08,65.69,84.69,65.69Z"/></svg><span>Discord Server</span></a>
   <a href="https://platopedia.com/groups/arcade" target="_blank" class="lnk" style="border-color:#00ffff;"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg><span>Arcade Website</span></a>
   <div class="designed-by">DESIGNED BY <b>RISK</b></div>
@@ -421,16 +421,16 @@
     <div id="frame-btn-group">
         <label class="btn" onclick="playClick()">CHOOSE IMAGE<input type="file" id="u1" accept="image/*" onchange="handleFile(event)" style="display:none"></label>
         <label class="btn btn-r" onclick="playClick()">APPLY FRAME<input type="file" id="u2" accept="image/*" onchange="handleFrame(event)" style="display:none"></label>
-        
+
         <button class="btn" style="border-color:#00ffff; color:#00ffff;" onclick="toggleFilterUI()">MAGIC FILTERS ✨</button>
-        
+
         <div id="filter-wrapper">
             <div class="filter-scroll" id="filter-list">
                 </div>
         </div>
 
         <button class="btn" style="border-color:#ffffff; color:#ffffff;" onclick="togglePaletteUI()">COLOR PALETTE 🎨</button>
-        
+
         <div id="palette-wrapper">
             <div class="cat-scroll">
                 <button class="cat-btn" onclick="renderCat('Neon')">NEON</button>
@@ -457,13 +457,13 @@
 
     <div class="lbl">ZOOM <span id="z-val" class="val-tag">100%</span></div>
     <input type="range" id="z" min="0.1" max="2.5" step="0.01" value="1" oninput="updateZ(this.value)">
-    
+
     <div class="lbl">ROTATE <span id="r-val" class="val-tag">0°</span></div>
     <input type="range" id="r" min="0" max="360" step="1" value="0" oninput="updateR(this.value)">
-    
+
     <div class="lbl"><span id="m-lbl">CIRCLE SIZE</span> <span id="m-val" class="val-tag">375px</span></div>
     <input type="range" id="m" min="300" max="400" step="1" value="375" oninput="updateM(this.value)">
-    
+
     <button id="save" class="btn" onclick="downloadPic()" disabled>DOWNLOAD PICTURE</button>
   </div>
 </div>
@@ -496,9 +496,9 @@
         <div id="goBox" class="neon-wrap blue">
             <button id="go" class="btn-inner" disabled>⚡ CREATE HD GIF</button>
         </div>
-        
+
         <div id="msg" class="status">Processing...</div>
-        
+
         <div id="dlBox" class="neon-wrap blue" style="display:none;">
             <a id="dl" class="btn-inner">⬇️ DOWNLOAD GIF</a>
         </div>
@@ -558,40 +558,7 @@ function toggleThemeMenu(e) { e.stopPropagation(); thMenu.style.display = thMenu
 // --- 🎵 AUDIO ---
 const playlist = ["jfKfPfyJRdk", "BrnDlRmW5hs", "tLYL_3NcJck", "FKtzkolncnk", "_Ojv9Zu1IZY", "OBoMLZTtqb8", "lT8JepVwxBQ", "MedT9ECothA", "eAdtqDV06Ho", "2kzQ272Le8Q", "0qCL3Sz1--M", "2UN1ZVbBelU", "iDVKMdnvgl8", "9JMjZbIpmS8", "TNGsftqag6M", "GedLli_YXEI"];
 function initAudio(){ if(!audioStarted){ audioCtx.resume().then(()=>{ audioStarted=true; if(player&&musicOn){ player.unMute(); player.playVideo(); }});}}
-function onYouTubeIframeAPIReady(){ 
-    // 🔥 FIREFOX FIX: 
-    // We must force the player to "exist" in the layout, or Firefox blocks it.
-    // We switch it from "display:none" to "visibility:hidden".
-    const pDiv = document.getElementById('yt-player');
-    if(pDiv) {
-        pDiv.style.display = 'block';     
-        pDiv.style.visibility = 'hidden'; 
-        pDiv.style.position = 'absolute'; 
-        pDiv.style.opacity = '0';
-    }
-
-    const rId = playlist[Math.floor(Math.random() * playlist.length)]; 
-    const sel = document.querySelector('.station-select'); 
-    if(sel) sel.value = rId; 
-    
-    player = new YT.Player('yt-player', {
-        height: '1',   // Fix: 1px size (0px is often blocked)
-        width: '1',    // Fix: 1px size
-        videoId: rId,
-        host: 'https://www.youtube-nocookie.com',
-        playerVars: {
-            'autoplay': 1,
-            'loop': 1,
-            'playlist': rId,
-            'mute': 0,
-            'origin': window.location.origin
-        },
-        events: {
-            'onReady': e => { e.target.setVolume(25); }
-        }
-    });
-}
-
+function onYouTubeIframeAPIReady(){ const rId = playlist[Math.floor(Math.random() * playlist.length)]; const sel = document.querySelector('.station-select'); if(sel) sel.value = rId; player=new YT.Player('yt-player',{height:'0',width:'0',videoId:rId,playerVars:{'autoplay':1,'loop':1,'playlist':rId,'mute':0},events:{'onReady':e=>{e.target.setVolume(25);}}});}
 function changeMusic(id){ if(player)player.loadVideoById(id); playShutter(); }
 function toggleMusic(){ initAudio(); playClick(); musicOn=!musicOn; if(musicOn){ player.playVideo(); mStat.innerText="ON"; mStat.style.color="#ff0000"; }else{ player.pauseVideo(); mStat.innerText="OFF"; mStat.style.color="#888"; }}
 function playClick(){ if(audioCtx.state!=='running')audioCtx.resume(); const o=audioCtx.createOscillator(), g=audioCtx.createGain(); o.frequency.setValueAtTime(800, audioCtx.currentTime); g.gain.setValueAtTime(0.03, audioCtx.currentTime); o.connect(g); g.connect(audioCtx.destination); o.start(); o.stop(audioCtx.currentTime+0.1); }
@@ -839,7 +806,7 @@ function renderCat(cat) {
                 d(); // Redraw
                 playClick();
             };
-            
+
             grid.appendChild(d);
         });
         grid.classList.add('show');
@@ -865,7 +832,7 @@ const magicFilters = [
     { name: 'AI-4K-ULTRA-ENHANCE 💎', f: 'contrast(1.4) saturate(1.1) brightness(1.05) contrast(1.1)' },
     { name: 'AI-HDR-MAX-CLARITY', f: 'contrast(1.6) saturate(1.2) brightness(1.1) contrast(1.1)' },
     { name: 'AUTO-ENHANCE ✨', f: 'contrast(1.15) saturate(1.25) brightness(1.05) sepia(0.05)' },
-    
+
     // --- 📱 UNIVERSAL DEVICE COMPATIBILITY ---
     { name: 'UNI-CLEAN-VIEW', f: 'brightness(1.1) contrast(1.05) saturate(1.05)' },
     { name: 'UNI-WARM-MOBILE', f: 'sepia(0.15) saturate(1.2) contrast(1.1)' },
@@ -1021,14 +988,14 @@ function toggleFilterUI() {
         el.classList.add('active');
         btn.innerHTML = "CLOSE FILTERS ✖";
         btn.style.color = "#ff00ff"; btn.style.borderColor = "#ff00ff";
-        
+
         if(document.getElementById('filter-list').children.length === 0) renderFilters();
         if(!document.getElementById('adj-panel')) createAdjustUI();
         if(!document.getElementById('open-adj-btn')) createSmartEditBtn();
-        
+
         document.getElementById('filter-list').style.display = 'flex';
         document.getElementById('adj-panel').style.display = 'none';
-        
+
         // 🔥 FORCE ADJUST BUTTON VISIBLE (The Fix)
         // This ensures the button is always there, even for the original image
         const adjBtn = document.getElementById('open-adj-btn');
@@ -1126,10 +1093,10 @@ function adjChange(type, val, el) {
 function applyFilter(filterVal, btn) {
     // 1. Check if we are actually changing the filter
     if (cfg.filter !== filterVal) {
-        
+
         // 2. Reset adjustment sliders to standard (100%)
         cfg.adj = { b: 100, c: 100, s: 100 };
-        
+
         // Reset the slider UI elements
         ['b', 'c', 's'].forEach(k => {
             const el = document.getElementById('sl-' + k);
@@ -1137,22 +1104,22 @@ function applyFilter(filterVal, btn) {
                 el.value = 100; 
                 const valDisplay = document.getElementById('val-' + k);
                 if (valDisplay) valDisplay.innerText = "100%"; 
-                
+
                 // Keep the slider gradient logic if you use it
                 if(typeof updateSliderColor === 'function') {
                     updateSliderColor(el, 100, 200);
                 }
             }
         });
-        
+
         // 3. Update the Data Configuration
         cfg.filter = filterVal;
-        
+
         // 🛡️ THE OLD ANDROID PROTECTION:
         // We do absolutely NOTHING to c.style.filter here.
         // We do not touch the canvas CSS. 
         // We only save the data to 'cfg' and let 'd()' handle the rest.
-        
+
         // 4. Update UI Button Highlights
         document.querySelectorAll('.filter-btn').forEach(b => {
             b.classList.remove('active-filter');
@@ -1160,54 +1127,39 @@ function applyFilter(filterVal, btn) {
         if (btn) {
             btn.classList.add('active-filter');
         }
-        
+
         // 5. Trigger the Drawing Engine (The one we did surgery on)
         d(); 
-        
+
         // 6. Sound Effect
         if (typeof playClick === 'function') {
             playClick();
         }
     }
 }
-/// --- 🔒 BOUNDARY LOCK LOGIC (FIXED) ---
+
+// --- 🔒 2. BOUNDARY LOCK LOGIC ---
 let isBoundaryLocked = true;
 function toggleBoundaryLock() {
     isBoundaryLocked = !isBoundaryLocked;
     const btn = document.getElementById('lock-btn');
-    const zSlider = document.getElementById('z'); 
-
     if (isBoundaryLocked) {
-        // 🔒 LOCK ON
         if(btn) {
             btn.innerHTML = "BOUNDARY LOCK: ON 🔒";
             btn.style.borderColor = "#00ff00";
             btn.style.color = "#00ff00";
         }
-        d(); // Snap back to limits
     } else {
-        // 🔓 LOCK OFF
         if(btn) {
             btn.innerHTML = "BOUNDARY LOCK: OFF 🔓";
             btn.style.borderColor = "#ff0000";
             btn.style.color = "#ff0000";
         }
-        
-        // 🔥 FORCE UNLOCK (The Missing Piece)
-        if(zSlider) {
-            zSlider.min = "0.01";                // JS Property
-            zSlider.setAttribute('min', '0.01'); // HTML Attribute (Crucial for Mobile)
-            zSlider.step = "0.01";               // Ensures smooth dragging
-            
-            // Force the visual red/blue line to update instantly
-            if(typeof updS === 'function') updS(zSlider);
-        }
     }
-    
+    d();
     if(typeof playClick === 'function') playClick();
 }
-
-// --- 🛠️ CORE DRAWING ENGINE (FINAL UNIFIED FIX) ---
+// --- 🛠️ CORE DRAWING ENGINE (JAN 16th FIX: IPHONE HARD BAKE + ANDROID SHIELD) ---
 function d(){ 
   if(!x) return;
   x.clearRect(0,0,800,800); 
@@ -1219,17 +1171,24 @@ function d(){
   if(cfg.adj.c !== 100) cssFilter += ` contrast(${cfg.adj.c}%)`;
   if(cfg.adj.s !== 100) cssFilter += ` saturate(${cfg.adj.s}%)`;
 
-  // 🧠 SMART DEVICE DETECTION (Friend's Fix)
-  // This helps us know if it's an Apple device.
-  const isIOS = /AppleWebKit/.test(navigator.userAgent) && !/Chrome|Chromium|Android/.test(navigator.userAgent);
-
-  // 2. DISABLE CSS PREVIEW (SOLVES DOUBLE FILTERS)
-  // We turn off CSS for EVERYONE (iPhone & Android).
-  // Why? Because we apply the filter directly to the pixels in Step 4.
-  // This prevents the "Double Filter" look on iPhone and the glitches on Android.
-  if(c) {
-      c.style.filter = 'none';
-      c.style.webkitFilter = 'none';
+  // 🧠 SMART DEVICE DETECTION
+  const isIOS =
+  /AppleWebKit/.test(navigator.userAgent) &&
+  !/Chrome|Chromium|Android/.test(navigator.userAgent);
+  // 2. SCREEN PREVIEW (VISUALS)
+  if (isIOS) {
+      // 🍎 IPHONE: Apply CSS so the user sees changes instantly on screen
+      if(c) {
+          c.style.filter = (cssFilter !== '') ? cssFilter : 'none';
+          c.style.webkitFilter = (cssFilter !== '') ? cssFilter : 'none';
+      }
+  } else {
+      // 🤖 ANDROID SHIELD: Force CSS to 'none'.
+      // This protects Android from the "Double Filter" and "Tinted Frame" glitches.
+      if(c) {
+          c.style.filter = 'none';
+          c.style.webkitFilter = 'none';
+      }
   }
 
   // 3. SIZE & BOUNDARY LOGIC
@@ -1242,20 +1201,14 @@ function d(){
       const mathM = drawM + 15; 
       const reqW = (mathM*2*cos + mathM*2*sin), reqH = (mathM*2*sin + mathM*2*cos);
       const minS = Math.max(reqW/i.width, reqH/i.height);
-      
-      if(cfg.s < minS) { 
-          cfg.s = minS; 
-          if(window.zSl) zSl.value = minS; 
-          if(window.zVal) zVal.innerText = Math.round((minS/zSl.min)*100)+"%"; 
-      }
-      
+      if(cfg.s < minS) { cfg.s = minS; if(window.zSl) zSl.value = minS; if(window.zVal) zVal.innerText = Math.round((minS/zSl.min)*100)+"%"; }
       const w = i.width * cfg.s, h = i.height * cfg.s;
       const rangeX = Math.max(0, (w - reqW)/2), rangeY = Math.max(0, (h - reqH)/2);
       cfg.x = Math.max(400 - rangeX, Math.min(400 + rangeX, cfg.x));
       cfg.y = Math.max(400 - rangeY, Math.min(400 + rangeY, cfg.y));
   }
 
-  // 4. IMAGE DRAWING (HARD BAKE FOR EVERYONE)
+  // 4. IMAGE DRAWING (THE SAVE FIX)
   if(i.src){
       x.save(); 
       x.beginPath(); x.arc(400, 400, drawM + 2, 0, Math.PI * 2); x.clip(); 
@@ -1264,19 +1217,22 @@ function d(){
       x.translate(cfg.x, cfg.y); 
       x.rotate(cfg.r * Math.PI / 180);
 
-      // 🔥 THE UNIVERSAL FIX 🔥
-      // We apply the filter to the CANVAS PIXELS for both iPhone and Android.
-      // - iPhone: Needs this for the download to work (Hard Bake).
-      // - Android: Needs this to see the filter at all (since we turned off CSS).
-      x.filter = (cssFilter !== '') ? cssFilter : 'none';
+      // 🔥 THE IPHONE FIX (Hard Bake)
+      // This is the Jan 16th Logic:
+      if (isIOS) {
+          // Force filter into pixels for iPhone download
+          x.filter = (cssFilter !== '') ? cssFilter : 'none';
+      } else {
+          // 🛡️ ANDROID PROTECTION
+          // Force none to prevent double-filtering/tinting
+          x.filter = 'none'; 
+      }
 
       x.drawImage(i, -w/2, -h/2, w, h);
       x.restore(); 
   }
 
-  // 5. RESET FILTER (CRITICAL: Protects the Frame)
-  // We turn the filter OFF before drawing the frame, 
-  // so the frame doesn't get tinted/colored.
+  // 5. RESET FILTER (Crucial: Protects Frames from being colored on Android)
   x.filter = 'none'; 
 
   // 6. FRAME DRAWING
@@ -1319,11 +1275,11 @@ function handleFile(e){
         n.onload = async () => {
             if ('decode' in n) { try { await n.decode(); } catch(err) { } }
             i = n; cfg.x = 400; cfg.y = 400; cfg.r = 0;
-            
+
             // 🔥 LOGIC: If NO frame is active, go to 400px (Full Size).
             // If a frame IS active, this line is skipped, so it stays at 375px.
             if(!f.src && !cfg.pColor) { cfg.m = 400; mSl.value = 400; mVal.innerText = "400px"; }
-            
+
             const fillSize = Math.max(800/i.width, 800/i.height);
             if(isBoundaryLocked) {
                 const rad = cfg.r * Math.PI / 180;
@@ -1367,15 +1323,15 @@ function centerSubject(){ cfg.x=400; cfg.y=400; cfg.r=0; rSl.value=0; d(); playS
 
 function resetProject(){ 
     i=new Image(); f=new Image(); 
-    
+
     // 🔥 RESET TO 400px (Normal Mode)
     cfg={s:1, m:400, x:400, y:400, r:0, pColor:null, pType:null, filter:'none', adj:{b:100,c:100,s:100}};
     zSl.value=1; rSl.value=0; mSl.value=400; mVal.innerText="400px"; mLbl.innerText = "CIRCLE SIZE";
-    
+
     document.getElementById('u1').value = ''; document.getElementById('u2').value = '';
     c.style.filter = 'none'; document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active-filter'));
     if(document.getElementById('filter-list')) document.getElementById('filter-list').innerHTML = '';
-    
+
     // Close Adjustment Panel
     if(document.getElementById('adj-panel')) { 
         document.getElementById('filter-list').style.display = 'flex'; 
@@ -1383,7 +1339,7 @@ function resetProject(){
         closeAdjust(); 
     }
     if(document.getElementById('open-adj-btn')) document.getElementById('open-adj-btn').style.display = 'none';
-    
+
     d(); playShutter(); updS(zSl); updS(rSl); updS(mSl); 
     document.getElementById('save').disabled = true; document.querySelector('.ui').style.paddingBottom = "0px"; 
 }
@@ -1412,18 +1368,18 @@ function downloadPic() {
         a.download = uniqueName; 
         document.body.appendChild(a);
         a.click();
-        
+
         // 5. CLEANUP & RESTORE
         // We wait 100ms, then turn off Save Mode so the screen goes back to normal.
         setTimeout(() => {
             document.body.removeChild(a);
             window.URL.revokeObjectURL(url);
-            
+
             window.isSaving = false;
             d(); 
         }, 100);
     }, 'image/png');
-    
+
     // 6. Sound Effect
     playShutter();
 }
@@ -1436,14 +1392,14 @@ function openAdjust() {
     document.getElementById('filter-list').style.display = 'none';
     document.getElementById('open-adj-btn').style.display = 'none';
     document.getElementById('adj-panel').style.display = 'flex';
-    
+
     // 🔥 AGGRESSIVE HIDE: Hunt down buttons everywhere
     const uiElements = document.querySelectorAll('.ui button, .ui label, #lock-btn');
     uiElements.forEach(el => {
         if(el.closest('#filter-wrapper')) return; // Don't hide the sliders!
         if(el.closest('#adj-panel')) return;     // Don't hide the "Done" button!
         if(el.innerText && el.innerText.includes('HIDE MENU')) return; // Keep top toggle
-        
+
         el.style.display = 'none';
     });
     playClick();
@@ -1453,7 +1409,7 @@ function closeAdjust() {
     document.getElementById('adj-panel').style.display = 'none';
     document.getElementById('filter-list').style.display = 'flex';
     document.getElementById('open-adj-btn').style.display = 'block';
-    
+
     // 🔥 AGGRESSIVE RESTORE: Bring them back
     const uiElements = document.querySelectorAll('.ui button, .ui label, #lock-btn');
     uiElements.forEach(el => {
@@ -1595,7 +1551,7 @@ function refreshGalleryIfOpen() {
 function toggleGalleryUI() {
     let el = document.getElementById('gallery-wrapper');
     if(!el) { createGalleryUI(); el = document.getElementById('gallery-wrapper'); }
-    
+
     if(el.style.display === 'flex') {
         el.style.display = 'none';
         document.body.style.overflow = 'auto'; 
@@ -1609,11 +1565,11 @@ function toggleGalleryUI() {
 
 function createGalleryUI() {
     if(document.getElementById('gallery-wrapper')) return;
-    
+
     const div = document.createElement('div');
     div.id = 'gallery-wrapper';
     div.style.cssText = "display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(10, 10, 16, 0.95); backdrop-filter:blur(15px); -webkit-backdrop-filter:blur(15px); z-index:9999; flex-direction:column; padding:20px; box-sizing:border-box; overflow-y:auto; transition: opacity 0.3s ease;";
-    
+
     div.innerHTML = `
         <div style="display:flex; justify-content:center; align-items:center; margin-bottom:25px; position:sticky; top:0; z-index:10;">
             <div style="background:rgba(0,0,0,0.6); padding:10px 20px; border-radius:30px; border:1px solid #333; backdrop-filter:blur(5px); display:flex; align-items:center; gap:15px; box-shadow:0 10px 30px rgba(0,0,0,0.5);">
@@ -1708,7 +1664,7 @@ function showToast(text, color) {
     requestAnimationFrame(() => { t.style.opacity = "1"; t.style.transform = "translateX(-50%) translateY(0)"; });
     setTimeout(() => { t.style.opacity = "0"; t.style.transform = "translateX(-50%) translateY(20px)"; setTimeout(() => t.remove(), 300); }, 2000);
 }
-    
+
 function downloadFromGallery(base64Data) {
     fetch(base64Data).then(res => res.blob()).then(blob => {
         const uniqueName = `Arcade_Backup_${Date.now()}_${Math.floor(Math.random() * 9999)}.png`;
