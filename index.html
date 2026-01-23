@@ -1778,6 +1778,35 @@ setInterval(() => {
         menu.insertBefore(btn, menu.firstChild);
     }
 }, 1000);
+
+    // --- 🍎 HIDE MAGIC FILTERS ON ALL APPLE DEVICES (iPhone/iPad/Mac) ---
+(function() {
+    // 1. Aggressive Apple Detection
+    // Checks for "Mac", "iPhone", "iPad", "iPod" in UserAgent OR Platform
+    const isApple = /Mac|iPad|iPhone|iPod/.test(navigator.userAgent) || 
+                    (navigator.platform && /Mac|iPhone|iPod|iPad/.test(navigator.platform));
+
+    if (isApple) {
+        // 2. Find the "Magic Filters" Button
+        // We search specifically for the button that toggles the UI
+        const filterBtn = document.querySelector("button[onclick='toggleFilterUI()']");
+        
+        if (filterBtn) {
+            // 3. Force Hide It
+            filterBtn.style.display = 'none'; 
+            filterBtn.style.visibility = 'hidden'; // Double insurance
+        }
+
+        // 4. Hide the panel just in case
+        const wrapper = document.getElementById('filter-wrapper');
+        if (wrapper) wrapper.style.display = 'none';
+        
+        // 5. Hide the Adjust button if it exists
+        const adjBtn = document.getElementById('open-adj-btn');
+        if (adjBtn) adjBtn.style.display = 'none';
+    }
+})();
+
 </script>
 </body>
 </html>
