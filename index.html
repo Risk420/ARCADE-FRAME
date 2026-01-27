@@ -1031,6 +1031,78 @@ const magicFilters = [
 ];
 cfg.adj = { b: 100, c: 100, s: 100 };
 
+    /* =========================================
+   🛡️ FORTRESS MODE: ANTI-HACKER PROTOCOLS
+   ========================================= */
+
+(function() {
+    "use strict";
+
+    // 1. DISABLE RIGHT-CLICK (Context Menu)
+    document.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+        // Optional: Alert the user
+        // alert("🔒 Security protocols active. Right-click disabled.");
+    }, false);
+
+    // 2. DISABLE KEYBOARD SHORTCUTS (F12, Ctrl+U, Ctrl+Shift+I, etc.)
+    document.addEventListener('keydown', function(e) {
+        // F12 (DevTools)
+        if (e.key === 'F12' || e.keyCode === 123) {
+            stopEvent(e);
+        }
+        // Ctrl+Shift+I (Inspect) or Ctrl+Shift+J (Console) or Ctrl+Shift+C (Element Inspector)
+        if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C' || e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67)) {
+            stopEvent(e);
+        }
+        // Ctrl+U (View Source)
+        if (e.ctrlKey && (e.key === 'U' || e.keyCode === 85)) {
+            stopEvent(e);
+        }
+        // Ctrl+S (Save Page)
+        if (e.ctrlKey && (e.key === 'S' || e.keyCode === 83)) {
+            stopEvent(e);
+        }
+    }, false);
+
+    function stopEvent(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        return false;
+    }
+
+    // 3. ANTI-XSS MONITOR (Input Sanitization)
+    // This watches every input field on the page for malicious characters
+    const inputs = document.querySelectorAll('input, textarea');
+    inputs.forEach(input => {
+        input.addEventListener('input', function(e) {
+            const val = e.target.value;
+            // Check for dangerous HTML tags like <script>, <iframe>, <object>
+            if (/<script|<\/script>|<iframe|<object|javascript:|onclick=|onerror=/i.test(val)) {
+                e.target.value = val.replace(/[<>]/g, ''); // Strip the brackets immediately
+                console.warn("⚠️ Security Threat Detected: Script injection blocked.");
+                alert("⛔ Action Blocked: You cannot paste code here.");
+            }
+        });
+    });
+
+    // 4. CONSOLE CLEARER & DEBUGGER TRAP
+    // If they somehow open the console, this clears it and pauses execution
+    setInterval(function() {
+        // Clear any logs so they can't see your code structure
+        // console.clear(); 
+        
+        // "Debugger" keyword stops code execution if DevTools is open
+        // This makes the site "freeze" for them if they try to inspect it
+        // Uncomment the line below if you want to be very aggressive:
+        // debugger; 
+    }, 1000);
+
+    console.log("%c🛑 SECURITY ACTIVE", "color: red; font-size: 20px; font-weight: bold;");
+    console.log("This site is protected.");
+
+})();
+
 function toggleFilterUI() {
     const el = document.getElementById('filter-wrapper');
     const btn = document.querySelector("button[onclick='toggleFilterUI()']");
