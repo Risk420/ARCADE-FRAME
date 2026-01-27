@@ -1264,41 +1264,30 @@ function applyFilter(filterVal, btn) {
     }
 }
 
-/// --- 🔒 BOUNDARY LOCK LOGIC (FIXED) ---
-let isBoundaryLocked = true;
+// --- 🔒 BOUNDARY LOCK (FIXED FOR 360°) ---
+function applyBoundaryLock() {
+    if (!isBoundaryLocked || !zSlider || !rSlider) return;
+
+    // Trig logic to ensure image always fills the frame during rotation
+    let rad = (currentRotation * Math.PI) / 180;
+    let minScale = Math.abs(Math.cos(rad)) + Math.abs(Math.sin(rad));
+
+    zSlider.min = minScale.toFixed(2);
+    
+    if (parseFloat(zSlider.value) < minScale) {
+        zSlider.value = minScale.toFixed(2);
+        if(typeof updS === 'function') updS(zSlider); 
+    }
+}
+
 function toggleBoundaryLock() {
     isBoundaryLocked = !isBoundaryLocked;
-    const btn = document.getElementById('lock-btn');
-    const zSlider = document.getElementById('z'); 
-
-    if (isBoundaryLocked) {
-        // 🔒 LOCK ON
-        if(btn) {
-            btn.innerHTML = "BOUNDARY LOCK: ON 🔒";
-            btn.style.borderColor = "#00ff00";
-            btn.style.color = "#00ff00";
-        }
-        d(); // Snap back to limits
-    } else {
-        // 🔓 LOCK OFF
-        if(btn) {
-            btn.innerHTML = "BOUNDARY LOCK: OFF 🔓";
-            btn.style.borderColor = "#ff0000";
-            btn.style.color = "#ff0000";
-        }
-        
-        // 🔥 FORCE UNLOCK (The Missing Piece)
-        if(zSlider) {
-            zSlider.min = "0.01";                // JS Property
-            zSlider.setAttribute('min', '0.01'); // HTML Attribute (Crucial for Mobile)
-            zSlider.step = "0.01";               // Ensures smooth dragging
-            
-            // Force the visual red/blue line to update instantly
-            if(typeof updS === 'function') updS(zSlider);
-        }
+    if (lockBtn) {
+        lockBtn.innerHTML = isBoundaryLocked ? "BOUNDARY LOCK: ON 🔒" : "BOUNDARY LOCK: OFF 🔓";
+        lockBtn.style.color = isBoundaryLocked ? "#00ff00" : "#ff0000";
     }
-    
-    if(typeof playClick === 'function') playClick();
+    if (isBoundaryLocked) applyBoundaryLock();
+    else zSlider.min = "0.01";
 }
 
 // --- 🛠️ CORE DRAWING ENGINE (CSS DISABLED = NO TINTED FRAMES) ---
@@ -1905,6 +1894,106 @@ setInterval(() => {
     }
 })();
 
+// --- 🛡️ FORTRESS PROTECTION + COPY FIX ---
+(function() {
+    // 1. Block Inspect Element & Right-Click
+    // This stops your friend from using the standard menu to see your code
+    document.addEventListener('contextmenu', e => e.preventDefault());
+    
+    document.addEventListener('keydown', e => {
+        // Blocks F12 (123), Ctrl+Shift+I (73), Ctrl+Shift+J (74), Ctrl+Shift+C (67), and Ctrl+U (85)
+        if (e.keyCode === 123 || 
+           (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67)) || 
+           (e.ctrlKey && e.keyCode === 85)) {
+            e.preventDefault();
+            return false;
+        }
+    });
+
+    // 2. Allow Text Selection (Fixes the "Can't Copy" issue)
+    // We add this CSS dynamically to make sure the font cards are selectable
+    const style = document.createElement('style');
+    style.innerHTML = `
+        .font-card { 
+            user-select: text !important; 
+            -webkit-user-select: text !important; 
+            -moz-user-select: text !important;
+            -ms-user-select: text !important;
+            cursor: pointer; 
+        }
+        #input-text { user-select: text !important; }
+    `;
+    document.head.appendChild(style);
+})();
+
+// --- 📋 THE "SUPER COPY" FUNCTION ---
+// This works even when Right-Click is disabled
+async function copyToClipboard(text) {
+    try {
+        // Modern approach
+        await navigator.clipboard.writeText(text);
+        showToast("Copied to clipboard! ✅");
+    } catch (err) {
+        // Fallback for older browsers or non-HTTPS connections
+        const textArea = document.createElement("textarea");
+        textArea.value = text;
+        textArea.style.position = "fixed"; // Avoid scrolling to bottom
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        try {
+            document.execCommand('copy');
+            showToast("Copied! ✅");
+        } catch (err) {
+            console.error('Fallback copy failed', err);
+        }
+        document.body.removeChild(textArea);
+    }
+}
+
+// --- 🖋️ GENERATION & TRANSFORMATION ---
+function generateFonts() {
+    const text = inputField.value || "Type something...";
+    if (!outputContainer) return;
+    
+    outputContainer.innerHTML = "";
+    
+    alphas.forEach(font => {
+        // Only show fonts for the active category
+        if (activeCategory !== "ALL" && font.c !== activeCategory) return;
+        
+        const card = document.createElement("div");
+        card.className = "font-card";
+        
+        const transformed = transformText(text, font.m);
+        card.innerText = transformed;
+        
+        // Clicking the card triggers the copy function automatically
+        card.onclick = () => copyToClipboard(transformed);
+        
+        outputContainer.appendChild(card);
+    });
+}
+
+function transformText(t, m) {
+    const abc = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    const mArr = Array.from(m);
+    return t.split('').map(c => {
+        const i = abc.indexOf(c);
+        return i > -1 ? (mArr[i] || c) : c;
+    }).join('');
+}
+
+function showToast(msg) {
+    // If you have a toast element, use it; otherwise, use a simple alert
+    console.log("Toast:", msg);
+    // alert(msg); // Remove the comment here if you want a pop-up alert
+}
+
+// --- 🚀 FINAL INITIALIZATION ---
+// This starts the generator as soon as the page loads
+generateFonts();
+    
 </script>
 </body>
 </html>
